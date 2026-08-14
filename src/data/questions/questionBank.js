@@ -1,691 +1,895 @@
 // ASK LOVELY RITA
 // MASTER QUESTION DATABASE
 //
-// Content is separated from the game engine so the library can
-// grow independently without rewriting the application.
+// CONTENT STRUCTURE:
 //
-// Structure:
-// ageBand -> difficulty -> category -> questions
-//
-// The production database will eventually contain hundreds/thousands
-// of questions. This file establishes the expandable architecture.
+// WORLD
+//   ↓
+// SUBCATEGORY
+//   ↓
+// AGE GROUP
+//   ↓
+// DIFFICULTY
+//   ↓
+// QUESTION
+//   ↓
+// ANSWERS
+//   ↓
+// EXPLANATION
+//   ↓
+// TAGS
 
-const QUESTION_BANK = {
+const QUESTION_BANK = [
 
   // ============================================================
-  // KIDS — approximately ages 5–8
+  // SCIENCE
   // ============================================================
 
-  kids_5_8: {
+  {
+    world: "Science",
+    subcategory: "Animals",
+    ageGroup: "kids_5_8",
+    difficulty: "easy",
 
-    easy: {
+    question: "Which animal says 'moo'?",
 
-      Math: [
-        {
-          question: "What is 2 + 2?",
-          answers: ["3", "4", "5", "6"],
-          correct: 1
-        },
-        {
-          question: "Which number comes after 9?",
-          answers: ["8", "10", "11", "12"],
-          correct: 1
-        },
-        {
-          question: "How many sides does a triangle have?",
-          answers: ["2", "3", "4", "5"],
-          correct: 1
-        }
-      ],
+    answers: [
+      "Dog",
+      "Cow",
+      "Cat",
+      "Duck"
+    ],
 
-      Science: [
-        {
-          question: "Which animal says moo?",
-          answers: ["Dog", "Cow", "Cat", "Duck"],
-          correct: 1
-        },
-        {
-          question: "What do plants need from the Sun?",
-          answers: ["Sunlight", "Shoes", "Music", "Toys"],
-          correct: 0
-        },
-        {
-          question: "Which part of your body helps you see?",
-          answers: ["Ears", "Eyes", "Nose", "Hands"],
-          correct: 1
-        }
-      ],
+    correct: 1,
 
-      Geography: [
-        {
-          question: "What planet do we live on?",
-          answers: ["Mars", "Earth", "Venus", "Jupiter"],
-          correct: 1
-        },
-        {
-          question: "Which is usually found in the sky?",
-          answers: ["Clouds", "Fish", "Trees", "Shoes"],
-          correct: 0
-        },
-        {
-          question: "Which is the largest body of water?",
-          answers: ["Ocean", "Pond", "Bathtub", "Cup"],
-          correct: 0
-        }
-      ],
+    explanation: "A cow makes a 'moo' sound.",
 
-      Music: [
-        {
-          question: "Which instrument usually has black and white keys?",
-          answers: ["Piano", "Drum", "Flute", "Guitar"],
-          correct: 0
-        },
-        {
-          question: "Which instrument do you hit to make a beat?",
-          answers: ["Drum", "Violin", "Flute", "Piano"],
-          correct: 0
-        },
-        {
-          question: "What do we call a group of sounds arranged into a musical idea?",
-          answers: ["Melody", "Cloud", "Puzzle", "Rocket"],
-          correct: 0
-        }
-      ],
-
-      SmartMind: [
-        {
-          question: "Which one does not belong?",
-          answers: ["Apple", "Banana", "Carrot", "Guitar"],
-          correct: 3
-        },
-        {
-          question: "If you have 3 apples and get 2 more, how many do you have?",
-          answers: ["4", "5", "6", "7"],
-          correct: 1
-        },
-        {
-          question: "Which shape has four equal sides?",
-          answers: ["Circle", "Triangle", "Square", "Oval"],
-          correct: 2
-        }
-      ]
-    },
-
-    medium: {
-
-      Math: [
-        {
-          question: "What is 7 + 8?",
-          answers: ["13", "14", "15", "16"],
-          correct: 2
-        },
-        {
-          question: "What is 20 - 7?",
-          answers: ["11", "12", "13", "14"],
-          correct: 2
-        }
-      ],
-
-      Science: [
-        {
-          question: "Which state of matter is ice?",
-          answers: ["Solid", "Liquid", "Gas", "Plasma"],
-          correct: 0
-        },
-        {
-          question: "What do bees collect from flowers?",
-          answers: ["Nectar", "Sand", "Snow", "Leaves"],
-          correct: 0
-        }
-      ],
-
-      Geography: [
-        {
-          question: "Which direction does the Sun appear to rise from?",
-          answers: ["North", "South", "East", "West"],
-          correct: 2
-        },
-        {
-          question: "Which continent is Brazil in?",
-          answers: ["Africa", "Asia", "Europe", "South America"],
-          correct: 3
-        }
-      ],
-
-      Music: [
-        {
-          question: "How many strings does a standard guitar usually have?",
-          answers: ["4", "5", "6", "8"],
-          correct: 2
-        },
-        {
-          question: "What is the speed of music called?",
-          answers: ["Tempo", "Color", "Shape", "Volume"],
-          correct: 0
-        }
-      ]
-    }
+    tags: ["animals", "sounds", "nature"]
   },
 
+  {
+    world: "Science",
+    subcategory: "Human Body",
+    ageGroup: "kids_5_8",
+    difficulty: "easy",
 
-  // ============================================================
-  // KIDS — approximately ages 9–12
-  // ============================================================
+    question: "Which part of your body helps you see?",
 
-  kids_9_12: {
+    answers: [
+      "Ears",
+      "Nose",
+      "Eyes",
+      "Hands"
+    ],
 
-    medium: {
+    correct: 2,
 
-      Math: [
-        {
-          question: "What is 12 × 8?",
-          answers: ["86", "96", "106", "116"],
-          correct: 1
-        },
-        {
-          question: "What is half of 3/4?",
-          answers: ["1/4", "3/8", "1/2", "2/3"],
-          correct: 1
-        },
-        {
-          question: "What is 25% of 80?",
-          answers: ["10", "15", "20", "25"],
-          correct: 2
-        }
-      ],
+    explanation: "Your eyes allow you to see the world around you.",
 
-      Science: [
-        {
-          question: "What gas do humans need to breathe?",
-          answers: ["Oxygen", "Helium", "Carbon dioxide", "Hydrogen"],
-          correct: 0
-        },
-        {
-          question: "What force pulls objects toward Earth?",
-          answers: ["Magnetism", "Gravity", "Friction", "Electricity"],
-          correct: 1
-        },
-        {
-          question: "What organ pumps blood around the body?",
-          answers: ["Lungs", "Brain", "Heart", "Kidney"],
-          correct: 2
-        }
-      ],
-
-      Geography: [
-        {
-          question: "Which is the largest continent?",
-          answers: ["Africa", "Asia", "Europe", "Australia"],
-          correct: 1
-        },
-        {
-          question: "Which ocean is between Africa and Australia?",
-          answers: ["Atlantic", "Pacific", "Indian", "Arctic"],
-          correct: 2
-        },
-        {
-          question: "Which country is famous for the pyramids at Giza?",
-          answers: ["Egypt", "Greece", "India", "Mexico"],
-          correct: 0
-        }
-      ],
-
-      Music: [
-        {
-          question: "What does rhythm primarily organize?",
-          answers: [
-            "Beats and timing",
-            "Colors",
-            "Words on a page",
-            "Geographic borders"
-          ],
-          correct: 0
-        },
-        {
-          question: "Which family does the violin belong to?",
-          answers: ["Strings", "Brass", "Woodwind", "Percussion"],
-          correct: 0
-        },
-        {
-          question: "What is harmony?",
-          answers: [
-            "Different notes sounding together",
-            "A type of drum",
-            "A music venue",
-            "A recording machine"
-          ],
-          correct: 0
-        }
-      ],
-
-      SmartMind: [
-        {
-          question: "If all birds have feathers and a robin is a bird, what does a robin have?",
-          answers: ["Scales", "Feathers", "Fur", "Shell"],
-          correct: 1
-        },
-        {
-          question: "Which number continues the pattern: 2, 4, 8, 16, ___?",
-          answers: ["20", "24", "30", "32"],
-          correct: 3
-        }
-      ]
-    },
-
-    hard: {
-
-      Math: [
-        {
-          question: "What is 15% of 200?",
-          answers: ["20", "25", "30", "35"],
-          correct: 2
-        },
-        {
-          question: "If a triangle has angles of 50° and 60°, what is the third angle?",
-          answers: ["60°", "70°", "80°", "90°"],
-          correct: 1
-        }
-      ],
-
-      Science: [
-        {
-          question: "What is the process by which plants make food using sunlight?",
-          answers: [
-            "Photosynthesis",
-            "Respiration",
-            "Digestion",
-            "Evaporation"
-          ],
-          correct: 0
-        },
-        {
-          question: "Which planet is known for its prominent ring system?",
-          answers: ["Mars", "Saturn", "Mercury", "Venus"],
-          correct: 1
-        }
-      ],
-
-      Music: [
-        {
-          question: "What does dynamics describe in music?",
-          answers: [
-            "How loud or soft music is",
-            "How fast music is",
-            "The number of musicians",
-            "The length of a song"
-          ],
-          correct: 0
-        },
-        {
-          question: "What is an octave?",
-          answers: [
-            "The interval between one note and the next note with the same name",
-            "A type of rhythm",
-            "A musical instrument",
-            "A recording technique"
-          ],
-          correct: 0
-        }
-      ]
-    }
+    tags: ["human-body", "senses", "eyes"]
   },
 
+  {
+    world: "Science",
+    subcategory: "Space",
+    ageGroup: "kids_5_8",
+    difficulty: "easy",
 
-  // ============================================================
-  // ADULTS — GENERAL KNOWLEDGE
-  // ============================================================
+    question: "What planet do we live on?",
 
-  adults: {
+    answers: [
+      "Mars",
+      "Venus",
+      "Earth",
+      "Jupiter"
+    ],
 
-    medium: {
+    correct: 2,
 
-      Science: [
-        {
-          question: "What gas do plants absorb during photosynthesis?",
-          answers: [
-            "Oxygen",
-            "Carbon dioxide",
-            "Nitrogen",
-            "Hydrogen"
-          ],
-          correct: 1
-        },
-        {
-          question: "Which organ is primarily responsible for filtering blood?",
-          answers: [
-            "Kidney",
-            "Heart",
-            "Lung",
-            "Stomach"
-          ],
-          correct: 0
-        }
-      ],
+    explanation: "Earth is the planet where humans live.",
 
-      Geography: [
-        {
-          question: "Which country is the largest by land area?",
-          answers: ["Canada", "China", "Russia", "Brazil"],
-          correct: 2
-        },
-        {
-          question: "Which river is traditionally considered the longest in South America?",
-          answers: [
-            "Amazon",
-            "Nile",
-            "Mississippi",
-            "Danube"
-          ],
-          correct: 0
-        }
-      ],
-
-      Music: [
-        {
-          question: "Which instrument normally has 88 keys?",
-          answers: ["Piano", "Guitar", "Trumpet", "Violin"],
-          correct: 0
-        },
-        {
-          question: "What does the word 'tempo' refer to?",
-          answers: [
-            "Musical speed",
-            "Musical volume",
-            "Instrument size",
-            "Song lyrics"
-          ],
-          correct: 0
-        }
-      ],
-
-      History: [
-        {
-          question: "Which ancient civilization developed democracy in Athens?",
-          answers: [
-            "Ancient Greece",
-            "Ancient Egypt",
-            "Ancient Rome",
-            "The Maya"
-          ],
-          correct: 0
-        }
-      ]
-    },
-
-    hard: {
-
-      Science: [
-        {
-          question: "Which particle mediates the electromagnetic force?",
-          answers: ["Gluon", "Photon", "Muon", "Neutrino"],
-          correct: 1
-        },
-        {
-          question: "What is the approximate speed of light in vacuum?",
-          answers: [
-            "300,000 km/s",
-            "30,000 km/s",
-            "3,000 km/s",
-            "3,000,000 km/s"
-          ],
-          correct: 0
-        }
-      ],
-
-      History: [
-        {
-          question: "Which treaty is generally associated with ending the First World War?",
-          answers: [
-            "Treaty of Versailles",
-            "Treaty of Paris",
-            "Treaty of Rome",
-            "Treaty of Vienna"
-          ],
-          correct: 0
-        }
-      ],
-
-      Music: [
-        {
-          question: "What is a polyrhythm?",
-          answers: [
-            "Two or more contrasting rhythmic patterns occurring together",
-            "A change from major to minor",
-            "A very fast tempo",
-            "A type of vocal harmony"
-          ],
-          correct: 0
-        },
-        {
-          question: "In Western music theory, how many semitones are in an octave?",
-          answers: ["8", "10", "12", "14"],
-          correct: 2
-        }
-      ],
-
-      SmartMind: [
-        {
-          question: "If all A are B, and all B are C, what must be true?",
-          answers: [
-            "All A are C",
-            "All C are A",
-            "No A are C",
-            "Some C are not B"
-          ],
-          correct: 0
-        }
-      ]
-    }
+    tags: ["space", "planets", "earth"]
   },
 
+  {
+    world: "Science",
+    subcategory: "Plants",
+    ageGroup: "kids_5_8",
+    difficulty: "easy",
+
+    question: "What do plants need from the Sun to help them grow?",
+
+    answers: [
+      "Sunlight",
+      "Snow",
+      "Rocks",
+      "Plastic"
+    ],
+
+    correct: 0,
+
+    explanation: "Plants use sunlight to make their food through photosynthesis.",
+
+    tags: ["plants", "sun", "nature"]
+  },
+
+  {
+    world: "Science",
+    subcategory: "Human Body",
+    ageGroup: "kids_9_12",
+    difficulty: "medium",
+
+    question: "Which organ pumps blood around your body?",
+
+    answers: [
+      "Brain",
+      "Heart",
+      "Lung",
+      "Stomach"
+    ],
+
+    correct: 1,
+
+    explanation: "The heart pumps blood throughout the body.",
+
+    tags: ["human-body", "heart", "biology"]
+  },
+
+  {
+    world: "Science",
+    subcategory: "Space",
+    ageGroup: "kids_9_12",
+    difficulty: "medium",
+
+    question: "Which planet is known as the Red Planet?",
+
+    answers: [
+      "Venus",
+      "Mars",
+      "Saturn",
+      "Mercury"
+    ],
+
+    correct: 1,
+
+    explanation: "Mars appears reddish because of iron minerals on its surface.",
+
+    tags: ["space", "mars", "planets"]
+  },
+
+  {
+    world: "Science",
+    subcategory: "Human Body",
+    ageGroup: "adults",
+    difficulty: "medium",
+
+    question: "What is the largest organ of the human body?",
+
+    answers: [
+      "Heart",
+      "Liver",
+      "Skin",
+      "Brain"
+    ],
+
+    correct: 2,
+
+    explanation: "The skin is the body's largest organ.",
+
+    tags: ["human-body", "biology", "skin"]
+  },
 
   // ============================================================
-  // EXPERTS
+  // MATHEMATICS
   // ============================================================
 
-  experts: {
+  {
+    world: "Mathematics",
+    subcategory: "Arithmetic",
+    ageGroup: "kids_5_8",
+    difficulty: "easy",
 
-    hard: {
+    question: "What is 2 + 2?",
 
-      Science: [
-        {
-          question: "Which fundamental interaction is mediated by photons?",
-          answers: [
-            "Electromagnetic interaction",
-            "Strong interaction",
-            "Weak interaction",
-            "Gravitational interaction"
-          ],
-          correct: 0
-        },
-        {
-          question: "What does the second law of thermodynamics describe?",
-          answers: [
-            "The tendency of entropy to increase in an isolated system",
-            "The conservation of electric charge",
-            "The relationship between force and acceleration",
-            "The speed of electromagnetic waves"
-          ],
-          correct: 0
-        }
-      ],
+    answers: [
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
 
-      Mathematics: [
-        {
-          question: "What is the derivative of x²?",
-          answers: ["x", "2x", "x²", "2"],
-          correct: 1
-        },
-        {
-          question: "What is the integral of 1/x with respect to x?",
-          answers: [
-            "ln|x| + C",
-            "x + C",
-            "1/x² + C",
-            "x² + C"
-          ],
-          correct: 0
-        }
-      ],
+    correct: 1,
 
-      Music: [
-        {
-          question: "In tonal harmony, what is a cadence?",
-          answers: [
-            "A harmonic or melodic progression that creates a sense of closure",
-            "A repeating drum pattern",
-            "A change in recording format",
-            "A type of microphone"
-          ],
-          correct: 0
-        },
-        {
-          question: "What is counterpoint?",
-          answers: [
-            "The combination of independent melodic lines",
-            "A change in musical volume",
-            "A method of tuning drums",
-            "A type of recording studio"
-          ],
-          correct: 0
-        }
-      ],
+    explanation: "Two plus two equals four.",
 
-      Philosophy: [
-        {
-          question: "Which philosophical tradition emphasizes the pursuit of knowledge through systematic doubt and reasoning?",
-          answers: [
-            "Rationalism",
-            "Epicureanism",
-            "Stoicism",
-            "Hedonism"
-          ],
-          correct: 0
-        }
-      ],
+    tags: ["math", "addition", "numbers"]
+  },
 
-      SmartMind: [
-        {
-          question: "If a proposition is logically necessary, can it be false in any possible world under the same definitions?",
-          answers: [
-            "No",
-            "Yes",
-            "Only empirically",
-            "Only probabilistically"
-          ],
-          correct: 0
-        }
-      ]
-    }
+  {
+    world: "Mathematics",
+    subcategory: "Numbers",
+    ageGroup: "kids_5_8",
+    difficulty: "easy",
+
+    question: "Which number comes after 9?",
+
+    answers: [
+      "8",
+      "10",
+      "11",
+      "12"
+    ],
+
+    correct: 1,
+
+    explanation: "The number that comes after 9 is 10.",
+
+    tags: ["math", "numbers", "counting"]
+  },
+
+  {
+    world: "Mathematics",
+    subcategory: "Arithmetic",
+    ageGroup: "kids_9_12",
+    difficulty: "medium",
+
+    question: "What is 15 × 4?",
+
+    answers: [
+      "45",
+      "50",
+      "60",
+      "75"
+    ],
+
+    correct: 2,
+
+    explanation: "15 multiplied by 4 equals 60.",
+
+    tags: ["math", "multiplication"]
+  },
+
+  {
+    world: "Mathematics",
+    subcategory: "Percentages",
+    ageGroup: "adults",
+    difficulty: "medium",
+
+    question: "What is 15% of 200?",
+
+    answers: [
+      "15",
+      "20",
+      "30",
+      "40"
+    ],
+
+    correct: 2,
+
+    explanation: "15% of 200 is 30.",
+
+    tags: ["math", "percentages", "arithmetic"]
+  },
+
+  // ============================================================
+  // GEOGRAPHY
+  // ============================================================
+
+  {
+    world: "Geography",
+    subcategory: "World",
+    ageGroup: "kids_5_8",
+    difficulty: "easy",
+
+    question: "Which continent is Brazil in?",
+
+    answers: [
+      "Europe",
+      "Asia",
+      "South America",
+      "Africa"
+    ],
+
+    correct: 2,
+
+    explanation: "Brazil is located in South America.",
+
+    tags: ["geography", "brazil", "continents"]
+  },
+
+  {
+    world: "Geography",
+    subcategory: "Countries",
+    ageGroup: "kids_9_12",
+    difficulty: "medium",
+
+    question: "Which country has the largest population?",
+
+    answers: [
+      "India",
+      "Brazil",
+      "United States",
+      "Australia"
+    ],
+
+    correct: 0,
+
+    explanation: "India is currently the world's most populous country.",
+
+    tags: ["geography", "countries", "population"]
+  },
+
+  {
+    world: "Geography",
+    subcategory: "Landmarks",
+    ageGroup: "kids_9_12",
+    difficulty: "medium",
+
+    question: "Where is the Eiffel Tower?",
+
+    answers: [
+      "London",
+      "Paris",
+      "Rome",
+      "Madrid"
+    ],
+
+    correct: 1,
+
+    explanation: "The Eiffel Tower is one of the most famous landmarks in Paris, France.",
+
+    tags: ["geography", "landmarks", "france"]
+  },
+
+  // ============================================================
+  // MUSIC
+  // ============================================================
+
+  {
+    world: "Music",
+    subcategory: "Instruments",
+    ageGroup: "kids_5_8",
+    difficulty: "easy",
+
+    question: "How many strings does a typical guitar have?",
+
+    answers: [
+      "4",
+      "5",
+      "6",
+      "8"
+    ],
+
+    correct: 2,
+
+    explanation: "A standard guitar usually has six strings.",
+
+    tags: ["music", "guitar", "instruments"]
+  },
+
+  {
+    world: "Music",
+    subcategory: "Instruments",
+    ageGroup: "kids_9_12",
+    difficulty: "medium",
+
+    question: "Which instrument normally has 88 keys?",
+
+    answers: [
+      "Guitar",
+      "Violin",
+      "Piano",
+      "Trumpet"
+    ],
+
+    correct: 2,
+
+    explanation: "A standard modern piano has 88 keys.",
+
+    tags: ["music", "piano", "instruments"]
+  },
+
+  {
+    world: "Music",
+    subcategory: "Music Theory",
+    ageGroup: "adults",
+    difficulty: "hard",
+
+    question: "What does the term 'polyrhythm' describe?",
+
+    answers: [
+      "Multiple simultaneous rhythmic patterns",
+      "A very fast tempo",
+      "A change of key",
+      "A solo vocal passage"
+    ],
+
+    correct: 0,
+
+    explanation: "Polyrhythm means two or more contrasting rhythmic patterns occurring at the same time.",
+
+    tags: ["music", "theory", "rhythm"]
+  },
+
+  // ============================================================
+  // ECONOMICS
+  // ============================================================
+
+  {
+    world: "Economics",
+    subcategory: "Money",
+    ageGroup: "kids_5_8",
+    difficulty: "easy",
+
+    question: "What do people usually use money to buy?",
+
+    answers: [
+      "Goods and services",
+      "Clouds",
+      "Sunlight",
+      "Dreams"
+    ],
+
+    correct: 0,
+
+    explanation: "Money is commonly used to exchange for goods and services.",
+
+    tags: ["economics", "money", "basics"]
+  },
+
+  {
+    world: "Economics",
+    subcategory: "Markets",
+    ageGroup: "kids_9_12",
+    difficulty: "medium",
+
+    question: "What usually happens when there is very high demand for something that is difficult to find?",
+
+    answers: [
+      "Its price may increase",
+      "It always becomes free",
+      "Nobody wants it",
+      "It disappears immediately"
+    ],
+
+    correct: 0,
+
+    explanation: "When demand is high and supply is limited, prices may rise.",
+
+    tags: ["economics", "supply", "demand"]
+  },
+
+  {
+    world: "Economics",
+    subcategory: "Finance",
+    ageGroup: "adults",
+    difficulty: "medium",
+
+    question: "What is inflation?",
+
+    answers: [
+      "A general rise in prices",
+      "A fall in population",
+      "A decrease in rainfall",
+      "A rise in unemployment only"
+    ],
+
+    correct: 0,
+
+    explanation: "Inflation is a sustained increase in the general level of prices.",
+
+    tags: ["economics", "inflation", "finance"]
+  },
+
+  // ============================================================
+  // MEDICINE
+  // ============================================================
+
+  {
+    world: "Medicine",
+    subcategory: "Human Body",
+    ageGroup: "kids_9_12",
+    difficulty: "medium",
+
+    question: "Which organ helps you breathe by taking oxygen into your body?",
+
+    answers: [
+      "Lungs",
+      "Stomach",
+      "Kidneys",
+      "Skin"
+    ],
+
+    correct: 0,
+
+    explanation: "The lungs bring oxygen into the body and remove carbon dioxide.",
+
+    tags: ["medicine", "lungs", "breathing"]
+  },
+
+  {
+    world: "Medicine",
+    subcategory: "Human Body",
+    ageGroup: "adults",
+    difficulty: "hard",
+
+    question: "Which blood cells primarily help fight infections?",
+
+    answers: [
+      "Red blood cells",
+      "White blood cells",
+      "Platelets",
+      "Plasma"
+    ],
+
+    correct: 1,
+
+    explanation: "White blood cells are important components of the immune system.",
+
+    tags: ["medicine", "blood", "immune-system"]
+  },
+
+  // ============================================================
+  // HUMAN BEHAVIOR
+  // ============================================================
+
+  {
+    world: "Human Behavior",
+    subcategory: "Body Language",
+    ageGroup: "kids_9_12",
+    difficulty: "easy",
+
+    question: "What can a smile often communicate?",
+
+    answers: [
+      "Happiness or friendliness",
+      "That someone is sleeping",
+      "That someone is underwater",
+      "That someone is running"
+    ],
+
+    correct: 0,
+
+    explanation: "A smile can often communicate positive emotions such as happiness or friendliness.",
+
+    tags: ["body-language", "communication", "emotions"]
+  },
+
+  {
+    world: "Human Behavior",
+    subcategory: "Communication",
+    ageGroup: "adults",
+    difficulty: "medium",
+
+    question: "What is active listening?",
+
+    answers: [
+      "Paying attention and responding thoughtfully",
+      "Interrupting constantly",
+      "Ignoring the speaker",
+      "Thinking only about what to say next"
+    ],
+
+    correct: 0,
+
+    explanation: "Active listening involves paying attention, understanding the speaker, and responding appropriately.",
+
+    tags: ["communication", "body-language", "psychology"]
+  },
+
+  // ============================================================
+  // FOOD & CULINARY ARTS
+  // ============================================================
+
+  {
+    world: "Food & Culinary Arts",
+    subcategory: "Food",
+    ageGroup: "kids_5_8",
+    difficulty: "easy",
+
+    question: "Which food is made from milk?",
+
+    answers: [
+      "Cheese",
+      "Rice",
+      "Carrot",
+      "Apple"
+    ],
+
+    correct: 0,
+
+    explanation: "Cheese is commonly made from milk.",
+
+    tags: ["food", "dairy", "cooking"]
+  },
+
+  {
+    world: "Food & Culinary Arts",
+    subcategory: "Cooking",
+    ageGroup: "kids_9_12",
+    difficulty: "medium",
+
+    question: "What does boiling water mean?",
+
+    answers: [
+      "Water is freezing",
+      "Water is turning into ice",
+      "Water is heated until it bubbles",
+      "Water is being mixed with oil"
+    ],
+
+    correct: 2,
+
+    explanation: "Boiling occurs when water is heated to the point where it produces bubbles throughout the liquid.",
+
+    tags: ["food", "cooking", "science"]
+  },
+
+  {
+    world: "Food & Culinary Arts",
+    subcategory: "Culinary Techniques",
+    ageGroup: "adults",
+    difficulty: "medium",
+
+    question: "What does 'sauté' generally mean?",
+
+    answers: [
+      "Cook food quickly in a small amount of fat",
+      "Freeze food",
+      "Bake food overnight",
+      "Dry food in the sun"
+    ],
+
+    correct: 0,
+
+    explanation: "Sautéing involves quickly cooking food in a small amount of fat over relatively high heat.",
+
+    tags: ["culinary", "cooking", "techniques"]
+  },
+
+  // ============================================================
+  // SPACE
+  // ============================================================
+
+  {
+    world: "Space",
+    subcategory: "Solar System",
+    ageGroup: "kids_5_8",
+    difficulty: "easy",
+
+    question: "What is the name of the star at the center of our solar system?",
+
+    answers: [
+      "The Moon",
+      "The Sun",
+      "Mars",
+      "Earth"
+    ],
+
+    correct: 1,
+
+    explanation: "The Sun is the star at the center of our solar system.",
+
+    tags: ["space", "sun", "solar-system"]
+  },
+
+  {
+    world: "Space",
+    subcategory: "Planets",
+    ageGroup: "kids_9_12",
+    difficulty: "medium",
+
+    question: "Which planet has the most prominent ring system?",
+
+    answers: [
+      "Earth",
+      "Mars",
+      "Saturn",
+      "Mercury"
+    ],
+
+    correct: 2,
+
+    explanation: "Saturn is famous for its large and prominent system of rings.",
+
+    tags: ["space", "saturn", "planets"]
+  },
+
+  {
+    world: "Space",
+    subcategory: "Astronomy",
+    ageGroup: "adults",
+    difficulty: "hard",
+
+    question: "What is a light-year?",
+
+    answers: [
+      "A unit of time",
+      "A unit of distance",
+      "A type of star",
+      "A spacecraft"
+    ],
+
+    correct: 1,
+
+    explanation: "A light-year is the distance light travels through vacuum in one year.",
+
+    tags: ["space", "astronomy", "light-year"]
+  },
+
+  // ============================================================
+  // HISTORY
+  // ============================================================
+
+  {
+    world: "History",
+    subcategory: "Ancient History",
+    ageGroup: "kids_9_12",
+    difficulty: "medium",
+
+    question: "Which civilization built the pyramids at Giza?",
+
+    answers: [
+      "Ancient Egyptians",
+      "Romans",
+      "Vikings",
+      "Aztecs"
+    ],
+
+    correct: 0,
+
+    explanation: "The pyramids at Giza were built in ancient Egypt.",
+
+    tags: ["history", "egypt", "pyramids"]
+  },
+
+  // ============================================================
+  // ARTS
+  // ============================================================
+
+  {
+    world: "Arts",
+    subcategory: "Visual Arts",
+    ageGroup: "kids_5_8",
+    difficulty: "easy",
+
+    question: "Which tool is commonly used to paint a picture?",
+
+    answers: [
+      "Paintbrush",
+      "Spoon",
+      "Hammer",
+      "Ruler"
+    ],
+
+    correct: 0,
+
+    explanation: "A paintbrush is commonly used to apply paint to a surface.",
+
+    tags: ["arts", "painting", "creativity"]
+  },
+
+  // ============================================================
+  // TECHNOLOGY
+  // ============================================================
+
+  {
+    world: "Technology",
+    subcategory: "Computers",
+    ageGroup: "kids_9_12",
+    difficulty: "medium",
+
+    question: "What does a computer use to store information for later use?",
+
+    answers: [
+      "Storage",
+      "Water",
+      "Paper only",
+      "Sunlight"
+    ],
+
+    correct: 0,
+
+    explanation: "Computers use storage devices and systems to save information.",
+
+    tags: ["technology", "computers", "storage"]
+  },
+
+  // ============================================================
+  // NATURE
+  // ============================================================
+
+  {
+    world: "Nature",
+    subcategory: "Environment",
+    ageGroup: "kids_5_8",
+    difficulty: "easy",
+
+    question: "Which of these is a renewable source of energy?",
+
+    answers: [
+      "Sunlight",
+      "Coal",
+      "Oil",
+      "Natural gas"
+    ],
+
+    correct: 0,
+
+    explanation: "Sunlight is a renewable source of energy because it is naturally replenished.",
+
+    tags: ["nature", "environment", "energy"]
   }
 
-};
+];
 
 
 // ============================================================
-// UTILITY FUNCTIONS
+// HELPER FUNCTIONS
 // ============================================================
 
-function flattenQuestions(ageBand, difficulty = null, category = null) {
-
-  const ageData = QUESTION_BANK[ageBand];
-
-  if (!ageData) {
-    return [];
-  }
-
-  const difficulties = difficulty
-    ? [difficulty]
-    : Object.keys(ageData);
-
-  const result = [];
-
-  difficulties.forEach(level => {
-
-    const levelData = ageData[level];
-
-    if (!levelData) {
-      return;
-    }
-
-    Object.keys(levelData).forEach(cat => {
-
-      if (category && cat !== category) {
-        return;
-      }
-
-      levelData[cat].forEach(question => {
-
-        result.push({
-          ...question,
-          ageBand,
-          difficulty: level,
-          category: cat
-        });
-
-      });
-
-    });
-
-  });
-
-  return result;
-}
-
-
-// Fisher-Yates shuffle
 function shuffle(array) {
+  const copy = [...array];
 
-  const result = [...array];
-
-  for (let i = result.length - 1; i > 0; i--) {
-
+  for (let i = copy.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
 
-    [result[i], result[j]] =
-      [result[j], result[i]];
-
+    [copy[i], copy[j]] = [copy[j], copy[i]];
   }
 
-  return result;
+  return copy;
 }
 
 
-// Get the complete pool for an age group.
-export function getQuestions(
-  ageBand = "kids_5_8",
-  difficulty = null,
-  category = null
-) {
+// ============================================================
+// GET FILTERED QUESTIONS
+// ============================================================
 
-  return flattenQuestions(
-    ageBand,
-    difficulty,
-    category
-  );
+export function getQuestions({
+  world = null,
+  subcategory = null,
+  ageGroup = null,
+  difficulty = null
+} = {}) {
 
+  return QUESTION_BANK.filter(question => {
+
+    if (world && question.world !== world) {
+      return false;
+    }
+
+    if (subcategory && question.subcategory !== subcategory) {
+      return false;
+    }
+
+    if (ageGroup && question.ageGroup !== ageGroup) {
+      return false;
+    }
+
+    if (difficulty && question.difficulty !== difficulty) {
+      return false;
+    }
+
+    return true;
+  });
 }
 
 
-// Get one random question.
-export function getRandomQuestion(
-  ageBand = "kids_5_8",
-  difficulty = null,
-  category = null
-) {
+// ============================================================
+// GET RANDOM QUESTION
+// ============================================================
 
-  const pool = flattenQuestions(
-    ageBand,
-    difficulty,
-    category
-  );
+export function getRandomQuestion(filters = {}) {
+
+  const pool = getQuestions(filters);
 
   if (!pool.length) {
     return null;
   }
 
-  const question =
-    pool[Math.floor(Math.random() * pool.length)];
+  const question = pool[
+    Math.floor(Math.random() * pool.length)
+  ];
 
   const answers = shuffle(
     question.answers.map((answer, index) => ({
@@ -695,37 +899,31 @@ export function getRandomQuestion(
   );
 
   return {
-    question: question.question,
-    category: question.category,
-    ageBand: question.ageBand,
+    world: question.world,
+    subcategory: question.subcategory,
+    ageGroup: question.ageGroup,
     difficulty: question.difficulty,
-    answers
+    question: question.question,
+    answers,
+    explanation: question.explanation,
+    tags: question.tags
   };
-
 }
 
 
-// Create a randomized quiz session.
-export function createQuiz(
-  ageBand = "kids_5_8",
-  difficulty = null,
-  category = null,
+// ============================================================
+// CREATE QUESTION SESSION
+// ============================================================
+
+export function createQuestionSession(
+  filters = {},
   numberOfQuestions = 10
 ) {
 
-  const pool = flattenQuestions(
-    ageBand,
-    difficulty,
-    category
-  );
+  const pool = shuffle(getQuestions(filters));
 
-  const shuffledQuestions = shuffle(pool);
-
-  return shuffledQuestions
-    .slice(
-      0,
-      Math.min(numberOfQuestions, shuffledQuestions.length)
-    )
+  return pool
+    .slice(0, Math.min(numberOfQuestions, pool.length))
     .map(question => {
 
       const answers = shuffle(
@@ -736,61 +934,70 @@ export function createQuiz(
       );
 
       return {
-        question: question.question,
-        category: question.category,
-        ageBand: question.ageBand,
+        world: question.world,
+        subcategory: question.subcategory,
+        ageGroup: question.ageGroup,
         difficulty: question.difficulty,
-        answers
+        question: question.question,
+        answers,
+        explanation: question.explanation,
+        tags: question.tags
       };
-
     });
-
 }
 
 
-// Get available categories.
-export function getCategories(
-  ageBand = "kids_5_8"
-) {
+// ============================================================
+// GET DATABASE STATISTICS
+// ============================================================
 
-  const questions =
-    flattenQuestions(ageBand);
+export function getQuestionStats() {
 
-  return [
+  const worlds = [
     ...new Set(
-      questions.map(question => question.category)
+      QUESTION_BANK.map(question => question.world)
     )
   ];
 
-}
+  const subcategories = [
+    ...new Set(
+      QUESTION_BANK.map(question => question.subcategory)
+    )
+  ];
 
+  const ageGroups = [
+    ...new Set(
+      QUESTION_BANK.map(question => question.ageGroup)
+    )
+  ];
 
-// Get database statistics.
-export function getQuestionStats() {
-
-  let total = 0;
-
-  Object.keys(QUESTION_BANK).forEach(ageBand => {
-
-    total +=
-      flattenQuestions(ageBand).length;
-
-  });
+  const difficulties = [
+    ...new Set(
+      QUESTION_BANK.map(question => question.difficulty)
+    )
+  ];
 
   return {
-    totalQuestions: total,
-    ageBands: Object.keys(QUESTION_BANK),
-    categories: [
-      ...new Set(
-        Object.keys(QUESTION_BANK).flatMap(ageBand =>
-          flattenQuestions(ageBand)
-            .map(question => question.category)
-        )
-      )
-    ]
+    totalQuestions: QUESTION_BANK.length,
+    worlds,
+    subcategories,
+    ageGroups,
+    difficulties
   };
-
 }
 
+
+// ============================================================
+// GET ALL QUESTIONS
+// ============================================================
+
+export function getAllQuestions() {
+  return [...QUESTION_BANK];
+}
+
+
+// ============================================================
+// DEFAULT EXPORT
+// ============================================================
 
 export default QUESTION_BANK;
