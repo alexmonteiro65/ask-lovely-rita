@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ask Lovely Rita — Real Size Preview</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:#0a0a0a;
+  display:flex; flex-direction:column;
+  align-items:center; min-height:100vh;
+  font-family:Georgia,serif;
+  padding:0;
+}
+
+/* DEVICE SELECTOR BAR */
+#device-bar {
+  width:100%; background:#111; border-bottom:1px solid #222;
+  padding:10px 16px; display:flex; gap:8px; align-items:center;
+  flex-wrap:wrap; position:sticky; top:0; z-index:100;
+}
+#device-bar span { color:#555; font-size:10px; font-family:monospace; letter-spacing:1px; margin-right:4px; }
+.dev-btn {
+  background:#1a1a1a; border:1px solid #333; color:#888;
+  padding:5px 10px; border-radius:4px; cursor:pointer;
+  font-family:monospace; font-size:9px; letter-spacing:0.5px;
+  transition:all 0.2s; white-space:nowrap;
+}
+.dev-btn:hover { border-color:#555; color:#ccc; }
+.dev-btn.active { background:#ff6ef7; border-color:#ff6ef7; color:#000; font-weight:bold; }
+
+/* PHONE WRAPPER */
+#phone-outer {
+  display:flex; justify-content:center; align-items:flex-start;
+  padding:20px 0 40px; width:100%;
+}
+#phone {
+  background:var(--bg, #1a0040);
+  overflow:hidden; position:relative;
+  display:flex; flex-direction:column;
+  transition:background 0.5s, width 0.3s, height 0.3s, border-radius 0.3s;
+  /* Default: iPhone 14 Pro */
+  width:393px; height:852px;
+  border-radius:48px;
+  box-shadow:0 0 0 10px #1a1a1a, 0 0 0 12px #333, 0 30px 80px rgba(0,0,0,0.8);
+}
+/* Notch */
+#phone::before {
+  content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:120px; height:34px; background:#0a0a0a;
+  border-radius:0 0 20px 20px; z-index:100;
+}
+
+/* THEMES */
+:root {
+  --bg:#1a0040; --accent:#ff6ef7; --accent2:#ffde59; --glow:#ff6ef7;
+  --iborder:#ff6ef7; --sub-color:#ffde59;
+  --btn-grad:linear-gradient(135deg,#ff6ef7,#a855f7);
+  --vinil-label:#ffde59; --vinil-label2:#ff9fff;
+  --title-glow:0 0 24px #ff6ef7, 0 0 48px #a855f7;
+}
+.theme-youngsters {
+  --bg:#1a0040; --accent:#ff6ef7; --accent2:#ffde59; --glow:#ff6ef7;
+  --iborder:#ff6ef7; --sub-color:#ffde59;
+  --btn-grad:linear-gradient(135deg,#ff6ef7,#a855f7);
+  --vinil-label:#ffde59; --vinil-label2:#ff9fff;
+  --title-glow:0 0 24px #ff6ef7, 0 0 48px #a855f7;
+}
+.theme-grownups {
+  --bg:#0d0d1e; --accent:#c8a96e; --accent2:#e8d5b0; --glow:#c8a96e;
+  --iborder:#c8a96e; --sub-color:#c8a96e;
+  --btn-grad:linear-gradient(135deg,#c8a96e,#6677aa);
+  --vinil-label:#c8a96e; --vinil-label2:#e8d5b0;
+  --title-glow:0 0 20px #c8a96e, 0 0 40px #6677aa;
+}
+.theme-experts {
+  --bg:#050510; --accent:#ffd700; --accent2:#ffd700; --glow:#ffd700;
+  --iborder:#ffd700; --sub-color:#ffd700;
+  --btn-grad:linear-gradient(135deg,#ffd700,#c8860a);
+  --vinil-label:#ffd700; --vinil-label2:#fff8dc;
+  --title-glow:0 0 30px #ffd700, 0 0 70px #c8860a;
+}
+
+/* SCROLL CONTAINER */
+#phone-scroll {
+  flex:1; overflow-y:auto; overflow-x:hidden;
+  display:flex; flex-direction:column;
+  padding-top:34px; /* notch */
+}
+#phone-scroll::-webkit-scrollbar { width:0; }
+
+/* HEADER */
+#header {
+  padding:16px 20px 12px;
+  display:flex; flex-direction:column; align-items:center;
+  background:var(--bg); transition:background 0.5s; flex-shrink:0;
+}
+
+/* LADS */
+#lads-row {
+  display:flex; justify-content:center; gap:8px;
+  margin-bottom:8px; width:100%;
+}
+.lad-wrap {
+  display:flex; flex-direction:column; align-items:center;
+  cursor:pointer; transition:transform 0.3s;
+}
+.lad-wrap:hover { transform:translateY(-6px) scale(1.1); }
+.lad-img {
+  width:72px; height:72px; object-fit:contain;
+  filter:drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+  transition:filter 0.3s;
+}
+.lad-wrap:hover .lad-img { filter:drop-shadow(0 0 16px var(--glow)); }
+.lad-name {
+  font-size:7.5px; color:var(--accent2); margin-top:2px;
+  font-family:monospace; letter-spacing:0.5px; text-align:center; opacity:1; font-weight:bold; text-shadow:0 0 6px var(--accent2);
+}
+
+/* TITLE */
+#title-wrap { text-align:center; margin-bottom:10px; width:100%; }
+#main-title {
+  font-size:2.1rem; color:#fff;
+  text-shadow:var(--title-glow); line-height:1.1; margin-bottom:3px;
+  transition:all 0.5s;
+}
+#subtitle {
+  font-size:0.6rem; color:var(--sub-color);
+  font-family:monospace; letter-spacing:2px; text-transform:uppercase; opacity:0.8;
+}
+
+/* RITA INPUT */
+#rita-box {
+  width:100%; background:rgba(255,255,255,0.07);
+  border:2px solid var(--iborder); border-radius:40px;
+  padding:10px 14px; display:flex; align-items:center; gap:8px;
+  margin-bottom:10px; transition:border-color 0.5s;
+}
+#mic-btn {
+  background:none; border:none; cursor:pointer;
+  padding:2px; display:flex; align-items:center; flex-shrink:0;
+}
+#rita-input {
+  flex:1; background:none; border:none; outline:none;
+  color:#fff; font-size:0.78rem; font-family:Georgia,serif;
+}
+#rita-input::placeholder { color:rgba(255,255,255,0.3); font-size:0.72rem; }
+#rita-btn {
+  background:var(--btn-grad); border:none; color:#fff;
+  padding:7px 13px; border-radius:22px; cursor:pointer;
+  font-size:0.65rem; font-weight:bold; font-family:monospace;
+  letter-spacing:0.5px; white-space:nowrap; flex-shrink:0;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,0.2)} 50%{box-shadow:0 0 0 5px rgba(255,255,255,0)} }
+
+/* PLAYLIST */
+#playlist-btn {
+  width:100%; background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.12); border-radius:10px;
+  padding:8px 12px; display:flex; align-items:center; gap:8px;
+  cursor:pointer; margin-bottom:10px; transition:all 0.3s;
+}
+#playlist-btn:hover { border-color:var(--accent); }
+.pl-text { flex:1; text-align:left; }
+.pl-title { font-size:8px; color:#fff; font-weight:bold; letter-spacing:0.5px; }
+.pl-sub { font-size:6px; color:rgba(255,255,255,0.4); margin-top:1px; }
+
+/* LEVEL TABS */
+#level-wrap { width:100%; margin-bottom:0; }
+.level-section-label {
+  text-align:center; font-size:8.1px; color:rgba(255,255,255,0.9);
+  letter-spacing:3px; text-transform:uppercase; font-family:monospace; margin-bottom:6px; font-weight:bold;
+}
+#level-tabs { display:flex; gap:5px; justify-content:center; width:100%; }
+.level-tab {
+  flex:1; border:2px solid rgba(255,255,255,0.1); border-radius:9px;
+  background:rgba(255,255,255,0.04); cursor:pointer; overflow:hidden;
+  transition:all 0.3s; position:relative;
+}
+.level-tab img { width:100%; aspect-ratio:1/1; object-fit:cover; filter:saturate(0.6) brightness(0.45); transition:filter 0.3s; }
+.level-tab:hover img,.level-tab.active img { filter:saturate(1.2) brightness(0.85); }
+.lt-label {
+  position:absolute; bottom:0; left:0; right:0;
+  background:linear-gradient(transparent,rgba(0,0,0,0.92));
+  padding:10px 3px 4px; text-align:center;
+  font-family:monospace; font-size:7px; font-weight:bold;
+  color:#fff; text-transform:uppercase;
+}
+.lt-sub { font-size:5.5px; opacity:0.85; display:block; margin-top:1px; }
+.level-tab.active { border-color:var(--accent); box-shadow:0 0 12px var(--glow); }
+
+/* SCROLL BODY */
+#scroll-body {
+  flex:1; overflow-y:auto; padding:12px 20px 30px;
+  background:var(--bg); transition:background 0.5s;
+}
+#scroll-body::-webkit-scrollbar { width:0; }
+
+/* BEATCOINS */
+#bc-wrap {
+  display:flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+  border-radius:22px; padding:7px 14px;
+  font-family:monospace; color:var(--accent2);
+  margin-bottom:8px; width:100%;
+}
+.bc-label { font-size:12.1px; opacity:1; flex:1; color:var(--accent2); font-weight:bold; }
+.bc-count { font-weight:bold; font-size:16px; color:var(--accent2); }
+
+/* COUNTER */
+#counter-wrap {
+  text-align:center; font-family:monospace; font-size:7px;
+  color:var(--accent); letter-spacing:2px; text-transform:uppercase; margin-bottom:12px; font-weight:bold;
+}
+#counter-wrap span { color:var(--accent); font-weight:bold; }
+
+/* DYNAMIC ALBUMS */
+.dyn-label {
+  font-size:7.2px; color:rgba(255,255,255,0.9); letter-spacing:3px;
+  text-transform:uppercase; font-family:monospace; margin-bottom:7px; font-weight:bold;
+}
+.album-panel { display:none; animation:fadein 0.4s ease; }
+.album-panel.active { display:block; }
+@keyframes fadein { from{opacity:0;transform:scale(0.97)} to{opacity:1;transform:scale(1)} }
+.album-pair { display:flex; gap:8px; }
+.album-card {
+  flex:1; border-radius:9px; overflow:hidden; cursor:pointer;
+  border:2px solid rgba(255,255,255,0.06); transition:all 0.35s; position:relative;
+}
+.album-card img { width:100%; aspect-ratio:1/1; object-fit:cover; filter:saturate(0.8) brightness(0.6); transition:filter 0.35s; }
+.album-card:hover img { filter:saturate(1.3) brightness(0.9); }
+.album-card.shake { border-color:var(--accent); box-shadow:0 0 16px var(--glow); animation:shake 0.5s ease; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-4px) rotate(-1deg)} 40%{transform:translateX(4px) rotate(1deg)} 60%{transform:translateX(-3px)} 80%{transform:translateX(3px)} }
+.ac-label { display:none; }
+
+/* BOTTOM BAR */
+#bottom-bar {
+  display:flex; gap:8px; padding:10px 16px 14px;
+  background:var(--bg); border-top:1px solid rgba(255,255,255,0.08);
+  flex-shrink:0;
+}
+.bb-btn {
+  flex:1; background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.15); border-radius:10px;
+  padding:8px 4px; cursor:pointer; color:#fff;
+  font-family:monospace; font-size:8px; letter-spacing:1px;
+  text-transform:uppercase; transition:all 0.2s;
+  display:flex; align-items:center; justify-content:center; gap:5px;
+}
+.bb-btn:hover { border-color:var(--accent); background:rgba(255,255,255,0.1); }
+.bb-btn.active { border-color:var(--accent); color:var(--accent); }
+
+/* TOAST */
+#toast {
+  position:fixed; bottom:60px; left:50%; transform:translateX(-50%);
+  background:rgba(0,0,0,0.9); color:#fff; padding:7px 16px;
+  border-radius:20px; font-family:monospace; font-size:9px; z-index:9999;
+  border:1px solid rgba(255,255,255,0.15); max-width:300px; text-align:center;
+  transition:opacity 0.3s; pointer-events:none; opacity:0;
+}
+
+/* RITA POPUP */
+#rita-popup {
+  display:none; position:absolute; bottom:70px; left:12px; right:12px;
+  background:rgba(10,0,30,0.97); border:1px solid var(--accent);
+  border-radius:14px; padding:14px; z-index:500;
+  box-shadow:0 0 20px var(--glow);
+  animation:popIn 0.25s ease;
+}
+@keyframes popIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+#rita-popup.visible { display:block; }
+#rita-popup-text {
+  font-family:Georgia,serif; font-size:11px; color:#fff;
+  line-height:1.5; margin-bottom:10px;
+}
+#rita-popup-close {
+  display:block; text-align:center; font-family:monospace; font-size:8px;
+  color:var(--accent); letter-spacing:1px; cursor:pointer; opacity:0.7;
+}
+#rita-popup-close:hover { opacity:1; }
+
+/* SIZE LABEL */
+#size-label {
+  font-family:monospace; font-size:9px; color:#444;
+  margin-top:10px; letter-spacing:1px;
+}
+</style>
+</head>
+<body>
+
+<!-- DEVICE BAR -->
+<div id="device-bar">
+  <span>📱 DEVICE:</span>
+  <button class="dev-btn" onclick="setDevice(390,844,'iPhone 14')" id="d-iphone14">iPhone 14 · 390×844</button>
+  <button class="dev-btn active" onclick="setDevice(393,852,'iPhone 14 Pro')" id="d-iphone14pro">iPhone 14 Pro · 393×852</button>
+  <button class="dev-btn" onclick="setDevice(430,932,'iPhone 14 Plus')" id="d-iphone14plus">iPhone 14 Plus · 430×932</button>
+  <button class="dev-btn" onclick="setDevice(360,800,'Android M')" id="d-android">Android Mid · 360×800</button>
+  <button class="dev-btn" onclick="setDevice(412,915,'Android L')" id="d-androidl">Android Large · 412×915</button>
+  <button class="dev-btn" onclick="setDevice(320,568,'iPhone SE')" id="d-iphonese">iPhone SE · 320×568</button>
+</div>
+
+<div id="phone-outer">
+<div id="phone" class="theme-youngsters">
+  <div id="phone-scroll">
+
+    <!-- HEADER -->
+    <div id="header">
+      <div id="lads-row">
+        <div class="lad-wrap" onclick="selectLad('smart')">
+          <img class="lad-img" id="lad-smart" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-smart-regular.png" alt="Smart">
+          <span class="lad-name">THE SMART ONE</span>
+        </div>
+        <div class="lad-wrap" onclick="selectLad('cute')">
+          <img class="lad-img" id="lad-cute" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-cute-regular.png" alt="Cute">
+          <span class="lad-name">THE CUTE ONE</span>
+        </div>
+        <div class="lad-wrap" onclick="selectLad('quiet')">
+          <img class="lad-img" id="lad-quiet" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-quiet-regular.png" alt="Quiet">
+          <span class="lad-name">THE QUIET ONE</span>
+        </div>
+        <div class="lad-wrap" onclick="selectLad('funny')">
+          <img class="lad-img" id="lad-funny" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-funny-regular.png" alt="Funny">
+          <span class="lad-name">THE FUNNY ONE</span>
+        </div>
+      </div>
+
+      <div id="title-wrap">
+        <div id="main-title">Ask Lovely Rita</div>
+        <div id="subtitle">Learning with the Lads for Generations</div>
+      </div>
+
+      <div id="rita-box">
+        <button id="mic-btn" onclick="toggleMic()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <rect x="9" y="2" width="6" height="11" rx="3" fill="var(--accent)"/>
+            <path d="M5 11a7 7 0 0 0 14 0" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <line x1="12" y1="18" x2="12" y2="22" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>
+            <line x1="8" y1="22" x2="16" y2="22" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <input id="rita-input" type="text" placeholder="Speak or type any question..." autocomplete="off">
+        <button id="rita-btn" onclick="askRita()">ASK RITA ♪</button>
+      </div>
+
+      <div id="playlist-btn" onclick="togglePlaylist()">
+        <svg width="28" height="28" viewBox="0 0 40 40" style="flex-shrink:0">
+          <circle cx="20" cy="20" r="19" fill="#111"/>
+          <circle cx="20" cy="20" r="13" fill="#1a1a1a"/>
+          <circle cx="20" cy="20" r="7" fill="var(--vinil-label)"/>
+          <circle cx="20" cy="20" r="4" fill="#111"/>
+          <circle cx="20" cy="20" r="1.5" fill="var(--vinil-label2)"/>
+        </svg>
+        <div class="pl-text">
+          <div class="pl-title">🎵 PLAYLIST — Tribute Songs</div>
+          <div class="pl-sub">Fan Made · Preview 15s</div>
+        </div>
+        <span style="font-size:14px;color:var(--accent)" id="pl-arrow">▶</span>
+      </div>
+
+      <div id="level-wrap">
+        <div class="level-section-label">Choose your level</div>
+        <div id="level-tabs">
+          <div class="level-tab active" id="tab-youngsters" onclick="setTheme('youngsters',this)">
+            <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/album-youngsters.png" alt="Yellow Submarine">
+            <div class="lt-label">YOUNGSTERS<span class="lt-sub">Kinder · Middle</span></div>
+          </div>
+          <div class="level-tab" id="tab-grownups" onclick="setTheme('grownups',this)">
+            <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/album-youngsters.png" alt="Rubber Soul">
+            <div class="lt-label">GROWN UPS<span class="lt-sub">High · College</span></div>
+          </div>
+          <div class="level-tab" id="tab-experts" onclick="setTheme('experts',this)">
+            <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/album-youngsters.png" alt="Abbey Road">
+            <div class="lt-label">EXPERTS<span class="lt-sub">The Fifth Beatle</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCROLL BODY -->
+    <div id="scroll-body">
+
+      <div id="bc-wrap">
+        <svg width="24" height="24" viewBox="0 0 40 40" style="flex-shrink:0">
+          <circle cx="20" cy="20" r="19" fill="#111"/>
+          <circle cx="20" cy="20" r="13" fill="#1a1a1a"/>
+          <circle cx="20" cy="20" r="7" fill="var(--vinil-label)"/>
+          <circle cx="20" cy="20" r="4" fill="#111"/>
+          <circle cx="20" cy="20" r="1.5" fill="var(--vinil-label2)"/>
+        </svg>
+        <span class="bc-label">Educational Beatcoins</span>
+        <span class="bc-count" id="bc-display">0</span>
+      </div>
+
+      <div id="counter-wrap"><span>20,324</span> Fans Learning Worldwide</div>
+
+      <div id="dynamic-albums">
+        <div class="dyn-label" id="dyn-label">For Youngsters</div>
+        <div class="album-panel active" id="panel-youngsters">
+          <div class="album-pair">
+            <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/album-youngsters.png" alt="MMT"><div class="ac-label">Magical Mystery Tour</div></div>
+            <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/album-youngsters.png" alt="HDN"><div class="ac-label">A Hard Day's Night</div></div>
+          </div>
+        </div>
+        <div class="album-panel" id="panel-grownups">
+          <div class="album-pair">
+            <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/album-youngsters.png" alt="Rev"><div class="ac-label">Revolver</div></div>
+            <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/album-youngsters.png" alt="LIB"><div class="ac-label">Let It Be</div></div>
+          </div>
+        </div>
+        <div class="album-panel" id="panel-experts">
+          <div class="album-pair">
+            <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/album-youngsters.png" alt="Blue"><div class="ac-label">The Blue Album</div></div>
+            <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/album-youngsters.png" alt="Red"><div class="ac-label">The Red Album</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end scroll-body -->
+  </div><!-- end phone-scroll -->
+
+  <!-- RITA POPUP -->
+  <div id="rita-popup">
+    <div id="rita-popup-text">♪ Ask me anything about The Beatles...</div>
+    <span id="rita-popup-close" onclick="hideRitaPopup()">— Tap to hide —</span>
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div id="bottom-bar">
+    <button class="bb-btn" id="btn-home" onclick="goHome()">🏠 HOME</button>
+    <button class="bb-btn" id="btn-mute" onclick="toggleMute()">🔊 SOUND</button>
+  </div>
+
+</div><!-- end phone -->
+</div><!-- end phone-outer -->
+
+<div id="size-label" id="size-label">iPhone 14 Pro · 393 × 852 px</div>
+<div id="toast"></div>
+
+<script>
+const LADS = {
+  regular:{ smart:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-smart-regular.png', cute:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-cute-regular.png', quiet:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-quiet-regular.png', funny:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-funny-regular.png' },
+  pepper:{  smart:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-smart-pepper.png', cute:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-cute-regular.png', quiet:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-quiet-regular.png', funny:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-quiet-pepper.png' },
+  abbey:{   smart:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-smart-abbey.png', cute:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-cute-abbey.png', quiet:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-quiet-abbey.png', funny:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-funny-abbey.png' }
+};
+const OUTFIT_MAP = { youngsters:'regular', grownups:'pepper', experts:'abbey' };
+const DYN_LABELS = { youngsters:'For Youngsters', grownups:'For Grown Ups', experts:'For Experts' };
+const QUOTES = {
+  smart:"Pick me! I will take you to Strawberry Fields forever!",
+  cute:"No no no! Pick ME! We will walk down Penny Lane together!",
+  quiet:"Choose me... and find your inner peace. Here comes the sun.",
+  funny:"OI! Pick me! We will share my Octopus Garden — plenty of room!"
+};
+
+let listening=false, recognition=null, playlistOpen=false;
+
+function setTheme(t, tabEl) {
+  const phone=document.getElementById('phone');
+  phone.className='theme-'+t;
+  document.querySelectorAll('.level-tab').forEach(e=>e.classList.remove('active'));
+  if(tabEl) tabEl.classList.add('active');
+  else { const m={youngsters:0,grownups:1,experts:2}; document.querySelectorAll('.level-tab')[m[t]]?.classList.add('active'); }
+  // Auto outfit by level
+  const outfit = OUTFIT_MAP[t];
+  ['smart','cute','quiet','funny'].forEach(lad=>document.getElementById('lad-'+lad).src=LADS[outfit][lad]);
+  // Swap album panels
+  document.querySelectorAll('.album-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+t)?.classList.add('active');
+  document.getElementById('dyn-label').textContent = DYN_LABELS[t];
+  setTimeout(()=>{
+    document.querySelectorAll('#panel-'+t+' .album-card').forEach(c=>{
+      c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake');
+      setTimeout(()=>c.classList.remove('shake'),600);
+    });
+  },50);
+}
+
+function selectLad(lad) { toast('♪ '+QUOTES[lad]); }
+
+function toggleMic() {
+  if(listening){ stopListening(); return; }
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){ toast('⚠️ Speech not supported in this browser'); return; }
+  recognition=new SR(); recognition.lang='en-US'; recognition.interimResults=false;
+  recognition.onresult=(e)=>{ const t=e.results[0][0].transcript; document.getElementById('rita-input').value=t; stopListening(); setTimeout(()=>{ askRita(); },300); };
+  recognition.onerror=()=>{ stopListening(); toast('⚠️ Could not hear clearly'); };
+  recognition.onend=()=>{ if(listening) stopListening(); };
+  recognition.start(); listening=true;
+  document.getElementById('mic-btn').style.opacity='0.5';
+  toast('🎤 Listening... speak now');
+}
+function stopListening() {
+  listening=false;
+  if(recognition){ try{recognition.stop();}catch(e){} recognition=null; }
+  document.getElementById('mic-btn').style.opacity='1';
+}
+
+let muteState = false;
+
+function askRita() {
+  const q=document.getElementById('rita-input').value.trim(); if(!q) return;
+  showRitaPopup('♪ Rita says: "' + q.substring(0,40) + '…" — Full AI coming in v20!');
+  document.getElementById('rita-input').value='';
+}
+
+function showRitaPopup(msg) {
+  const p = document.getElementById('rita-popup');
+  document.getElementById('rita-popup-text').textContent = msg;
+  p.classList.add('visible');
+}
+
+function hideRitaPopup() {
+  document.getElementById('rita-popup').classList.remove('visible');
+}
+
+function goHome() {
+  hideRitaPopup();
+  document.getElementById('phone-scroll').scrollTop = 0;
+  toast('🏠 Back to top!');
+}
+
+function toggleMute() {
+  muteState = !muteState;
+  const btn = document.getElementById('btn-mute');
+  btn.textContent = muteState ? '🔇 MUTED' : '🔊 SOUND';
+  btn.classList.toggle('active', muteState);
+  toast(muteState ? '🔇 Sound off' : '🔊 Sound on');
+}
+
+function togglePlaylist() {
+  playlistOpen=!playlistOpen;
+  document.getElementById('pl-arrow').textContent=playlistOpen?'▼':'▶';
+  toast(playlistOpen?'🎵 Playlist — coming in v20!':'');
+}
+
+function toast(msg) {
+  if(!msg) return;
+  const t=document.getElementById('toast'); t.textContent=msg; t.style.opacity='1';
+  clearTimeout(t._t); t._t=setTimeout(()=>t.style.opacity='0',3000);
+}
+
+function setDevice(w,h,name) {
+  const phone=document.getElementById('phone');
+  phone.style.width=w+'px'; phone.style.height=h+'px';
+  document.getElementById('size-label').textContent=name+' · '+w+' × '+h+' px';
+  document.querySelectorAll('.dev-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// Init
+setTheme('youngsters');
+</script>
+</body>
+</html>
