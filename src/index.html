@@ -728,11 +728,11 @@ const RITA_BRAIN = {
       const em=t.match(/atomic number of (\w+)/);
       if(em&&elements[em[1]]) return `The atomic number of ${em[1]} is ${elements[em[1]]}.`;
     }
-    if(/what is oxygen/.test(t)) return 'Oxygen is a chemical element (symbol O, atomic number 8). It makes up about 21% of Earth's atmosphere and is essential for life.';
+    if(/what is oxygen/.test(t)) return "Oxygen is a chemical element (symbol O, atomic number 8). It makes up about 21% of Earth's atmosphere and is essential for life.";
     if(/what is carbon/.test(t)) return 'Carbon is a chemical element (symbol C, atomic number 6) that is the basis of all known life on Earth.';
     if(/fastest animal/.test(t)) return 'The cheetah is the fastest land animal, reaching speeds of up to 120 km/h. The peregrine falcon is the fastest animal overall at over 320 km/h in a dive.';
     if(/largest animal/.test(t)) return 'The blue whale is the largest animal ever known to exist, reaching up to 30 metres in length.';
-    if(/smallest animal/.test(t)) return 'The bumblebee bat is often considered the world's smallest mammal, weighing less than 2 grams.';
+    if(/smallest animal/.test(t)) return "The bumblebee bat is often considered the world's smallest mammal, weighing less than 2 grams.";
     if(/how many legs.+spider/.test(t)) return 'Spiders have 8 legs.';
     if(/how many legs.+insect/.test(t)) return 'Insects have 6 legs.';
     if(/what is the speed of sound/.test(t)) return 'The speed of sound in air is about 343 metres per second (1,235 km/h) at room temperature.';
@@ -788,7 +788,7 @@ const RITA_BRAIN = {
     if(/who.*shakespeare/.test(t)) return 'William Shakespeare (1564-1616) was an English playwright and poet, widely regarded as the greatest writer in the English language.';
     if(/who.*einstein/.test(t)) return 'Albert Einstein (1879-1955) was a German-born physicist who developed the theory of relativity and won the Nobel Prize in Physics in 1921.';
     if(/what is the pythagorean theorem/.test(t)) return 'The Pythagorean theorem states that in a right triangle, a² + b² = c², where c is the hypotenuse.';
-    if(/what is pi/.test(t)) return 'Pi (π) is the ratio of a circle's circumference to its diameter — approximately 3.14159. It goes on forever without repeating.';
+    if(/what is pi/.test(t)) return "Pi (π) is the ratio of a circle's circumference to its diameter — approximately 3.14159. It goes on forever without repeating.";
     if(/what is inflation/.test(t)) return 'Inflation is the rate at which the general level of prices for goods and services rises over time, reducing purchasing power.';
     if(/what is democracy/.test(t)) return 'Democracy is a system of government where citizens have the power to elect their leaders and participate in decision-making.';
     if(/what is artificial intelligence|what is ai/.test(t)) return 'Artificial Intelligence (AI) is the simulation of human intelligence by computer systems — including learning, reasoning, and problem-solving.';
@@ -856,7 +856,7 @@ if (window.speechSynthesis) {
   window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
 }
 
-function askRita() {
+async function askRita() {
   const input = document.getElementById('rita-input');
   const q = input.value.trim();
   if (!q) { toast('♪ Ask me anything, love!'); return; }
@@ -867,11 +867,75 @@ function askRita() {
   const preview = words.length > 12 ? words.slice(0,12).join(' ') + '...' : q;
   document.getElementById('rita-popup-question').textContent = '❝ ' + preview + ' ❞';
 
-  // Get response from local brain
-  const result = RITA_BRAIN.respond(q, theme);
-  showRitaPopupHTML(result.html);
-  ritaSpeak(result.spokenText);
+  // Show loading
+  showRitaPopupHTML('<div style="opacity:0.7;font-style:italic;text-align:center;padding:20px">♪ Rita is thinking...</div>');
+  document.getElementById('rita-popup').classList.add('visible');
   input.value = '';
+
+  // Try Claude API first
+  try {
+    const toneMap = {
+      youngsters: "You speak warmly and enthusiastically to children aged 6-12. Use simple words. End with encouragement like 'You are absolutely fab!'",
+      grownups: "You speak coolly and engagingly to teenagers. Be clever and fun. End with something like 'Sharp thinking, mate!'",
+      experts: "You speak with sophistication to adults. Be concise and impressive. End with something like 'The Fab Four salute you.'"
+    };
+
+    const systemPrompt = `You are Lovely Rita, a charming British educational assistant inspired by The Beatles song "Lovely Rita, Meter Maid".
+Your personality: warm, witty, British, knowledgeable — never say you don't know something.
+${toneMap[theme] || toneMap.youngsters}
+
+RULES:
+1. Answer ANY question directly and accurately in 2-3 short sentences
+2. ALWAYS end with a relevant Beatles connection — a lyric, song title, album, or fun Beatles fact that relates to the topic
+3. The Beatles connection must make sense for the topic — not random
+4. Keep total response under 80 words
+5. Never refuse to answer — give your best answer always
+
+Format: [Direct answer 2-3 sentences]. [One Beatles connection sentence with song/album title].`;
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 150,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: q }]
+      })
+    });
+
+    if (!response.ok) throw new Error('API error');
+    const data = await response.json();
+    const ritaText = data.content?.[0]?.text;
+    if (!ritaText) throw new Error('No response');
+
+    const beatlesEntry = RITA_BRAIN.getBeatlsEntry(theme);
+    const closings = {
+      youngsters: ["You are absolutely fab!","The Beatles would be so proud!","Brilliant work, young one!","Keep rocking, superstar!"],
+      grownups:   ["Sharp thinking, mate!","Now that is the Pepper spirit!","Invest those BeatCoins wisely!"],
+      experts:    ["Impressive. Pure Abbey Road calibre.","The Fab Four salute you.","Now we are talking, Beat Corps."]
+    };
+    const c = closings[theme] || closings.youngsters;
+    const closing = c[Math.floor(Math.random()*c.length)];
+
+    const popupHtml = `<div style="line-height:1.6">
+      <div style="font-size:0.92rem;margin-bottom:12px">${ritaText}</div>
+      <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:8px 12px;font-size:0.76rem;opacity:0.85">
+        🎵 <strong>${beatlesEntry.song}</strong><br>
+        <span style="opacity:0.75">📀 ${beatlesEntry.album} · ${beatlesEntry.year}</span>
+      </div>
+      <div style="margin-top:10px;font-size:0.78rem;opacity:0.65;font-style:italic">${closing}</div>
+    </div>`;
+
+    showRitaPopupHTML(popupHtml);
+    ritaSpeak(ritaText + ' ' + closing);
+
+  } catch(err) {
+    // Fallback to local brain
+    const result = RITA_BRAIN.respond(q, theme);
+    showRitaPopupHTML(result.html);
+    ritaSpeak(result.spokenText);
+  }
 }
 
 function showRitaPopupHTML(html) {
