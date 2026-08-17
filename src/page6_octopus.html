@@ -170,9 +170,10 @@
     display:flex; flex-direction:column; align-items:center; gap:4px;
   }
   #lad-img-el {
-    width: 68px; height: auto;
+    width: 80px; height: auto;
     filter: drop-shadow(0 4px 12px rgba(77,200,255,.5));
     animation: lad-float 2.5s ease-in-out infinite alternate;
+    display: block;
   }
   #lad-img-el.speaking {
     filter: drop-shadow(0 0 16px rgba(77,200,255,.9)) drop-shadow(0 4px 12px rgba(77,200,255,.5));
@@ -229,16 +230,20 @@
 
   /* ── LETTER BOXES ── */
   #letter-boxes {
-    display: flex; gap: 6px; justify-content: center;
-    flex-wrap: wrap; margin-bottom: 8px;
+    display: flex; gap: 4px; justify-content: center;
+    flex-wrap: nowrap; margin-bottom: 8px;
+    overflow-x: auto; padding-bottom: 4px;
+    scrollbar-width: none;
   }
+  #letter-boxes::-webkit-scrollbar { display: none; }
   .letter-box {
-    width: 34px; height: 40px;
+    flex-shrink: 0;
+    width: 30px; height: 36px;
     background: rgba(255,255,255,.08);
     border: 2px solid rgba(77,200,255,.4);
-    border-radius: 8px;
+    border-radius: 7px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px; font-weight: 900;
+    font-size: 15px; font-weight: 900;
     color: #fff; text-transform: uppercase;
     transition: all .25s;
     position: relative;
@@ -596,7 +601,7 @@ const RITA_COMPLETE = [
 const LEVEL_CFG = {
   youngsters: { hints:3, bonusCorrect:20, bonusAll:100, inputType:'scramble', ladImg:'Funny_Aqua_Lad.png' },
   grownups:   { hints:2, bonusCorrect:30, bonusAll:150, inputType:'keyboard', ladImg:'Aqua_Lad.png' },
-  experts:    { hints:0, bonusCorrect:50, bonusAll:250, inputType:'keyboard', ladImg:'Aqua_Lad.png' },
+  experts:    { hints:1, bonusCorrect:50, bonusAll:250, inputType:'keyboard', ladImg:'Aqua_Lad.png' },
 };
 
 const KEYBOARD_ROWS = [
@@ -688,6 +693,10 @@ function applyLevel(lvl) {
   const ladEl = document.getElementById('lad-img-el');
   ladEl.src = BASE + cfg.ladImg;
   ladEl.style.display = 'block';
+  ladEl.onerror = function() {
+    this.style.display = 'none';
+    document.getElementById('lad-label').textContent = 'Funny Lad 🤿';
+  };
 
   // BeatCoins
   document.getElementById('bc-val').textContent = S.beatcoins;
@@ -809,13 +818,17 @@ function loadWord() {
   S.hintsUsedThisWord = 0;
   S.revealedPositions = [];
   S.usedScrambleIndices = [];
+  // Reset hints per word based on level
+  const hintCfg = LEVEL_CFG[S.level];
+  S.hintsLeft = hintCfg.hints; // reset each word
 
   // Display
   document.getElementById('word-category').textContent = wordObj.cat;
   document.getElementById('word-image').textContent = wordObj.emoji;
-  document.getElementById('word-hint').textContent = cfg.hints > 0
-    ? `💡 ${S.hintsLeft} hint${S.hintsLeft!==1?'s':''} remaining`
-    : 'No hints in Expert mode!';
+  const hintsAvail = LEVEL_CFG[S.level].hints;
+  document.getElementById('word-hint').textContent = hintsAvail > 0
+    ? `💡 ${hintsAvail} hint${hintsAvail!==1?'s':''} per word`
+    : 'No hints — you can do it!';
   document.getElementById('result-panel').classList.remove('show');
   document.getElementById('next-btn').style.display = 'none';
 
@@ -836,8 +849,8 @@ function loadWord() {
   } else {
     document.getElementById('scramble-section').style.display = 'none';
     document.getElementById('keyboard-section').style.display = 'flex';
-    document.getElementById('hint-btn').style.display = cfg.hints > 0 ? 'block' : 'none';
-    if (cfg.hints > 0) document.getElementById('hint-btn').disabled = S.hintsLeft <= 0;
+    document.getElementById('hint-btn').style.display = 'block';
+    document.getElementById('hint-btn').disabled = S.hintsLeft <= 0;
     resetKeyboard();
   }
 }
@@ -849,10 +862,18 @@ function loadWord() {
 function buildLetterBoxes(word) {
   const container = document.getElementById('letter-boxes');
   container.innerHTML = '';
+  // Adapt box size to word length so it fits in one line
+  const len = word.length;
+  const boxW = len <= 6 ? 34 : len <= 8 ? 28 : len <= 10 ? 24 : 20;
+  const fontSize = len <= 6 ? 18 : len <= 8 ? 15 : len <= 10 ? 13 : 11;
+  const gap = len <= 6 ? 6 : 4;
+  container.style.gap = gap + 'px';
   for (let i = 0; i < word.length; i++) {
     const box = document.createElement('div');
     box.className = 'letter-box';
     box.id = `box-${i}`;
+    box.style.width = boxW + 'px';
+    box.style.fontSize = fontSize + 'px';
     container.appendChild(box);
   }
 }
@@ -960,6 +981,7 @@ function handleKey(key) {
 }
 
 function resetKeyboard() {
+  // Keys never get greyed out — letters can repeat in words
   document.querySelectorAll('.key').forEach(k => k.classList.remove('used'));
 }
 
@@ -1005,12 +1027,16 @@ function checkWord() {
     }
     setTimeout(() => {
       updateBoxes();
-      // If experts — show correct answer and move on
+      // If experts — give 1 hint then move on if still wrong
       if (S.level === 'experts') {
-        S.wordComplete = true;
-        revealAnswer(wordObj);
-        showResult(false, wordObj, 0);
-        speak(pick(RITA_WRONG));
+        if (S.hintsLeft > 0) {
+          toast('Wrong! Use your hint or try again!');
+        } else {
+          S.wordComplete = true;
+          revealAnswer(wordObj);
+          showResult(false, wordObj, 0);
+          speak(pick(RITA_WRONG));
+        }
       } else {
         // Clear non-revealed inputs
         S.currentInput = S.currentInput.map((l,i) => S.revealedPositions.includes(i) ? l : '');
