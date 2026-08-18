@@ -6,19 +6,12 @@
 <title>Ask Lovely Rita — Octopus's Garden</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     font-family: 'Segoe UI', system-ui, sans-serif;
-    background: #0a0a14;
-    color: #fff;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px 16px 40px;
+    background: #0a0a14; color: #fff;
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; padding: 20px 16px 40px;
   }
-
-  /* ── DEVICE BAR ── */
   #device-bar {
     display: flex; gap: 8px; margin-bottom: 16px;
     flex-wrap: wrap; justify-content: center;
@@ -31,8 +24,6 @@
   #device-bar button:hover, #device-bar button.active {
     background: #333; color: #fff; border-color: #666;
   }
-
-  /* ── PHONE ── */
   #phone-outer {
     background: #1c1c1c; border-radius: 50px; padding: 12px;
     box-shadow: 0 0 0 2px #333, 0 20px 60px rgba(0,0,0,.8);
@@ -47,28 +38,25 @@
   #notch {
     position: absolute; top: 0; left: 50%;
     transform: translateX(-50%);
-    width: 120px; height: 30px;
-    background: #1c1c1c;
+    width: 120px; height: 30px; background: #1c1c1c;
     border-radius: 0 0 20px 20px; z-index: 20;
   }
   #scroll-area {
     flex: 1; overflow-y: auto; overflow-x: hidden;
-    padding: 36px 14px 8px;
-    scrollbar-width: none;
+    padding: 36px 12px 8px; scrollbar-width: none;
   }
   #scroll-area::-webkit-scrollbar { display: none; }
 
-  /* ── OCEAN BG ── */
+  /* OCEAN BG */
   #ocean-bg {
     position: absolute; inset: 0; z-index: 0;
-    background: linear-gradient(180deg,
-      #061a2e 0%, #0a3d6b 25%, #0d5a8a 55%, #0a7c6c 100%);
-    border-radius: 40px; overflow: hidden;
+    background: linear-gradient(180deg, #061a2e 0%, #0a3d6b 30%, #0d5a8a 60%, #0a7c6c 100%);
+    border-radius: 40px; overflow: hidden; pointer-events: none;
   }
   .bg-bubble {
     position: absolute; border-radius: 50%;
-    border: 1px solid rgba(255,255,255,.25);
-    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.2);
+    background: rgba(255,255,255,.05);
     animation: bg-rise var(--bd) ease-in infinite;
   }
   @keyframes bg-rise {
@@ -77,21 +65,49 @@
   }
   .bg-fish {
     position: absolute; font-size: var(--fs);
-    animation: fish-drift var(--fd) linear infinite;
-    opacity: .35;
+    animation: fish-drift var(--fd) linear infinite; opacity: .3;
   }
   @keyframes fish-drift {
     0%   { transform: translateX(-60px); }
     100% { transform: translateX(420px); }
   }
 
-  /* ── NAV BAR ── */
+  /* FUNNY LAD FIXED BOTTOM */
+  #lad-bottom-wrap {
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 110px;
+    position: relative;
+    overflow: visible;
+    background: rgba(0,10,20,.3);
+    border-top: 1px solid rgba(77,200,255,.1);
+  }
+  #lad-bottom-img {
+    height: 130px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 -4px 20px rgba(77,200,255,.4));
+    animation: lad-bottom-float 3s ease-in-out infinite alternate;
+    margin-bottom: -10px;
+    position: relative;
+    z-index: 5;
+  }
+  @keyframes lad-bottom-float {
+    from { transform: translateY(0) rotate(-1deg); }
+    to   { transform: translateY(-8px) rotate(1deg); }
+  }
+  #lad-bottom-img.speaking {
+    filter: drop-shadow(0 0 20px rgba(77,200,255,.9)) drop-shadow(0 -4px 20px rgba(77,200,255,.4));
+  }
+
+  /* NAV */
   #nav-bar {
     flex-shrink: 0; display: flex; align-items: center;
     justify-content: space-around; padding: 8px 20px 12px;
     border-top: 1px solid rgba(255,255,255,.08);
-    background: rgba(0,10,20,.6);
-    backdrop-filter: blur(12px);
+    background: rgba(0,10,20,.6); backdrop-filter: blur(12px);
     position: relative; z-index: 10;
   }
   .nav-btn {
@@ -105,307 +121,225 @@
   .nav-btn .nav-icon { font-size: 20px; line-height: 1; }
   .nav-btn.nav-home { color: #4dc8ff; }
 
-  /* ── HEADER ── */
-  #page-header {
-    text-align: center; margin-bottom: 10px;
-    position: relative; z-index: 2;
-  }
+  /* HEADER */
+  #page-header { text-align: center; margin-bottom: 8px; position: relative; z-index: 2; }
   #page-header h1 {
-    font-size: 18px; font-weight: 900;
-    letter-spacing: 1px; text-transform: uppercase;
-    background: linear-gradient(135deg, #4dc8ff, #00e5cc, #4dc8ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 0 16px rgba(77,200,255,.6));
+    font-size: 18px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;
+    background: linear-gradient(135deg,#4dc8ff,#00e5cc);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    filter: drop-shadow(0 0 14px rgba(77,200,255,.5));
   }
-  #page-header p {
-    font-size: 10px; color: rgba(255,255,255,.4);
-    margin-top: 2px; letter-spacing: .5px;
-  }
+  #page-header p { font-size: 10px; color: rgba(255,255,255,.4); margin-top: 2px; }
 
-  /* ── LEVEL TABS ── */
+  /* LEVEL TABS */
   #level-tabs {
     display: flex; gap: 5px; justify-content: center;
-    margin-bottom: 10px; position: relative; z-index: 2;
+    margin-bottom: 8px; position: relative; z-index: 2;
   }
   #level-tabs button {
     padding: 4px 10px; border-radius: 20px;
     border: 1px solid rgba(255,255,255,.18);
     background: rgba(255,255,255,.05); color: rgba(255,255,255,.5);
-    font-size: 9px; font-weight: 700; cursor: pointer;
-    transition: all .2s; text-transform: uppercase;
+    font-size: 9px; font-weight: 700; cursor: pointer; transition: all .2s; text-transform: uppercase;
   }
   #level-tabs button.active {
     background: linear-gradient(135deg,#4dc8ff,#00e5cc);
-    border-color: transparent; color: #000; font-weight:900;
+    border-color: transparent; color: #000; font-weight: 900;
   }
 
-  /* ── RITA + LAD ROW ── */
-  #characters-row {
-    display: flex; gap: 8px; align-items: flex-end;
-    margin-bottom: 10px; position: relative; z-index: 2;
-  }
+  /* RITA WRAP */
   #rita-wrap {
-    flex: 1;
-    background: rgba(255,255,255,.07);
+    flex: 1; background: rgba(255,255,255,.07);
     border: 1px solid rgba(77,200,255,.3);
     border-radius: 14px 14px 14px 4px;
-    padding: 9px 28px 9px 10px;
-    position: relative;
+    padding: 8px 26px 8px 10px; position: relative;
   }
   #rita-name { font-size: 9px; font-weight:700; color:#4dc8ff; text-transform:uppercase; letter-spacing:.8px; margin-bottom:3px; }
-  #rita-text { font-size: 11px; color: rgba(255,255,255,.8); line-height:1.5; }
+  #rita-text { font-size: 10px; color: rgba(255,255,255,.8); line-height: 1.5; }
   #rita-speak-btn {
-    position: absolute; top:7px; right:7px;
+    position: absolute; top:7px; right:6px;
     background: rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15);
-    border-radius:50%; width:22px; height:22px;
+    border-radius:50%; width:20px; height:20px;
     display:flex; align-items:center; justify-content:center;
-    font-size:11px; cursor:pointer; color:#fff; transition:all .2s;
+    font-size:10px; cursor:pointer; color:#fff; transition:all .2s;
   }
-  #rita-speak-btn:hover { background:rgba(255,255,255,.2); }
+  /* lad-wrap removed — lad now fixed at bottom */
 
-  #lad-wrap {
-    width: 70px; flex-shrink:0;
-    display:flex; flex-direction:column; align-items:center; gap:4px;
-  }
-  #lad-img-el {
-    width: 80px; height: auto;
-    filter: drop-shadow(0 4px 12px rgba(77,200,255,.5));
-    animation: lad-float 2.5s ease-in-out infinite alternate;
-    display: block;
-  }
-  #lad-img-el.speaking {
-    filter: drop-shadow(0 0 16px rgba(77,200,255,.9)) drop-shadow(0 4px 12px rgba(77,200,255,.5));
-  }
-  @keyframes lad-float {
-    from { transform: translateY(0) rotate(-2deg); }
-    to   { transform: translateY(-6px) rotate(2deg); }
-  }
-  #lad-label { font-size:9px; color:rgba(255,255,255,.5); text-align:center; }
-
-  /* ── STATUS BAR ── */
-  #status-bar {
-    display:flex; gap:8px; margin-bottom:10px;
-    position:relative; z-index:2;
-  }
+  /* STATUS */
+  #status-bar { display:flex; gap:6px; margin-bottom:8px; position:relative; z-index:2; }
   .stat-card {
     flex:1; background:rgba(255,255,255,.05);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:10px; padding:5px 10px;
+    border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:4px 8px;
   }
-  .stat-label { font-size:8px; color:rgba(255,255,255,.3); text-transform:uppercase; letter-spacing:.5px; }
-  .stat-val { font-size:14px; font-weight:900; }
+  .stat-label { font-size:7px; color:rgba(255,255,255,.3); text-transform:uppercase; letter-spacing:.5px; }
+  .stat-val { font-size:13px; font-weight:900; }
   #bc-val { color:#ffde59; }
   #score-val { color:#4dc8ff; }
   #word-count-val { color:#00e5cc; }
 
-  /* ── WORD DISPLAY ── */
+  /* PROGRESS */
+  #progress-bar-wrap { position:relative; z-index:2; margin-bottom:8px; }
+  #progress-label { font-size:8px; color:rgba(255,255,255,.3); text-transform:uppercase; letter-spacing:.5px; margin-bottom:3px; }
+  #progress-track { height:5px; background:rgba(255,255,255,.08); border-radius:3px; overflow:hidden; }
+  #progress-fill { height:100%; background:linear-gradient(90deg,#4dc8ff,#00e5cc); border-radius:3px; transition:width .4s ease; width:0%; }
+
+  /* WORD SECTION */
   #word-section {
-    background: rgba(0,0,0,.3);
-    border: 1px solid rgba(77,200,255,.25);
-    border-radius: 18px; padding: 14px;
-    margin-bottom: 10px;
-    position: relative; z-index: 2;
-    text-align: center;
+    background: rgba(0,0,0,.3); border: 1px solid rgba(77,200,255,.2);
+    border-radius: 16px; padding: 12px; margin-bottom: 8px;
+    position: relative; z-index: 2; text-align: center;
   }
-  #word-category {
-    font-size: 9px; color: rgba(255,255,255,.4);
-    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;
+  #word-category { font-size:8px; color:rgba(255,255,255,.4); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+
+  /* CREATURE IMAGE — Youngsters */
+  #creature-wrap {
+    width: 80px; height: 80px; margin: 0 auto 8px;
+    display: flex; align-items:center; justify-content:center;
+    position: relative;
   }
-  #word-image {
-    font-size: 48px; line-height: 1;
-    margin-bottom: 8px;
-    animation: word-pulse 2s ease-in-out infinite alternate;
+  #creature-img {
+    width: 100%; height: 100%; object-fit: contain;
+    border-radius: 12px;
+    transition: transform .3s ease;
   }
-  @keyframes word-pulse {
-    from { transform: scale(1); }
-    to   { transform: scale(1.08); }
+  #creature-img.wiggle {
+    animation: wiggle-correct .6s ease;
   }
-  #word-hint {
-    font-size: 11px; color: rgba(255,255,255,.6);
-    margin-bottom: 10px; font-style: italic;
-    min-height: 16px;
+  @keyframes wiggle-correct {
+    0%,100% { transform: scale(1) rotate(0deg); }
+    20%      { transform: scale(1.25) rotate(-8deg); }
+    40%      { transform: scale(1.3) rotate(8deg); }
+    60%      { transform: scale(1.2) rotate(-5deg); }
+    80%      { transform: scale(1.15) rotate(3deg); }
+  }
+  #creature-emoji {
+    font-size: 64px; line-height:1;
+    transition: transform .3s;
+    display: none;
   }
 
-  /* ── LETTER BOXES ── */
+  /* RIDDLE — Grown Ups / Experts */
+  #riddle-wrap {
+    background: rgba(77,200,255,.08); border: 1px solid rgba(77,200,255,.2);
+    border-radius: 12px; padding: 10px; margin-bottom: 8px;
+    display: none;
+  }
+  #riddle-label { font-size:8px; color:#4dc8ff; text-transform:uppercase; letter-spacing:.8px; margin-bottom:5px; }
+  #riddle-text { font-size: 12px; color: rgba(255,255,255,.85); line-height: 1.6; font-style: italic; }
+
+  /* HINT TEXT */
+  #word-hint { font-size:10px; color:rgba(255,255,255,.5); margin-bottom:8px; font-style:italic; min-height:14px; }
+
+  /* LETTER BOXES */
   #letter-boxes {
     display: flex; gap: 4px; justify-content: center;
-    flex-wrap: nowrap; margin-bottom: 8px;
-    overflow-x: auto; padding-bottom: 4px;
+    flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px;
     scrollbar-width: none;
   }
   #letter-boxes::-webkit-scrollbar { display: none; }
   .letter-box {
-    flex-shrink: 0;
-    width: 30px; height: 36px;
+    flex-shrink: 0; height: 36px;
     background: rgba(255,255,255,.08);
-    border: 2px solid rgba(77,200,255,.4);
-    border-radius: 7px;
+    border: 2px solid rgba(77,200,255,.4); border-radius: 7px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 15px; font-weight: 900;
-    color: #fff; text-transform: uppercase;
-    transition: all .25s;
-    position: relative;
+    font-weight: 900; color: #fff; text-transform: uppercase;
+    transition: all .2s; position: relative;
   }
-  .letter-box.filled {
-    background: rgba(77,200,255,.15);
-    border-color: #4dc8ff;
-    transform: scale(1.05);
-  }
-  .letter-box.correct {
-    background: rgba(74,222,128,.2);
-    border-color: #4ade80;
-    animation: box-correct .4s ease;
-  }
-  .letter-box.wrong {
-    background: rgba(248,113,113,.15);
-    border-color: #f87171;
-    animation: box-wrong .4s ease;
-  }
-  @keyframes box-correct {
-    0%,100% { transform:scale(1); }
-    50%      { transform:scale(1.15); }
-  }
-  @keyframes box-wrong {
-    0%,100% { transform:translateX(0); }
-    25%      { transform:translateX(-4px); }
-    75%      { transform:translateX(4px); }
-  }
-  .letter-box.revealed {
-    background: rgba(0,229,204,.2);
-    border-color: #00e5cc;
-  }
+  .letter-box.filled { background: rgba(77,200,255,.15); border-color: #4dc8ff; }
+  .letter-box.correct { background: rgba(74,222,128,.2); border-color: #4ade80; animation: box-pop .35s ease; }
+  .letter-box.wrong { background: rgba(248,113,113,.15); border-color: #f87171; animation: box-shake .4s ease; }
+  .letter-box.revealed { background: rgba(0,229,204,.2); border-color: #00e5cc; }
+  @keyframes box-pop { 0%,100%{transform:scale(1)} 50%{transform:scale(1.18)} }
+  @keyframes box-shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
 
-  /* ── SCRAMBLED LETTERS (Youngsters) ── */
+  /* SCRAMBLE */
   #scramble-section {
-    display: none;
-    flex-wrap: wrap; gap: 7px; justify-content: center;
-    margin-bottom: 10px; position: relative; z-index: 2;
+    display: none; flex-wrap: wrap; gap: 6px; justify-content: center;
+    margin-bottom: 8px; position: relative; z-index: 2;
   }
   .scramble-letter {
-    width: 38px; height: 44px;
+    width: 36px; height: 40px;
     background: linear-gradient(135deg,#0d5a8a,#0a7c6c);
-    border: 2px solid rgba(77,200,255,.5);
-    border-radius: 10px;
+    border: 2px solid rgba(77,200,255,.5); border-radius: 9px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 20px; font-weight: 900; color: #fff;
-    text-transform: uppercase; cursor: pointer;
-    transition: all .15s;
-    box-shadow: 0 3px 10px rgba(0,0,0,.3);
-    user-select: none;
+    font-size: 18px; font-weight: 900; color: #fff; text-transform: uppercase;
+    cursor: pointer; transition: all .15s; user-select: none;
+    box-shadow: 0 3px 8px rgba(0,0,0,.3);
   }
-  .scramble-letter:hover { transform: translateY(-3px) scale(1.05); background: linear-gradient(135deg,#1a7ab5,#0d9e8a); }
-  .scramble-letter:active { transform: scale(.95); }
-  .scramble-letter.used { opacity:.25; pointer-events:none; transform:scale(.9); }
+  .scramble-letter:hover { transform: translateY(-3px) scale(1.06); }
+  .scramble-letter:active { transform: scale(.94); }
+  .scramble-letter.used { opacity:.2; pointer-events:none; transform:scale(.88); }
+  .scr-del {
+    background: linear-gradient(135deg,#5a1a1a,#8a2020) !important;
+    border-color: rgba(248,113,113,.5) !important;
+  }
 
-  /* ── KEYBOARD (Grown Ups / Experts) ── */
+  /* KEYBOARD */
   #keyboard-section {
-    display: none;
-    flex-direction: column; gap: 5px;
-    margin-bottom: 10px; position: relative; z-index: 2;
+    display: none; flex-direction: column; gap: 4px;
+    margin-bottom: 8px; position: relative; z-index: 2;
   }
-  .key-row { display: flex; gap: 4px; justify-content: center; }
+  .key-row { display: flex; gap: 3px; justify-content: center; }
   .key {
-    height: 40px; min-width: 30px; padding: 0 4px;
+    height: 38px; min-width: 28px; padding: 0 3px;
     background: rgba(255,255,255,.1);
-    border: 1px solid rgba(255,255,255,.2);
-    border-radius: 8px;
-    color: #fff; font-size: 13px; font-weight: 700;
-    cursor: pointer; transition: all .12s;
-    display: flex; align-items: center; justify-content: center;
-    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,.2); border-radius: 7px;
+    color: #fff; font-size: 12px; font-weight: 700; cursor: pointer;
+    transition: all .1s; display: flex; align-items: center; justify-content: center;
+    text-transform: uppercase; user-select: none;
   }
   .key:hover { background: rgba(77,200,255,.25); border-color:#4dc8ff; }
-  .key:active { transform: scale(.92); }
-  .key.used { opacity:.2; pointer-events:none; }
-  .key-del { min-width: 46px; font-size:16px; }
+  .key:active { transform: scale(.9); background: rgba(77,200,255,.4); }
+  .key-del { min-width: 42px; font-size:15px; }
   .key-submit {
-    min-width: 80px; font-size:11px;
+    min-width: 70px; font-size:10px; font-weight:900;
     background: linear-gradient(135deg,#4dc8ff,#00e5cc);
-    border-color: transparent; color:#000; font-weight:900;
+    border-color: transparent; color:#000;
   }
-  .key-submit:hover { filter: brightness(1.1); }
+  .key-submit:hover { filter:brightness(1.1); }
 
-  /* ── ACTION BTNS ── */
-  #action-btns {
-    display: flex; gap: 8px; margin-bottom: 10px;
-    position: relative; z-index: 2;
-  }
+  /* ACTION BTNS */
+  #action-btns { display:flex; gap:7px; margin-bottom:8px; position:relative; z-index:2; }
   .act-btn {
-    flex:1; padding:10px; border:none; border-radius:26px;
-    font-size:12px; font-weight:800; letter-spacing:.5px;
-    text-transform:uppercase; cursor:pointer;
-    transition:transform .15s, opacity .3s;
+    flex:1; padding:10px; border:none; border-radius:24px;
+    font-size:11px; font-weight:800; letter-spacing:.5px; text-transform:uppercase;
+    cursor:pointer; transition:transform .15s, opacity .3s;
     position:relative; overflow:hidden;
   }
   .act-btn::after {
     content:''; position:absolute; inset:0;
-    background:linear-gradient(180deg,rgba(255,255,255,.14),transparent);
-    border-radius:inherit;
+    background:linear-gradient(180deg,rgba(255,255,255,.14),transparent); border-radius:inherit;
   }
   .act-btn:hover:not(:disabled) { transform:scale(1.03); }
   .act-btn:disabled { opacity:.35; cursor:not-allowed; }
-  #start-btn {
-    background: linear-gradient(135deg,#4dc8ff,#00e5cc);
-    color:#000; box-shadow:0 4px 16px rgba(77,200,255,.4);
+  #start-btn { background:linear-gradient(135deg,#4dc8ff,#00e5cc); color:#000; box-shadow:0 4px 14px rgba(77,200,255,.4); }
+  #next-btn  { background:rgba(255,255,255,.07); border:1px solid #4dc8ff; color:#4dc8ff; display:none; }
+  #hint-btn  {
+    flex:0 0 auto; padding:10px 12px;
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15);
+    border-radius:24px; color:rgba(255,255,255,.6);
+    font-size:10px; font-weight:700; cursor:pointer; transition:all .2s; display:none;
   }
-  #next-btn {
-    background:rgba(255,255,255,.07);
-    border:1px solid #4dc8ff; color:#4dc8ff; display:none;
-  }
-  #hint-btn {
-    flex:0 0 auto; padding:10px 14px;
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.15);
-    border-radius:26px; color:rgba(255,255,255,.6);
-    font-size:11px; font-weight:700; cursor:pointer;
-    transition:all .2s;
-  }
-  #hint-btn:hover { background:rgba(255,255,255,.12); color:#fff; }
+  #hint-btn:hover:not(:disabled) { background:rgba(255,255,255,.14); color:#fff; }
   #hint-btn:disabled { opacity:.3; cursor:not-allowed; }
 
-  /* ── RESULT ── */
+  /* RESULT */
   #result-panel {
-    background:rgba(255,255,255,.05);
-    border:1px solid rgba(255,255,255,.1);
-    border-radius:14px; padding:12px;
-    margin-bottom:10px; text-align:center;
-    display:none; flex-direction:column;
-    align-items:center; gap:4px;
-    position:relative; z-index:2;
-    animation:slideIn .4s ease;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
+    border-radius:13px; padding:10px; margin-bottom:8px;
+    text-align:center; display:none; flex-direction:column;
+    align-items:center; gap:3px; position:relative; z-index:2;
+    animation:slideIn .35s ease;
   }
   #result-panel.show { display:flex; }
-  @keyframes slideIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
-  #result-icon { font-size:28px; }
-  #result-title { font-size:14px; font-weight:800; color:#4dc8ff; }
-  #result-word { font-size:20px; font-weight:900; color:#00e5cc; letter-spacing:2px; text-transform:uppercase; }
-  #result-sub { font-size:10px; color:rgba(255,255,255,.45); }
-  #result-pts { font-size:18px; font-weight:900; }
+  @keyframes slideIn { from{opacity:0;transform:translateY(-5px)} to{opacity:1;transform:translateY(0)} }
+  #result-icon { font-size:24px; }
+  #result-title { font-size:13px; font-weight:800; color:#4dc8ff; }
+  #result-word { font-size:18px; font-weight:900; color:#00e5cc; letter-spacing:2px; text-transform:uppercase; }
+  #result-sub { font-size:9px; color:rgba(255,255,255,.45); }
+  #result-pts { font-size:16px; font-weight:900; }
 
-  /* ── PROGRESS ── */
-  #progress-bar-wrap {
-    position:relative; z-index:2;
-    margin-bottom:8px;
-  }
-  #progress-label {
-    font-size:9px; color:rgba(255,255,255,.35);
-    text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px;
-  }
-  #progress-track {
-    height:6px; background:rgba(255,255,255,.08);
-    border-radius:3px; overflow:hidden;
-  }
-  #progress-fill {
-    height:100%;
-    background:linear-gradient(90deg,#4dc8ff,#00e5cc);
-    border-radius:3px;
-    transition:width .4s ease;
-    width:0%;
-  }
-
-  /* ── CELEBRATE ── */
+  /* CELEBRATE */
   #celebrate {
     position:absolute; inset:0; pointer-events:none;
     z-index:25; overflow:hidden; border-radius:40px;
@@ -419,12 +353,12 @@
     100% { transform:translateY(900px) rotate(720deg); opacity:0; }
   }
 
-  /* ── TOAST ── */
+  /* TOAST */
   #toast {
     position:fixed; bottom:30px; left:50%;
     transform:translateX(-50%) translateY(80px);
     background:rgba(6,26,46,.95); border:1px solid #4dc8ff;
-    border-radius:20px; padding:9px 18px; font-size:12px; color:#fff;
+    border-radius:20px; padding:8px 16px; font-size:11px; color:#fff;
     z-index:1000; transition:transform .3s,opacity .3s;
     opacity:0; white-space:nowrap; pointer-events:none;
   }
@@ -449,83 +383,63 @@
 
     <div id="scroll-area">
 
-      <!-- HEADER -->
       <div id="page-header">
         <h1>🐙 Octopus's Garden</h1>
         <p>The Funny Lad's underwater world!</p>
       </div>
 
-      <!-- LEVEL TABS -->
       <div id="level-tabs">
         <button onclick="setLevel('youngsters')" class="active">🟣 Youngsters</button>
         <button onclick="setLevel('grownups')">🟡 Grown Ups</button>
         <button onclick="setLevel('experts')">⭐ Experts</button>
       </div>
 
-      <!-- CHARACTERS ROW -->
-      <div id="characters-row">
-        <div id="rita-wrap">
-          <div id="rita-name">♪ Lovely Rita</div>
-          <div id="rita-text">Loading...</div>
-          <button id="rita-speak-btn" onclick="ritaSpeak()">🔊</button>
-        </div>
-        <div id="lad-wrap">
-          <img id="lad-img-el"
-            src="https://alexmonteiro65.github.io/ask-lovely-rita/src/Funny_Aqua_Lad.png"
-            alt="Funny Lad"
-            onerror="this.style.display='none'"/>
-          <div id="lad-label">Funny Lad</div>
-        </div>
+      <div id="rita-wrap" style="margin-bottom:8px;position:relative;z-index:2">
+        <div id="rita-name">♪ Lovely Rita</div>
+        <div id="rita-text">Loading...</div>
+        <button id="rita-speak-btn" onclick="ritaSpeak()">🔊</button>
       </div>
 
-      <!-- STATUS -->
       <div id="status-bar">
-        <div class="stat-card">
-          <div class="stat-label">BeatCoins</div>
-          <div class="stat-val" id="bc-val">80</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Score</div>
-          <div class="stat-val" id="score-val">0</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Words</div>
-          <div class="stat-val" id="word-count-val">0/8</div>
-        </div>
+        <div class="stat-card"><div class="stat-label">BeatCoins</div><div class="stat-val" id="bc-val">80</div></div>
+        <div class="stat-card"><div class="stat-label">Score</div><div class="stat-val" id="score-val">0</div></div>
+        <div class="stat-card"><div class="stat-label">Words</div><div class="stat-val" id="word-count-val">0/8</div></div>
       </div>
 
-      <!-- PROGRESS -->
       <div id="progress-bar-wrap">
         <div id="progress-label">Progress</div>
         <div id="progress-track"><div id="progress-fill"></div></div>
       </div>
 
-      <!-- WORD DISPLAY -->
       <div id="word-section">
         <div id="word-category">Ocean Word</div>
-        <div id="word-image">🌊</div>
-        <div id="word-hint">Press Start to dive in!</div>
+        <!-- Youngsters: real creature image -->
+        <div id="creature-wrap">
+          <img id="creature-img" src="" alt="" style="display:none"/>
+          <div id="creature-emoji" style="display:block">🌊</div>
+        </div>
+        <!-- Grown Ups / Experts: riddle -->
+        <div id="riddle-wrap">
+          <div id="riddle-label">🔍 Riddle</div>
+          <div id="riddle-text">...</div>
+        </div>
+        <div id="word-hint">Press Dive In to start!</div>
         <div id="letter-boxes"></div>
       </div>
 
-      <!-- SCRAMBLED LETTERS — Youngsters -->
       <div id="scramble-section"></div>
-
-      <!-- KEYBOARD — Grown Ups / Experts -->
       <div id="keyboard-section">
         <div class="key-row" id="key-row-1"></div>
         <div class="key-row" id="key-row-2"></div>
         <div class="key-row" id="key-row-3"></div>
       </div>
 
-      <!-- ACTION BTNS -->
       <div id="action-btns">
         <button class="act-btn" id="start-btn" onclick="startGame()">🐙 Dive In!</button>
         <button class="act-btn" id="next-btn" onclick="nextWord()">Next Word ▶</button>
-        <button class="act-btn" id="hint-btn" onclick="useHint()" style="display:none">💡 Hint</button>
+        <button id="hint-btn" onclick="useHint()">💡 Hint</button>
       </div>
 
-      <!-- RESULT -->
       <div id="result-panel">
         <div id="result-icon">🌊</div>
         <div id="result-title"></div>
@@ -534,106 +448,109 @@
         <div id="result-pts"></div>
       </div>
 
-    </div><!-- /scroll-area -->
+    </div>
 
-    <!-- NAV BAR -->
+    <!-- FUNNY LAD FIXED AT BOTTOM -->
+    <div id="lad-bottom-wrap">
+      <img id="lad-bottom-img"
+        src="https://alexmonteiro65.github.io/ask-lovely-rita/src/Funny_Aqua_Lad.png"
+        alt="Funny Lad"
+        onerror="this.style.display='none';document.getElementById('lad-bottom-fallback').style.display='block'"/>
+      <div id="lad-bottom-fallback" style="display:none;font-size:64px;line-height:1">🤿</div>
+    </div>
+
     <nav id="nav-bar">
-      <button class="nav-btn" onclick="goBack()">
-        <span class="nav-icon">◀️</span><span>Back</span>
-      </button>
-      <button class="nav-btn nav-home" onclick="goHome()">
-        <span class="nav-icon">🏠</span><span>Home</span>
-      </button>
-      <button class="nav-btn" onclick="goForward()">
-        <span class="nav-icon">▶️</span><span>Next</span>
-      </button>
+      <button class="nav-btn" onclick="goBack()"><span class="nav-icon">◀️</span><span>Back</span></button>
+      <button class="nav-btn nav-home" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
+      <button class="nav-btn" onclick="goForward()"><span class="nav-icon">▶️</span><span>Next</span></button>
     </nav>
-
   </div>
 </div>
-
 <div id="toast"></div>
 
 <script>
-// ════════════════════════════════
-//  CONFIG
-// ════════════════════════════════
-
 const BASE = 'https://alexmonteiro65.github.io/ask-lovely-rita/src/';
 
-// Ocean words — emoji, hint, category
-const WORDS = [
-  { word:'CORAL',     emoji:'🪸', hint:'A colourful reef structure where fish love to hide',      cat:'Ocean Life' },
-  { word:'OCTOPUS',  emoji:'🐙', hint:'The Funny Lad\'s favourite eight-armed friend',            cat:'Ocean Life' },
-  { word:'SEAHORSE',  emoji:'🐠', hint:'A tiny horse that swims upright in the sea',              cat:'Ocean Life' },
-  { word:'JELLYFISH', emoji:'🪼', hint:'A transparent creature that glows in the dark ocean',     cat:'Ocean Life' },
-  { word:'SEAWEED',   emoji:'🌿', hint:'Green plants that grow on the ocean floor',               cat:'Ocean Plants' },
-  { word:'DOLPHIN',   emoji:'🐬', hint:'A smart and friendly ocean mammal that loves to jump',    cat:'Ocean Life' },
-  { word:'STARFISH',  emoji:'⭐', hint:'A five-armed creature found on the ocean floor',          cat:'Ocean Life' },
-  { word:'SUBMARINE', emoji:'🚢', hint:'A vessel that travels deep under the sea',                cat:'Ocean Vehicles' },
-  { word:'TREASURE',  emoji:'💎', hint:'What pirates search for under the deep blue sea',         cat:'Ocean Adventure' },
-  { word:'CURRENT',   emoji:'🌊', hint:'The movement of water flowing through the ocean',         cat:'Ocean Science' },
-];
+// ── WORD DATA — different words per level ─────────────────
+const WORDS_BY_LEVEL = {
+  youngsters: [
+    { word:'CORAL',     emoji:'🪸', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Coral_reef_at_palmyra.jpg/320px-Coral_reef_at_palmyra.jpg', cat:'Ocean Life',    riddle:"I live underwater and come in many colours. Fish love to hide inside me. I look like a plant but I am actually made of tiny animals!" },
+    { word:'FISH',      emoji:'🐟', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Tropical_fish_schools.jpg/320px-Tropical_fish_schools.jpg',   cat:'Ocean Life',    riddle:"I live in the water and breathe through gills. I have fins and scales. You might find me in an aquarium or on your dinner plate!" },
+    { word:'WAVE',      emoji:'🌊', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Mavericks_Surf_Contest_2010b.jpg/320px-Mavericks_Surf_Contest_2010b.jpg', cat:'Ocean Science', riddle:"I rise and fall in the sea. Surfers love to ride me! The wind creates me and I travel far across the ocean." },
+    { word:'DOLPHIN',   emoji:'🐬', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Tursiops_truncatus_01.jpg/320px-Tursiops_truncatus_01.jpg',    cat:'Ocean Life',    riddle:"I am one of the smartest animals in the sea! I jump and play. I am not a fish. I breathe air just like you!" },
+    { word:'SEAHORSE',  emoji:'🐠', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Pacific_Seahorse_Monterey.jpg/180px-Pacific_Seahorse_Monterey.jpg', cat:'Ocean Life', riddle:"I look like a tiny horse but I swim in the sea! The daddy in my family carries the babies." },
+    { word:'SEAWEED',   emoji:'🌿', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Kelp_forest_at_Anacapa_Island.jpg/320px-Kelp_forest_at_Anacapa_Island.jpg', cat:'Ocean Plants', riddle:"I am a plant that grows in the sea. Humans use me in sushi and even in ice cream!" },
+    { word:'STARFISH',  emoji:'⭐', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Linckia_laevigata.jpg/320px-Linckia_laevigata.jpg',            cat:'Ocean Life',    riddle:"I have five arms and live on the ocean floor. If I lose an arm it grows back all by itself!" },
+    { word:'JELLYFISH', emoji:'🪼', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Jelly_cc11.jpg/240px-Jelly_cc11.jpg',                           cat:'Ocean Life',    riddle:"I float through the ocean with no brain no bones and no heart! My long arms can sting you. Be careful!" },
+  ],
+  grownups: [
+    { word:'SUBMARINE',  emoji:'🚢', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/USS_Alexandria_%28SSN_757%29.jpg/320px-USS_Alexandria_%28SSN_757%29.jpg', cat:'Ocean Vehicles', riddle:"I travel deep below the surface of the sea. Sailors live inside me for months at a time without seeing sunlight. What am I?" },
+    { word:'PLANKTON',   emoji:'🦠', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Haeckel_Peridinea.jpg/240px-Haeckel_Peridinea.jpg',           cat:'Ocean Science',  riddle:"I am invisible to the naked eye but I am the foundation of all ocean life. Whales eat billions of me every day. What am I?" },
+    { word:'BARNACLE',   emoji:'🐚', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Cirripedia_Gould_1841.jpg/240px-Cirripedia_Gould_1841.jpg',   cat:'Ocean Life',     riddle:"I attach myself to rocks and ships and never move again. I am a crustacean that feeds by waving feathery legs through the water. What am I?" },
+    { word:'CURRENT',    emoji:'🌊', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Corrientes-oceanicas.gif/320px-Corrientes-oceanicas.gif',      cat:'Ocean Science',  riddle:"I am an invisible river flowing through the ocean. I move heat around the planet and guide ships across the seas. What am I?" },
+    { word:'ANEMONE',    emoji:'🌺', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Clownfish_in_sea_anemone.jpg/240px-Clownfish_in_sea_anemone.jpg', cat:'Ocean Life',  riddle:"I look like a flower but I am an animal! Clownfish live inside my tentacles and I protect them from predators. What am I?" },
+    { word:'NAUTILUS',   emoji:'🐚', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Nautilus_pompilius_%28Pieter_Bleeker%29.jpg/240px-Nautilus_pompilius_%28Pieter_Bleeker%29.jpg', cat:'Ocean Life', riddle:"I am a living fossil that has barely changed in 500 million years. I live in a beautiful spiral shell with many chambers. What am I?" },
+    { word:'SQUID',      emoji:'🦑', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Loligo_vulgaris.jpg/240px-Loligo_vulgaris.jpg',               cat:'Ocean Life',     riddle:"I have ten arms and can change colour in an instant. I shoot ink to escape predators and can swim backwards faster than most fish. What am I?" },
+    { word:'OCTOPUS',    emoji:'🐙', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Octopus2.jpg/240px-Octopus2.jpg',                              cat:'Ocean Life',     riddle:"I have eight arms and three hearts. I am one of the most intelligent creatures in the sea and I can open jars and solve puzzles. What am I?" },
+  ],
+  experts: [
+    { word:'BIOLUMINESCENCE', emoji:'✨', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Bioluminescence_dinoflagellates.jpg/320px-Bioluminescence_dinoflagellates.jpg', cat:'Ocean Science', riddle:"I am the production of light by living organisms through a chemical reaction. Certain fish anglerfish and plankton use me to lure prey or communicate in the deep ocean darkness." },
+    { word:'THERMOCLINE',     emoji:'🌡️', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/THERMOCLINE.png/320px-THERMOCLINE.png',                   cat:'Ocean Science',  riddle:"I am a layer in the ocean where temperature drops rapidly with depth. I act as a barrier between the warm surface water and the cold deep ocean below." },
+    { word:'ARCHIPELAGO',     emoji:'🏝️', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Indonesia_Sulawesi.jpg/320px-Indonesia_Sulawesi.jpg',      cat:'Ocean Geography',riddle:"I am a chain or cluster of islands scattered across a sea. The Galapagos and Hawaii are famous examples of me. I am often formed by volcanic activity beneath the ocean floor." },
+    { word:'PHOTOSYNTHESIS',  emoji:'🌿', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Chlorophyll_ab_spectra-en.svg/320px-Chlorophyll_ab_spectra-en.svg', cat:'Ocean Science', riddle:"I am the process by which ocean plants and phytoplankton convert sunlight into energy. I produce more than half of the oxygen in Earth's atmosphere." },
+    { word:'CEPHALOPOD',      emoji:'🦑', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Octopus2.jpg/240px-Octopus2.jpg',                          cat:'Ocean Science',  riddle:"I am a class of molluscs that includes octopuses squid and nautiluses. My name means head-foot in Greek as my limbs are attached directly to my head." },
+    { word:'ECHOLOCATION',    emoji:'🔊', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Tursiops_truncatus_01.jpg/320px-Tursiops_truncatus_01.jpg', cat:'Ocean Science', riddle:"I am the biological sonar used by dolphins and whales to navigate and hunt. They emit sound waves that bounce off objects and return as echoes revealing location size and shape." },
+    { word:'CRUSTACEAN',      emoji:'🦀', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Blue_crab_on_market.jpg/320px-Blue_crab_on_market.jpg',    cat:'Ocean Life',     riddle:"I am a large group of arthropods that includes crabs lobsters shrimp and barnacles. I have a hard exoskeleton jointed limbs and I must shed my shell to grow." },
+    { word:'CAMOUFLAGE',      emoji:'🦑', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Loligo_vulgaris.jpg/240px-Loligo_vulgaris.jpg',            cat:'Ocean Science',  riddle:"I am the ability of an ocean creature to blend into its surroundings by changing colour texture or shape. The octopus and cuttlefish are my most remarkable ocean practitioners." },
+  ],
+};
 
 // Rita speeches
 const RITA_INTRO = {
-  youngsters: "Hello love! Welcome to Octopus's Garden! The Funny Lad is your guide today. Tap the letters to spell the ocean word you see. You have THREE chances to use a hint if you get stuck!",
-  grownups:   "Hello there! Time to explore the deep! Type out each ocean word using the keyboard. You have TWO hints available. Think carefully darling and spell it right!",
-  experts:    "Right then! Experts only down here! Type each ocean word from memory with NO hints. One shot per word darling. Can you handle the pressure of the deep?",
+  youngsters: "Hello love! Welcome to Octopus's Garden! Look at each ocean creature and spell its name using the letters below. You have THREE hints per word if you get stuck darling!",
+  grownups:   "Hello there! Read each riddle carefully and type the ocean word on the keyboard. You have TWO hints per word. Think like a sea explorer!",
+  experts:    "Right then! Expert divers only down here! Solve the riddle and type the word. ONE hint per word and that is all. The deep ocean keeps its secrets well!",
 };
 const RITA_CORRECT = [
-  "Brilliant! You spelt it perfectly! The Funny Lad is doing a little underwater dance for you!",
+  "Brilliant! You got it! The Funny Lad is doing a little underwater dance for you!",
   "Smashing! Right on the mark! Even the octopus is impressed darling!",
-  "Wonderful! You really know your ocean words! The Funny Lad gives you a thumbs up!",
-  "Absolutely spot on love! The fish are cheering for you down here!",
+  "Wonderful! You really know your ocean words love!",
+  "Spot on! The fish are cheering for you down here!",
 ];
 const RITA_WRONG = [
-  "Oh nearly! The word was hiding just below the surface. Have a look and try the next one!",
-  "Not quite this time darling! But no points lost. Swim on to the next word!",
-  "Almost got it! The ocean keeps its secrets well. On to the next adventure!",
+  "Oh nearly! Have a look at the clue and try the next one darling!",
+  "Not quite this time love! But no points lost. Swim on!",
+  "Almost! The ocean keeps its secrets. On to the next one!",
 ];
 const RITA_COMPLETE = [
-  "Oh how wonderful! You've explored the whole garden! The Funny Lad is so proud of you darling!",
-  "Brilliant work love! Every ocean word discovered! The Funny Lad says you swim like a fish!",
+  "Oh how wonderful! You have explored the whole garden! The Funny Lad is so proud darling!",
+  "Brilliant work love! Every ocean word discovered! You swim like a fish!",
 ];
 
-// Level config
 const LEVEL_CFG = {
   youngsters: { hints:3, bonusCorrect:20, bonusAll:100, inputType:'scramble', ladImg:'Funny_Aqua_Lad.png' },
   grownups:   { hints:2, bonusCorrect:30, bonusAll:150, inputType:'keyboard', ladImg:'Aqua_Lad.png' },
   experts:    { hints:1, bonusCorrect:50, bonusAll:250, inputType:'keyboard', ladImg:'Aqua_Lad.png' },
 };
 
-const KEYBOARD_ROWS = [
+const KB_ROWS = [
   ['Q','W','E','R','T','Y','U','I','O','P'],
   ['A','S','D','F','G','H','J','K','L'],
-  ['DEL','Z','X','C','V','B','N','M','✓'],
+  ['⌫','Z','X','C','V','B','N','M','✓'],
 ];
 
-// ════════════════════════════════
-//  STATE
-// ════════════════════════════════
-
+// ── STATE ──────────────────────────────────────────────────
 let S = {
   level: 'youngsters',
-  beatcoins: 80,
-  score: 0,
-  wordIndex: 0,
-  wordsOrder: [],
+  beatcoins: 80, score: 0,
+  wordIndex: 0, wordsOrder: [],
   currentInput: [],
-  gameActive: false,
-  wordComplete: false,
-  hintsLeft: 3,
-  hintsUsedThisWord: 0,
-  revealedPositions: [],
+  gameActive: false, wordComplete: false,
+  hintsLeft: 3, revealedPositions: [],
   usedScrambleIndices: [],
-  scrambleMap: [], // maps scramble slot → original letter index
 };
 
-// ════════════════════════════════
-//  STORAGE
-// ════════════════════════════════
-
+// ── STORAGE ────────────────────────────────────────────────
 function loadStorage() {
   try {
     const d = JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');
@@ -649,21 +566,15 @@ function saveStorage() {
   } catch(e) {}
 }
 
-// ════════════════════════════════
-//  INIT
-// ════════════════════════════════
-
+// ── INIT ───────────────────────────────────────────────────
 function init() {
   loadStorage();
   buildOceanBg();
+  buildKeyboard();
   applyLevel(S.level);
   highlightTab(S.level);
-  setTimeout(() => speak(RITA_INTRO[S.level]), 800);
+  setTimeout(() => speak(RITA_INTRO[S.level]), 900);
 }
-
-// ════════════════════════════════
-//  LEVEL
-// ════════════════════════════════
 
 function setLevel(lvl) {
   S.level = lvl;
@@ -685,109 +596,74 @@ function highlightTab(lvl) {
 
 function applyLevel(lvl) {
   const cfg = LEVEL_CFG[lvl];
-
-  // Rita text
   document.getElementById('rita-text').textContent = RITA_INTRO[lvl];
-
-  // Lad image
-  const ladEl = document.getElementById('lad-img-el');
-  ladEl.src = BASE + cfg.ladImg;
-  ladEl.style.display = 'block';
-  ladEl.onerror = function() {
-    this.style.display = 'none';
-    document.getElementById('lad-label').textContent = 'Funny Lad 🤿';
-  };
-
-  // BeatCoins
   document.getElementById('bc-val').textContent = S.beatcoins;
 
-  // Keyboard visibility
-  document.getElementById('scramble-section').style.display = 'none';
-  document.getElementById('keyboard-section').style.display = 'none';
-
-  // Build keyboard if needed
-  if (cfg.inputType === 'keyboard' && !document.getElementById('key-row-1').children.length) {
-    buildKeyboard();
+  // Update bottom lad image per level
+  const ladBottomEl = document.getElementById('lad-bottom-img');
+  const ladBottomFallback = document.getElementById('lad-bottom-fallback');
+  if(ladBottomEl) {
+    ladBottomEl.style.display = 'block';
+    ladBottomFallback.style.display = 'none';
+    ladBottomEl.src = BASE + cfg.ladImg;
+    ladBottomEl.onerror = () => {
+      ladBottomEl.style.display = 'none';
+      ladBottomFallback.style.display = 'block';
+    };
   }
 
-  // Reset game state
   resetGame();
 }
 
-// ════════════════════════════════
-//  OCEAN BACKGROUND
-// ════════════════════════════════
-
+// ── OCEAN BACKGROUND ───────────────────────────────────────
 function buildOceanBg() {
   const bg = document.getElementById('ocean-bg');
-  // Bubbles
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < 10; i++) {
     const b = document.createElement('div');
     b.className = 'bg-bubble';
-    const size = 4 + Math.random() * 12;
-    b.style.cssText = `
-      width:${size}px; height:${size}px;
-      left:${Math.random()*100}%;
-      bottom:${Math.random()*40}%;
-      --bd:${3+Math.random()*5}s;
-      animation-delay:${Math.random()*5}s;
-    `;
+    const size = 4 + Math.random()*10;
+    b.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;bottom:${Math.random()*30}%;--bd:${3+Math.random()*5}s;animation-delay:${Math.random()*5}s`;
     bg.appendChild(b);
   }
-  // Fish
-  const fishEmoji = ['🐠','🐡','🐟','🦈'];
-  for (let i = 0; i < 5; i++) {
-    const f = document.createElement('div');
-    f.className = 'bg-fish';
-    f.textContent = fishEmoji[Math.floor(Math.random()*fishEmoji.length)];
-    f.style.cssText = `
-      top:${20+Math.random()*60}%;
-      --fs:${16+Math.random()*14}px;
-      --fd:${8+Math.random()*10}s;
-      animation-delay:${Math.random()*8}s;
-    `;
-    bg.appendChild(f);
-  }
+  ['🐠','🐡','🐟','🦈'].forEach(f => {
+    const el = document.createElement('div');
+    el.className = 'bg-fish'; el.textContent = f;
+    el.style.cssText = `top:${20+Math.random()*60}%;--fs:${14+Math.random()*12}px;--fd:${8+Math.random()*10}s;animation-delay:${Math.random()*8}s`;
+    bg.appendChild(el);
+  });
 }
 
-// ════════════════════════════════
-//  KEYBOARD
-// ════════════════════════════════
-
+// ── KEYBOARD ───────────────────────────────────────────────
 function buildKeyboard() {
-  KEYBOARD_ROWS.forEach((row, ri) => {
+  KB_ROWS.forEach((row, ri) => {
     const rowEl = document.getElementById(`key-row-${ri+1}`);
     rowEl.innerHTML = '';
-    row.forEach(letter => {
+    row.forEach(k => {
       const btn = document.createElement('button');
-      btn.className = 'key' + (letter==='DEL'||letter==='✓'?' key-'+(letter==='DEL'?'del':'submit'):'');
-      btn.textContent = letter;
-      btn.dataset.key = letter;
-      btn.onclick = () => handleKey(letter);
+      const isDel = k === '⌫', isSubmit = k === '✓';
+      btn.className = 'key' + (isDel?' key-del':'') + (isSubmit?' key-submit':'');
+      btn.textContent = k;
+      btn.dataset.key = k;
+      // CRITICAL: keys are NEVER marked as used — letters can repeat
+      btn.onclick = () => handleKey(k);
       rowEl.appendChild(btn);
     });
   });
 }
 
-// ════════════════════════════════
-//  GAME FLOW
-// ════════════════════════════════
-
+// ── GAME FLOW ─────────────────────────────────────────────
 function resetGame() {
-  S.score = 0;
-  S.wordIndex = 0;
-  S.wordsOrder = shuffle([...Array(WORDS.length).keys()]).slice(0, 8);
-  S.gameActive = false;
-  S.wordComplete = false;
-  S.hintsLeft = LEVEL_CFG[S.level].hints;
-  S.currentInput = [];
-  S.revealedPositions = [];
+  S.score = 0; S.wordIndex = 0;
+  // Use level-specific word list, shuffled
+  const levelWords = WORDS_BY_LEVEL[S.level];
+  S.wordsOrder = shuffle([...Array(levelWords.length).keys()]).slice(0,8);
+  S.gameActive = false; S.wordComplete = false;
+  S.currentInput = []; S.revealedPositions = []; S.usedScrambleIndices = [];
 
   document.getElementById('score-val').textContent = '0';
-  document.getElementById('word-count-val').textContent = `0/8`;
+  document.getElementById('word-count-val').textContent = '0/8';
   document.getElementById('progress-fill').style.width = '0%';
-  document.getElementById('word-image').textContent = '🌊';
-  document.getElementById('word-hint').textContent = "Press Start to dive in!";
+  document.getElementById('word-hint').textContent = 'Press Dive In to start!';
   document.getElementById('word-category').textContent = 'Ocean Word';
   document.getElementById('letter-boxes').innerHTML = '';
   document.getElementById('scramble-section').innerHTML = '';
@@ -796,9 +672,13 @@ function resetGame() {
   document.getElementById('result-panel').classList.remove('show');
   document.getElementById('start-btn').style.display = 'block';
   document.getElementById('start-btn').textContent = '🐙 Dive In!';
+  document.getElementById('start-btn').onclick = startGame;
   document.getElementById('next-btn').style.display = 'none';
   document.getElementById('hint-btn').style.display = 'none';
-  resetKeyboard();
+  document.getElementById('creature-emoji').textContent = '🌊';
+  document.getElementById('creature-emoji').style.display = 'block';
+  document.getElementById('creature-img').style.display = 'none';
+  document.getElementById('riddle-wrap').style.display = 'none';
 }
 
 function startGame() {
@@ -810,33 +690,47 @@ function startGame() {
 
 function loadWord() {
   if (S.wordIndex >= S.wordsOrder.length) { finishGame(); return; }
-
   const cfg = LEVEL_CFG[S.level];
-  const wordObj = WORDS[S.wordsOrder[S.wordIndex]];
+  const wordObj = WORDS_BY_LEVEL[S.level][S.wordsOrder[S.wordIndex]];
   S.currentInput = Array(wordObj.word.length).fill('');
   S.wordComplete = false;
-  S.hintsUsedThisWord = 0;
+  S.hintsLeft = cfg.hints;
   S.revealedPositions = [];
   S.usedScrambleIndices = [];
-  // Reset hints per word based on level
-  const hintCfg = LEVEL_CFG[S.level];
-  S.hintsLeft = hintCfg.hints; // reset each word
 
-  // Display
   document.getElementById('word-category').textContent = wordObj.cat;
-  document.getElementById('word-image').textContent = wordObj.emoji;
-  const hintsAvail = LEVEL_CFG[S.level].hints;
-  document.getElementById('word-hint').textContent = hintsAvail > 0
-    ? `💡 ${hintsAvail} hint${hintsAvail!==1?'s':''} per word`
-    : 'No hints — you can do it!';
   document.getElementById('result-panel').classList.remove('show');
   document.getElementById('next-btn').style.display = 'none';
-
-  // Progress
   document.getElementById('word-count-val').textContent = `${S.wordIndex}/${S.wordsOrder.length}`;
   document.getElementById('progress-fill').style.width = `${(S.wordIndex/S.wordsOrder.length)*100}%`;
 
-  // Build letter boxes
+  // YOUNGSTERS: show real creature photo
+  if (S.level === 'youngsters') {
+    document.getElementById('creature-wrap').style.display = 'flex';
+    document.getElementById('riddle-wrap').style.display = 'none';
+    const img = document.getElementById('creature-img');
+    const emoji = document.getElementById('creature-emoji');
+    img.src = wordObj.photo;
+    img.style.display = 'block';
+    img.classList.remove('wiggle');
+    img.onerror = () => {
+      img.style.display = 'none';
+      emoji.textContent = wordObj.emoji;
+      emoji.style.display = 'block';
+    };
+    emoji.style.display = 'none';
+    document.getElementById('word-hint').textContent = `💡 ${S.hintsLeft} hints per word`;
+  } else {
+    // GROWN UPS / EXPERTS: show riddle
+    document.getElementById('creature-wrap').style.display = 'none';
+    document.getElementById('riddle-wrap').style.display = 'block';
+    const riddle = wordObj.riddle;
+    document.getElementById('riddle-text').textContent = riddle;
+    document.getElementById('word-hint').textContent = `💡 ${S.hintsLeft} hint${S.hintsLeft!==1?'s':''} per word`;
+    // Rita reads the riddle
+    setTimeout(() => speak(riddle), 300);
+  }
+
   buildLetterBoxes(wordObj.word);
 
   // Input method
@@ -844,36 +738,29 @@ function loadWord() {
     buildScramble(wordObj.word);
     document.getElementById('scramble-section').style.display = 'flex';
     document.getElementById('keyboard-section').style.display = 'none';
-    document.getElementById('hint-btn').style.display = 'block';
-    document.getElementById('hint-btn').disabled = S.hintsLeft <= 0;
   } else {
     document.getElementById('scramble-section').style.display = 'none';
     document.getElementById('keyboard-section').style.display = 'flex';
-    document.getElementById('hint-btn').style.display = 'block';
-    document.getElementById('hint-btn').disabled = S.hintsLeft <= 0;
-    resetKeyboard();
   }
+  document.getElementById('hint-btn').style.display = 'block';
+  document.getElementById('hint-btn').disabled = false;
+  document.getElementById('hint-btn').textContent = `💡 Hint (${S.hintsLeft})`;
 }
 
-// ════════════════════════════════
-//  LETTER BOXES
-// ════════════════════════════════
-
+// ── LETTER BOXES ──────────────────────────────────────────
 function buildLetterBoxes(word) {
   const container = document.getElementById('letter-boxes');
   container.innerHTML = '';
-  // Adapt box size to word length so it fits in one line
   const len = word.length;
-  const boxW = len <= 6 ? 34 : len <= 8 ? 28 : len <= 10 ? 24 : 20;
-  const fontSize = len <= 6 ? 18 : len <= 8 ? 15 : len <= 10 ? 13 : 11;
-  const gap = len <= 6 ? 6 : 4;
-  container.style.gap = gap + 'px';
-  for (let i = 0; i < word.length; i++) {
+  const w = len<=5?34 : len<=7?30 : len<=9?26 : 22;
+  const fs = len<=5?17 : len<=7?14 : len<=9?12 : 10;
+  container.style.gap = (len<=6?5:3)+'px';
+  for (let i=0; i<len; i++) {
     const box = document.createElement('div');
     box.className = 'letter-box';
     box.id = `box-${i}`;
-    box.style.width = boxW + 'px';
-    box.style.fontSize = fontSize + 'px';
+    box.style.width = w+'px';
+    box.style.fontSize = fs+'px';
     container.appendChild(box);
   }
 }
@@ -883,24 +770,16 @@ function updateBoxes() {
     const box = document.getElementById(`box-${i}`);
     if (!box) return;
     box.textContent = letter;
-    if (S.revealedPositions.includes(i)) {
-      box.className = 'letter-box revealed';
-    } else {
-      box.className = letter ? 'letter-box filled' : 'letter-box';
-    }
+    if (S.revealedPositions.includes(i)) box.className='letter-box revealed';
+    else box.className = letter ? 'letter-box filled' : 'letter-box';
   });
 }
 
-// ════════════════════════════════
-//  SCRAMBLE (Youngsters)
-// ════════════════════════════════
-
+// ── SCRAMBLE (Youngsters) ─────────────────────────────────
 function buildScramble(word) {
   const section = document.getElementById('scramble-section');
   section.innerHTML = '';
   const letters = shuffle([...word]);
-  S.scrambleMap = letters.map((l, i) => ({ letter:l, idx:i, used:false }));
-
   letters.forEach((letter, i) => {
     const btn = document.createElement('div');
     btn.className = 'scramble-letter';
@@ -909,194 +788,142 @@ function buildScramble(word) {
     btn.onclick = () => useScrambleLetter(i, letter);
     section.appendChild(btn);
   });
-
-  // Add backspace button
+  // Backspace
   const del = document.createElement('div');
-  del.className = 'scramble-letter';
+  del.className = 'scramble-letter scr-del';
   del.textContent = '⌫';
-  del.style.background = 'linear-gradient(135deg,#5a1a1a,#8a2020)';
-  del.style.borderColor = 'rgba(248,113,113,.5)';
-  del.onclick = () => deleteLastScramble();
+  del.onclick = deleteLastScramble;
   section.appendChild(del);
 }
 
 function useScrambleLetter(idx, letter) {
   if (!S.gameActive || S.wordComplete) return;
-  const nextEmpty = S.currentInput.findIndex((l, i) => !l && !S.revealedPositions.includes(i));
+  const nextEmpty = S.currentInput.findIndex((l,i) => !l && !S.revealedPositions.includes(i));
   if (nextEmpty === -1) return;
-
   S.currentInput[nextEmpty] = letter;
   S.usedScrambleIndices.push(idx);
-  document.getElementById(`scr-${idx}`).classList.add('used');
+  document.getElementById(`scr-${idx}`)?.classList.add('used');
   updateBoxes();
-
-  // Auto-check when all filled
-  if (!S.currentInput.includes('')) {
-    setTimeout(() => checkWord(), 300);
-  }
+  if (!S.currentInput.includes('')) setTimeout(() => checkWord(), 300);
 }
 
 function deleteLastScramble() {
   if (!S.gameActive || S.wordComplete) return;
-  // Find last non-revealed filled position
-  let lastFilled = -1;
-  for (let i = S.currentInput.length-1; i >= 0; i--) {
+  for (let i=S.currentInput.length-1; i>=0; i--) {
     if (S.currentInput[i] && !S.revealedPositions.includes(i)) {
-      lastFilled = i; break;
+      S.currentInput[i] = '';
+      const lastScr = S.usedScrambleIndices.pop();
+      if (lastScr !== undefined) document.getElementById(`scr-${lastScr}`)?.classList.remove('used');
+      updateBoxes(); return;
     }
   }
-  if (lastFilled === -1) return;
-
-  S.currentInput[lastFilled] = '';
-  // Re-enable last used scramble
-  const lastScr = S.usedScrambleIndices.pop();
-  if (lastScr !== undefined) {
-    document.getElementById(`scr-${lastScr}`)?.classList.remove('used');
-  }
-  updateBoxes();
 }
 
-// ════════════════════════════════
-//  KEYBOARD (Grown Ups / Experts)
-// ════════════════════════════════
-
+// ── KEYBOARD (Grown Ups / Experts) ───────────────────────
+// CRITICAL FIX: Keys are NEVER disabled or marked as used.
+// Players must be able to press the same letter multiple times (e.g. SEAWEED has 3 E's)
 function handleKey(key) {
   if (!S.gameActive || S.wordComplete) return;
-  if (key === 'DEL') {
-    // Delete last non-revealed
-    for (let i = S.currentInput.length-1; i >= 0; i--) {
+  if (key === '⌫') {
+    for (let i=S.currentInput.length-1; i>=0; i--) {
       if (S.currentInput[i] && !S.revealedPositions.includes(i)) {
-        S.currentInput[i] = ''; updateBoxes(); return;
+        S.currentInput[i] = '';
+        updateBoxes(); return;
       }
     }
   } else if (key === '✓') {
+    if (S.currentInput.includes('')) { toast('Fill all letters first!'); return; }
     checkWord();
   } else {
-    const nextEmpty = S.currentInput.findIndex((l, i) => !l && !S.revealedPositions.includes(i));
+    const nextEmpty = S.currentInput.findIndex((l,i) => !l && !S.revealedPositions.includes(i));
     if (nextEmpty === -1) return;
     S.currentInput[nextEmpty] = key;
-    document.querySelector(`.key[data-key="${key}"]`)?.classList.add('used');
+    // DO NOT addClass('used') — keys must always remain available for repeated letters
     updateBoxes();
   }
 }
 
-function resetKeyboard() {
-  // Keys never get greyed out — letters can repeat in words
-  document.querySelectorAll('.key').forEach(k => k.classList.remove('used'));
-}
-
-// ════════════════════════════════
-//  CHECK WORD
-// ════════════════════════════════
-
+// ── CHECK WORD ────────────────────────────────────────────
 function checkWord() {
-  const wordObj = WORDS[S.wordsOrder[S.wordIndex]];
+  const wordObj = WORDS_BY_LEVEL[S.level][S.wordsOrder[S.wordIndex]];
   const attempt = S.currentInput.join('').toUpperCase();
   const correct = wordObj.word.toUpperCase();
 
   if (attempt === correct) {
-    // CORRECT
     S.wordComplete = true;
-    const cfg = LEVEL_CFG[S.level];
-    const earned = cfg.bonusCorrect;
-    S.score += earned;
-    S.beatcoins += earned;
+    const earned = LEVEL_CFG[S.level].bonusCorrect;
+    S.score += earned; S.beatcoins += earned;
     document.getElementById('score-val').textContent = S.score;
     document.getElementById('bc-val').textContent = S.beatcoins;
     saveStorage();
 
-    // Flash boxes green
-    for (let i = 0; i < correct.length; i++) {
+    // Flash green
+    for (let i=0; i<correct.length; i++) {
       setTimeout(() => {
         const box = document.getElementById(`box-${i}`);
         if (box) box.className = 'letter-box correct';
-      }, i * 60);
+      }, i*50);
     }
 
+    // Wiggle creature image (youngsters)
     setTimeout(() => {
-      showResult(true, wordObj, earned);
+      const img = document.getElementById('creature-img');
+      if (img.style.display !== 'none') {
+        img.classList.remove('wiggle');
+        void img.offsetWidth; // reflow
+        img.classList.add('wiggle');
+      }
+    }, correct.length*50+100);
+
+    setTimeout(() => {
+      showWordResult(true, wordObj, earned);
       celebrate();
       speak(pick(RITA_CORRECT));
-    }, correct.length * 60 + 200);
+    }, correct.length*50+300);
 
   } else {
-    // WRONG
-    for (let i = 0; i < correct.length; i++) {
+    // Flash red
+    for (let i=0; i<correct.length; i++) {
       const box = document.getElementById(`box-${i}`);
-      if (box && !S.revealedPositions.includes(i)) box.className = 'letter-box wrong';
+      if (box && !S.revealedPositions.includes(i)) box.className='letter-box wrong';
     }
     setTimeout(() => {
+      // Clear non-revealed inputs
+      S.currentInput = S.currentInput.map((l,i) => S.revealedPositions.includes(i)?l:'');
+      S.usedScrambleIndices = [];
+      document.querySelectorAll('.scramble-letter:not(.scr-del)').forEach(b=>b.classList.remove('used'));
       updateBoxes();
-      // If experts — give 1 hint then move on if still wrong
-      if (S.level === 'experts') {
-        if (S.hintsLeft > 0) {
-          toast('Wrong! Use your hint or try again!');
-        } else {
-          S.wordComplete = true;
-          revealAnswer(wordObj);
-          showResult(false, wordObj, 0);
-          speak(pick(RITA_WRONG));
-        }
-      } else {
-        // Clear non-revealed inputs
-        S.currentInput = S.currentInput.map((l,i) => S.revealedPositions.includes(i) ? l : '');
-        S.usedScrambleIndices = [];
-        // Re-enable scramble buttons
-        document.querySelectorAll('.scramble-letter:not(:last-child)').forEach(b => b.classList.remove('used'));
-        resetKeyboard();
-        updateBoxes();
-        toast('Not quite! Try again love!');
-      }
-    }, 600);
+      toast('Not quite! Try again love!');
+    }, 500);
   }
 }
 
-function revealAnswer(wordObj) {
-  for (let i = 0; i < wordObj.word.length; i++) {
-    S.currentInput[i] = wordObj.word[i];
-    if (!S.revealedPositions.includes(i)) S.revealedPositions.push(i);
-  }
-  updateBoxes();
-}
-
-// ════════════════════════════════
-//  HINT
-// ════════════════════════════════
-
+// ── HINT ─────────────────────────────────────────────────
 function useHint() {
-  if (S.hintsLeft <= 0 || S.wordComplete) return;
-  const wordObj = WORDS[S.wordsOrder[S.wordIndex]];
+  if (S.hintsLeft<=0 || S.wordComplete || !S.gameActive) return;
+  const wordObj = WORDS_BY_LEVEL[S.level][S.wordsOrder[S.wordIndex]];
 
   // Find first unrevealed empty position
   let pos = -1;
-  for (let i = 0; i < wordObj.word.length; i++) {
-    if (!S.revealedPositions.includes(i) && !S.currentInput[i]) {
-      pos = i; break;
+  for (let i=0; i<wordObj.word.length; i++) {
+    if (!S.revealedPositions.includes(i) && !S.currentInput[i]) { pos=i; break; }
+  }
+  if (pos===-1) {
+    for (let i=0; i<wordObj.word.length; i++) {
+      if (!S.revealedPositions.includes(i)) { pos=i; break; }
     }
   }
-  if (pos === -1) {
-    // Find first unrevealed position regardless
-    for (let i = 0; i < wordObj.word.length; i++) {
-      if (!S.revealedPositions.includes(i)) { pos = i; break; }
-    }
-  }
-  if (pos === -1) return;
+  if (pos===-1) return;
 
   S.revealedPositions.push(pos);
   S.currentInput[pos] = wordObj.word[pos];
   S.hintsLeft--;
-  S.hintsUsedThisWord++;
   updateBoxes();
 
-  document.getElementById('word-hint').textContent =
-    S.hintsLeft > 0 ? `💡 ${S.hintsLeft} hint${S.hintsLeft!==1?'s':''} remaining` : 'No more hints!';
-  document.getElementById('hint-btn').disabled = S.hintsLeft <= 0;
-
-  // For scramble: mark that letter as used
-  if (S.level === 'youngsters') {
-    // find available scramble button with that letter
-    const scrMap = [...document.querySelectorAll('.scramble-letter:not(:last-child)')];
-    const available = scrMap.find(b => b.textContent === wordObj.word[pos] && !b.classList.contains('used'));
+  // For scramble — mark corresponding letter as used
+  if (S.level==='youngsters') {
+    const scrBtns = [...document.querySelectorAll('.scramble-letter:not(.scr-del)')];
+    const available = scrBtns.find(b=>b.textContent===wordObj.word[pos]&&!b.classList.contains('used'));
     if (available) {
       available.classList.add('used');
       const idx = parseInt(available.id.split('-')[1]);
@@ -1104,30 +931,24 @@ function useHint() {
     }
   }
 
+  document.getElementById('hint-btn').textContent = `💡 Hint (${S.hintsLeft})`;
+  document.getElementById('hint-btn').disabled = S.hintsLeft<=0;
+  document.getElementById('word-hint').textContent = S.hintsLeft>0 ? `💡 ${S.hintsLeft} hints left` : 'No more hints!';
   speak(`The letter at position ${pos+1} is ${wordObj.word[pos]}!`);
 
-  // Check if complete
-  if (!S.currentInput.includes('')) {
-    setTimeout(() => checkWord(), 400);
-  }
+  if (!S.currentInput.includes('')) setTimeout(()=>checkWord(),400);
 }
 
-// ════════════════════════════════
-//  SHOW RESULT
-// ════════════════════════════════
-
-function showResult(correct, wordObj, pts) {
-  const panel = document.getElementById('result-panel');
-  document.getElementById('result-icon').textContent = correct ? '🎉' : '😔';
-  document.getElementById('result-title').textContent = correct ? 'Correct!' : 'Not quite!';
+// ── SHOW RESULT ───────────────────────────────────────────
+function showWordResult(correct, wordObj, pts) {
+  document.getElementById('result-icon').textContent = correct?'🎉':'😔';
+  document.getElementById('result-title').textContent = correct?'Correct!':'Not quite!';
   document.getElementById('result-word').textContent = wordObj.word;
-  document.getElementById('result-sub').textContent = correct
-    ? wordObj.hint
-    : `The word was: ${wordObj.word}`;
+  document.getElementById('result-sub').textContent = correct ? wordObj.riddle.split('.')[0]+'.' : `The word was: ${wordObj.word}`;
   const ptsEl = document.getElementById('result-pts');
-  ptsEl.textContent = correct ? `+${pts} BeatCoins!` : '+0 BeatCoins';
-  ptsEl.style.color = correct ? '#4ade80' : 'rgba(255,255,255,.4)';
-  panel.classList.add('show');
+  ptsEl.textContent = correct?`+${pts} BeatCoins!`:'+0 BeatCoins';
+  ptsEl.style.color = correct?'#4ade80':'rgba(255,255,255,.4)';
+  document.getElementById('result-panel').classList.add('show');
 
   S.wordIndex++;
   document.getElementById('word-count-val').textContent = `${S.wordIndex}/${S.wordsOrder.length}`;
@@ -1137,35 +958,29 @@ function showResult(correct, wordObj, pts) {
     document.getElementById('next-btn').style.display = 'block';
     document.getElementById('hint-btn').style.display = 'none';
   } else {
-    setTimeout(() => finishGame(), 1500);
+    setTimeout(()=>finishGame(), 1800);
   }
 }
 
 function nextWord() {
   document.getElementById('next-btn').style.display = 'none';
   document.getElementById('result-panel').classList.remove('show');
-  resetKeyboard();
   loadWord();
 }
 
-// ════════════════════════════════
-//  FINISH GAME
-// ════════════════════════════════
-
+// ── FINISH ────────────────────────────────────────────────
 function finishGame() {
   S.gameActive = false;
-  const cfg = LEVEL_CFG[S.level];
-  const bonus = cfg.bonusAll;
-  S.beatcoins += bonus;
-  S.score += bonus;
+  const bonus = LEVEL_CFG[S.level].bonusAll;
+  S.beatcoins+=bonus; S.score+=bonus;
   document.getElementById('bc-val').textContent = S.beatcoins;
   document.getElementById('score-val').textContent = S.score;
   saveStorage();
 
   document.getElementById('result-icon').textContent = '🏆';
-  document.getElementById('result-title').textContent = "Ocean Master!";
+  document.getElementById('result-title').textContent = 'Ocean Master!';
   document.getElementById('result-word').textContent = '🐙 🌊 🐠 🪸';
-  document.getElementById('result-sub').textContent = `You discovered all 8 ocean words!`;
+  document.getElementById('result-sub').textContent = 'You discovered all ocean words!';
   document.getElementById('result-pts').textContent = `+${bonus} Bonus BeatCoins!`;
   document.getElementById('result-pts').style.color = '#ffde59';
   document.getElementById('result-panel').classList.add('show');
@@ -1173,55 +988,41 @@ function finishGame() {
   document.getElementById('hint-btn').style.display = 'none';
   document.getElementById('start-btn').textContent = '🔄 Play Again!';
   document.getElementById('start-btn').style.display = 'block';
-  document.getElementById('start-btn').onclick = () => { resetGame(); startGame(); };
-
+  document.getElementById('start-btn').onclick = ()=>{ resetGame(); startGame(); };
   celebrate();
   speak(pick(RITA_COMPLETE));
 }
 
-// ════════════════════════════════
-//  NAVIGATION
-// ════════════════════════════════
-
+// ── NAVIGATION ────────────────────────────────────────────
 function goBack()    { toast('◀️ Going back... (page5 coming soon)'); }
 function goHome()    { toast('🏠 Going home... (index.html coming soon)'); }
 function goForward() { toast('▶️ Next... (coming soon)'); }
 
-// ════════════════════════════════
-//  RITA VOICE
-// ════════════════════════════════
-
+// ── RITA VOICE ────────────────────────────────────────────
 function speak(text) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.lang='en-GB'; u.rate=0.9; u.pitch=1.1;
-  const voices = window.speechSynthesis.getVoices();
-  const brit = voices.find(v=>v.lang==='en-GB'&&v.name.toLowerCase().includes('female'))
-            || voices.find(v=>v.lang==='en-GB')
-            || voices.find(v=>v.lang.startsWith('en'));
-  if (brit) u.voice = brit;
-  const img = document.getElementById('lad-img-el');
-  img.classList.add('speaking');
-  u.onend = () => img.classList.remove('speaking');
+  u.lang='en-GB'; u.rate=0.88; u.pitch=1.1;
+  const voices=window.speechSynthesis.getVoices();
+  const brit=voices.find(v=>v.lang==='en-GB'&&v.name.toLowerCase().includes('female'))
+          ||voices.find(v=>v.lang==='en-GB')
+          ||voices.find(v=>v.lang.startsWith('en'));
+  if(brit)u.voice=brit;
+  const lad=document.getElementById('lad-bottom-img');
+  if(lad){ lad.classList.add('speaking'); }
+  u.onend=()=>{ if(lad) lad.classList.remove('speaking'); };
   window.speechSynthesis.speak(u);
 }
-
 function ritaSpeak() { speak(RITA_INTRO[S.level]); }
+if(window.speechSynthesis){ window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices(); }
 
-if (window.speechSynthesis) {
-  window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
-}
-
-// ════════════════════════════════
-//  CELEBRATE
-// ════════════════════════════════
-
+// ── CELEBRATE ─────────────────────────────────────────────
 function celebrate() {
-  const layer = document.getElementById('celebrate');
-  layer.innerHTML = '';
-  const cols = ['#4dc8ff','#00e5cc','#ffde59','#4ade80','#a855f7','#fff'];
-  for (let i=0;i<45;i++) {
+  const layer=document.getElementById('celebrate');
+  layer.innerHTML='';
+  const cols=['#4dc8ff','#00e5cc','#ffde59','#4ade80','#a855f7','#fff'];
+  for(let i=0;i<45;i++){
     const el=document.createElement('div');
     el.className='cp';
     el.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*20}%;background:${cols[Math.floor(Math.random()*cols.length)]};animation-delay:${Math.random()*.7}s;animation-duration:${1.2+Math.random()*.9}s;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;border-radius:${Math.random()>.5?'50%':'2px'};`;
@@ -1230,36 +1031,26 @@ function celebrate() {
   setTimeout(()=>layer.innerHTML='',2800);
 }
 
-// ════════════════════════════════
-//  TOAST + HELPERS
-// ════════════════════════════════
-
+// ── HELPERS ───────────────────────────────────────────────
 let toastT;
-function toast(msg) {
+function toast(msg){
   const el=document.getElementById('toast');
   el.textContent=msg; el.classList.add('show');
-  clearTimeout(toastT);
-  toastT=setTimeout(()=>el.classList.remove('show'),3000);
+  clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('show'),3000);
 }
-
-function shuffle(a) {
+function shuffle(a){
   const b=[...a];
   for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}
   return b;
 }
-
-function pick(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
-
-function setDevice(w,h,name) {
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function setDevice(w,h,name){
   const p=document.getElementById('phone');
   p.style.width=w+'px'; p.style.height=h+'px';
-  document.querySelectorAll('#device-bar button').forEach(b=>
-    b.classList.toggle('active',b.textContent===name));
+  document.querySelectorAll('#device-bar button').forEach(b=>b.classList.toggle('active',b.textContent===name));
 }
 
-// ════════════════════════════════
-//  BOOT
-// ════════════════════════════════
+// ── BOOT ──────────────────────────────────────────────────
 init();
 </script>
 </body>
