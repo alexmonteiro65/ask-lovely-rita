@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ask Lovely Rita — The Inner Light</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #0a0a14; color: #fff;
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; padding: 20px 16px 40px;
+  }
+  #device-bar { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; justify-content:center; }
+  #device-bar button { background:#1a1a2e; border:1px solid #333; color:#aaa; padding:6px 12px; border-radius:20px; font-size:11px; cursor:pointer; transition:all .2s; }
+  #device-bar button:hover, #device-bar button.active { background:#333; color:#fff; border-color:#666; }
+  #phone-outer { background:#1c1c1c; border-radius:50px; padding:12px; box-shadow:0 0 0 2px #333,0 20px 60px rgba(0,0,0,.8); }
+  #phone { width:369px; height:828px; border-radius:40px; overflow:hidden; position:relative; display:flex; flex-direction:column; background:#1a0800; transition:width .3s,height .3s; }
+  #notch { position:absolute; top:0; left:50%; transform:translateX(-50%); width:120px; height:30px; background:#1c1c1c; border-radius:0 0 20px 20px; z-index:20; }
+  #scroll-area { flex:1; overflow-y:auto; overflow-x:hidden; padding:36px 12px 8px; scrollbar-width:none; }
+  #scroll-area::-webkit-scrollbar { display:none; }
+
+  /* INDIA BG */
+  #india-bg {
+    position:absolute; inset:0; z-index:0;
+    background:linear-gradient(180deg,#2d0a00 0%,#8b2500 25%,#d4590a 55%,#c8a96e 85%,#7bc67e 100%);
+    border-radius:40px; overflow:hidden; pointer-events:none;
+  }
+  .petal { position:absolute; font-size:var(--ps); animation:petal-fall var(--pd) linear infinite; opacity:.6; }
+  @keyframes petal-fall { 0%{transform:translateY(-30px) rotate(0deg);opacity:0} 10%{opacity:.6} 90%{opacity:.6} 100%{transform:translateY(900px) rotate(360deg);opacity:0} }
+
+  /* NAV */
+  #nav-bar { flex-shrink:0; display:flex; align-items:center; justify-content:space-around; padding:8px 20px 12px; border-top:1px solid rgba(255,255,255,.08); background:rgba(26,8,0,.7); backdrop-filter:blur(12px); position:relative; z-index:10; }
+  .nav-btn { display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; color:rgba(255,255,255,.5); cursor:pointer; padding:5px 14px; border-radius:12px; transition:all .2s; font-size:10px; }
+  .nav-btn:hover { background:rgba(255,255,255,.08); color:#fff; }
+  .nav-btn .nav-icon { font-size:20px; line-height:1; }
+  .nav-btn.nav-home { color:#ff6b35; }
+
+  body.theme-youngsters { --accent:#ff6b35; --glow:#ff6b35; --btn-grad:linear-gradient(135deg,#ff6b35,#c8a96e); }
+  body.theme-grownups   { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-gradient(135deg,#c8a96e,#8b4513); }
+  body.theme-experts    { --accent:#ffd700; --glow:#ffd700; --btn-grad:linear-gradient(135deg,#ffd700,#c8860a); }
+
+  #page-header { text-align:center; margin-bottom:8px; position:relative; z-index:2; }
+  #page-header h1 {
+    font-size:17px; font-weight:900; letter-spacing:1px; text-transform:uppercase;
+    background:linear-gradient(135deg,#ff6b35,#ffde59,#7bc67e);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    filter:drop-shadow(0 0 14px rgba(255,107,53,.5));
+  }
+  #page-header p { font-size:10px; color:rgba(255,255,255,.35); margin-top:2px; }
+
+  #level-tabs { display:flex; gap:5px; justify-content:center; margin-bottom:8px; position:relative; z-index:2; }
+  #level-tabs button { padding:4px 10px; border-radius:20px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.05); color:rgba(255,255,255,.5); font-size:9px; font-weight:700; cursor:pointer; transition:all .2s; text-transform:uppercase; }
+  #level-tabs button.active { background:var(--btn-grad); border-color:transparent; color:#fff; }
+
+  #rita-wrap { background:rgba(255,255,255,.06); border:1px solid rgba(255,107,53,.3); border-radius:14px; padding:8px 26px 8px 10px; position:relative; margin-bottom:8px; z-index:2; }
+  #rita-name { font-size:9px; font-weight:700; color:#ff6b35; text-transform:uppercase; letter-spacing:.8px; margin-bottom:3px; }
+  #rita-text { font-size:10px; color:rgba(255,255,255,.8); line-height:1.5; }
+  #rita-speak-btn { position:absolute; top:7px; right:6px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15); border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:10px; cursor:pointer; color:#fff; }
+
+  #status-bar { display:flex; gap:6px; margin-bottom:8px; position:relative; z-index:2; }
+  .stat-card { flex:1; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:4px 8px; }
+  .stat-label { font-size:7px; color:rgba(255,255,255,.3); text-transform:uppercase; letter-spacing:.5px; }
+  .stat-val { font-size:13px; font-weight:900; }
+  #bc-val { color:#ffde59; } #score-val { color:#ff6b35; } #pairs-val { color:#7bc67e; }
+
+  /* PROGRESS MANDALA */
+  #progress-row { display:flex; gap:5px; justify-content:center; margin-bottom:8px; position:relative; z-index:2; flex-wrap:wrap; }
+  .prog-dot { width:22px; height:22px; border-radius:50%; border:2px solid rgba(255,255,255,.2); background:rgba(255,255,255,.05); display:flex; align-items:center; justify-content:center; font-size:11px; transition:all .3s; }
+  .prog-dot.found { background:rgba(255,107,53,.3); border-color:#ff6b35; box-shadow:0 0 8px rgba(255,107,53,.5); }
+
+  /* CARDS GRID */
+  #cards-grid { display:grid; gap:6px; margin-bottom:10px; position:relative; z-index:2; }
+  .match-card {
+    aspect-ratio:1; border-radius:12px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    font-size:var(--card-fs,18px); position:relative; overflow:hidden;
+    transition:transform .15s; user-select:none;
+    border:2px solid rgba(255,255,255,.15);
+    background:linear-gradient(135deg,rgba(139,69,19,.4),rgba(200,169,110,.2));
+  }
+  .match-card:hover:not(.flipped):not(.matched) { transform:scale(1.04); }
+  .match-card .card-back {
+    position:absolute; inset:0; border-radius:10px;
+    background:linear-gradient(135deg,#8b4513,#c8a96e);
+    display:flex; align-items:center; justify-content:center;
+    font-size:20px; transition:opacity .3s;
+  }
+  .match-card .card-front {
+    position:absolute; inset:0; border-radius:10px;
+    background:rgba(0,0,0,.4);
+    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:2px;
+    opacity:0; transition:opacity .3s; padding:4px; text-align:center;
+  }
+  .match-card.flipped .card-back { opacity:0; }
+  .match-card.flipped .card-front { opacity:1; }
+  .match-card.matched { border-color:#7bc67e; background:rgba(123,198,126,.15); }
+  .match-card.matched .card-back { opacity:0; }
+  .match-card.matched .card-front { opacity:1; }
+  .match-card.wrong-flash { animation:card-wrong .4s ease; }
+  @keyframes card-wrong { 0%,100%{transform:scale(1)} 25%{transform:scale(.95) rotate(-2deg)} 75%{transform:scale(.95) rotate(2deg)} }
+  .card-emoji { font-size:var(--ce,20px); line-height:1; }
+  .card-label { font-size:var(--cl,9px); color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; line-height:1.2; }
+
+  #act-btns { display:flex; gap:7px; margin-bottom:8px; position:relative; z-index:2; }
+  .act-btn { flex:1; padding:10px; border:none; border-radius:24px; font-size:11px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; cursor:pointer; transition:transform .15s; position:relative; overflow:hidden; }
+  .act-btn::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(255,255,255,.14),transparent); border-radius:inherit; }
+  .act-btn:hover:not(:disabled) { transform:scale(1.03); }
+  .act-btn:disabled { opacity:.35; cursor:not-allowed; }
+  #start-btn { background:var(--btn-grad); color:#fff; box-shadow:0 4px 14px rgba(0,0,0,.4); }
+  #timer-display { text-align:center; font-size:11px; color:rgba(255,255,255,.5); margin-bottom:6px; position:relative; z-index:2; min-height:16px; }
+
+  #result-panel { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:13px; padding:10px; margin-bottom:8px; text-align:center; display:none; flex-direction:column; align-items:center; gap:3px; position:relative; z-index:2; animation:slideIn .35s ease; }
+  #result-panel.show { display:flex; }
+  @keyframes slideIn { from{opacity:0;transform:translateY(-5px)} to{opacity:1;transform:translateY(0)} }
+  #result-icon { font-size:24px; } #result-title { font-size:13px; font-weight:800; color:#ff6b35; }
+  #result-sub { font-size:10px; color:rgba(255,255,255,.5); } #result-pts { font-size:16px; font-weight:900; }
+
+  #lad-bottom-wrap { flex-shrink:0; display:flex; align-items:flex-end; justify-content:center; height:110px; background:rgba(26,8,0,.4); border-top:1px solid rgba(255,107,53,.1); }
+  #lad-bottom-img { height:128px; width:auto; object-fit:contain; filter:drop-shadow(0 -4px 20px rgba(255,107,53,.4)); animation:peaceful-float 3s ease-in-out infinite alternate; margin-bottom:-8px; }
+  @keyframes peaceful-float { from{transform:translateY(0) rotate(-1deg)} to{transform:translateY(-8px) rotate(1deg)} }
+  #lad-bottom-img.speaking { filter:drop-shadow(0 0 22px rgba(255,107,53,.9)) drop-shadow(0 -4px 20px rgba(255,107,53,.4)); }
+
+  #celebrate { position:absolute; inset:0; pointer-events:none; z-index:25; overflow:hidden; border-radius:40px; }
+  .cp { position:absolute; border-radius:2px; animation:cf 1.6s ease-out forwards; }
+  @keyframes cf { 0%{transform:translateY(-20px) rotate(0deg);opacity:1} 100%{transform:translateY(900px) rotate(720deg);opacity:0} }
+  #toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(80px); background:rgba(26,8,0,.95); border:1px solid #ff6b35; border-radius:20px; padding:8px 16px; font-size:11px; color:#fff; z-index:1000; transition:transform .3s,opacity .3s; opacity:0; white-space:nowrap; pointer-events:none; }
+  #toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+</style>
+</head>
+<body class="theme-youngsters">
+<div id="device-bar">
+  <button onclick="setDevice(393,852,'iPhone 14 Pro')" class="active">iPhone 14 Pro</button>
+  <button onclick="setDevice(375,667,'iPhone SE')">iPhone SE</button>
+  <button onclick="setDevice(360,800,'Galaxy S23')">Galaxy S23</button>
+  <button onclick="setDevice(412,915,'Pixel 7')">Pixel 7</button>
+  <button onclick="setDevice(430,932,'iPhone 14 Max')">iPhone 14 Max</button>
+</div>
+<div id="phone-outer">
+  <div id="phone">
+    <div id="notch"></div>
+    <div id="india-bg"></div>
+    <div id="celebrate"></div>
+    <div id="scroll-area">
+      <div id="page-header">
+        <h1>🌿 The Inner Light</h1>
+        <p>The Quiet Lad's world of culture and nature!</p>
+      </div>
+      <div id="level-tabs">
+        <button onclick="setLevel('youngsters')" class="active">🟣 Youngsters</button>
+        <button onclick="setLevel('grownups')">🟡 Grown Ups</button>
+        <button onclick="setLevel('experts')">⭐ Experts</button>
+      </div>
+      <div id="rita-wrap">
+        <div id="rita-name">♪ Lovely Rita</div>
+        <div id="rita-text">Loading...</div>
+        <button id="rita-speak-btn" onclick="ritaSpeak()">🔊</button>
+      </div>
+      <div id="status-bar">
+        <div class="stat-card"><div class="stat-label">BeatCoins</div><div class="stat-val" id="bc-val">80</div></div>
+        <div class="stat-card"><div class="stat-label">Score</div><div class="stat-val" id="score-val">0</div></div>
+        <div class="stat-card"><div class="stat-label">Pairs</div><div class="stat-val" id="pairs-val">0/4</div></div>
+      </div>
+      <div id="timer-display"></div>
+      <div id="progress-row"></div>
+      <div id="cards-grid"></div>
+      <div id="act-btns">
+        <button class="act-btn" id="start-btn" onclick="startGame()">🌿 Begin Journey!</button>
+      </div>
+      <div id="result-panel">
+        <div id="result-icon">🪷</div>
+        <div id="result-title"></div>
+        <div id="result-sub"></div>
+        <div id="result-pts"></div>
+      </div>
+    </div>
+    <div id="lad-bottom-wrap">
+      <img id="lad-bottom-img" src="https://alexmonteiro65.github.io/ask-lovely-rita/src/Quite_Peaceful_Lad.png" alt="Quiet Lad" onerror="this.style.display='none'"/>
+    </div>
+    <nav id="nav-bar">
+      <button class="nav-btn" onclick="goBack()"><span class="nav-icon">◀️</span><span>Back</span></button>
+      <button class="nav-btn nav-home" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
+      <button class="nav-btn" onclick="goForward()"><span class="nav-icon">▶️</span><span>Next</span></button>
+    </nav>
+  </div>
+</div>
+<div id="toast"></div>
+<script>
+const BASE='https://alexmonteiro65.github.io/ask-lovely-rita/src/';
+const RITA_INTRO={
+  youngsters:"Hello love! Welcome to The Inner Light! The Quiet Lad will show you wonders from around the world. Flip two cards at a time and try to find the matching pairs!",
+  grownups:"Hello there! Time to explore world cultures! Flip cards and match each image to its name or country. You have 12 pairs to find darling. How many moves will you need?",
+  experts:"Right then! Expert explorers only! Match all 16 pairs before the timer runs out. The Quiet Lad says wisdom comes to those who are swift and attentive!",
+};
+const RITA_MATCH=["Beautiful match darling! The Quiet Lad smiles with joy!","Wonderful! That is a perfect pair love!","Brilliant! Another connection made!","Spot on! The world is full of wonders!"];
+const RITA_COMPLETE=["Oh how magnificent! You matched them all! The Quiet Lad bows in respect darling!","Perfect harmony love! Every pair found! The inner light shines bright in you!"];
+const RITA_TIMEOUT=["Oh nearly darling! Time ran out but no points lost. Try again and find your rhythm!","Not quite this time love! The timer is strict but no penalty. Have another go!"];
+
+// Pairs data: each pair has an image card and a label card
+const ALL_PAIRS=[
+  {id:'sitar',   img:'🪕', label:'Sitar',      fact:'Indian string instrument'},
+  {id:'lotus',   img:'🪷', label:'India',       fact:'National flower of India'},
+  {id:'panda',   img:'🐼', label:'China',       fact:'Giant Panda lives in China'},
+  {id:'tulip',   img:'🌷', label:'Netherlands', fact:'Famous Dutch flower'},
+  {id:'kangaroo',img:'🦘', label:'Australia',   fact:'Found only in Australia'},
+  {id:'maple',   img:'🍁', label:'Canada',       fact:'Symbol of Canada'},
+  {id:'cherry',  img:'🌸', label:'Japan',       fact:'Cherry blossom of Japan'},
+  {id:'elephant',img:'🐘', label:'Thailand',    fact:'Sacred animal in Thailand'},
+  {id:'drum',    img:'🥁',  label:'Africa',      fact:'Drums originate in Africa'},
+  {id:'cactus',  img:'🌵', label:'Mexico',      fact:'Symbol of Mexican desert'},
+  {id:'windmill',img:'🌬️', label:'Holland',     fact:'Windmills of the Netherlands'},
+  {id:'koala',   img:'🐨', label:'Australia',   fact:'Koala sleeps 22 hours a day'},
+  {id:'tea',     img:'🍵', label:'China',       fact:'Tea originated in China'},
+  {id:'dragon',  img:'🐉', label:'Wales',       fact:'Dragon on the Welsh flag'},
+  {id:'bagpipe', img:'🎵', label:'Scotland',    fact:'Bagpipes are Scottish'},
+  {id:'camel',   img:'🐪', label:'Egypt',       fact:'Camels cross the Sahara Desert'},
+];
+
+const LEVEL_CFG={
+  youngsters:{pairs:4,timer:0,   bonusMatch:25,bonusAll:80, ladImg:'Quite_Peaceful_Lad.png'},
+  grownups:  {pairs:6,timer:0,   bonusMatch:20,bonusAll:100,ladImg:'Peaceful_Lad.png'},
+  experts:   {pairs:8,timer:60,  bonusMatch:15,bonusAll:150,ladImg:'Peaceful_Lad.png'},
+};
+
+let S={level:'youngsters',beatcoins:80,score:0,pairs:4,cards:[],flipped:[],matched:[],moves:0,gameActive:false,timerInt:null,timeLeft:0};
+
+function loadStorage(){try{const d=JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');if(d.theme&&LEVEL_CFG[d.theme])S.level=d.theme;if(typeof d.beatcoins==='number')S.beatcoins=d.beatcoins;}catch(e){}}
+function saveStorage(){try{const d=JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');d.beatcoins=S.beatcoins;localStorage.setItem('askLovelyRitaV4',JSON.stringify(d));}catch(e){}}
+
+function init(){loadStorage();buildBg();applyLevel(S.level);highlightTab(S.level);setTimeout(()=>speak(RITA_INTRO[S.level]),900);}
+
+function setLevel(lvl){S.level=lvl;clearInterval(S.timerInt);window.speechSynthesis&&window.speechSynthesis.cancel();applyLevel(lvl);highlightTab(lvl);setTimeout(()=>speak(RITA_INTRO[lvl]),400);}
+function highlightTab(lvl){document.querySelectorAll('#level-tabs button').forEach(b=>b.classList.toggle('active',(lvl==='youngsters'&&b.textContent.includes('Young'))||(lvl==='grownups'&&b.textContent.includes('Grown'))||(lvl==='experts'&&b.textContent.includes('Expert'))));}
+
+function applyLevel(lvl){
+  document.body.className=`theme-${lvl}`;
+  document.getElementById('rita-text').textContent=RITA_INTRO[lvl];
+  document.getElementById('bc-val').textContent=S.beatcoins;
+  const ladEl=document.getElementById('lad-bottom-img');
+  ladEl.src=BASE+LEVEL_CFG[lvl].ladImg;
+  const cfg=LEVEL_CFG[lvl];
+  document.getElementById('pairs-val').textContent=`0/${cfg.pairs}`;
+  resetGame();
+}
+
+function buildBg(){
+  const bg=document.getElementById('india-bg');
+  const petals=['🌸','🌺','🌼','🌷'];
+  for(let i=0;i<8;i++){
+    const p=document.createElement('div');p.className='petal';
+    p.textContent=petals[Math.floor(Math.random()*petals.length)];
+    p.style.cssText=`left:${Math.random()*100}%;--ps:${12+Math.random()*10}px;--pd:${4+Math.random()*6}s;animation-delay:${Math.random()*6}s`;
+    bg.appendChild(p);
+  }
+}
+
+function resetGame(){
+  S.score=0;S.moves=0;S.matched=[];S.flipped=[];S.gameActive=false;
+  clearInterval(S.timerInt);
+  document.getElementById('score-val').textContent='0';
+  document.getElementById('result-panel').classList.remove('show');
+  document.getElementById('timer-display').textContent='';
+  document.getElementById('cards-grid').innerHTML='';
+  document.getElementById('progress-row').innerHTML='';
+  document.getElementById('start-btn').style.display='block';
+  document.getElementById('start-btn').textContent='🌿 Begin Journey!';
+  document.getElementById('start-btn').onclick=startGame;
+}
+
+function startGame(){
+  S.gameActive=true;S.moves=0;S.matched=[];S.flipped=[];
+  document.getElementById('start-btn').style.display='none';
+  document.getElementById('result-panel').classList.remove('show');
+  const cfg=LEVEL_CFG[S.level];
+  const selectedPairs=shuffle([...ALL_PAIRS]).slice(0,cfg.pairs);
+
+  // Build cards: each pair creates 2 cards (image + label)
+  S.cards=[];
+  selectedPairs.forEach(pair=>{
+    S.cards.push({id:pair.id,type:'img',content:pair.img,label:pair.label,fact:pair.fact});
+    S.cards.push({id:pair.id,type:'label',content:pair.label,img:pair.img,fact:pair.fact});
+  });
+  S.cards=shuffle(S.cards);
+
+  // Progress dots
+  const pr=document.getElementById('progress-row');pr.innerHTML='';
+  for(let i=0;i<cfg.pairs;i++){
+    const d=document.createElement('div');d.className='prog-dot';d.id=`pdot-${i}`;
+    d.textContent='🪷';pr.appendChild(d);
+  }
+  document.getElementById('pairs-val').textContent=`0/${cfg.pairs}`;
+
+  // Grid columns
+  const cols=cfg.pairs<=4?4:cfg.pairs<=6?4:4;
+  const fs=cfg.pairs<=4?22:cfg.pairs<=6?18:16;
+  const grid=document.getElementById('cards-grid');
+  grid.style.gridTemplateColumns=`repeat(${cols},1fr)`;
+  grid.innerHTML='';
+  grid.style.setProperty('--card-fs',fs+'px');
+
+  S.cards.forEach((card,idx)=>{
+    const el=document.createElement('div');el.className='match-card';el.dataset.idx=idx;
+    const ce=cfg.pairs<=4?24:cfg.pairs<=6?20:16;
+    const cl=cfg.pairs<=4?10:9;
+    el.style.setProperty('--ce',ce+'px');
+    el.style.setProperty('--cl',cl+'px');
+    el.innerHTML=`
+      <div class="card-back">🌀</div>
+      <div class="card-front">
+        <div class="card-emoji">${card.content}</div>
+        ${card.type==='label'?`<div class="card-label">${card.content}</div>`:''}
+      </div>`;
+    el.onclick=()=>flipCard(idx);
+    grid.appendChild(el);
+  });
+
+  // Timer for experts
+  if(cfg.timer>0){
+    S.timeLeft=cfg.timer;
+    document.getElementById('timer-display').textContent=`⏱️ ${S.timeLeft}s remaining`;
+    S.timerInt=setInterval(()=>{
+      S.timeLeft--;
+      document.getElementById('timer-display').textContent=`⏱️ ${S.timeLeft}s remaining`;
+      if(S.timeLeft<=0){clearInterval(S.timerInt);timeOut();}
+    },1000);
+  }
+}
+
+function flipCard(idx){
+  if(!S.gameActive)return;
+  if(S.flipped.length>=2)return;
+  if(S.flipped.includes(idx))return;
+  if(S.matched.includes(S.cards[idx].id)&&S.cards.filter((c,i)=>c.id===S.cards[idx].id&&S.matched.includes(c.id)).length>=2)return;
+
+  S.flipped.push(idx);
+  const el=document.querySelector(`.match-card[data-idx="${idx}"]`);
+  el.classList.add('flipped');
+
+  if(S.flipped.length===2){
+    S.moves++;
+    setTimeout(()=>checkMatch(),500);
+  }
+}
+
+function checkMatch(){
+  const [a,b]=S.flipped;
+  const ca=S.cards[a],cb=S.cards[b];
+  if(ca.id===cb.id&&ca.type!==cb.type){
+    // MATCH
+    S.matched.push(ca.id);
+    document.querySelector(`.match-card[data-idx="${a}"]`).classList.add('matched');
+    document.querySelector(`.match-card[data-idx="${b}"]`).classList.add('matched');
+    const earned=LEVEL_CFG[S.level].bonusMatch;
+    S.score+=earned;S.beatcoins+=earned;
+    document.getElementById('score-val').textContent=S.score;
+    document.getElementById('bc-val').textContent=S.beatcoins;
+    saveStorage();
+    const pairsDone=S.matched.length;
+    document.getElementById('pairs-val').textContent=`${pairsDone}/${LEVEL_CFG[S.level].pairs}`;
+    document.getElementById(`pdot-${pairsDone-1}`)?.classList.add('found');
+    toast(`✅ ${ca.label || ca.content} matched! +${earned} BeatCoins`);
+    speak(pick(RITA_MATCH));
+    if(S.matched.length===LEVEL_CFG[S.level].pairs){setTimeout(()=>finishGame(true),600);}
+  } else {
+    // NO MATCH
+    setTimeout(()=>{
+      [a,b].forEach(i=>{document.querySelector(`.match-card[data-idx="${i}"]`).classList.remove('flipped');});
+    },400);
+    document.querySelector(`.match-card[data-idx="${a}"]`).classList.add('wrong-flash');
+    document.querySelector(`.match-card[data-idx="${b}"]`).classList.add('wrong-flash');
+    setTimeout(()=>{
+      document.querySelector(`.match-card[data-idx="${a}"]`).classList.remove('wrong-flash');
+      document.querySelector(`.match-card[data-idx="${b}"]`).classList.remove('wrong-flash');
+    },400);
+  }
+  S.flipped=[];
+}
+
+function timeOut(){
+  S.gameActive=false;
+  document.getElementById('result-icon').textContent='⏱️';
+  document.getElementById('result-title').textContent='Time\'s Up!';
+  document.getElementById('result-sub').textContent=`You found ${S.matched.length} of ${LEVEL_CFG[S.level].pairs} pairs — no penalty!`;
+  document.getElementById('result-pts').textContent='+0 BeatCoins';
+  document.getElementById('result-pts').style.color='rgba(255,255,255,.4)';
+  document.getElementById('result-panel').classList.add('show');
+  document.getElementById('start-btn').textContent='🔄 Try Again!';
+  document.getElementById('start-btn').style.display='block';
+  document.getElementById('start-btn').onclick=()=>{resetGame();startGame();};
+  speak(pick(RITA_TIMEOUT));
+}
+
+function finishGame(success){
+  clearInterval(S.timerInt);S.gameActive=false;
+  const bonus=LEVEL_CFG[S.level].bonusAll;
+  S.beatcoins+=bonus;S.score+=bonus;
+  document.getElementById('bc-val').textContent=S.beatcoins;
+  document.getElementById('score-val').textContent=S.score;
+  saveStorage();
+  document.getElementById('result-icon').textContent='🏆';
+  document.getElementById('result-title').textContent='All Pairs Found!';
+  document.getElementById('result-sub').textContent=`You matched everything in ${S.moves} moves!`;
+  document.getElementById('result-pts').textContent=`+${bonus} Bonus BeatCoins!`;
+  document.getElementById('result-pts').style.color='#ffde59';
+  document.getElementById('result-panel').classList.add('show');
+  document.getElementById('timer-display').textContent='';
+  document.getElementById('start-btn').textContent='🔄 Play Again!';
+  document.getElementById('start-btn').style.display='block';
+  document.getElementById('start-btn').onclick=()=>{resetGame();startGame();};
+  celebrate();speak(pick(RITA_COMPLETE));
+}
+
+function goBack(){toast('◀️ Going back...');}
+function goHome(){toast('🏠 Going home...');}
+function goForward(){toast('▶️ Next...');}
+
+function speak(text){
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.9;u.pitch=1.1;
+  const voices=window.speechSynthesis.getVoices();
+  const brit=voices.find(v=>v.lang==='en-GB'&&v.name.toLowerCase().includes('female'))||voices.find(v=>v.lang==='en-GB')||voices.find(v=>v.lang.startsWith('en'));
+  if(brit)u.voice=brit;
+  const lad=document.getElementById('lad-bottom-img');
+  if(lad){lad.classList.add('speaking');u.onend=()=>lad.classList.remove('speaking');}
+  window.speechSynthesis.speak(u);
+}
+function ritaSpeak(){speak(RITA_INTRO[S.level]);}
+if(window.speechSynthesis){window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();}
+
+function celebrate(){
+  const layer=document.getElementById('celebrate');layer.innerHTML='';
+  const cols=['#ff6b35','#ffde59','#7bc67e','#c8a96e','#fff','#f472b6'];
+  for(let i=0;i<45;i++){const el=document.createElement('div');el.className='cp';el.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*20}%;background:${cols[Math.floor(Math.random()*cols.length)]};animation-delay:${Math.random()*.7}s;animation-duration:${1.2+Math.random()*.9}s;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;border-radius:${Math.random()>.5?'50%':'2px'};`;layer.appendChild(el);}
+  setTimeout(()=>layer.innerHTML='',2800);
+}
+
+let toastT;
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),3000);}
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function setDevice(w,h,name){const p=document.getElementById('phone');p.style.width=w+'px';p.style.height=h+'px';document.querySelectorAll('#device-bar button').forEach(b=>b.classList.toggle('active',b.textContent===name));}
+
+init();
+</script>
+</body>
+</html>

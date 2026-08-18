@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ask Lovely Rita — Penny Lane</title>
+<style>
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Segoe UI',system-ui,sans-serif; background:#0a0a14; color:#fff; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:20px 16px 40px; }
+  #device-bar { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; justify-content:center; }
+  #device-bar button { background:#1a1a2e; border:1px solid #333; color:#aaa; padding:6px 12px; border-radius:20px; font-size:11px; cursor:pointer; transition:all .2s; }
+  #device-bar button:hover, #device-bar button.active { background:#333; color:#fff; border-color:#666; }
+  #phone-outer { background:#1c1c1c; border-radius:50px; padding:12px; box-shadow:0 0 0 2px #333,0 20px 60px rgba(0,0,0,.8); }
+  #phone { width:369px; height:828px; border-radius:40px; overflow:hidden; position:relative; display:flex; flex-direction:column; background:#1a0d00; transition:width .3s,height .3s; }
+  #notch { position:absolute; top:0; left:50%; transform:translateX(-50%); width:120px; height:30px; background:#1c1c1c; border-radius:0 0 20px 20px; z-index:20; }
+  #scroll-area { flex:1; overflow-y:auto; overflow-x:hidden; padding:36px 12px 8px; scrollbar-width:none; }
+  #scroll-area::-webkit-scrollbar { display:none; }
+
+  /* CITY BG */
+  #city-bg { position:absolute; inset:0; z-index:0; background:linear-gradient(180deg,#ff6b35 0%,#ffde59 30%,#87ceeb 60%,#4a90d9 100%); border-radius:40px; overflow:hidden; pointer-events:none; }
+  .city-building { position:absolute; bottom:0; background:var(--bc); border-radius:4px 4px 0 0; }
+  .city-window { position:absolute; background:#ffde59; border-radius:1px; animation:win-blink var(--wb) ease-in-out infinite alternate; }
+  @keyframes win-blink { from{opacity:.2} to{opacity:1} }
+  .city-bus { position:absolute; bottom:20px; font-size:22px; animation:bus-move 7s linear infinite; }
+  @keyframes bus-move { 0%{transform:translateX(-50px);opacity:0} 5%{opacity:1} 95%{opacity:1} 100%{transform:translateX(400px);opacity:0} }
+
+  /* NAV */
+  #nav-bar { flex-shrink:0; display:flex; align-items:center; justify-content:space-around; padding:8px 20px 12px; border-top:1px solid rgba(255,255,255,.08); background:rgba(26,13,0,.7); backdrop-filter:blur(12px); position:relative; z-index:10; }
+  .nav-btn { display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; color:rgba(255,255,255,.5); cursor:pointer; padding:5px 14px; border-radius:12px; transition:all .2s; font-size:10px; }
+  .nav-btn:hover { background:rgba(255,255,255,.08); color:#fff; }
+  .nav-btn .nav-icon { font-size:20px; line-height:1; }
+  .nav-btn.nav-home { color:#ffde59; }
+
+  body.theme-youngsters { --accent:#ffde59; --glow:#ffde59; --btn-grad:linear-gradient(135deg,#ffde59,#ff6b35); }
+  body.theme-grownups   { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-gradient(135deg,#c8a96e,#8b4513); }
+  body.theme-experts    { --accent:#ffd700; --glow:#ffd700; --btn-grad:linear-gradient(135deg,#ffd700,#c8860a); }
+
+  #page-header { text-align:center; margin-bottom:8px; position:relative; z-index:2; }
+  #page-header h1 { font-size:17px; font-weight:900; letter-spacing:1px; text-transform:uppercase; color:#fff; text-shadow:0 0 20px rgba(255,107,53,.8), 0 2px 8px rgba(0,0,0,.9), 0 0 40px rgba(255,222,89,.4); -webkit-text-fill-color:#fff; }
+  #page-header p { font-size:10px; color:rgba(255,255,255,.35); margin-top:2px; }
+
+  #level-tabs { display:flex; gap:5px; justify-content:center; margin-bottom:8px; position:relative; z-index:2; }
+  #level-tabs button { padding:4px 10px; border-radius:20px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.05); color:rgba(255,255,255,.5); font-size:9px; font-weight:700; cursor:pointer; transition:all .2s; text-transform:uppercase; }
+  #level-tabs button.active { background:var(--btn-grad); border-color:transparent; color:#000; font-weight:900; }
+
+  #rita-wrap { background:rgba(255,255,255,.06); border:1px solid rgba(255,222,89,.3); border-radius:14px; padding:8px 26px 8px 10px; position:relative; margin-bottom:8px; z-index:2; }
+  #rita-name { font-size:9px; font-weight:700; color:#ffde59; text-transform:uppercase; letter-spacing:.8px; margin-bottom:3px; }
+  #rita-text { font-size:10px; color:rgba(255,255,255,.8); line-height:1.5; }
+  #rita-speak-btn { position:absolute; top:7px; right:6px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15); border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:10px; cursor:pointer; color:#fff; }
+
+  #status-bar { display:flex; gap:6px; margin-bottom:8px; position:relative; z-index:2; }
+  .stat-card { flex:1; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:4px 8px; }
+  .stat-label { font-size:7px; color:rgba(255,255,255,.3); text-transform:uppercase; letter-spacing:.5px; }
+  .stat-val { font-size:13px; font-weight:900; }
+  #bc-val { color:#ffde59; } #score-val { color:#ff6b35; } #q-num-val { color:#c8a96e; }
+
+  /* CITY CARD */
+  #city-card { background:rgba(0,0,0,.35); border:1px solid rgba(255,222,89,.2); border-radius:18px; padding:14px; margin-bottom:10px; position:relative; z-index:2; }
+  #city-emoji { font-size:42px; text-align:center; margin-bottom:6px; animation:city-bounce 2s ease-in-out infinite alternate; }
+  @keyframes city-bounce { from{transform:translateY(0)} to{transform:translateY(-4px)} }
+  #city-name { font-size:18px; font-weight:900; text-align:center; color:#ffde59; text-shadow:0 0 15px rgba(255,222,89,.5); margin-bottom:10px; letter-spacing:1px; }
+  #facts-label { font-size:9px; color:rgba(255,255,255,.4); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+
+  /* FACTS */
+  #facts-list { display:flex; flex-direction:column; gap:7px; }
+  .fact-item {
+    background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12);
+    border-radius:12px; padding:10px 12px; cursor:pointer;
+    transition:all .2s; display:flex; align-items:center; gap:8px;
+    font-size:12px; color:rgba(255,255,255,.85); line-height:1.4;
+  }
+  .fact-item:hover:not(.selected) { background:rgba(255,222,89,.12); border-color:rgba(255,222,89,.4); }
+  .fact-item.selected { border-color:#ffde59; background:rgba(255,222,89,.1); }
+  .fact-item.correct { background:rgba(74,222,128,.15); border-color:#4ade80; color:#4ade80; }
+  .fact-item.wrong-pick { background:rgba(248,113,113,.15); border-color:#f87171; color:#f87171; animation:shake-fact .4s ease; }
+  @keyframes shake-fact { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+  .fact-number { width:22px; height:22px; border-radius:50%; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:900; flex-shrink:0; }
+  #q-instruction { font-size:10px; color:rgba(255,222,89,.7); text-align:center; margin-top:8px; font-style:italic; }
+
+  /* ACTION */
+  #action-btns { display:flex; gap:7px; margin-bottom:8px; position:relative; z-index:2; }
+  .act-btn { flex:1; padding:10px; border:none; border-radius:24px; font-size:11px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; cursor:pointer; transition:transform .15s; position:relative; overflow:hidden; }
+  .act-btn::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(255,255,255,.14),transparent); border-radius:inherit; }
+  .act-btn:hover:not(:disabled) { transform:scale(1.03); }
+  .act-btn:disabled { opacity:.35; cursor:not-allowed; }
+  #start-btn { background:var(--btn-grad); color:#000; font-weight:900; box-shadow:0 4px 14px rgba(0,0,0,.4); }
+  #next-btn  { background:rgba(255,255,255,.07); border:1px solid var(--accent); color:var(--accent); display:none; }
+
+  #result-panel { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:13px; padding:10px; margin-bottom:8px; text-align:center; display:none; flex-direction:column; align-items:center; gap:3px; position:relative; z-index:2; animation:slideIn .35s ease; }
+  #result-panel.show { display:flex; }
+  @keyframes slideIn { from{opacity:0;transform:translateY(-5px)} to{opacity:1;transform:translateY(0)} }
+  #result-icon { font-size:24px; } #result-title { font-size:13px; font-weight:800; color:#ffde59; }
+  #result-explain { font-size:10px; color:rgba(255,255,255,.6); line-height:1.5; font-style:italic; }
+  #result-pts { font-size:16px; font-weight:900; }
+
+  #lad-bottom-wrap { flex-shrink:0; display:flex; align-items:flex-end; justify-content:center; height:110px; background:rgba(26,13,0,.4); border-top:1px solid rgba(255,222,89,.1); }
+  #lad-bottom-img { height:128px; width:auto; object-fit:contain; filter:drop-shadow(0 -4px 20px rgba(255,222,89,.4)); animation:city-lad-float 3s ease-in-out infinite alternate; margin-bottom:-8px; }
+  @keyframes city-lad-float { from{transform:translateY(0) rotate(-1deg)} to{transform:translateY(-8px) rotate(1deg)} }
+  #lad-bottom-img.speaking { filter:drop-shadow(0 0 22px rgba(255,222,89,.9)) drop-shadow(0 -4px 20px rgba(255,222,89,.4)); }
+
+  #celebrate { position:absolute; inset:0; pointer-events:none; z-index:25; overflow:hidden; border-radius:40px; }
+  .cp { position:absolute; border-radius:2px; animation:cf 1.6s ease-out forwards; }
+  @keyframes cf { 0%{transform:translateY(-20px) rotate(0deg);opacity:1} 100%{transform:translateY(900px) rotate(720deg);opacity:0} }
+  #toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(80px); background:rgba(26,13,0,.95); border:1px solid #ffde59; border-radius:20px; padding:8px 16px; font-size:11px; color:#fff; z-index:1000; transition:transform .3s,opacity .3s; opacity:0; white-space:nowrap; pointer-events:none; }
+  #toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+</style>
+</head>
+<body class="theme-youngsters">
+<div id="device-bar">
+  <button onclick="setDevice(393,852,'iPhone 14 Pro')" class="active">iPhone 14 Pro</button>
+  <button onclick="setDevice(375,667,'iPhone SE')">iPhone SE</button>
+  <button onclick="setDevice(360,800,'Galaxy S23')">Galaxy S23</button>
+  <button onclick="setDevice(412,915,'Pixel 7')">Pixel 7</button>
+  <button onclick="setDevice(430,932,'iPhone 14 Max')">iPhone 14 Max</button>
+</div>
+<div id="phone-outer">
+  <div id="phone">
+    <div id="notch"></div>
+    <div id="city-bg"></div>
+    <div id="celebrate"></div>
+    <div id="scroll-area">
+      <div id="page-header">
+        <h1>🌆 Penny Lane</h1>
+        <p>The Cute Lad's city adventure!</p>
+      </div>
+      <div id="level-tabs">
+        <button onclick="setLevel('youngsters')" class="active">🟣 Youngsters</button>
+        <button onclick="setLevel('grownups')">🟡 Grown Ups</button>
+        <button onclick="setLevel('experts')">⭐ Experts</button>
+      </div>
+      <div id="rita-wrap">
+        <div id="rita-name">♪ Lovely Rita</div>
+        <div id="rita-text">Loading...</div>
+        <button id="rita-speak-btn" onclick="ritaSpeak()">🔊</button>
+      </div>
+      <div id="status-bar">
+        <div class="stat-card"><div class="stat-label">BeatCoins</div><div class="stat-val" id="bc-val">80</div></div>
+        <div class="stat-card"><div class="stat-label">Score</div><div class="stat-val" id="score-val">0</div></div>
+        <div class="stat-card"><div class="stat-label">City</div><div class="stat-val" id="q-num-val">0/8</div></div>
+      </div>
+      <div id="city-card">
+        <div id="city-emoji">🌆</div>
+        <div id="city-name">Press Start!</div>
+        <div id="facts-label">Which fact is FALSE?</div>
+        <div id="facts-list"></div>
+        <div id="q-instruction">Tap the fact you think is NOT true!</div>
+      </div>
+      <div id="action-btns">
+        <button class="act-btn" id="start-btn" onclick="startGame()">🚌 Explore Cities!</button>
+        <button class="act-btn" id="next-btn" onclick="nextCity()">Next City ▶</button>
+      </div>
+      <div id="result-panel">
+        <div id="result-icon">🌆</div>
+        <div id="result-title"></div>
+        <div id="result-explain"></div>
+        <div id="result-pts"></div>
+      </div>
+    </div>
+    <div id="lad-bottom-wrap">
+      <img id="lad-bottom-img" src="https://alexmonteiro65.github.io/ask-lovely-rita/src/Cute_Urban_Lad.png" alt="Cute Lad" onerror="this.style.display='none'"/>
+    </div>
+    <nav id="nav-bar">
+      <button class="nav-btn" onclick="goBack()"><span class="nav-icon">◀️</span><span>Back</span></button>
+      <button class="nav-btn nav-home" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
+      <button class="nav-btn" onclick="goForward()"><span class="nav-icon">▶️</span><span>Next</span></button>
+    </nav>
+  </div>
+</div>
+<div id="toast"></div>
+<script>
+const BASE='https://alexmonteiro65.github.io/ask-lovely-rita/src/';
+const RITA_INTRO={
+  youngsters:"Hello love! Welcome to Penny Lane! The Cute Lad is your city guide today. I will tell you three facts about a city. One of them is completely made up! Can you spot the fake?",
+  grownups:"Hello there! City detective time! For each city I give you three facts. One is false. Some are tricky darling so think carefully before you tap!",
+  experts:"Right then! Expert city sleuths only! These facts are very specific and the fake ones are very convincing. Only true world travellers will spot them all!",
+};
+const RITA_CORRECT=["Brilliant! You spotted the fake! The Cute Lad is impressed darling!","Smashing detective work love! That fact was completely made up!","Wonderful! You really know your cities!","Outstanding! Nothing gets past you darling!"];
+const RITA_WRONG=["Oh nearly! That one was a real fact darling. The fake was a tricky one!","Not quite love! That was actually true. The fake was sneakier than it looked!","Close! Even the Cute Lad was fooled by that one at first!"];
+const RITA_COMPLETE=["Magnificent! You have explored every city! The Cute Lad is walking on sunshine darling!","Brilliant city detective work love! Every fake fact spotted!"];
+
+const CITIES={
+  youngsters:[
+    {emoji:'🗼',name:'Paris',facts:['The Eiffel Tower is in Paris','Paris is the capital of France','Paris is in the middle of the ocean'],fake:2,explain:'Paris is a beautiful city in France — not in the ocean! The Eiffel Tower was built in 1889.'},
+    {emoji:'🗽',name:'New York',facts:['New York has a famous park called Central Park','The Statue of Liberty is in New York','New York is the capital of the USA'],fake:2,explain:'Washington D.C. is the capital of the USA! New York is the largest city but not the capital.'},
+    {emoji:'🏰',name:'London',facts:['London has red double-decker buses','Big Ben is a famous clock in London','London is in Australia'],fake:2,explain:'London is in England! It is famous for its red buses Big Ben and the River Thames.'},
+    {emoji:'🏯',name:'Tokyo',facts:['Tokyo is in Japan','Tokyo is the most populated city in the world','It snows every day in Tokyo'],fake:2,explain:'Tokyo has mild seasons! It does not snow every day. Tokyo is indeed in Japan and is very large!'},
+    {emoji:'🎡',name:'Sydney',facts:['The Sydney Opera House is famous worldwide','Sydney is in Australia','Sydney is the capital of Australia'],fake:2,explain:'Canberra is the capital of Australia — not Sydney! Sydney is the largest city though.'},
+    {emoji:'⛩️',name:'Beijing',facts:['The Great Wall of China is near Beijing','Beijing is the capital of China','Beijing is in South America'],fake:2,explain:'Beijing is the capital of China in Asia — not South America! The Great Wall is one of the wonders of the world.'},
+    {emoji:'🏛️',name:'Rome',facts:['The Colosseum is in Rome','Rome is the capital of Italy','Pizza was invented in Tokyo'],fake:2,explain:'Pizza was invented in Naples Italy — not Tokyo! Rome is the eternal city and capital of Italy.'},
+    {emoji:'🌉',name:'San Francisco',facts:['The Golden Gate Bridge is in San Francisco','San Francisco is in California','San Francisco is the capital of the USA'],fake:2,explain:'Washington D.C. is the capital of the USA! San Francisco is in California and famous for its bridge.'},
+  ],
+  grownups:[
+    {emoji:'🗼',name:'Paris',facts:['The Louvre is the most visited museum in the world','Paris has more dogs than children','The Eiffel Tower grows taller in summer'],fake:1,explain:'Paris does not have more dogs than children — that is a myth! The Eiffel Tower does grow about 15cm in summer due to heat expansion.'},
+    {emoji:'🇯🇵',name:'Tokyo',facts:['Tokyo has the world\'s busiest pedestrian crossing','Tokyo has over 200 Michelin-starred restaurants','Tokyo was founded in the 13th century'],fake:2,explain:'Tokyo was founded in 1457 as Edo — the 15th century not the 13th! It became Tokyo in 1868.'},
+    {emoji:'🇦🇪',name:'Dubai',facts:['Dubai has the world\'s tallest building','Dubai receives more rain than London annually','Dubai has an indoor ski slope in the desert'],fake:1,explain:'London receives far more rain than Dubai! Dubai is one of the driest cities on Earth. The Burj Khalifa and the indoor ski slope are both real!'},
+    {emoji:'🇧🇷',name:'Rio de Janeiro',facts:['Christ the Redeemer statue stands 38 metres tall','Rio hosted the 2016 Olympics','Rio is the current capital of Brazil'],fake:2,explain:'Brasília has been the capital of Brazil since 1960 — not Rio! Rio hosted the 2016 Olympics and Christ the Redeemer is 38 metres tall.'},
+    {emoji:'🇮🇳',name:'Mumbai',facts:['Mumbai is the financial capital of India','Mumbai was formerly known as Bombay','Mumbai has the world\'s largest film industry'],fake:2,explain:'Hollywood in the USA produces the most films by revenue — Bollywood produces the most by number of films though! Mumbai was indeed called Bombay.'},
+    {emoji:'🇿🇦',name:'Cape Town',facts:['Table Mountain overlooks Cape Town','Cape Town is the capital of South Africa','Cape Town hosts the Cape of Good Hope'],fake:1,explain:'South Africa has three capitals — Pretoria is the executive capital! Cape Town is the legislative capital. Table Mountain and the Cape of Good Hope are both real.'},
+    {emoji:'🇸🇬',name:'Singapore',facts:['Singapore is both a city and a country','Chewing gum is banned in Singapore','Singapore has the world\'s oldest subway system'],fake:2,explain:'The London Underground opened in 1863 — the world\'s oldest! Singapore\'s MRT opened in 1987. Chewing gum is indeed banned and Singapore is indeed a city-state.'},
+    {emoji:'🇪🇬',name:'Cairo',facts:['Cairo is the largest city in Africa','The Great Pyramid of Giza is in Cairo','The Nile River flows through Cairo'],fake:0,explain:'Wait — all three facts are actually true! Cairo is Africa\'s largest city the pyramids are just outside Cairo and the Nile flows right through it! Trick question!'},
+  ],
+  experts:[
+    {emoji:'🇮🇸',name:'Reykjavik',facts:['Reykjavik is the northernmost capital city in the world','Iceland has no mosquitoes','Reykjavik runs entirely on geothermal and hydropower'],fake:0,explain:'All three facts are true! Reykjavik is the world\'s northernmost capital Iceland genuinely has no mosquitoes and it runs on 100% renewable energy! This was a trick!'},
+    {emoji:'🇳🇴',name:'Oslo',facts:['Oslo was called Christiania until 1925','Norway invented the cheese slicer','Oslo has the world\'s largest Viking museum'],fake:2,explain:'The Vikingskiphuset in Oslo is impressive but not the world\'s largest Viking museum. Oslo was indeed called Christiania and Norway did invent the cheese slicer in 1925!'},
+    {emoji:'🇨🇿',name:'Prague',facts:['Prague Castle is the largest ancient castle in the world','Prague has a famous astronomical clock from 1410','Prague is the capital of Slovakia'],fake:2,explain:'Prague is the capital of the Czech Republic not Slovakia! Prague Castle is the world\'s largest ancient castle and the Orloj astronomical clock dates from 1410.'},
+    {emoji:'🇧🇴',name:'La Paz',facts:['La Paz is the highest administrative capital in the world','La Paz has cable cars as public transport','La Paz is the largest city in Bolivia'],fake:2,explain:'Santa Cruz is the largest city in Bolivia — La Paz is the highest administrative capital at 3600m and does use cable cars as public transport!'},
+    {emoji:'🇵🇹',name:'Lisbon',facts:['Lisbon is one of the oldest cities in Europe','Lisbon is built on seven hills','Lisbon is located on the River Seine'],fake:2,explain:'The River Seine is in Paris! Lisbon is on the River Tagus. Lisbon is indeed one of Europe\'s oldest cities and is built on seven hills.'},
+    {emoji:'🇳🇿',name:'Wellington',facts:['Wellington is the world\'s southernmost capital city','Wellington is windier than Chicago on average','New Zealand was the first country to give women the vote'],fake:1,explain:'Wellington is actually one of the windiest cities but Chicago is actually windier on average! Wellington is the southernmost capital and New Zealand gave women the vote in 1893.'},
+    {emoji:'🇹🇷',name:'Istanbul',facts:['Istanbul spans two continents','Istanbul was once called Constantinople','Istanbul is the capital of Turkey'],fake:2,explain:'Ankara is the capital of Turkey — not Istanbul! Istanbul does span Europe and Asia and was indeed called Constantinople until 1930.'},
+    {emoji:'🇨🇦',name:'Ottawa',facts:['Ottawa is the capital of Canada','Ottawa is colder than Moscow on average in winter','Ottawa has the world\'s longest skating rink'],fake:0,explain:'All three facts are true! Ottawa is Canada\'s capital is colder than Moscow and the Rideau Canal is officially the world\'s largest naturally frozen skating rink. Another trick!'},
+  ],
+};
+
+const LEVEL_CFG={
+  youngsters:{bonus:30,bonusAll:120,ladImg:'Cute_Urban_Lad.png'},
+  grownups:  {bonus:40,bonusAll:150,ladImg:'Urban_Lad.png'},
+  experts:   {bonus:60,bonusAll:200,ladImg:'Urban_Lad.png'},
+};
+
+let S={level:'youngsters',beatcoins:80,score:0,qIndex:0,order:[],gameActive:false,answered:false};
+
+function loadStorage(){try{const d=JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');if(d.theme&&LEVEL_CFG[d.theme])S.level=d.theme;if(typeof d.beatcoins==='number')S.beatcoins=d.beatcoins;}catch(e){}}
+function saveStorage(){try{const d=JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');d.beatcoins=S.beatcoins;localStorage.setItem('askLovelyRitaV4',JSON.stringify(d));}catch(e){}}
+
+function init(){loadStorage();buildCityBg();applyLevel(S.level);highlightTab(S.level);setTimeout(()=>speak(RITA_INTRO[S.level]),900);}
+
+function setLevel(lvl){S.level=lvl;window.speechSynthesis&&window.speechSynthesis.cancel();applyLevel(lvl);highlightTab(lvl);setTimeout(()=>speak(RITA_INTRO[lvl]),400);}
+function highlightTab(lvl){document.querySelectorAll('#level-tabs button').forEach(b=>b.classList.toggle('active',(lvl==='youngsters'&&b.textContent.includes('Young'))||(lvl==='grownups'&&b.textContent.includes('Grown'))||(lvl==='experts'&&b.textContent.includes('Expert'))));}
+
+function applyLevel(lvl){
+  document.body.className=`theme-${lvl}`;
+  document.getElementById('rita-text').textContent=RITA_INTRO[lvl];
+  document.getElementById('bc-val').textContent=S.beatcoins;
+  document.getElementById('lad-bottom-img').src=BASE+LEVEL_CFG[lvl].ladImg;
+  resetGame();
+}
+
+function buildCityBg(){
+  const bg=document.getElementById('city-bg');
+  const bldgs=[
+    {left:0,w:52,h:72,color:'#c0392b'},{left:56,w:36,h:50,color:'#2c3e50'},
+    {left:96,w:44,h:88,color:'#8e44ad'},{left:144,w:38,h:60,color:'#16a085'},
+    {right:0,w:60,h:84,color:'#2980b9'},
+  ];
+  bldgs.forEach((b,i)=>{
+    const el=document.createElement('div');el.className='city-building';
+    const pos=b.left!==undefined?`left:${b.left}px`:`right:${b.right}px`;
+    el.style.cssText=`${pos};width:${b.w}px;height:${b.h}px;--bc:${b.color}`;
+    // windows
+    for(let r=0;r<Math.floor(b.h/16);r++){
+      for(let c=0;c<Math.floor(b.w/14);c++){
+        const w=document.createElement('div');w.className='city-window';
+        w.style.cssText=`width:8px;height:8px;top:${8+r*16}px;left:${4+c*14}px;--wb:${1+Math.random()*2}s`;
+        el.appendChild(w);
+      }
+    }
+    bg.appendChild(el);
+  });
+  // Bus
+  const bus=document.createElement('div');bus.className='city-bus';bus.textContent='🚌';
+  bus.style.animationDelay=`${Math.random()*3}s`;
+  bg.appendChild(bus);
+  // Road
+  const road=document.createElement('div');
+  road.style.cssText='position:absolute;bottom:0;left:0;right:0;height:20px;background:#555';
+  bg.appendChild(road);
+}
+
+function resetGame(){
+  S.score=0;S.qIndex=0;S.gameActive=false;S.answered=false;
+  S.order=shuffle([...Array(CITIES[S.level].length).keys()]);
+  document.getElementById('score-val').textContent='0';
+  document.getElementById('q-num-val').textContent='0/8';
+  document.getElementById('city-emoji').textContent='🌆';
+  document.getElementById('city-name').textContent='Press Start!';
+  document.getElementById('facts-list').innerHTML='';
+  document.getElementById('result-panel').classList.remove('show');
+  document.getElementById('start-btn').style.display='block';
+  document.getElementById('start-btn').textContent='🚌 Explore Cities!';
+  document.getElementById('start-btn').onclick=startGame;
+  document.getElementById('next-btn').style.display='none';
+}
+
+function startGame(){
+  S.gameActive=true;
+  document.getElementById('start-btn').style.display='none';
+  loadCity();
+}
+
+function loadCity(){
+  if(S.qIndex>=8){finishGame();return;}
+  const cities=CITIES[S.level];
+  const city=cities[S.order[S.qIndex%cities.length]];
+  S.answered=false;
+  document.getElementById('city-emoji').textContent=city.emoji;
+  document.getElementById('city-name').textContent=city.name;
+  document.getElementById('result-panel').classList.remove('show');
+  document.getElementById('next-btn').style.display='none';
+  document.getElementById('q-num-val').textContent=`${S.qIndex+1}/8`;
+
+  const list=document.getElementById('facts-list');list.innerHTML='';
+  city.facts.forEach((fact,i)=>{
+    const item=document.createElement('div');item.className='fact-item';
+    item.innerHTML=`<span class="fact-number">${i+1}</span>${fact}`;
+    item.onclick=()=>checkFact(i,city);
+    list.appendChild(item);
+  });
+
+  // Rita reads city name and instruction
+  setTimeout(()=>speak(`We are in ${city.name}! Listen carefully and find the fake fact!`),300);
+}
+
+function checkFact(idx,city){
+  if(S.answered)return;S.answered=true;
+  const items=document.querySelectorAll('.fact-item');
+  items.forEach(i=>i.style.cursor='default');
+  const isCorrect=idx===city.fake;
+
+  if(isCorrect){
+    items[idx].classList.add('correct');
+    const earned=LEVEL_CFG[S.level].bonus;
+    S.score+=earned;S.beatcoins+=earned;
+    document.getElementById('score-val').textContent=S.score;
+    document.getElementById('bc-val').textContent=S.beatcoins;
+    saveStorage();
+    document.getElementById('result-icon').textContent='🎉';
+    document.getElementById('result-title').textContent='Fake spotted!';
+    document.getElementById('result-explain').textContent=city.explain;
+    document.getElementById('result-pts').textContent=`+${earned} BeatCoins!`;
+    document.getElementById('result-pts').style.color='#4ade80';
+    celebrate();
+    speak(pick(RITA_CORRECT));
+  } else {
+    items[idx].classList.add('wrong-pick');
+    if(city.fake<items.length)items[city.fake].classList.add('correct');
+    document.getElementById('result-icon').textContent='🤔';
+    document.getElementById('result-title').textContent='Not the fake!';
+    document.getElementById('result-explain').textContent=city.explain;
+    document.getElementById('result-pts').textContent='+0 BeatCoins';
+    document.getElementById('result-pts').style.color='rgba(255,255,255,.4)';
+    speak(pick(RITA_WRONG));
+  }
+
+  document.getElementById('result-panel').classList.add('show');
+  S.qIndex++;
+  if(S.qIndex<8) document.getElementById('next-btn').style.display='block';
+  else setTimeout(()=>finishGame(),2000);
+}
+
+function nextCity(){
+  document.getElementById('next-btn').style.display='none';
+  document.getElementById('result-panel').classList.remove('show');
+  loadCity();
+}
+
+function finishGame(){
+  S.gameActive=false;
+  const bonus=LEVEL_CFG[S.level].bonusAll;
+  S.beatcoins+=bonus;S.score+=bonus;
+  document.getElementById('bc-val').textContent=S.beatcoins;
+  document.getElementById('score-val').textContent=S.score;
+  saveStorage();
+  document.getElementById('result-icon').textContent='🏆';
+  document.getElementById('result-title').textContent='City Explorer!';
+  document.getElementById('result-explain').textContent='You have visited all 8 cities! The Cute Lad is playing Penny Lane just for you!';
+  document.getElementById('result-pts').textContent=`+${bonus} Bonus BeatCoins!`;
+  document.getElementById('result-pts').style.color='#ffde59';
+  document.getElementById('result-panel').classList.add('show');
+  document.getElementById('next-btn').style.display='none';
+  document.getElementById('start-btn').textContent='🔄 Explore Again!';
+  document.getElementById('start-btn').style.display='block';
+  document.getElementById('start-btn').onclick=()=>{resetGame();startGame();};
+  celebrate();speak(pick(RITA_COMPLETE));
+}
+
+function goBack(){toast('◀️ Going back...');}
+function goHome(){toast('🏠 Going home...');}
+function goForward(){toast('▶️ Next...');}
+
+function speak(text){
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.9;u.pitch=1.1;
+  const voices=window.speechSynthesis.getVoices();
+  const brit=voices.find(v=>v.lang==='en-GB'&&v.name.toLowerCase().includes('female'))||voices.find(v=>v.lang==='en-GB')||voices.find(v=>v.lang.startsWith('en'));
+  if(brit)u.voice=brit;
+  const lad=document.getElementById('lad-bottom-img');
+  if(lad){lad.classList.add('speaking');u.onend=()=>lad.classList.remove('speaking');}
+  window.speechSynthesis.speak(u);
+}
+function ritaSpeak(){speak(RITA_INTRO[S.level]);}
+if(window.speechSynthesis){window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();}
+
+function celebrate(){
+  const layer=document.getElementById('celebrate');layer.innerHTML='';
+  const cols=['#ffde59','#ff6b35','#c8a96e','#4ade80','#60a5fa','#fff'];
+  for(let i=0;i<45;i++){const el=document.createElement('div');el.className='cp';el.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*20}%;background:${cols[Math.floor(Math.random()*cols.length)]};animation-delay:${Math.random()*.7}s;animation-duration:${1.2+Math.random()*.9}s;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;border-radius:${Math.random()>.5?'50%':'2px'};`;layer.appendChild(el);}
+  setTimeout(()=>layer.innerHTML='',2800);
+}
+
+let toastT;
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),3000);}
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function setDevice(w,h,name){const p=document.getElementById('phone');p.style.width=w+'px';p.style.height=h+'px';document.querySelectorAll('#device-bar button').forEach(b=>b.classList.toggle('active',b.textContent===name));}
+
+init();
+</script>
+</body>
+</html>

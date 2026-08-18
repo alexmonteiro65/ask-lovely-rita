@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ask Lovely Rita — Across the Universe</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #0a0a14; color: #fff;
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; padding: 20px 16px 40px;
+  }
+  #device-bar {
+    display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; justify-content: center;
+  }
+  #device-bar button {
+    background: #1a1a2e; border: 1px solid #333; color: #aaa;
+    padding: 6px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; transition: all .2s;
+  }
+  #device-bar button:hover, #device-bar button.active { background: #333; color: #fff; border-color: #666; }
+  #phone-outer {
+    background: #1c1c1c; border-radius: 50px; padding: 12px;
+    box-shadow: 0 0 0 2px #333, 0 20px 60px rgba(0,0,0,.8);
+  }
+  #phone {
+    width: 369px; height: 828px; border-radius: 40px; overflow: hidden;
+    position: relative; display: flex; flex-direction: column;
+    background: #000510; transition: width .3s, height .3s;
+  }
+  #notch { position: absolute; top:0; left:50%; transform:translateX(-50%); width:120px; height:30px; background:#1c1c1c; border-radius:0 0 20px 20px; z-index:20; }
+  #scroll-area { flex:1; overflow-y:auto; overflow-x:hidden; padding:36px 12px 8px; scrollbar-width:none; }
+  #scroll-area::-webkit-scrollbar { display:none; }
+
+  /* SPACE BG */
+  #space-bg {
+    position:absolute; inset:0; z-index:0;
+    background: radial-gradient(ellipse at 30% 20%, #1a0040 0%, #000510 50%, #000205 100%);
+    border-radius:40px; overflow:hidden; pointer-events:none;
+  }
+  .star-dot {
+    position:absolute; background:#fff; border-radius:50%;
+    animation: twinkle var(--td) ease-in-out infinite alternate;
+  }
+  @keyframes twinkle { from{opacity:.15;transform:scale(1)} to{opacity:1;transform:scale(1.5)} }
+  .planet-bg {
+    position:absolute; border-radius:50%;
+    animation: planet-drift var(--pd) ease-in-out infinite alternate;
+  }
+  @keyframes planet-drift { from{transform:translateY(0)} to{transform:translateY(-8px)} }
+
+  /* NAV */
+  #nav-bar {
+    flex-shrink:0; display:flex; align-items:center; justify-content:space-around;
+    padding:8px 20px 12px; border-top:1px solid rgba(255,255,255,.08);
+    background:rgba(0,5,16,.7); backdrop-filter:blur(12px); position:relative; z-index:10;
+  }
+  .nav-btn {
+    display:flex; flex-direction:column; align-items:center; gap:3px;
+    background:none; border:none; color:rgba(255,255,255,.5); cursor:pointer;
+    padding:5px 14px; border-radius:12px; transition:all .2s; font-size:10px;
+  }
+  .nav-btn:hover { background:rgba(255,255,255,.08); color:#fff; }
+  .nav-btn .nav-icon { font-size:20px; line-height:1; }
+  .nav-btn.nav-home { color:#a855f7; }
+
+  /* THEMES */
+  body.theme-youngsters { --accent:#ff6ef7; --glow:#ff6ef7; --btn-grad:linear-gradient(135deg,#ff6ef7,#a855f7); }
+  body.theme-grownups   { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-gradient(135deg,#c8a96e,#6677aa); }
+  body.theme-experts    { --accent:#ffd700; --glow:#ffd700; --btn-grad:linear-gradient(135deg,#ffd700,#c8860a); }
+
+  #page-header { text-align:center; margin-bottom:8px; position:relative; z-index:2; }
+  #page-header h1 {
+    font-size:17px; font-weight:900; letter-spacing:1px; text-transform:uppercase;
+    background:linear-gradient(135deg,#a855f7,#60a5fa,#f472b6);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    filter:drop-shadow(0 0 14px rgba(168,85,247,.5));
+  }
+  #page-header p { font-size:10px; color:rgba(255,255,255,.35); margin-top:2px; }
+
+  #level-tabs { display:flex; gap:5px; justify-content:center; margin-bottom:8px; position:relative; z-index:2; }
+  #level-tabs button {
+    padding:4px 10px; border-radius:20px; border:1px solid rgba(255,255,255,.18);
+    background:rgba(255,255,255,.05); color:rgba(255,255,255,.5);
+    font-size:9px; font-weight:700; cursor:pointer; transition:all .2s; text-transform:uppercase;
+  }
+  #level-tabs button.active { background:var(--btn-grad); border-color:transparent; color:#fff; }
+
+  /* RITA */
+  #rita-wrap {
+    background:rgba(255,255,255,.06); border:1px solid rgba(168,85,247,.3);
+    border-radius:14px; padding:8px 26px 8px 10px; position:relative;
+    margin-bottom:8px; z-index:2;
+  }
+  #rita-name { font-size:9px; font-weight:700; color:#a855f7; text-transform:uppercase; letter-spacing:.8px; margin-bottom:3px; }
+  #rita-text { font-size:10px; color:rgba(255,255,255,.8); line-height:1.5; }
+  #rita-speak-btn {
+    position:absolute; top:7px; right:6px;
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15);
+    border-radius:50%; width:20px; height:20px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; cursor:pointer; color:#fff;
+  }
+
+  /* STATUS */
+  #status-bar { display:flex; gap:6px; margin-bottom:8px; position:relative; z-index:2; }
+  .stat-card { flex:1; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:4px 8px; }
+  .stat-label { font-size:7px; color:rgba(255,255,255,.3); text-transform:uppercase; letter-spacing:.5px; }
+  .stat-val { font-size:13px; font-weight:900; }
+  #bc-val { color:#ffde59; } #score-val { color:#a855f7; } #q-val { color:#60a5fa; }
+
+  /* STAR MAP */
+  #starmap {
+    display:flex; justify-content:center; gap:6px; align-items:center;
+    margin-bottom:10px; position:relative; z-index:2; padding:0 4px;
+  }
+  .star-stop {
+    width:28px; height:28px; border-radius:50%;
+    border:2px solid rgba(255,255,255,.2);
+    background:rgba(255,255,255,.05);
+    display:flex; align-items:center; justify-content:center;
+    font-size:14px; transition:all .4s; position:relative;
+  }
+  .star-stop.done { background:rgba(168,85,247,.3); border-color:#a855f7; box-shadow:0 0 10px rgba(168,85,247,.5); }
+  .star-stop.current { background:rgba(96,165,250,.2); border-color:#60a5fa; animation:current-pulse 1.5s ease-in-out infinite; }
+  @keyframes current-pulse { 0%,100%{box-shadow:0 0 8px rgba(96,165,250,.4)} 50%{box-shadow:0 0 18px rgba(96,165,250,.8)} }
+  .star-line { flex:1; height:2px; background:rgba(255,255,255,.1); border-radius:1px; position:relative; }
+  .star-line.done { background:linear-gradient(90deg,#a855f7,#60a5fa); }
+
+  /* QUESTION CARD */
+  #question-card {
+    background:rgba(255,255,255,.05); border:1px solid rgba(168,85,247,.25);
+    border-radius:18px; padding:14px; margin-bottom:10px;
+    position:relative; z-index:2; text-align:center;
+  }
+  #q-topic { font-size:9px; color:#a855f7; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+  #q-image { font-size:44px; margin-bottom:8px; animation:float-q 3s ease-in-out infinite alternate; }
+  @keyframes float-q { from{transform:translateY(0)} to{transform:translateY(-5px)} }
+  #q-text { font-size:13px; color:#fff; line-height:1.5; font-weight:600; margin-bottom:12px; }
+
+  /* OPTIONS */
+  #options-grid { display:flex; flex-direction:column; gap:7px; }
+  .opt-btn {
+    width:100%; padding:10px 14px; border-radius:12px;
+    background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.15);
+    color:#fff; font-size:12px; font-weight:600; cursor:pointer;
+    transition:all .2s; text-align:left; display:flex; align-items:center; gap:8px;
+  }
+  .opt-btn:hover:not(:disabled) { background:rgba(168,85,247,.2); border-color:#a855f7; }
+  .opt-btn:disabled { cursor:not-allowed; }
+  .opt-btn.correct { background:rgba(74,222,128,.2); border-color:#4ade80; color:#4ade80; animation:opt-pop .3s ease; }
+  .opt-btn.wrong   { background:rgba(248,113,113,.15); border-color:#f87171; color:#f87171; }
+  @keyframes opt-pop { 0%,100%{transform:scale(1)} 50%{transform:scale(1.03)} }
+  .opt-letter {
+    width:22px; height:22px; border-radius:50%;
+    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2);
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:900; flex-shrink:0;
+  }
+
+  /* ACTION */
+  #action-btns { display:flex; gap:7px; margin-bottom:8px; position:relative; z-index:2; }
+  .act-btn {
+    flex:1; padding:10px; border:none; border-radius:24px;
+    font-size:11px; font-weight:800; letter-spacing:.5px; text-transform:uppercase;
+    cursor:pointer; transition:transform .15s; position:relative; overflow:hidden;
+  }
+  .act-btn::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(255,255,255,.14),transparent); border-radius:inherit; }
+  .act-btn:hover:not(:disabled) { transform:scale(1.03); }
+  .act-btn:disabled { opacity:.35; cursor:not-allowed; }
+  #start-btn { background:var(--btn-grad); color:#fff; box-shadow:0 4px 14px rgba(0,0,0,.4); }
+  #next-btn  { background:rgba(255,255,255,.07); border:1px solid var(--accent); color:var(--accent); display:none; }
+
+  /* RESULT */
+  #result-panel {
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
+    border-radius:13px; padding:10px; margin-bottom:8px;
+    text-align:center; display:none; flex-direction:column; align-items:center; gap:3px;
+    position:relative; z-index:2; animation:slideIn .35s ease;
+  }
+  #result-panel.show { display:flex; }
+  @keyframes slideIn { from{opacity:0;transform:translateY(-5px)} to{opacity:1;transform:translateY(0)} }
+  #result-icon { font-size:24px; } #result-title { font-size:13px; font-weight:800; color:#a855f7; }
+  #result-fact { font-size:10px; color:rgba(255,255,255,.6); line-height:1.5; font-style:italic; }
+  #result-pts { font-size:16px; font-weight:900; }
+
+  /* SMART LAD BOTTOM */
+  #lad-bottom-wrap {
+    flex-shrink:0; display:flex; align-items:flex-end; justify-content:center;
+    height:110px; background:rgba(0,5,16,.4); border-top:1px solid rgba(168,85,247,.1);
+  }
+  #lad-bottom-img {
+    height:128px; width:auto; object-fit:contain;
+    filter:drop-shadow(0 -4px 20px rgba(168,85,247,.4));
+    animation:space-float 3s ease-in-out infinite alternate;
+    margin-bottom:-8px;
+  }
+  @keyframes space-float {
+    from{transform:translateY(0) rotate(-2deg)}
+    to{transform:translateY(-10px) rotate(2deg)}
+  }
+  #lad-bottom-img.speaking { filter:drop-shadow(0 0 22px rgba(168,85,247,.9)) drop-shadow(0 -4px 20px rgba(168,85,247,.4)); }
+
+  /* CELEBRATE */
+  #celebrate { position:absolute; inset:0; pointer-events:none; z-index:25; overflow:hidden; border-radius:40px; }
+  .cp { position:absolute; border-radius:2px; animation:cf 1.6s ease-out forwards; }
+  @keyframes cf { 0%{transform:translateY(-20px) rotate(0deg);opacity:1} 100%{transform:translateY(900px) rotate(720deg);opacity:0} }
+
+  #toast {
+    position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(80px);
+    background:rgba(0,5,16,.95); border:1px solid #a855f7; border-radius:20px;
+    padding:8px 16px; font-size:11px; color:#fff; z-index:1000;
+    transition:transform .3s,opacity .3s; opacity:0; white-space:nowrap; pointer-events:none;
+  }
+  #toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+</style>
+</head>
+<body class="theme-youngsters">
+<div id="device-bar">
+  <button onclick="setDevice(393,852,'iPhone 14 Pro')" class="active">iPhone 14 Pro</button>
+  <button onclick="setDevice(375,667,'iPhone SE')">iPhone SE</button>
+  <button onclick="setDevice(360,800,'Galaxy S23')">Galaxy S23</button>
+  <button onclick="setDevice(412,915,'Pixel 7')">Pixel 7</button>
+  <button onclick="setDevice(430,932,'iPhone 14 Max')">iPhone 14 Max</button>
+</div>
+<div id="phone-outer">
+  <div id="phone">
+    <div id="notch"></div>
+    <div id="space-bg"></div>
+    <div id="celebrate"></div>
+    <div id="scroll-area">
+      <div id="page-header">
+        <h1>🚀 Across the Universe</h1>
+        <p>The Smart Lad's cosmic adventure!</p>
+      </div>
+      <div id="level-tabs">
+        <button onclick="setLevel('youngsters')" class="active">🟣 Youngsters</button>
+        <button onclick="setLevel('grownups')">🟡 Grown Ups</button>
+        <button onclick="setLevel('experts')">⭐ Experts</button>
+      </div>
+      <div id="rita-wrap">
+        <div id="rita-name">♪ Lovely Rita</div>
+        <div id="rita-text">Loading...</div>
+        <button id="rita-speak-btn" onclick="ritaSpeak()">🔊</button>
+      </div>
+      <div id="status-bar">
+        <div class="stat-card"><div class="stat-label">BeatCoins</div><div class="stat-val" id="bc-val">80</div></div>
+        <div class="stat-card"><div class="stat-label">Score</div><div class="stat-val" id="score-val">0</div></div>
+        <div class="stat-card"><div class="stat-label">Question</div><div class="stat-val" id="q-val">0/8</div></div>
+      </div>
+      <div id="starmap"></div>
+      <div id="question-card">
+        <div id="q-topic">Space Mission</div>
+        <div id="q-image">🚀</div>
+        <div id="q-text">Press Launch to begin your mission!</div>
+        <div id="options-grid"></div>
+      </div>
+      <div id="action-btns">
+        <button class="act-btn" id="start-btn" onclick="startGame()">🚀 Launch Mission!</button>
+        <button class="act-btn" id="next-btn" onclick="nextQuestion()">Next Question ▶</button>
+      </div>
+      <div id="result-panel">
+        <div id="result-icon">⭐</div>
+        <div id="result-title"></div>
+        <div id="result-fact"></div>
+        <div id="result-pts"></div>
+      </div>
+    </div>
+    <div id="lad-bottom-wrap">
+      <img id="lad-bottom-img" src="https://alexmonteiro65.github.io/ask-lovely-rita/src/Smart_Space_Lad.png" alt="Smart Lad"
+        onerror="this.style.display='none'"/>
+    </div>
+    <nav id="nav-bar">
+      <button class="nav-btn" onclick="goBack()"><span class="nav-icon">◀️</span><span>Back</span></button>
+      <button class="nav-btn nav-home" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
+      <button class="nav-btn" onclick="goForward()"><span class="nav-icon">▶️</span><span>Next</span></button>
+    </nav>
+  </div>
+</div>
+<div id="toast"></div>
+<script>
+const BASE = 'https://alexmonteiro65.github.io/ask-lovely-rita/src/';
+const RITA_INTRO = {
+  youngsters: "Hello love! Welcome to Across the Universe! The Smart Lad will guide you through the stars. Pick the right answer and light up your route across the cosmos!",
+  grownups:   "Hello there! Time for a space mission! Answer each astronomy question correctly to chart your course across the universe. Think carefully darling!",
+  experts:    "Right then! Expert astronauts only! These questions will test your deepest knowledge of space and science. The Smart Lad is counting on you!",
+};
+const RITA_CORRECT = [
+  "Brilliant! The Smart Lad is doing a zero gravity dance for you!",
+  "Smashing! Another star lit up on your route! Keep going love!",
+  "Outstanding! You really know your cosmos darling!",
+  "Perfect! Houston we have a winner!",
+];
+const RITA_WRONG = [
+  "Oh nearly! Space is full of surprises darling. On to the next question!",
+  "Not quite! Even astronauts make mistakes. Keep flying love!",
+  "Close! The universe is vast and full of mystery. Try the next one!",
+];
+const RITA_COMPLETE = [
+  "Mission complete! You have crossed the universe! The Smart Lad is over the moon darling!",
+  "Extraordinary! Every question answered! You are a true space explorer love!",
+];
+
+const QUESTIONS = {
+  youngsters: [
+    { emoji:'🌙', topic:'Our Solar System', q:'Which is the closest star to Earth?', opts:['The Moon','The Sun','Mars','Jupiter'], correct:1, fact:'The Sun is our closest star — it is 150 million kilometres away!' },
+    { emoji:'🪐', topic:'Planets', q:'Which planet has beautiful rings around it?', opts:['Mars','Venus','Saturn','Neptune'], correct:2, fact:'Saturn has stunning rings made of ice and rock particles!' },
+    { emoji:'🌍', topic:'Our Planet', q:'How many planets are in our Solar System?', opts:['7','8','9','10'], correct:1, fact:'There are 8 planets — Mercury Venus Earth Mars Jupiter Saturn Uranus and Neptune!' },
+    { emoji:'🌕', topic:'The Moon', q:'What do we call it when we can see the full Moon?', opts:['New Moon','Half Moon','Full Moon','Star Moon'], correct:2, fact:'A Full Moon happens when the Earth is between the Sun and the Moon!' },
+    { emoji:'🚀', topic:'Space Travel', q:'What do astronauts wear in space?', opts:['Raincoat','Space suit','Swimming costume','School uniform'], correct:1, fact:'Space suits protect astronauts from the extreme temperatures and vacuum of space!' },
+    { emoji:'⭐', topic:'Stars', q:'What shape do we often draw stars as?', opts:['Circle','Square','Five-pointed star','Triangle'], correct:2, fact:'Real stars are actually ball-shaped like our Sun. We draw them pointed for fun!' },
+    { emoji:'🌌', topic:'Galaxy', q:'What is the name of our galaxy?', opts:['Andromeda','The Milky Way','The Big Bang','Orion'], correct:1, fact:'We live in the Milky Way galaxy which contains over 200 billion stars!' },
+    { emoji:'☄️', topic:'Space Rocks', q:'What is a shooting star really made of?', opts:['A falling star','A meteor burning up','A lost rocket','A comet tail'], correct:1, fact:'Shooting stars are actually meteors — space rocks burning up in our atmosphere!' },
+  ],
+  grownups: [
+    { emoji:'🌑', topic:'Astronomy', q:'How long does light from the Sun take to reach Earth?', opts:['8 seconds','8 minutes','8 hours','8 days'], correct:1, fact:'Sunlight takes approximately 8 minutes and 20 seconds to travel 150 million km to Earth!' },
+    { emoji:'🪐', topic:'Planets', q:'Which is the largest planet in our Solar System?', opts:['Saturn','Uranus','Neptune','Jupiter'], correct:3, fact:'Jupiter is so large that all other planets could fit inside it twice over!' },
+    { emoji:'🌌', topic:'Deep Space', q:'What is a light-year?', opts:['How long light lasts','Distance light travels in a year','Speed of light','Age of a star'], correct:1, fact:'A light-year is approximately 9.46 trillion kilometres — the distance light travels in one year!' },
+    { emoji:'🔭', topic:'Astronomy', q:'Who was the first human to walk on the Moon?', opts:['Yuri Gagarin','Buzz Aldrin','Neil Armstrong','John Glenn'], correct:2, fact:'Neil Armstrong took his famous first step on the Moon on July 20 1969!' },
+    { emoji:'☀️', topic:'Our Star', q:'What type of star is our Sun?', opts:['Red giant','White dwarf','Yellow dwarf','Blue supergiant'], correct:2, fact:'Our Sun is a yellow dwarf star — average sized and about halfway through its 10 billion year life!' },
+    { emoji:'🌠', topic:'Stars', q:'What happens to a massive star at the end of its life?', opts:['It fades away','It becomes a black hole','It turns into a planet','It explodes as a supernova'], correct:3, fact:'Massive stars end in spectacular supernovae explosions — some leaving behind black holes!' },
+    { emoji:'🛸', topic:'Space Travel', q:'What is the International Space Station?', opts:['A space hotel','A research lab orbiting Earth','A satellite for phones','A telescope'], correct:1, fact:'The ISS orbits Earth at 400km altitude travelling at 28000 km/h completing 16 orbits per day!' },
+    { emoji:'🌍', topic:'Gravity', q:'Who first described the law of universal gravitation?', opts:['Einstein','Galileo','Newton','Hawking'], correct:2, fact:'Isaac Newton formulated the law of universal gravitation in 1687 inspired by a falling apple!' },
+  ],
+  experts: [
+    { emoji:'⚫', topic:'Astrophysics', q:'What is the Schwarzschild radius?', opts:['Radius of Saturn','Size of a neutron star','Critical radius forming a black hole','Distance to nearest star'], correct:2, fact:'The Schwarzschild radius defines the event horizon — the point of no return around a black hole!' },
+    { emoji:'🌌', topic:'Cosmology', q:'What does the Cosmic Microwave Background radiation represent?', opts:['Radiation from stars','Afterglow of the Big Bang','Radio signals from aliens','Solar wind particles'], correct:1, fact:'The CMB is thermal radiation left over from the early universe approximately 380000 years after the Big Bang!' },
+    { emoji:'⭐', topic:'Stellar Physics', q:'What is the Hertzsprung-Russell diagram used for?', opts:['Mapping galaxies','Classifying stars by temperature and luminosity','Measuring distances','Tracking asteroid paths'], correct:1, fact:'The H-R diagram plots stellar luminosity against surface temperature revealing patterns in stellar evolution!' },
+    { emoji:'🕳️', topic:'Black Holes', q:'What is Hawking radiation?', opts:['Heat from stars','Radiation emitted by black holes','Cosmic ray showers','Solar flare emissions'], correct:1, fact:'Stephen Hawking theorised that black holes slowly emit thermal radiation due to quantum effects near the event horizon!' },
+    { emoji:'🔭', topic:'Observational', q:'What is redshift in astronomy?', opts:['A type of star colour','Doppler effect showing objects moving away','Filter used in telescopes','Type of solar flare'], correct:1, fact:'Redshift occurs when light from distant objects is stretched to longer wavelengths indicating they are moving away from us!' },
+    { emoji:'💫', topic:'Cosmology', q:'What is dark energy hypothesised to cause?', opts:['Galaxy formation','Accelerating expansion of universe','Black hole creation','Star formation'], correct:1, fact:'Dark energy makes up 68% of the universe and is thought to drive its accelerating expansion!' },
+    { emoji:'🌀', topic:'Galaxies', q:'What type of galaxy is the Milky Way?', opts:['Elliptical','Irregular','Barred spiral','Ring galaxy'], correct:2, fact:'The Milky Way is a barred spiral galaxy with a central bar-shaped structure of stars from which spiral arms extend!' },
+    { emoji:'⚡', topic:'Stellar Physics', q:'What process powers the Sun?', opts:['Nuclear fission','Chemical combustion','Nuclear fusion','Gravitational collapse'], correct:2, fact:'The Sun converts 600 million tonnes of hydrogen into helium every second through nuclear fusion releasing enormous energy!' },
+  ],
+};
+
+const LEVEL_CFG = {
+  youngsters: { bonus:30, bonusAll:120, ladImg:'Smart_Space_Lad.png' },
+  grownups:   { bonus:40, bonusAll:160, ladImg:'Space_Lad.png' },
+  experts:    { bonus:60, bonusAll:240, ladImg:'Space_Lad.png' },
+};
+
+let S = { level:'youngsters', beatcoins:80, score:0, qIndex:0, order:[], gameActive:false, answered:false };
+
+function loadStorage() {
+  try {
+    const d=JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');
+    if(d.theme&&LEVEL_CFG[d.theme])S.level=d.theme;
+    if(typeof d.beatcoins==='number')S.beatcoins=d.beatcoins;
+  } catch(e){}
+}
+function saveStorage() {
+  try {
+    const d=JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');
+    d.beatcoins=S.beatcoins; localStorage.setItem('askLovelyRitaV4',JSON.stringify(d));
+  } catch(e){}
+}
+
+function init() {
+  loadStorage(); buildSpaceBg(); applyLevel(S.level); highlightTab(S.level);
+  setTimeout(()=>speak(RITA_INTRO[S.level]),900);
+}
+
+function setLevel(lvl) {
+  S.level=lvl; window.speechSynthesis&&window.speechSynthesis.cancel();
+  applyLevel(lvl); highlightTab(lvl);
+  setTimeout(()=>speak(RITA_INTRO[lvl]),400);
+}
+
+function highlightTab(lvl) {
+  document.querySelectorAll('#level-tabs button').forEach(b=>b.classList.toggle('active',
+    (lvl==='youngsters'&&b.textContent.includes('Young'))||(lvl==='grownups'&&b.textContent.includes('Grown'))||(lvl==='experts'&&b.textContent.includes('Expert'))));
+}
+
+function applyLevel(lvl) {
+  document.body.className=`theme-${lvl}`;
+  document.getElementById('rita-text').textContent=RITA_INTRO[lvl];
+  document.getElementById('bc-val').textContent=S.beatcoins;
+  const ladEl=document.getElementById('lad-bottom-img');
+  ladEl.src=BASE+LEVEL_CFG[lvl].ladImg;
+  resetGame();
+}
+
+function buildSpaceBg() {
+  const bg=document.getElementById('space-bg');
+  for(let i=0;i<80;i++){
+    const s=document.createElement('div'); s.className='star-dot';
+    const sz=0.5+Math.random()*2;
+    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--td:${1+Math.random()*3}s;animation-delay:${Math.random()*3}s`;
+    bg.appendChild(s);
+  }
+  // Planets
+  const planets=[
+    {size:40,color:'radial-gradient(circle at 35% 30%,#f4d03f,#c8860a)',top:'15%',left:'72%',pd:'4s'},
+    {size:16,color:'radial-gradient(circle at 35% 30%,#60a5fa,#1e40af)',top:'40%',left:'5%',pd:'5s'},
+  ];
+  planets.forEach(p=>{
+    const el=document.createElement('div'); el.className='planet-bg';
+    el.style.cssText=`width:${p.size}px;height:${p.size}px;background:${p.color};top:${p.top};left:${p.left};--pd:${p.pd}`;
+    bg.appendChild(el);
+  });
+}
+
+function resetGame() {
+  S.score=0; S.qIndex=0; S.gameActive=false; S.answered=false;
+  S.order=shuffle([...Array(QUESTIONS[S.level].length).keys()]);
+  document.getElementById('score-val').textContent='0';
+  document.getElementById('q-val').textContent='0/8';
+  document.getElementById('q-topic').textContent='Space Mission';
+  document.getElementById('q-image').textContent='🚀';
+  document.getElementById('q-text').textContent='Press Launch to begin your mission!';
+  document.getElementById('options-grid').innerHTML='';
+  document.getElementById('result-panel').classList.remove('show');
+  document.getElementById('start-btn').style.display='block';
+  document.getElementById('start-btn').textContent='🚀 Launch Mission!';
+  document.getElementById('start-btn').onclick=startGame;
+  document.getElementById('next-btn').style.display='none';
+  buildStarmap();
+}
+
+function buildStarmap() {
+  const sm=document.getElementById('starmap'); sm.innerHTML='';
+  const total=8;
+  for(let i=0;i<total;i++){
+    if(i>0){const line=document.createElement('div');line.className='star-line';line.id=`line-${i}`;sm.appendChild(line);}
+    const stop=document.createElement('div'); stop.className='star-stop'; stop.id=`stop-${i}`;
+    stop.textContent=i===0?'🌍':i===total-1?'🌌':'⭐';
+    sm.appendChild(stop);
+  }
+}
+
+function updateStarmap() {
+  for(let i=0;i<8;i++){
+    const stop=document.getElementById(`stop-${i}`);
+    const line=document.getElementById(`line-${i}`);
+    if(!stop)continue;
+    if(i<S.qIndex){stop.className='star-stop done';if(line)line.className='star-line done';}
+    else if(i===S.qIndex){stop.className='star-stop current';}
+    else{stop.className='star-stop';}
+  }
+}
+
+function startGame() {
+  S.gameActive=true;
+  document.getElementById('start-btn').style.display='none';
+  loadQuestion();
+}
+
+function loadQuestion() {
+  if(S.qIndex>=8){finishGame();return;}
+  const qs=QUESTIONS[S.level];
+  const q=qs[S.order[S.qIndex%qs.length]];
+  S.answered=false;
+  document.getElementById('q-topic').textContent=q.topic;
+  document.getElementById('q-image').textContent=q.emoji;
+  document.getElementById('q-text').textContent=q.q;
+  document.getElementById('q-val').textContent=`${S.qIndex+1}/8`;
+  document.getElementById('result-panel').classList.remove('show');
+  document.getElementById('next-btn').style.display='none';
+  updateStarmap();
+
+  const grid=document.getElementById('options-grid'); grid.innerHTML='';
+  const letters=['A','B','C','D'];
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button'); btn.className='opt-btn';
+    btn.innerHTML=`<span class="opt-letter">${letters[i]}</span>${opt}`;
+    btn.onclick=()=>answerQuestion(i,q);
+    grid.appendChild(btn);
+  });
+
+  // Rita reads every question at all levels
+  setTimeout(()=>speak(q.q),600);
+}
+
+function answerQuestion(idx,q) {
+  if(S.answered)return; S.answered=true;
+  const btns=document.querySelectorAll('.opt-btn');
+  btns.forEach(b=>b.disabled=true);
+  const isCorrect=idx===q.correct;
+
+  btns[idx].classList.add(isCorrect?'correct':'wrong');
+  if(!isCorrect) btns[q.correct].classList.add('correct');
+
+  const earned=isCorrect?LEVEL_CFG[S.level].bonus:0;
+  if(isCorrect){S.score+=earned;S.beatcoins+=earned;}
+  document.getElementById('score-val').textContent=S.score;
+  document.getElementById('bc-val').textContent=S.beatcoins;
+  if(isCorrect)saveStorage();
+
+  document.getElementById('result-icon').textContent=isCorrect?'🎉':'💫';
+  document.getElementById('result-title').textContent=isCorrect?'Correct!':'Not quite!';
+  document.getElementById('result-fact').textContent=q.fact;
+  const pts=document.getElementById('result-pts');
+  pts.textContent=isCorrect?`+${earned} BeatCoins!`:'+0 BeatCoins';
+  pts.style.color=isCorrect?'#4ade80':'rgba(255,255,255,.4)';
+  document.getElementById('result-panel').classList.add('show');
+
+  if(isCorrect)celebrate();
+  setTimeout(()=>speak(isCorrect?pick(RITA_CORRECT):pick(RITA_WRONG)),300);
+
+  S.qIndex++;
+  if(S.qIndex<8) document.getElementById('next-btn').style.display='block';
+  else setTimeout(()=>finishGame(),2000);
+}
+
+function nextQuestion() {
+  document.getElementById('next-btn').style.display='none';
+  document.getElementById('result-panel').classList.remove('show');
+  loadQuestion();
+}
+
+function finishGame() {
+  S.gameActive=false;
+  const bonus=LEVEL_CFG[S.level].bonusAll;
+  S.beatcoins+=bonus; S.score+=bonus;
+  document.getElementById('bc-val').textContent=S.beatcoins;
+  document.getElementById('score-val').textContent=S.score;
+  saveStorage();
+  document.getElementById('result-icon').textContent='🏆';
+  document.getElementById('result-title').textContent='Mission Complete!';
+  document.getElementById('result-fact').textContent='You crossed the entire universe! The Smart Lad salutes you!';
+  document.getElementById('result-pts').textContent=`+${bonus} Bonus BeatCoins!`;
+  document.getElementById('result-pts').style.color='#ffde59';
+  document.getElementById('result-panel').classList.add('show');
+  document.getElementById('next-btn').style.display='none';
+  document.getElementById('start-btn').textContent='🔄 New Mission!';
+  document.getElementById('start-btn').style.display='block';
+  document.getElementById('start-btn').onclick=()=>{resetGame();startGame();};
+  celebrate(); speak(pick(RITA_COMPLETE));
+}
+
+function goBack(){toast('◀️ Going back...');}
+function goHome(){toast('🏠 Going home...');}
+function goForward(){toast('▶️ Next...');}
+
+function speak(text){
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='en-GB';u.rate=0.9;u.pitch=1.1;
+  const voices=window.speechSynthesis.getVoices();
+  const brit=voices.find(v=>v.lang==='en-GB'&&v.name.toLowerCase().includes('female'))||voices.find(v=>v.lang==='en-GB')||voices.find(v=>v.lang.startsWith('en'));
+  if(brit)u.voice=brit;
+  const lad=document.getElementById('lad-bottom-img');
+  if(lad){lad.classList.add('speaking');u.onend=()=>lad.classList.remove('speaking');}
+  window.speechSynthesis.speak(u);
+}
+function ritaSpeak(){speak(RITA_INTRO[S.level]);}
+if(window.speechSynthesis){window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();}
+
+function celebrate(){
+  const layer=document.getElementById('celebrate'); layer.innerHTML='';
+  const cols=['#a855f7','#60a5fa','#f472b6','#ffde59','#4ade80','#fff'];
+  for(let i=0;i<45;i++){
+    const el=document.createElement('div'); el.className='cp';
+    el.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*20}%;background:${cols[Math.floor(Math.random()*cols.length)]};animation-delay:${Math.random()*.7}s;animation-duration:${1.2+Math.random()*.9}s;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;border-radius:${Math.random()>.5?'50%':'2px'};`;
+    layer.appendChild(el);
+  }
+  setTimeout(()=>layer.innerHTML='',2800);
+}
+
+let toastT;
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),3000);}
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function setDevice(w,h,name){const p=document.getElementById('phone');p.style.width=w+'px';p.style.height=h+'px';document.querySelectorAll('#device-bar button').forEach(b=>b.classList.toggle('active',b.textContent===name));}
+
+init();
+</script>
+</body>
+</html>
