@@ -235,22 +235,37 @@ body {
 @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-4px) rotate(-1deg)} 40%{transform:translateX(4px) rotate(1deg)} 60%{transform:translateX(-3px)} 80%{transform:translateX(3px)} }
 .ac-label { display:none; }
 
-/* BOTTOM BAR */
-#bottom-bar {
-  display:flex; gap:8px; padding:10px 16px 14px;
-  background:var(--bg); border-top:1px solid rgba(255,255,255,0.08);
-  flex-shrink:0;
+/* NAV BAR */
+#nav-bar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px 20px 14px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
-.bb-btn {
-  flex:1; background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.15); border-radius:10px;
-  padding:8px 4px; cursor:pointer; color:#fff;
-  font-family:monospace; font-size:8px; letter-spacing:1px;
-  text-transform:uppercase; transition:all 0.2s;
-  display:flex; align-items:center; justify-content:center; gap:5px;
+.nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,.5);
+  cursor: pointer;
+  padding: 6px 14px;
+  border-radius: 12px;
+  transition: all .2s;
+  font-size: 10px;
+  letter-spacing: .3px;
 }
-.bb-btn:hover { border-color:var(--accent); background:rgba(255,255,255,0.1); }
-.bb-btn.active { border-color:var(--accent); color:var(--accent); }
+.nav-btn:hover { background: rgba(255,255,255,.08); color: #fff; }
+.nav-btn .nav-icon { font-size: 20px; line-height: 1; }
+.nav-btn.nav-home .nav-icon { color: var(--accent); }
+.nav-btn.nav-home { color: var(--accent); }
 
 /* TOAST */
 #toast {
@@ -309,19 +324,19 @@ body {
     <div id="header">
       <div id="lads-row">
         <div class="lad-wrap" onclick="selectLad('smart')">
-          <img class="lad-img" id="lad-smart" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-smart-regular.png" alt="Smart">
+          <img class="lad-img" id="lad-smart" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-smart-regular.png" alt="Smart">
           <span class="lad-name">THE SMART ONE</span>
         </div>
         <div class="lad-wrap" onclick="selectLad('cute')">
-          <img class="lad-img" id="lad-cute" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-cute-regular.png" alt="Cute">
+          <img class="lad-img" id="lad-cute" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-cute-regular.png" alt="Cute">
           <span class="lad-name">THE CUTE ONE</span>
         </div>
         <div class="lad-wrap" onclick="selectLad('quiet')">
-          <img class="lad-img" id="lad-quiet" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-quiet-regular.png" alt="Quiet">
+          <img class="lad-img" id="lad-quiet" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-quiet-regular.png" alt="Quiet">
           <span class="lad-name">THE QUIET ONE</span>
         </div>
         <div class="lad-wrap" onclick="selectLad('funny')">
-          <img class="lad-img" id="lad-funny" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-funny-regular.png" alt="Funny">
+          <img class="lad-img" id="lad-funny" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-funny-regular.png" alt="Funny">
           <span class="lad-name">THE FUNNY ONE</span>
         </div>
       </div>
@@ -363,15 +378,15 @@ body {
         <div class="level-section-label">Choose your level</div>
         <div id="level-tabs">
           <div class="level-tab active" id="tab-youngsters" onclick="setTheme('youngsters',this)">
-            <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/album-youngsters.png" alt="Yellow Submarine">
+            <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/YELLOW%20SUBMARINE%20ALBUM%20COVER.png" alt="Yellow Submarine">
             <div class="lt-label">YOUNGSTERS<span class="lt-sub">Kinder · Middle</span></div>
           </div>
           <div class="level-tab" id="tab-grownups" onclick="setTheme('grownups',this)">
-            <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/album-youngsters.png" alt="Rubber Soul">
+            <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/RUBBER%20SOUL%20ALBUM%20COVER.png" alt="Rubber Soul">
             <div class="lt-label">GROWN UPS<span class="lt-sub">High · College</span></div>
           </div>
           <div class="level-tab" id="tab-experts" onclick="setTheme('experts',this)">
-            <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/album-youngsters.png" alt="Abbey Road">
+            <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/ABBEY%20ROAD%20BEETLES%20COVER.png" alt="Abbey Road">
             <div class="lt-label">EXPERTS<span class="lt-sub">The Fifth Beatle</span></div>
           </div>
         </div>
@@ -399,20 +414,20 @@ body {
         <div class="dyn-label" id="dyn-label">For Youngsters</div>
         <div class="album-panel active" id="panel-youngsters">
           <div class="album-pair">
-            <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/album-youngsters.png" alt="MMT"><div class="ac-label">Magical Mystery Tour</div></div>
-            <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/album-youngsters.png" alt="HDN"><div class="ac-label">A Hard Day's Night</div></div>
+            <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/MAGIC%20MISTERY%20TOUR%20ALBUM%20COVER.png" alt="MMT"><div class="ac-label">Magical Mystery Tour</div></div>
+            <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/A%20HARD%20DAY%27S%20NIGHT%20ALBUM%20COVER.png" alt="HDN"><div class="ac-label">A Hard Day's Night</div></div>
           </div>
         </div>
         <div class="album-panel" id="panel-grownups">
           <div class="album-pair">
-            <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/album-youngsters.png" alt="Rev"><div class="ac-label">Revolver</div></div>
-            <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/album-youngsters.png" alt="LIB"><div class="ac-label">Let It Be</div></div>
+            <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/REVOLVER%20ALBUM%20COVER.png" alt="Rev"><div class="ac-label">Revolver</div></div>
+            <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/LET%20IT%20BE%20ALBUM%20COVER.png" alt="LIB"><div class="ac-label">Let It Be</div></div>
           </div>
         </div>
         <div class="album-panel" id="panel-experts">
           <div class="album-pair">
-            <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/album-youngsters.png" alt="Blue"><div class="ac-label">The Blue Album</div></div>
-            <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/album-youngsters.png" alt="Red"><div class="ac-label">The Red Album</div></div>
+            <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/BLUE%20ALBUM%20COVER.png" alt="Blue"><div class="ac-label">The Blue Album</div></div>
+            <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/RED%20ALBUM%20COVER.png" alt="Red"><div class="ac-label">The Red Album</div></div>
           </div>
         </div>
       </div>
@@ -426,11 +441,21 @@ body {
     <span id="rita-popup-close" onclick="hideRitaPopup()">— Tap to hide —</span>
   </div>
 
-  <!-- BOTTOM BAR -->
-  <div id="bottom-bar">
-    <button class="bb-btn" id="btn-home" onclick="goHome()">🏠 HOME</button>
-    <button class="bb-btn" id="btn-mute" onclick="toggleMute()">🔊 SOUND</button>
-  </div>
+  <!-- NAV BAR -->
+  <nav id="nav-bar">
+    <button class="nav-btn" onclick="toggleMute()">
+      <span class="nav-icon" id="sound-icon">🔊</span>
+      <span>Sound</span>
+    </button>
+    <button class="nav-btn nav-home" onclick="goHome()">
+      <span class="nav-icon">🏠</span>
+      <span>Home</span>
+    </button>
+    <button class="nav-btn" onclick="window.location.href='https://alexmonteiro65.github.io/ask-lovely-rita/src/page2_tictactoe.html'">
+      <span class="nav-icon">▶️</span>
+      <span>Next</span>
+    </button>
+  </nav>
 
 </div><!-- end phone -->
 </div><!-- end phone-outer -->
@@ -440,9 +465,9 @@ body {
 
 <script>
 const LADS = {
-  regular:{ smart:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-smart-regular.png', cute:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-cute-regular.png', quiet:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-quiet-regular.png', funny:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-funny-regular.png' },
-  pepper:{  smart:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-smart-pepper.png', cute:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-cute-regular.png', quiet:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-quiet-regular.png', funny:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-quiet-pepper.png' },
-  abbey:{   smart:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-smart-abbey.png', cute:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-cute-abbey.png', quiet:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-quiet-abbey.png', funny:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/images/lad-funny-abbey.png' }
+  regular:{ smart:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-smart-regular.png', cute:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-cute-regular.png', quiet:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-quiet-regular.png', funny:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-funny-regular.png' },
+  pepper:{  smart:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-smart-pepper.png', cute:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-cute-abbey.png', quiet:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-quiet-pepper.png', funny:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-funny-abbey.png' },
+  abbey:{   smart:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-smart-abbey.png', cute:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-cute-abbey.png', quiet:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-quiet-abbey.png', funny:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-funny-abbey.png' }
 };
 const OUTFIT_MAP = { youngsters:'regular', grownups:'pepper', experts:'abbey' };
 const DYN_LABELS = { youngsters:'For Youngsters', grownups:'For Grown Ups', experts:'For Experts' };
@@ -461,6 +486,13 @@ function setTheme(t, tabEl) {
   document.querySelectorAll('.level-tab').forEach(e=>e.classList.remove('active'));
   if(tabEl) tabEl.classList.add('active');
   else { const m={youngsters:0,grownups:1,experts:2}; document.querySelectorAll('.level-tab')[m[t]]?.classList.add('active'); }
+  // Save level to localStorage
+  localStorage.setItem('askLovelyRitaV4_level', t);
+  // If user clicked a tab (not init call), navigate to page 2
+  if(tabEl) {
+    toast('🎵 Let\'s play! Loading games...');
+    setTimeout(()=>{ window.location.href='https://alexmonteiro65.github.io/ask-lovely-rita/src/page2_tictactoe.html'; }, 900);
+  }
   // Auto outfit by level
   const outfit = OUTFIT_MAP[t];
   ['smart','cute','quiet','funny'].forEach(lad=>document.getElementById('lad-'+lad).src=LADS[outfit][lad]);
@@ -522,9 +554,7 @@ function goHome() {
 
 function toggleMute() {
   muteState = !muteState;
-  const btn = document.getElementById('btn-mute');
-  btn.textContent = muteState ? '🔇 MUTED' : '🔊 SOUND';
-  btn.classList.toggle('active', muteState);
+  document.getElementById('sound-icon').textContent = muteState ? '🔇' : '🔊';
   toast(muteState ? '🔇 Sound off' : '🔊 Sound on');
 }
 
