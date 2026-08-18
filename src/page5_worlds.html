@@ -890,10 +890,10 @@
 const BASE = 'https://alexmonteiro65.github.io/ask-lovely-rita/src/';
 
 const LAD_IMG = {
-  smart:  { regular:'lad-smart-regular.png', abbey:'lad-smart-abbey.png' },
-  cute:   { regular:'lad-cute-regular.png',  abbey:'lad-cute-abbey.png'  },
-  quiet:  { regular:'lad-quiet-regular.png', abbey:'lad-quiet-abbey.png' },
-  funny:  { regular:'lad-funny-regular.png', abbey:'lad-funny-abbey.png' },
+  smart:  { regular:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-smart-regular.png', abbey:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-smart-abbey.png' },
+  cute:   { regular:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-cute-regular.png',  abbey:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-cute-abbey.png'  },
+  quiet:  { regular:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-quiet-regular.png', abbey:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-quiet-abbey.png' },
+  funny:  { regular:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-funny-regular.png', abbey:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-funny-abbey.png' },
 };
 
 const WORLDS = {
@@ -1045,10 +1045,10 @@ function openWorld(key) {
   ladImgEl.innerHTML = `<span>${w.ladEmoji}</span>`;
   const isYoungsters = S.level === 'youngsters';
   const worldImgMap = {
-    ocean: isYoungsters ? 'Funny_Aqua_Lad.png'    : 'Aqua_Lad.png',
-    space: isYoungsters ? 'Smart_Space_Lad.png'    : 'Space_Lad.png',
-    india: isYoungsters ? 'Quite_Peaceful_Lad.png' : 'Peaceful_Lad.png',
-    city:  isYoungsters ? 'Cute_Urban_Lad.png'     : 'Urban_Lad.png',
+    ocean: isYoungsters ? 'https://alexmonteiro65.github.io/ask-lovely-rita/src/Funny_Aqua_Lad.png'    : 'https://alexmonteiro65.github.io/ask-lovely-rita/src/Aqua_Lad.png',
+    space: isYoungsters ? 'https://alexmonteiro65.github.io/ask-lovely-rita/src/Smart_Space_Lad.png'    : 'https://alexmonteiro65.github.io/ask-lovely-rita/src/Space_Lad.png',
+    india: isYoungsters ? 'https://alexmonteiro65.github.io/ask-lovely-rita/src/Quite_Peaceful_Lad.png' : 'https://alexmonteiro65.github.io/ask-lovely-rita/src/Peaceful_Lad.png',
+    city:  isYoungsters ? 'https://alexmonteiro65.github.io/ask-lovely-rita/src/Cute_Urban_Lad.png'     : 'https://alexmonteiro65.github.io/ask-lovely-rita/src/Urban_Lad.png',
   };
   const img = document.createElement('img');
   img.src = BASE + worldImgMap[key];
