@@ -117,7 +117,7 @@ body {
   height:70px; width:auto;
   animation:bus-roll 20s linear infinite; opacity:.3; z-index:1;
 }
-@keyframes bus-roll { 0%{left:-160px} 100%{left:430px} }
+@keyframes bus-roll { 0%{left:430px} 100%{left:-160px} }
 
 /* NAV */
 #nav-bar {
@@ -294,20 +294,20 @@ body.theme-experts    { --accent:#ffd700; --glow:#ffd700; --btn-grad:linear-grad
 #grownup-keyboard {
   display:flex; flex-direction:column; gap:4px; margin-top:8px;
 }
-.gkey-row { display:flex; gap:3px; justify-content:center; }
+.gkey-row { display:flex; gap:2px; justify-content:center; flex-wrap:nowrap; }
 .gkey {
-  height:38px; min-width:28px; padding:0 3px;
+  height:32px; min-width:22px; padding:0 2px;
   background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2);
-  border-radius:7px; color:#fff; font-size:12px; font-weight:700;
+  border-radius:6px; color:#fff; font-size:10px; font-weight:700;
   cursor:pointer; transition:all .1s;
   display:flex; align-items:center; justify-content:center;
   text-transform:uppercase; user-select:none;
 }
 .gkey:hover { background:rgba(255,215,0,.25); border-color:#ffd700; }
 .gkey:active { transform:scale(.9); }
-.gkey-del { min-width:42px; font-size:15px; }
+.gkey-del { min-width:32px; font-size:13px; }
 .gkey-submit {
-  min-width:70px; font-size:10px; font-weight:900;
+  min-width:56px; font-size:9px; font-weight:900;
   background:linear-gradient(135deg,#ffd700,#c8860a);
   border-color:transparent; color:#000;
 }
@@ -487,10 +487,10 @@ body.theme-experts    { --accent:#ffd700; --glow:#ffd700; --btn-grad:linear-grad
           </div>
           <div id="mic-status"></div>
           <!-- Expert virtual keyboard -->
-          <div id="expert-keyboard" style="display:flex;flex-direction:column;gap:4px;margin-bottom:8px">
-            <div class="gkey-row" id="ekr1"></div>
-            <div class="gkey-row" id="ekr2"></div>
-            <div class="gkey-row" id="ekr3"></div>
+          <div id="expert-keyboard" style="display:flex;flex-direction:column;gap:3px;margin-bottom:8px;max-width:100%;overflow:hidden">
+            <div class="gkey-row" id="ekr1" style="gap:1px"></div>
+            <div class="gkey-row" id="ekr2" style="gap:1px"></div>
+            <div class="gkey-row" id="ekr3" style="gap:1px"></div>
           </div>
           <button id="expert-submit" onclick="checkExpert()">✓ Submit</button>
         </div>
@@ -627,7 +627,7 @@ const Q_EXPERTS = [
 // ── RITA SPEECHES
 const RITA_INTRO = {
   youngsters: "Hello love! Welcome to Rita's World! Here you need to answer me using only words from the Lads' Universe. Click to enter and choose the album that has the right answer darling!",
-  grownups:   "Hello there! Welcome to Rita's World! I will tell you something and you respond as best as you can. Type a word that the Lads would say love!",
+  grownups:   "Hello there! Welcome to Rita's World! I will tell you something and you fill in the missing word. Type what the Lads would say love!",
   experts:    "Right then! You are in Expert territory now! We can only talk using the Lads' vocabulary. Type or use the microphone. Show me what you know darling!",
 };
 const RITA_CORRECT_Y = [
@@ -801,6 +801,10 @@ function buildExpertKeyboard() {
       const btn = document.createElement('button');
       const isDel = k==='⌫', isOk = k==='✓';
       btn.className = 'gkey' + (isDel?' gkey-del':'') + (isOk?' gkey-submit':'');
+      // Extra small for expert keyboard to fit screen
+      btn.style.cssText = 'height:28px;min-width:20px;font-size:9px;padding:0 1px;border-radius:5px';
+      if(isDel) btn.style.minWidth='28px';
+      if(isOk) btn.style.minWidth='44px';
       btn.textContent = k;
       btn.onclick = () => {
         const inp = document.getElementById('expert-input');
@@ -937,7 +941,15 @@ function loadQuestion() {
     document.getElementById('grownup-input').value='';
     document.getElementById('grownup-tries').textContent='';
     document.getElementById('grownup-area').style.display='block';
-    setTimeout(()=>speak(q.phrase.replace(/\([^)]+\)/g,'blank')),400);
+    setTimeout(()=>{
+    // Split phrase at blank, speak first part, chime for blank, speak rest
+    const parts = q.phrase.split(/\([^)]+\)/);
+    const speakText = parts[0].trim();
+    speak(speakText);
+    // Chime after first part to signal the blank
+    const wordCount = speakText.split(' ').length;
+    setTimeout(()=>playChime(), wordCount * 280);
+  },400);
 
   } else {
     // Experts
@@ -947,7 +959,7 @@ function loadQuestion() {
     document.getElementById('expert-input').value='';
     document.getElementById('mic-status').textContent='';
     document.getElementById('expert-area').style.display='block';
-    setTimeout(()=>speak(q.lyric),400);
+    setTimeout(()=>speak(q.lyric.replace(/\n/g,' — ').replace(/\.{2,}/g,'').trim()),400);
   }
 }
 
@@ -1143,6 +1155,25 @@ function goHome()    { window.location.href=BASE+'index.html'; }
 function goForward() { window.location.href=BASE+'index.html'; }
 
 // ── SPEAK
+function playChime() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const notes = [523, 659, 784]; // C E G — pleasant chime chord
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value = freq;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(0, ctx.currentTime + i*0.1);
+      gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + i*0.1 + 0.05);
+      gain.gain.linearRampToValueAtTime(0, ctx.currentTime + i*0.1 + 0.4);
+      osc.start(ctx.currentTime + i*0.1);
+      osc.stop(ctx.currentTime + i*0.1 + 0.5);
+    });
+  } catch(e) {}
+}
+
 function speak(text) {
   if(!window.speechSynthesis)return;
   window.speechSynthesis.cancel();
