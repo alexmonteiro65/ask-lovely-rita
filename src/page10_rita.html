@@ -482,7 +482,7 @@ body.theme-experts    { --accent:#ffd700; --glow:#ffd700; --btn-grad:linear-grad
         <div id="expert-area">
           <div id="expert-lyric"></div>
           <div id="expert-input-row">
-            <input id="expert-input" type="text" placeholder="Complete the next line..." readonly/>
+            <input id="expert-input" type="text" placeholder="Type, say or SING the next line..." readonly/>
             <button id="mic-btn" onclick="toggleMic()">🎤</button>
           </div>
           <div id="mic-status"></div>
@@ -628,7 +628,7 @@ const Q_EXPERTS = [
 const RITA_INTRO = {
   youngsters: "Hello love! Welcome to Rita's World! Here you need to answer me using only words from the Lads' Universe. Click to enter and choose the album that has the right answer darling!",
   grownups:   "Hello there! Welcome to Rita's World! I will tell you something and you fill in the missing word. Type what the Lads would say love!",
-  experts:    "Right then! You are in Expert territory now! We can only talk using the Lads' vocabulary. Type or use the microphone. Show me what you know darling!",
+  experts:    "Right then! Expert level love! I will give you a line and you give me the next one. Type it sing it or say it into the mic. Yes you can actually SING it love! Show me what you have got!",
 };
 const RITA_CORRECT_Y = [
   "Brilliant! You found it love!",
@@ -959,7 +959,17 @@ function loadQuestion() {
     document.getElementById('expert-input').value='';
     document.getElementById('mic-status').textContent='';
     document.getElementById('expert-area').style.display='block';
-    setTimeout(()=>speak(q.lyric.replace(/\n/g,' — ').replace(/\.{2,}/g,'').trim()),400);
+    const expertChallenges = [
+      "Now sing or say the next line love!",
+      "What comes next? Sing it if you dare!",
+      "Can you sing the next line? Go on love!",
+      "Your turn! Sing it speak it or type it!",
+      "Come on love! What is the next line?"
+    ];
+    const challenge = expertChallenges[S.qIndex % expertChallenges.length];
+    setTimeout(()=>{
+      speak(q.lyric.replace(/\n/g,' — ').replace(/\.{2,}/g,'').trim() + ' ... ' + challenge);
+    },400);
   }
 }
 
