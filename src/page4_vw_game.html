@@ -98,7 +98,7 @@
     color: var(--accent); text-shadow: 0 0 18px var(--glow);
     text-transform: uppercase;
   }
-  #vw-header p { font-size: 10px; color: rgba(255,255,255,.35); margin-top: 2px; }
+  #vw-header p { font-size: 13px; color: #e0e0ff; margin-top: 4px; font-weight: 600; text-shadow: 0 0 8px rgba(180,180,255,.6); }
 
   /* ── LEVEL TABS ── */
   #level-tabs { display: flex; gap: 5px; justify-content: center; margin-bottom: 8px; }
@@ -179,8 +179,9 @@
 
   /* ── CARS AREA ── */
   #cars-label {
-    font-size: 10px; color: rgba(255,255,255,.32); text-align:center;
+    font-size: 13px; color: #e0e0ff; text-align:center;
     letter-spacing:.5px; text-transform:uppercase; margin-bottom:6px;
+    font-weight: 700; text-shadow: 0 0 8px rgba(180,180,255,.6);
   }
   #cars-area {
     display: flex; flex-wrap: wrap; gap: 10px;
@@ -432,8 +433,7 @@
           <img id="rita-img"
             src="https://alexmonteiro65.github.io/ask-lovely-rita/src/rita_beatcorps_clean.png"
             alt="Lovely Rita"
-            onerror="this.style.display='none'; document.getElementById('rita-fallback').style.display='block'"/>
-          <div id="rita-fallback" style="display:none;font-size:52px;line-height:1;text-align:center;">🎤</div>
+            onerror="this.style.display='none'"/>
           <div id="flag-wrap">
             <div id="flag-pole"></div>
             <canvas id="flag-canvas" width="44" height="34"></canvas>
@@ -500,9 +500,9 @@ const RITA_INTRO = {
   experts:    "Welcome love! Choose your level then click Start Matching to play! Only 15 seconds on the clock love!",
 };
 const RITA_INTRO_DISPLAY = {
-  youngsters: "Hello love! 🚗 Each Lad has his own Beetle. Drag each car to the right garage! Take your time darling — no rush at all!",
-  grownups:   "Hello there! 🚗 You've got 30 seconds to drag each VW to the right Lad's garage. Think fast and think smart!",
-  experts:    "Right then! ⭐ Only 15 seconds! Match all four Beetles to their Lads as fast as you can. Go go go!",
+  youngsters: "Welcome love! Choose your level then click Start Matching to play! Take your time darling. No rush at all!",
+  grownups:   "Welcome love! Choose your level then click Start Matching to play! You have 30 seconds love!",
+  experts:    "Welcome love! Choose your level then click Start Matching to play! Only 15 seconds on the clock love!",
 };
 const RITA_WIN_ALL = [
   "Absolutely smashing! All four Beetles parked perfectly! The Fab Four would give you a standing ovation!",
@@ -593,7 +593,7 @@ function applyLevel(lvl) {
   const cfg = LEVEL_CFG[lvl];
   document.body.className = `theme-${lvl}`;
   document.getElementById('rita-text-bottom').textContent = RITA_INTRO_DISPLAY[lvl];
-  document.getElementById('bc-val').textContent = S.beatcoins;
+  const _bcEl = document.getElementById('bc-val'); if(_bcEl) _bcEl.textContent = S.beatcoins;
 
   // Rita image — use Beat Corps (abbey) image always for Rita
   document.getElementById('rita-img').src = BASE + 'https://alexmonteiro65.github.io/ask-lovely-rita/src/rita_beatcorps_clean.png';
@@ -824,7 +824,7 @@ function finishGame(reason) {
   }
 
   S.beatcoins += earned;
-  document.getElementById('bc-val').textContent = S.beatcoins;
+  const _bcEl = document.getElementById('bc-val'); if(_bcEl) _bcEl.textContent = S.beatcoins;
   saveStorage();
   panel.classList.add('show');
   document.getElementById('next-btn').style.display = 'block';
