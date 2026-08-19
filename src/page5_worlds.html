@@ -185,10 +185,37 @@
     position: relative; z-index: 2;
   }
 
+  /* Rita's World card */
+  .scene-rita {
+    background: linear-gradient(135deg, #8b0000 0%, #c0006a 40%, #ff1493 100%);
+    position: relative; overflow: hidden;
+  }
+  .music-note {
+    position: absolute;
+    font-size: 20px;
+    animation: note-float var(--nd, 3s) ease-in infinite;
+    opacity: 0;
+  }
+  @keyframes note-float {
+    0%   { transform: translateY(100px) rotate(0deg); opacity: 0; }
+    15%  { opacity: 1; }
+    85%  { opacity: 1; }
+    100% { transform: translateY(-20px) rotate(20deg); opacity: 0; }
+  }
+  .rita-mic {
+    position: absolute; font-size: 40px;
+    bottom: 12px; right: 16px;
+    animation: mic-pulse 1.5s ease-in-out infinite alternate;
+  }
+  @keyframes mic-pulse {
+    from { transform: scale(1) rotate(-5deg); }
+    to   { transform: scale(1.1) rotate(5deg); }
+  }
+
   .world-card {
     border-radius: 20px; overflow: hidden;
     cursor: pointer; position: relative;
-    height: 120px;
+    height: 90px;
     transition: transform .25s, box-shadow .25s;
     border: 1px solid rgba(255,255,255,.12);
   }
@@ -239,10 +266,10 @@
     animation: fish-swim var(--fs) linear infinite;
   }
   @keyframes fish-swim {
-    0%   { transform: translateX(-30px); opacity:0; }
+    0%   { transform: translateX(340px) scaleX(-1); opacity:0; }
     10%  { opacity:1; }
     90%  { opacity:1; }
-    100% { transform: translateX(320px); opacity:0; }
+    100% { transform: translateX(-40px) scaleX(-1); opacity:0; }
   }
   .octopus {
     position: absolute; font-size: 32px;
@@ -677,12 +704,6 @@
 
       <!-- RITA -->
       <div id="rita-section">
-        <div id="rita-img-wrap">
-          <img id="rita-img"
-            src="https://alexmonteiro65.github.io/ask-lovely-rita/src/rita_beatcorps_clean.png"
-            alt="Lovely Rita"
-            onerror="this.style.display='none'"/>
-        </div>
         <div id="rita-bubble">
           <div id="rita-name">♪ Lovely Rita</div>
           <div id="rita-text">Hello love! Four magical worlds are waiting for you! Each one has its own music and magic. Choose your world and start your adventure!</div>
@@ -703,6 +724,31 @@
       <div id="worlds-grid">
 
         <!-- OCTOPUS'S GARDEN -->
+        <!-- RITA'S WORLD -->
+        <div class="world-card rita-world" onclick="openWorld('rita')" style="border-color:rgba(255,20,147,.4);">
+          <div class="world-scene scene-rita">
+            <div class="music-note" style="left:8%;--nd:2.8s;animation-delay:0s">🎵</div>
+            <div class="music-note" style="left:22%;--nd:3.5s;animation-delay:.7s">♪</div>
+            <div class="music-note" style="left:38%;--nd:2.5s;animation-delay:1.4s">🎶</div>
+            <div class="music-note" style="left:54%;--nd:3.2s;animation-delay:.3s">♩</div>
+            <div class="music-note" style="left:70%;--nd:2.9s;animation-delay:1s">🎵</div>
+            <div class="music-note" style="left:84%;--nd:3.8s;animation-delay:.5s">♪</div>
+            <div class="rita-mic">🎤</div>
+          </div>
+          <div class="world-overlay">
+            <div class="world-top">
+              <div class="world-lad" id="lad-rita"><img src="https://alexmonteiro65.github.io/ask-lovely-rita/src/rita_beatcorps_clean.png" alt="Rita" onerror="this.style.display='none';"/></div>
+              <div class="world-badge" style="background:rgba(255,20,147,.7);">Rita's World</div>
+            </div>
+            <div class="world-bottom">
+              <div class="world-title">Rita's World</div>
+              <div class="world-sub">🎤 Only Lads language spoken here!</div>
+            </div>
+            <div class="world-arrow">▶</div>
+          </div>
+        </div>
+
+        <!-- OCEAN -->
         <div class="world-card ocean" onclick="openWorld('ocean')">
           <div class="world-scene scene-ocean">
             <!-- Bubbles -->
@@ -730,7 +776,7 @@
           </div>
           <div class="world-overlay">
             <div class="world-top">
-              <div class="world-lad" id="lad-ocean"><img src="https://alexmonteiro65.github.io/ask-lovely-rita/src/rita_beatcorps_clean.png" alt="Rita" onerror="this.style.display='none';this.parentElement.textContent='🎤'"/></div>
+              <div class="world-lad" id="lad-ocean"><img src="https://alexmonteiro65.github.io/ask-lovely-rita/src/Funny_Aqua_Lad.png" alt="Lad" onerror="this.style.display='none';"/></div>
               <div class="world-badge">Funny Lad's World</div>
             </div>
             <div class="world-bottom">
@@ -761,7 +807,7 @@
           </div>
           <div class="world-overlay">
             <div class="world-top">
-              <div class="world-lad" id="lad-space"><img src="https://alexmonteiro65.github.io/ask-lovely-rita/src/rita_beatcorps_clean.png" alt="Rita" onerror="this.style.display='none';this.parentElement.textContent='🎤'"/></div>
+              <div class="world-lad" id="lad-space"><img src="https://alexmonteiro65.github.io/ask-lovely-rita/src/Smart_Space_Lad.png" alt="Lad" onerror="this.style.display='none';"/></div>
               <div class="world-badge">Smart Lad's World</div>
             </div>
             <div class="world-bottom">
@@ -794,7 +840,7 @@
           </div>
           <div class="world-overlay">
             <div class="world-top">
-              <div class="world-lad" id="lad-india"><img src="https://alexmonteiro65.github.io/ask-lovely-rita/src/rita_beatcorps_clean.png" alt="Rita" onerror="this.style.display='none';this.parentElement.textContent='🎤'"/></div>
+              <div class="world-lad" id="lad-india"><img src="https://alexmonteiro65.github.io/ask-lovely-rita/src/Quite_Peaceful_Lad.png" alt="Lad" onerror="this.style.display='none';"/></div>
               <div class="world-badge">Quiet Lad's World</div>
             </div>
             <div class="world-bottom">
@@ -847,7 +893,7 @@
           </div>
           <div class="world-overlay">
             <div class="world-top">
-              <div class="world-lad" id="lad-city"><img src="https://alexmonteiro65.github.io/ask-lovely-rita/src/rita_beatcorps_clean.png" alt="Rita" onerror="this.style.display='none';this.parentElement.textContent='🎤'"/></div>
+              <div class="world-lad" id="lad-city"><img src="https://alexmonteiro65.github.io/ask-lovely-rita/src/Cute_Urban_Lad.png" alt="Lad" onerror="this.style.display='none';"/></div>
               <div class="world-badge">Cute Lad's World</div>
             </div>
             <div class="world-bottom">
@@ -1091,6 +1137,7 @@ function closeModal() {
 
 function enterWorld() {
   const pageMap = {
+    rita:  'page10_rita.html',
     ocean: 'page6_octopus.html',
     space: 'page7_space.html',
     india: 'page8_india.html',
