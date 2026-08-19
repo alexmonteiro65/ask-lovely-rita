@@ -111,16 +111,12 @@
     filter: drop-shadow(0 0 20px rgba(168,85,247,.5));
   }
   #page-header p {
-    font-size: 11px; color: rgba(255,255,255,.4);
+    font-size: 13px; color: #a0f0ff;
     margin-top: 3px; letter-spacing: .5px;
+    text-shadow: 0 0 8px rgba(160,240,255,.8);
   }
 
-  /* ── RITA SECTION ── */
-  #rita-section {
-    display: flex; gap: 10px; align-items: flex-end;
-    padding: 0 14px; margin-bottom: 14px;
-    position: relative; z-index: 2;
-  }
+
   #rita-img-wrap {
     width: 80px; flex-shrink: 0;
     display: flex; align-items: flex-end; justify-content: center;
@@ -702,14 +698,7 @@
         <p>Each world holds amazing secrets to discover!</p>
       </div>
 
-      <!-- RITA -->
-      <div id="rita-section">
-        <div id="rita-bubble">
-          <div id="rita-name">♪ Lovely Rita</div>
-          <div id="rita-text">Hello love! Four magical worlds are waiting for you! Each one has its own music and magic. Choose your world and start your adventure!</div>
-          <button id="rita-speak-btn" onclick="ritaSpeak()">🔊</button>
-        </div>
-      </div>
+
 
       <!-- BEATCOINS -->
       <!-- WORLD CARDS -->
@@ -717,7 +706,7 @@
 
         <!-- OCTOPUS'S GARDEN -->
         <!-- RITA'S WORLD -->
-        <div class="world-card rita-world" onclick="openWorld('rita')" style="border-color:rgba(255,20,147,.4);">
+        <div class="world-card rita-world" onclick="window.location.href='page10_rita.html'" style="border-color:rgba(255,20,147,.4);">
           <div class="world-scene scene-rita">
             <div class="music-note" style="left:8%;--nd:2.8s;animation-delay:0s">🎵</div>
             <div class="music-note" style="left:22%;--nd:3.5s;animation-delay:.7s">♪</div>
