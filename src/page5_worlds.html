@@ -215,7 +215,7 @@
   .world-card {
     border-radius: 20px; overflow: hidden;
     cursor: pointer; position: relative;
-    height: 90px;
+    height: 115px;
     transition: transform .25s, box-shadow .25s;
     border: 1px solid rgba(255,255,255,.12);
   }
@@ -477,7 +477,7 @@
     display: flex; align-items: flex-start; justify-content: space-between;
   }
   .world-lad {
-    width: 56px; height: 72px;
+    width: 64px; height: 80px;
     display: flex; align-items:flex-end; justify-content:center;
     flex-shrink: 0;
     filter: drop-shadow(0 2px 8px rgba(0,0,0,.5));
@@ -712,14 +712,6 @@
       </div>
 
       <!-- BEATCOINS -->
-      <div id="bc-bar">
-        <div>
-          <div id="bc-label">Educational BeatCoins</div>
-          <div id="bc-amount">80</div>
-        </div>
-        <div style="font-size:20px">🪙</div>
-      </div>
-
       <!-- WORLD CARDS -->
       <div id="worlds-grid">
 
@@ -757,8 +749,8 @@
             <div class="bubble" style="width:5px;height:5px;left:70%;bottom:15px;--bd:2s;animation-delay:1.4s"></div>
             <div class="bubble" style="width:7px;height:7px;left:85%;bottom:8px;--bd:2.8s;animation-delay:.3s"></div>
             <!-- Fish -->
-            <div class="fish" style="top:30px;--fs:5s;animation-delay:0s">🐠</div>
-            <div class="fish" style="top:55px;--fs:7s;animation-delay:2s;font-size:14px">🐡</div>
+            <div class="fish" style="top:30px;--fs:5s;animation-delay:0s;display:inline-block;transform:scaleX(-1)">🐠</div>
+            <div class="fish" style="top:55px;--fs:7s;animation-delay:2s;font-size:14px;display:inline-block;transform:scaleX(-1)">🐡</div>
             <!-- Corals -->
             <div class="coral" style="left:14px">
               <div class="coral-branch" style="height:28px;--cc:#e74c3c;left:0"></div>
@@ -1028,7 +1020,6 @@ function init() {
   loadStorage();
   buildStars();
   // Lad images now hardcoded as Rita in each card
-  document.getElementById('bc-amount').textContent = S.beatcoins;
   setTimeout(() => speak(RITA_INTRO), 1000);
 }
 
