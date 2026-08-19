@@ -184,16 +184,17 @@ body {
   position:absolute; bottom:0; left:0; right:0;
   background:linear-gradient(transparent,rgba(0,0,0,0.92));
   padding:8px 3px 3px; text-align:center;
-  font-family:monospace; font-size:6.5px; font-weight:bold;
+  font-family:monospace; font-size:9px; font-weight:bold;
   color:#fff; text-transform:uppercase;
 }
-.lt-sub { font-size:5px; opacity:0.85; display:block; margin-top:1px; }
+.lt-sub { font-size:7px; opacity:0.85; display:block; margin-top:1px; }
 .level-tab.active { border-color:var(--accent); box-shadow:0 0 12px var(--glow); }
 
 /* SCROLL BODY */
 #scroll-body {
   flex:1; overflow-y:auto; padding:8px 16px 10px;
   background:var(--bg); transition:background 0.5s;
+  display:flex; flex-direction:column;
 }
 #scroll-body::-webkit-scrollbar { width:0; }
 
@@ -217,6 +218,7 @@ body {
 /* BOTTOM AREA — albums + Rita side by side */
 #bottom-area {
   display:flex; gap:8px; align-items:flex-end; width:100%;
+  margin-top:auto;
 }
 
 /* DYNAMIC ALBUMS */
@@ -234,7 +236,7 @@ body {
   border:2px solid rgba(255,255,255,0.06); transition:all 0.35s; position:relative;
 }
 /* Albums same size as rectangular icons */
-.album-card img { width:100%; aspect-ratio:16/9; object-fit:cover; filter:saturate(0.8) brightness(0.6); transition:filter 0.35s; }
+.album-card img { width:100%; aspect-ratio:1/1; object-fit:cover; filter:saturate(0.8) brightness(0.6); transition:filter 0.35s; }
 .album-card:hover img { filter:saturate(1.3) brightness(0.9); }
 .album-card.shake { border-color:var(--accent); box-shadow:0 0 16px var(--glow); animation:shake 0.5s ease; }
 @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-4px) rotate(-1deg)} 40%{transform:translateX(4px) rotate(1deg)} 60%{transform:translateX(-3px)} 80%{transform:translateX(3px)} }
@@ -377,15 +379,24 @@ body {
       <div id="level-wrap">
         <div class="level-section-label">Choose your level</div>
         <div id="level-tabs">
-          <div class="level-tab active" id="tab-youngsters" onclick="setTheme('youngsters',this)">
+          <div class="level-tab active" id="tab-youngsters"
+            onclick="setTheme('youngsters',this)"
+            onmouseenter="previewAlbums('youngsters')"
+            onmouseleave="restoreAlbums()">
             <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/ICON%201.png" alt="Youngsters">
             <div class="lt-label">YOUNGSTERS<span class="lt-sub">Kinder · Middle</span></div>
           </div>
-          <div class="level-tab" id="tab-grownups" onclick="setTheme('grownups',this)">
+          <div class="level-tab" id="tab-grownups"
+            onclick="setTheme('grownups',this)"
+            onmouseenter="previewAlbums('grownups')"
+            onmouseleave="restoreAlbums()">
             <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/ICON%202.png" alt="Grown Ups">
             <div class="lt-label">GROWN UPS<span class="lt-sub">High · College</span></div>
           </div>
-          <div class="level-tab" id="tab-experts" onclick="setTheme('experts',this)">
+          <div class="level-tab" id="tab-experts"
+            onclick="setTheme('experts',this)"
+            onmouseenter="previewAlbums('experts')"
+            onmouseleave="restoreAlbums()">
             <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/ICON%203.png" alt="Experts">
             <div class="lt-label">EXPERTS<span class="lt-sub">The Fifth Beatle</span></div>
           </div>
@@ -515,6 +526,7 @@ function setTheme(t, tabEl) {
   phone.className = 'theme-'+t;
   document.querySelectorAll('.level-tab').forEach(e=>e.classList.remove('active'));
   if(tabEl) {
+    activeLevel = t;
     tabEl.classList.add('active');
     // Rita responds to level choice
     const responses = {
@@ -528,6 +540,7 @@ function setTheme(t, tabEl) {
     setTimeout(()=>{ window.location.href='https://alexmonteiro65.github.io/ask-lovely-rita/src/page2_tictactoe.html'; }, 1200);
   } else {
     // init — set active tab
+    activeLevel = t;
     const m={youngsters:0,grownups:1,experts:2};
     document.querySelectorAll('.level-tab')[m[t]]?.classList.add('active');
   }
@@ -590,10 +603,44 @@ function toggleMute() {
   toast(muteState?'🔇 Sound off':'🔊 Sound on');
 }
 
+const PLAYLIST = [
+  BASE+'Beatles%20Rap%20-%20Part%201.mp3',
+  BASE+'Beatles%20Rap%20-%20Part%202.mp3',
+  BASE+'Beatles%20Rap%201.mp3',
+  BASE+'Beatles%20Rap%201%20part%20B.mp3'
+];
+let audio = null;
+let currentTrack = 0;
+
 function togglePlaylist() {
   playlistOpen=!playlistOpen;
   document.getElementById('pl-arrow').textContent=playlistOpen?'▼':'▶';
-  toast(playlistOpen?'🎵 Playlist coming soon!':'');
+  if(playlistOpen) {
+    if(!audio) {
+      audio = new Audio(PLAYLIST[currentTrack]);
+      audio.volume = 0.7;
+      audio.onended = ()=>{ currentTrack=(currentTrack+1)%PLAYLIST.length; audio.src=PLAYLIST[currentTrack]; audio.play(); };
+    }
+    audio.play().catch(()=>toast('⚠️ Tap again to play music'));
+    toast('🎵 Playing Beatles Rap!');
+  } else {
+    if(audio) { audio.pause(); audio.currentTime=0; }
+    toast('⏹️ Music stopped');
+  }
+}
+
+let activeLevel = 'youngsters';
+
+function previewAlbums(t) {
+  document.querySelectorAll('.album-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+t)?.classList.add('active');
+  document.getElementById('dyn-label').textContent = DYN_LABELS[t];
+}
+
+function restoreAlbums() {
+  document.querySelectorAll('.album-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+activeLevel)?.classList.add('active');
+  document.getElementById('dyn-label').textContent = DYN_LABELS[activeLevel];
 }
 
 function toast(msg) {
