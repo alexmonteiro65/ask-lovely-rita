@@ -90,7 +90,7 @@ body { background:#0a0a0a; display:flex; flex-direction:column; align-items:cent
 
   <!-- TOP BAR -->
   <div id="top-bar">
-    <button id="back-btn" onclick="goBack()">&#8592; Back</button>
+    
     <div><div id="page-title">Beat the Beetles!</div><div id="page-subtitle">Tic-Tac-Toe &middot; Album Edition</div></div>
     <div style="width:60px"></div>
   </div>
@@ -176,10 +176,6 @@ body { background:#0a0a0a; display:flex; flex-direction:column; align-items:cent
     <span class="nav-icon">◀️</span>
     <span>Back</span>
   </button>
-  <button class="nav-btn" onclick="resetGame()">
-    <span class="nav-icon">🔄</span>
-    <span>New Game</span>
-  </button>
   <button class="nav-btn nav-home" onclick="goHome()">
     <span class="nav-icon">🏠</span>
     <span>Home</span>
@@ -240,7 +236,7 @@ const COMMENTS = {
   draw:     ["A draw! As The Beatles would say — Come Together!", "Neither wins! We Can Work It Out — play again!", "A tie! Now that is what Rita calls harmony, love!"]
 };
 
-let currentTheme = localStorage.getItem("askLovelyRitaV4_theme") || "youngsters";
+let currentTheme = localStorage.getItem("askLovelyRitaV4_level") || localStorage.getItem("askLovelyRitaV4_theme") || "youngsters";
 let selectedLad = 0;
 let board = Array(9).fill(null);
 let gameOver = false;
@@ -400,8 +396,8 @@ function nextGame() {
   toast("Next game coming soon! Stay tuned!");
 }
 
-function goHome()    { window.location.href = 'https://alexmonteiro65.github.io/ask-lovely-rita/src/index.html'; }
-function goBack()    { window.location.href = 'https://alexmonteiro65.github.io/ask-lovely-rita/src/index.html'; }
+function goHome()    { window.location.href = 'https://alexmonteiro65.github.io/ask-lovely-rita/src/page1_landing.html'; }
+function goBack()    { window.location.href = 'https://alexmonteiro65.github.io/ask-lovely-rita/src/page1_landing.html'; }
 function goForward() { window.location.href = 'https://alexmonteiro65.github.io/ask-lovely-rita/src/page3_turntable.html'; }
 
 function setStatus(msg){document.getElementById("game-status").innerHTML=msg;}
