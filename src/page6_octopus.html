@@ -994,9 +994,9 @@ function finishGame() {
 }
 
 // ── NAVIGATION ────────────────────────────────────────────
-function goBack()    { toast('◀️ Going back... (page5 coming soon)'); }
-function goHome()    { toast('🏠 Going home... (index.html coming soon)'); }
-function goForward() { toast('▶️ Next... (coming soon)'); }
+function goBack()    { window.location.href = 'page5_worlds.html'; }
+function goHome()    { window.location.href = 'page1_landing.html'; }
+function goForward() { window.location.href = 'page7_space.html'; }
 
 // ── RITA VOICE ────────────────────────────────────────────
 function speak(text) {
