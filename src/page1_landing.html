@@ -200,14 +200,16 @@ body {
 
 /* BEATCOINS */
 #bc-wrap {
-  display:flex; align-items:center; gap:8px;
+  display:flex; flex-direction:column;
   background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
-  border-radius:22px; padding:6px 12px;
+  border-radius:22px; padding:8px 12px;
   font-family:monospace; color:var(--accent2);
   margin-bottom:6px; width:100%;
 }
-.bc-label { font-size:11px; opacity:1; flex:1; color:var(--accent2); font-weight:bold; }
+.bc-top { display:flex; align-items:center; gap:8px; }
+.bc-label { font-size:11px; flex:1; color:var(--accent2); font-weight:bold; }
 .bc-count { font-weight:bold; font-size:15px; color:var(--accent2); }
+.bc-fans { font-size:8px; color:var(--accent); letter-spacing:2px; text-transform:uppercase; font-family:monospace; margin-top:3px; font-weight:bold; text-align:center; }
 
 /* COUNTER */
 #counter-wrap {
@@ -224,8 +226,20 @@ body {
 /* DYNAMIC ALBUMS */
 #dynamic-albums { flex:1; }
 .dyn-label {
-  font-size:7px; color:rgba(255,255,255,0.9); letter-spacing:3px;
+  font-size:14px; color:rgba(255,255,255,0.9); letter-spacing:3px;
   text-transform:uppercase; font-family:monospace; margin-bottom:5px; font-weight:bold;
+}
+
+/* RITA RESPONSE BOX */
+#rita-response-box {
+  width:100%; background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.12); border-radius:14px;
+  padding:10px 14px; margin-bottom:8px; min-height:60px;
+  display:flex; align-items:center; gap:10px;
+}
+#rita-response-text {
+  font-size:11px; color:rgba(255,255,255,0.85); font-family:Georgia,serif;
+  line-height:1.5; flex:1; font-style:italic;
 }
 .album-panel { display:none; animation:fadein 0.4s ease; }
 .album-panel.active { display:block; }
@@ -408,18 +422,30 @@ body {
     <div id="scroll-body">
 
       <div id="bc-wrap">
-        <svg width="22" height="22" viewBox="0 0 40 40" style="flex-shrink:0">
+        <div class="bc-top">
+          <svg width="22" height="22" viewBox="0 0 40 40" style="flex-shrink:0">
+            <circle cx="20" cy="20" r="19" fill="#111"/>
+            <circle cx="20" cy="20" r="13" fill="#1a1a1a"/>
+            <circle cx="20" cy="20" r="7" fill="var(--vinil-label)"/>
+            <circle cx="20" cy="20" r="4" fill="#111"/>
+            <circle cx="20" cy="20" r="1.5" fill="var(--vinil-label2)"/>
+          </svg>
+          <span class="bc-label">Educational BeatCoins</span>
+          <span class="bc-count" id="bc-display">25,000</span>
+        </div>
+        <div class="bc-fans">20,324 Fans Learning Worldwide</div>
+      </div>
+
+      <!-- RITA RESPONSE BOX -->
+      <div id="rita-response-box">
+        <svg width="28" height="28" viewBox="0 0 40 40" style="flex-shrink:0">
           <circle cx="20" cy="20" r="19" fill="#111"/>
           <circle cx="20" cy="20" r="13" fill="#1a1a1a"/>
           <circle cx="20" cy="20" r="7" fill="var(--vinil-label)"/>
           <circle cx="20" cy="20" r="4" fill="#111"/>
-          <circle cx="20" cy="20" r="1.5" fill="var(--vinil-label2)"/>
         </svg>
-        <span class="bc-label">Educational BeatCoins</span>
-        <span class="bc-count" id="bc-display">80</span>
+        <span id="rita-response-text">Hello love! Welcome to Ask Lovely Rita! Ask me anything, listen to a song, or pick a level and let's play!</span>
       </div>
-
-      <div id="counter-wrap"><span>20,324</span> Fans Learning Worldwide</div>
 
       <!-- BOTTOM AREA: albums + Rita -->
       <div id="bottom-area">
@@ -505,19 +531,19 @@ function ritaSpeak(text) {
 
 // Greeting on page load
 window.addEventListener('load', ()=>{
-  // Init BeatCoins from localStorage
-  const bc = localStorage.getItem('askLovelyRitaV4_bc') || 80;
-  document.getElementById('bc-display').textContent = bc;
+  // Init BeatCoins
+  const bc = localStorage.getItem('askLovelyRitaV4_bc') || 25000;
+  document.getElementById('bc-display').textContent = Number(bc).toLocaleString();
   // Set level from localStorage
   const savedLevel = localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
   setTheme(savedLevel, null);
-  // Rita greets after voices load
+  // Rita greets
+  const greeting = "Hello love! Welcome to Ask Lovely Rita! Ask me anything, listen to a song, or pick a level and lets play! What shall we do today?";
+  const speak = () => { ritaSpeak(greeting); updateRitaDisplay(greeting); };
   if(window.speechSynthesis.getVoices().length > 0) {
-    setTimeout(()=>ritaSpeak("Hello love! Welcome to Ask Lovely Rita! Ask me anything, listen to a song, or pick a level and lets play! What shall we do today?"), 800);
+    setTimeout(speak, 800);
   } else {
-    window.speechSynthesis.onvoiceschanged = () => {
-      setTimeout(()=>ritaSpeak("Hello love! Welcome to Ask Lovely Rita! Ask me anything, listen to a song, or pick a level and lets play! What shall we do today?"), 800);
-    };
+    window.speechSynthesis.onvoiceschanged = () => setTimeout(speak, 800);
   }
 });
 
@@ -528,13 +554,14 @@ function setTheme(t, tabEl) {
   if(tabEl) {
     activeLevel = t;
     tabEl.classList.add('active');
-    // Rita responds to level choice
     const responses = {
       youngsters: "Wonderful! Youngsters level it is! Lets have some fun love!",
       grownups:   "Lovely choice! Ready to level up love? Lets go!",
       experts:    "Ooh a brave one! Expert level love! I like your style!"
     };
-    ritaSpeak(responses[t]);
+    const msg = responses[t];
+    ritaSpeak(msg);
+    updateRitaDisplay(msg);
     localStorage.setItem('askLovelyRitaV4_level', t);
     toast('🎵 Loading games...');
     setTimeout(()=>{ window.location.href='https://alexmonteiro65.github.io/ask-lovely-rita/src/page2_tictactoe.html'; }, 1200);
@@ -578,11 +605,18 @@ function stopListening() {
   document.getElementById('mic-btn').style.opacity='1';
 }
 
+function updateRitaDisplay(text) {
+  document.getElementById('rita-response-text').textContent = text;
+}
+
 function askRita() {
-  const q=document.getElementById('rita-input').value.trim(); if(!q) return;
-  ritaSpeak("Brilliant! Ask away love! I am all ears!");
+  const q=document.getElementById('rita-input').value.trim();
+  if(!q) return;
+  const response = "What a brilliant question love! The Lads would know all about that! Keep exploring and you will find the answer!";
+  ritaSpeak(response);
+  updateRitaDisplay(response);
   document.getElementById('rita-input').value='';
-  toast('♪ Rita is thinking...');
+  toast('♪ Rita is answering...');
 }
 
 function goHome() {
@@ -591,7 +625,8 @@ function goHome() {
 }
 
 function goNext() {
-  ritaSpeak("Off we go love! Let the games begin!");
+  const msg = "Off we go love! Let the games begin!";
+  ritaSpeak(msg); updateRitaDisplay(msg);
   setTimeout(()=>{ window.location.href='https://alexmonteiro65.github.io/ask-lovely-rita/src/page2_tictactoe.html'; }, 800);
 }
 
@@ -599,7 +634,10 @@ function toggleMute() {
   muteState=!muteState;
   if(muteState) window.speechSynthesis&&window.speechSynthesis.cancel();
   document.getElementById('sound-icon').textContent=muteState?'🔇':'🔊';
-  if(!muteState) ritaSpeak("Shh! Going quiet are we love? I will be here when you are ready!");
+  if(!muteState) {
+    const msg = "Shh! Going quiet are we love? I will be here when you are ready!";
+    ritaSpeak(msg); updateRitaDisplay(msg);
+  }
   toast(muteState?'🔇 Sound off':'🔊 Sound on');
 }
 
