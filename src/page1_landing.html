@@ -417,27 +417,32 @@ body {
       <div id="playlist-dropdown">
         <div class="pl-track" onclick="playTrack(0)">
           <span class="pl-track-num">1</span>
-          <span class="pl-track-name">Lads Rap — Part 1</span>
+          <span class="pl-track-name">Beatles Rap — Part 1</span>
           <span class="pl-track-icon" id="icon-0">▶</span>
         </div>
         <div class="pl-track" onclick="playTrack(1)">
           <span class="pl-track-num">2</span>
-          <span class="pl-track-name">Lads Rap — Part 2</span>
+          <span class="pl-track-name">Beatles Rap — Part 2</span>
           <span class="pl-track-icon" id="icon-1">▶</span>
         </div>
         <div class="pl-track" onclick="playTrack(2)">
           <span class="pl-track-num">3</span>
-          <span class="pl-track-name">Lads Rap 1</span>
+          <span class="pl-track-name">Beatles Rap — Part 1 x Part 2 Mashup</span>
           <span class="pl-track-icon" id="icon-2">▶</span>
         </div>
         <div class="pl-track" onclick="playTrack(3)">
           <span class="pl-track-num">4</span>
-          <span class="pl-track-name">Lads Rap 1 — Part B</span>
+          <span class="pl-track-name">Beatles Rap 1</span>
           <span class="pl-track-icon" id="icon-3">▶</span>
         </div>
         <div class="pl-track" onclick="playTrack(4)">
           <span class="pl-track-num">5</span>
-          <span class="pl-track-name">Lads Rap 1 x Part B Mashup</span>
+          <span class="pl-track-name">Beatles Rap 1 — Part B</span>
+          <span class="pl-track-icon" id="icon-4">▶</span>
+        </div>
+        <div class="pl-track" onclick="playTrack(5)">
+          <span class="pl-track-num">6</span>
+          <span class="pl-track-name">Beatles Rap 1 x Part B Mashup</span>
           <span class="pl-track-icon" id="icon-5">▶</span>
         </div>
       </div>
@@ -565,10 +570,9 @@ const LADS = {
 const OUTFIT_MAP = { youngsters:'regular', grownups:'pepper', experts:'abbey' };
 const DYN_LABELS = { youngsters:'For Youngsters', grownups:'For Grown Ups', experts:'For Experts' };
 
-let listening=false, recognition=null, playlistOpen=false;
+let listening=false, recognition=null, playlistOpen=false, muteState=false;
 
 // Rita speech
-let muteState = localStorage.getItem('askLovelyRitaV4_mute') === '1';
 function ritaSpeak(text) {
   if(muteState || !window.speechSynthesis) return;
   window.speechSynthesis.cancel();
@@ -709,44 +713,9 @@ CONTENT SAFETY — GOLDEN RULE FOR ALL GAMES:
     document.getElementById('rita-input').value = '';
 
   } catch(err) {
-    // API indisponível no GitHub Pages — respostas inteligentes por tema
-    const q_lower = q.toLowerCase();
-    let fallback;
-
-    // Tenta resolver matematica basica
-    const mathMatch = q.replace(/what is|what'?s|calculate|solve/gi,'').trim().match(/^[\d\s\+\-\*\/\(\)\.]+$/);
-    if(mathMatch) {
-      try {
-        const result = Function('"use strict"; return (' + mathMatch[0] + ')')();
-        fallback = result + " love! Even the Smart Lad knows his numbers. Mathematics is the hidden music of the universe!";
-      } catch(e) { fallback = null; }
-    }
-
-    if(!fallback) {
-      if(q_lower.match(/\d[\s\+\-\*\/]\d/) || q_lower.includes('plus') || q_lower.includes('minus') || q_lower.includes('times') || q_lower.includes('divided')) {
-        // Tenta math em palavras
-        const expr = q_lower.replace('plus','+').replace('minus','-').replace('times','*').replace('divided by','/').replace(/what.?s|what is/g,'').trim();
-        try {
-          const result = Function('"use strict"; return (' + expr + ')')();
-          fallback = result + " love! Smart Lad would be proud. Numbers and music go hand in hand!";
-        } catch(e) { fallback = null; }
-      }
-    }
-
-    if(!fallback) {
-      if(q_lower.includes('lad') || q_lower.includes('music') || q_lower.includes('song') || q_lower.includes('beatl')) {
-        fallback = "What a brilliant musical question love! The Lads say music is the answer to everything. Keep exploring and the answer will come to you!";
-      } else if(q_lower.includes('capital') || q_lower.includes('country') || q_lower.includes('president') || q_lower.includes('who is')) {
-        fallback = "That is a great question love! The Smart Lad says knowledge is like a song — the more you practice the better it gets. Keep exploring!";
-      } else {
-        fallback = "Oh what a wonderful thing to wonder about love! The Quiet Lad always says the best questions lead to the most magical answers. Keep asking!";
-      }
-    }
-
+    const fallback = "What a wonderful question love! Keep exploring and the answer will come to you!";
     updateRitaDisplay("♪ " + fallback);
-    document.getElementById('rita-input').value = '';
-    window.speechSynthesis && window.speechSynthesis.cancel();
-    setTimeout(() => ritaSpeak(String(fallback)), 300);
+    ritaSpeak(fallback);
   }
 }
 
@@ -763,7 +732,6 @@ function goNext() {
 
 function toggleMute() {
   muteState=!muteState;
-  localStorage.setItem('askLovelyRitaV4_mute', muteState ? '1' : '0');
   if(muteState) window.speechSynthesis&&window.speechSynthesis.cancel();
   document.getElementById('sound-icon').textContent=muteState?'🔇':'🔊';
   if(!muteState) {
@@ -776,6 +744,7 @@ function toggleMute() {
 const PLAYLIST = [
   BASE+'Beatles%20Rap%20-%20Part%201.mp3',
   BASE+'Beatles%20Rap%20-%20Part%202.mp3',
+  BASE+'Beatles%20Rap%20-%20Part%201%20x%20Part%202%20(Mashup)%202.mp3',
   BASE+'Beatles%20Rap%201.mp3',
   BASE+'Beatles%20Rap%201%20part%20B.mp3',
   BASE+'Beatles%20Rap%201%20x%20Beatles%20Rap%201%20part%20B%20(Mashup).mp3'
