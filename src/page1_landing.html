@@ -566,9 +566,9 @@ const OUTFIT_MAP = { youngsters:'regular', grownups:'pepper', experts:'abbey' };
 const DYN_LABELS = { youngsters:'For Youngsters', grownups:'For Grown Ups', experts:'For Experts' };
 
 let listening=false, recognition=null, playlistOpen=false;
-let muteState = localStorage.getItem('askLovelyRitaV4_mute') === '1';
 
 // Rita speech
+let muteState = localStorage.getItem('askLovelyRitaV4_mute') === '1';
 function ritaSpeak(text) {
   if(muteState || !window.speechSynthesis) return;
   window.speechSynthesis.cancel();
