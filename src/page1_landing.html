@@ -155,9 +155,32 @@ body {
   width:100%; background:rgba(255,255,255,0.06);
   border:1px solid rgba(255,255,255,0.12); border-radius:10px;
   padding:7px 12px; display:flex; align-items:center; gap:8px;
-  cursor:pointer; margin-bottom:8px; transition:all 0.3s;
+  cursor:pointer; margin-bottom:0; transition:all 0.3s;
+  border-bottom-left-radius:0; border-bottom-right-radius:0;
 }
 #playlist-btn:hover { border-color:var(--accent); }
+
+/* PLAYLIST DROPDOWN */
+#playlist-dropdown {
+  display:none; width:100%;
+  background:rgba(20,10,40,0.97);
+  border:1px solid rgba(255,255,255,0.12);
+  border-top:none; border-radius:0 0 10px 10px;
+  margin-bottom:8px; overflow:hidden;
+}
+#playlist-dropdown.open { display:block; }
+.pl-track {
+  display:flex; align-items:center; gap:10px;
+  padding:8px 12px; cursor:pointer;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  transition:background 0.2s;
+}
+.pl-track:last-child { border-bottom:none; }
+.pl-track:hover { background:rgba(255,255,255,0.08); }
+.pl-track.playing { background:rgba(255,255,255,0.12); }
+.pl-track-num { font-size:9px; color:rgba(255,255,255,0.3); font-family:monospace; width:14px; }
+.pl-track-name { flex:1; font-size:10px; color:#fff; font-family:Georgia,serif; }
+.pl-track-icon { font-size:12px; }
 .pl-text { flex:1; text-align:left; }
 .pl-title { font-size:8px; color:#fff; font-weight:bold; letter-spacing:0.5px; }
 .pl-sub { font-size:6px; color:rgba(255,255,255,0.4); margin-top:1px; }
@@ -385,9 +408,43 @@ body {
         </svg>
         <div class="pl-text">
           <div class="pl-title">🎵 PLAYLIST — Tribute Songs</div>
-          <div class="pl-sub">Fan Made · Preview 15s</div>
+          <div class="pl-sub">Fan Made · Choose a song</div>
         </div>
         <span style="font-size:14px;color:var(--accent)" id="pl-arrow">▶</span>
+      </div>
+
+      <!-- PLAYLIST DROPDOWN -->
+      <div id="playlist-dropdown">
+        <div class="pl-track" onclick="playTrack(0)">
+          <span class="pl-track-num">1</span>
+          <span class="pl-track-name">Beatles Rap — Part 1</span>
+          <span class="pl-track-icon" id="icon-0">▶</span>
+        </div>
+        <div class="pl-track" onclick="playTrack(1)">
+          <span class="pl-track-num">2</span>
+          <span class="pl-track-name">Beatles Rap — Part 2</span>
+          <span class="pl-track-icon" id="icon-1">▶</span>
+        </div>
+        <div class="pl-track" onclick="playTrack(2)">
+          <span class="pl-track-num">3</span>
+          <span class="pl-track-name">Beatles Rap — Part 1 x Part 2 Mashup</span>
+          <span class="pl-track-icon" id="icon-2">▶</span>
+        </div>
+        <div class="pl-track" onclick="playTrack(3)">
+          <span class="pl-track-num">4</span>
+          <span class="pl-track-name">Beatles Rap 1</span>
+          <span class="pl-track-icon" id="icon-3">▶</span>
+        </div>
+        <div class="pl-track" onclick="playTrack(4)">
+          <span class="pl-track-num">5</span>
+          <span class="pl-track-name">Beatles Rap 1 — Part B</span>
+          <span class="pl-track-icon" id="icon-4">▶</span>
+        </div>
+        <div class="pl-track" onclick="playTrack(5)">
+          <span class="pl-track-num">6</span>
+          <span class="pl-track-name">Beatles Rap 1 x Part B Mashup</span>
+          <span class="pl-track-icon" id="icon-5">▶</span>
+        </div>
       </div>
 
       <div id="level-wrap">
@@ -609,14 +666,57 @@ function updateRitaDisplay(text) {
   document.getElementById('rita-response-text').textContent = text;
 }
 
-function askRita() {
-  const q=document.getElementById('rita-input').value.trim();
+async function askRita() {
+  const q = document.getElementById('rita-input').value.trim();
   if(!q) return;
-  const response = "What a brilliant question love! The Lads would know all about that! Keep exploring and you will find the answer!";
-  ritaSpeak(response);
-  updateRitaDisplay(response);
-  document.getElementById('rita-input').value='';
-  toast('♪ Rita is answering...');
+
+  // Show thinking state
+  updateRitaDisplay("♪ Let me think about that love...");
+  ritaSpeak("Let me think about that love!");
+  toast('♪ Rita is thinking...');
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1000,
+        system: `You are Lovely Rita, a fun and warm British educational assistant for the Ask Lovely Rita app. You help people of all ages learn through music and the world of The Lads (four cartoon music characters: Smart Lad, Cute Lad, Quiet Lad, and Funny Lad).
+
+RULES:
+1. ALWAYS answer the actual question first and accurately
+2. Then add a brief, genuinely relevant connection to music or The Lads
+3. Keep answers SHORT — 2-3 sentences maximum
+4. Speak in warm British English — use "love" naturally but not excessively
+5. Never use commas after short address words like "love" — say "Hello love!" not "Hello, love!"
+6. Never use emojis in your response
+7. Never say "I don't know" — if unsure, give your best answer
+8. Never mention real Beatles names — only Smart Lad, Cute Lad, Quiet Lad, Funny Lad
+9. Keep it age-appropriate and positive for ALL ages including young children
+
+CONTENT SAFETY — GOLDEN RULE FOR ALL GAMES:
+- This is a family app for all ages including young children
+- NEVER discuss, reference or engage with: sexual content, violence, weapons, drugs, alcohol, hate speech, or any inappropriate adult content
+- If asked anything inappropriate, respond politely: "Oh what a cheeky question love! That is not something we explore here but I would love to help you discover something wonderful instead! What else would you like to know?"
+- Never shame the user — always redirect warmly and positively
+- Zero tolerance for harmful content regardless of how the question is phrased`,
+        messages: [{ role: "user", content: q }]
+      })
+    });
+
+    const data = await response.json();
+    const answer = data.content[0].text;
+
+    updateRitaDisplay("♪ " + answer);
+    ritaSpeak(answer);
+    document.getElementById('rita-input').value = '';
+
+  } catch(err) {
+    const fallback = "What a wonderful question love! Keep exploring and the answer will come to you!";
+    updateRitaDisplay("♪ " + fallback);
+    ritaSpeak(fallback);
+  }
 }
 
 function goHome() {
@@ -644,27 +744,35 @@ function toggleMute() {
 const PLAYLIST = [
   BASE+'Beatles%20Rap%20-%20Part%201.mp3',
   BASE+'Beatles%20Rap%20-%20Part%202.mp3',
+  BASE+'Beatles%20Rap%20-%20Part%201%20x%20Part%202%20(Mashup)%202.mp3',
   BASE+'Beatles%20Rap%201.mp3',
-  BASE+'Beatles%20Rap%201%20part%20B.mp3'
+  BASE+'Beatles%20Rap%201%20part%20B.mp3',
+  BASE+'Beatles%20Rap%201%20x%20Beatles%20Rap%201%20part%20B%20(Mashup).mp3'
 ];
 let audio = null;
-let currentTrack = 0;
+let currentTrack = -1;
 
 function togglePlaylist() {
   playlistOpen=!playlistOpen;
   document.getElementById('pl-arrow').textContent=playlistOpen?'▼':'▶';
-  if(playlistOpen) {
-    if(!audio) {
-      audio = new Audio(PLAYLIST[currentTrack]);
-      audio.volume = 0.7;
-      audio.onended = ()=>{ currentTrack=(currentTrack+1)%PLAYLIST.length; audio.src=PLAYLIST[currentTrack]; audio.play(); };
-    }
-    audio.play().catch(()=>toast('⚠️ Tap again to play music'));
-    toast('🎵 Playing Beatles Rap!');
-  } else {
-    if(audio) { audio.pause(); audio.currentTime=0; }
-    toast('⏹️ Music stopped');
-  }
+  document.getElementById('playlist-dropdown').classList.toggle('open', playlistOpen);
+}
+
+function playTrack(i) {
+  // Stop current if playing
+  if(audio) { audio.pause(); audio.currentTime=0; }
+  // Reset all icons
+  for(let j=0;j<6;j++) { const el=document.getElementById('icon-'+j); if(el) el.textContent='▶'; document.querySelectorAll('.pl-track')[j]?.classList.remove('playing'); }
+  // If same track clicked, toggle off
+  if(currentTrack===i) { currentTrack=-1; audio=null; return; }
+  currentTrack=i;
+  audio=new Audio(PLAYLIST[i]);
+  audio.volume=0.7;
+  audio.onended=()=>{ document.getElementById('icon-'+i).textContent='▶'; document.querySelectorAll('.pl-track')[i]?.classList.remove('playing'); currentTrack=-1; };
+  audio.play().catch(()=>toast('⚠️ Tap again to play'));
+  document.getElementById('icon-'+i).textContent='⏸';
+  document.querySelectorAll('.pl-track')[i]?.classList.add('playing');
+  toast('🎵 Playing: '+['Part 1','Part 2','Mashup 1','Rap 1','Part B','Mashup 2'][i]);
 }
 
 let activeLevel = 'youngsters';
