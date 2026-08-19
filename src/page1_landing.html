@@ -572,7 +572,8 @@ const DYN_LABELS = { youngsters:'For Youngsters', grownups:'For Grown Ups', expe
 
 let listening=false, recognition=null, playlistOpen=false, muteState=false;
 
-// Rita speech
+// Rita speech — lê mute global do localStorage
+let muteState = localStorage.getItem('askLovelyRitaV4_mute') === '1';
 function ritaSpeak(text) {
   if(muteState || !window.speechSynthesis) return;
   window.speechSynthesis.cancel();
@@ -713,9 +714,20 @@ CONTENT SAFETY — GOLDEN RULE FOR ALL GAMES:
     document.getElementById('rita-input').value = '';
 
   } catch(err) {
-    const fallback = "What a wonderful question love! Keep exploring and the answer will come to you!";
+    // API indisponível no GitHub Pages — usar respostas inteligentes por tema
+    const q_lower = q.toLowerCase();
+    let fallback;
+    if(q_lower.includes('beatl') || q_lower.includes('lad') || q_lower.includes('music') || q_lower.includes('song')) {
+      fallback = "What a brilliant musical question love! The Lads say music is the answer to everything. Keep exploring and you will find all the answers!";
+    } else if(q_lower.includes('what is') || q_lower.includes('who is') || q_lower.includes('how')) {
+      fallback = "That is a wonderful question love! The Smart Lad would say: keep asking and keep learning. That is how great minds are made!";
+    } else {
+      fallback = "Oh what a lovely thing to wonder about love! The Quiet Lad always says the best questions have the most magical answers. Keep exploring!";
+    }
     updateRitaDisplay("♪ " + fallback);
-    ritaSpeak(fallback);
+    document.getElementById('rita-input').value = '';
+    window.speechSynthesis && window.speechSynthesis.cancel();
+    setTimeout(() => ritaSpeak(fallback), 300);
   }
 }
 
@@ -732,6 +744,7 @@ function goNext() {
 
 function toggleMute() {
   muteState=!muteState;
+  localStorage.setItem('askLovelyRitaV4_mute', muteState ? '1' : '0');
   if(muteState) window.speechSynthesis&&window.speechSynthesis.cancel();
   document.getElementById('sound-icon').textContent=muteState?'🔇':'🔊';
   if(!muteState) {
