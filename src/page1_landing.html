@@ -564,7 +564,7 @@ function setTheme(t, tabEl) {
     updateRitaDisplay(msg);
     localStorage.setItem('askLovelyRitaV4_level', t);
     toast('🎵 Loading games...');
-    setTimeout(()=>{ window.location.href='https://alexmonteiro65.github.io/ask-lovely-rita/src/page2_tictactoe.html'; }, 1200);
+    setTimeout(()=>{ window.location.href='https://alexmonteiro65.github.io/ask-lovely-rita/src/page2_tictactoe.html?level='+t; }, 1200);
   } else {
     // init — set active tab
     activeLevel = t;
@@ -627,7 +627,7 @@ function goHome() {
 function goNext() {
   const msg = "Off we go love! Let the games begin!";
   ritaSpeak(msg); updateRitaDisplay(msg);
-  setTimeout(()=>{ window.location.href='https://alexmonteiro65.github.io/ask-lovely-rita/src/page2_tictactoe.html'; }, 800);
+  setTimeout(()=>{ window.location.href='https://alexmonteiro65.github.io/ask-lovely-rita/src/page2_tictactoe.html?level='+activeLevel; }, 800);
 }
 
 function toggleMute() {

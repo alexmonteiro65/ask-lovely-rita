@@ -236,7 +236,17 @@ const COMMENTS = {
   draw:     ["A draw! As The Beatles would say — Come Together!", "Neither wins! We Can Work It Out — play again!", "A tie! Now that is what Rita calls harmony, love!"]
 };
 
-let currentTheme = localStorage.getItem("askLovelyRitaV4_level") || localStorage.getItem("askLovelyRitaV4_theme") || "youngsters";
+// Read level - check URL param first, then localStorage
+var urlParams = new URLSearchParams(window.location.search);
+var urlLevel = urlParams.get('level');
+if(urlLevel) {
+  localStorage.setItem('askLovelyRitaV4_level', urlLevel);
+  localStorage.setItem('askLovelyRitaV4_theme', urlLevel);
+}
+let currentTheme = urlLevel || localStorage.getItem("askLovelyRitaV4_level") || localStorage.getItem("askLovelyRitaV4_theme") || "youngsters";
+// Keep both keys in sync
+localStorage.setItem('askLovelyRitaV4_level', currentTheme);
+localStorage.setItem('askLovelyRitaV4_theme', currentTheme);
 let selectedLad = 0;
 let board = Array(9).fill(null);
 let gameOver = false;
