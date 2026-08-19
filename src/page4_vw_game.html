@@ -395,6 +395,10 @@
 
       <!-- STATUS -->
       <div id="status-bar">
+        <div class="status-card">
+          <div class="status-label">Educational BeatCoins</div>
+          <div class="status-value" id="bc-val">80</div>
+        </div>
         <div class="status-card" id="timer-card">
           <div class="status-label">Time Left</div>
           <div class="status-value" id="timer-val">30</div>
@@ -428,7 +432,8 @@
           <img id="rita-img"
             src="https://alexmonteiro65.github.io/ask-lovely-rita/src/rita_beatcorps_clean.png"
             alt="Lovely Rita"
-            onerror="this.style.display='none'"/>
+            onerror="this.style.display='none'; document.getElementById('rita-fallback').style.display='block'"/>
+          <div id="rita-fallback" style="display:none;font-size:52px;line-height:1;text-align:center;">🎤</div>
           <div id="flag-wrap">
             <div id="flag-pole"></div>
             <canvas id="flag-canvas" width="44" height="34"></canvas>
@@ -491,13 +496,8 @@ const LEVEL_CFG = {
 // Rita speech — no commas on short phrases
 const RITA_INTRO = {
   youngsters: "Welcome love! Choose your level then click Start Matching to play! Take your time darling. No rush at all!",
-  grownups:   "Welcome love! Choose your level then click Start Matching to play! You have got 30 seconds love. Think fast!",
-  experts:    "Welcome love! Choose your level then click Start Matching to play! Only 15 seconds on the clock. Are you ready?",
-};
-const RITA_GO = {
-  youngsters: "Go! Match each Lad with their own car love! Drag them to the right spot!",
-  grownups:   "Go! Match each Lad with their car! The clock is ticking love!",
-  experts:    "Go go go! Match each Lad with their car as fast as you can love!",
+  grownups:   "Welcome love! Choose your level then click Start Matching to play! You have 30 seconds love!",
+  experts:    "Welcome love! Choose your level then click Start Matching to play! Only 15 seconds on the clock love!",
 };
 const RITA_INTRO_DISPLAY = {
   youngsters: "Hello love! 🚗 Each Lad has his own Beetle. Drag each car to the right garage! Take your time darling — no rush at all!",
@@ -593,10 +593,10 @@ function applyLevel(lvl) {
   const cfg = LEVEL_CFG[lvl];
   document.body.className = `theme-${lvl}`;
   document.getElementById('rita-text-bottom').textContent = RITA_INTRO_DISPLAY[lvl];
-  const bcEl = document.getElementById('bc-val'); if(bcEl) bcEl.textContent = S.beatcoins;
+  document.getElementById('bc-val').textContent = S.beatcoins;
 
   // Rita image — use Beat Corps (abbey) image always for Rita
-  document.getElementById('rita-img').src = 'https://alexmonteiro65.github.io/ask-lovely-rita/src/rita_beatcorps_clean.png';
+  document.getElementById('rita-img').src = BASE + 'https://alexmonteiro65.github.io/ask-lovely-rita/src/rita_beatcorps_clean.png';
 
   // Timer
   const tc = document.getElementById('timer-card');
@@ -635,10 +635,6 @@ function buildGarages(suffix) {
   });
 }
 
-// ════════════════════════════════
-//  BUILD CARS
-// ════════════════════════════════
-
 function buildCars() {
   const area = document.getElementById('cars-area');
   area.innerHTML = '';
@@ -650,9 +646,9 @@ function buildCars() {
     el.dataset.key = lad.key;
     el.id = `car-${lad.key}`;
     el.draggable = true;
-    const ladImg = LAD_IMG[lad.key][cfg.suffix];
-    el.innerHTML = `<img src="${BASE}${ladImg}" alt="${lad.name}"
-      onerror="this.parentElement.style.cssText='background:rgba(255,255,255,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:28px';this.parentElement.innerHTML='${lad.emoji}'"/>`;
+    const ladImg = `${BASE}${LAD_IMG[lad.key][cfg.suffix]}`;
+    el.innerHTML = `<img src="${ladImg}" alt="${lad.name}"
+      onerror="this.parentElement.innerHTML='${lad.emoji}'"/>`;
     el.addEventListener('dragstart', onDragStart);
     el.addEventListener('dragend',   onDragEnd);
     el.addEventListener('pointerdown', onPointerDown);
@@ -766,8 +762,10 @@ function handlePlace(carKey, garageKey) {
 
 function startGame() {
   S.gameActive = true;
+  const goMsg = {youngsters:"Go! Match each Lad with their own car love!",grownups:"Go! Match each Lad with their car! The clock is ticking love!",experts:"Go go go! Match them fast love!"};
+  speak(goMsg[S.level]);
+  document.getElementById('rita-text-bottom').textContent = goMsg[S.level];
   S.placed = {}; S.correct = 0;
-  ritaSpeakText(RITA_GO[S.level]);
   document.getElementById('play-btn').style.display = 'none';
   document.getElementById('result-panel').classList.remove('show');
   document.getElementById('next-btn').style.display = 'none';
@@ -826,7 +824,7 @@ function finishGame(reason) {
   }
 
   S.beatcoins += earned;
-  const bcEl = document.getElementById('bc-val'); if(bcEl) bcEl.textContent = S.beatcoins;
+  document.getElementById('bc-val').textContent = S.beatcoins;
   saveStorage();
   panel.classList.add('show');
   document.getElementById('next-btn').style.display = 'block';
@@ -914,11 +912,6 @@ function speak(text) {
   img.classList.add('speaking');
   u.onend = () => img.classList.remove('speaking');
   window.speechSynthesis.speak(u);
-}
-function ritaSpeakText(text) {
-  const el = document.getElementById('rita-text-bottom');
-  if(el) el.textContent = text;
-  speak(text);
 }
 function ritaSpeak() { speak(RITA_INTRO[S.level]); }
 if (window.speechSynthesis) {
