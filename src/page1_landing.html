@@ -417,32 +417,27 @@ body {
       <div id="playlist-dropdown">
         <div class="pl-track" onclick="playTrack(0)">
           <span class="pl-track-num">1</span>
-          <span class="pl-track-name">Beatles Rap — Part 1</span>
+          <span class="pl-track-name">Lads Rap — Part 1</span>
           <span class="pl-track-icon" id="icon-0">▶</span>
         </div>
         <div class="pl-track" onclick="playTrack(1)">
           <span class="pl-track-num">2</span>
-          <span class="pl-track-name">Beatles Rap — Part 2</span>
+          <span class="pl-track-name">Lads Rap — Part 2</span>
           <span class="pl-track-icon" id="icon-1">▶</span>
         </div>
         <div class="pl-track" onclick="playTrack(2)">
           <span class="pl-track-num">3</span>
-          <span class="pl-track-name">Beatles Rap — Part 1 x Part 2 Mashup</span>
+          <span class="pl-track-name">Lads Rap 1</span>
           <span class="pl-track-icon" id="icon-2">▶</span>
         </div>
         <div class="pl-track" onclick="playTrack(3)">
           <span class="pl-track-num">4</span>
-          <span class="pl-track-name">Beatles Rap 1</span>
+          <span class="pl-track-name">Lads Rap 1 — Part B</span>
           <span class="pl-track-icon" id="icon-3">▶</span>
         </div>
         <div class="pl-track" onclick="playTrack(4)">
           <span class="pl-track-num">5</span>
-          <span class="pl-track-name">Beatles Rap 1 — Part B</span>
-          <span class="pl-track-icon" id="icon-4">▶</span>
-        </div>
-        <div class="pl-track" onclick="playTrack(5)">
-          <span class="pl-track-num">6</span>
-          <span class="pl-track-name">Beatles Rap 1 x Part B Mashup</span>
+          <span class="pl-track-name">Lads Rap 1 x Part B Mashup</span>
           <span class="pl-track-icon" id="icon-5">▶</span>
         </div>
       </div>
@@ -678,7 +673,7 @@ async function askRita() {
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "anthropic-dangerous-direct-browser-access": "true" },
       body: JSON.stringify({
         model: "claude-sonnet-4-6",
         max_tokens: 1000,
@@ -713,9 +708,47 @@ CONTENT SAFETY — GOLDEN RULE FOR ALL GAMES:
     document.getElementById('rita-input').value = '';
 
   } catch(err) {
-    const fallback = "What a wonderful question love! Keep exploring and the answer will come to you!";
-    updateRitaDisplay("♪ " + fallback);
-    ritaSpeak(fallback);
+    // API não disponível — responder inteligentemente por tema
+    const q2 = q.toLowerCase();
+    let ans = "";
+
+    // Matemática básica
+    try {
+      const expr = q2.replace(/what['’]?s|what is|calculate|=\?/gi,"")
+                     .replace(/plus/gi,"+").replace(/minus/gi,"-")
+                     .replace(/times|multiplied by/gi,"*").replace(/divided by/gi,"/")
+                     .trim();
+      if(/^[\d\s\+\-\*\/\(\)\.]+$/.test(expr)) {
+        const res = Function('"use strict";return('+expr+')')();
+        if(!isNaN(res)) ans = res+" love! Smart Lad loves numbers. Even music is made of mathematics!";
+      }
+    } catch(e){}
+
+    if(!ans) {
+      if(/who is god|what is god/i.test(q2)) {
+        ans = "That is one of life’s greatest questions love! Philosophers and poets have explored it for centuries. The Quiet Lad says the answer may be found in the music that moves your soul!";
+      } else if(/capital of/i.test(q2)) {
+        const caps = {france:"Paris",england:"London",brazil:"Brasilia",usa:"Washington DC",italy:"Rome",spain:"Madrid",portugal:"Lisbon",germany:"Berlin",japan:"Tokyo",china:"Beijing"};
+        const match = Object.keys(caps).find(k=>q2.includes(k));
+        if(match) ans = "The capital of "+match.charAt(0).toUpperCase()+match.slice(1)+" is "+caps[match]+" love! Smart Lad would be proud of that answer!";
+      } else if(/\d/.test(q2) && /[\+\-\*\/]/.test(q2)) {
+        try {
+          const res2 = Function('"use strict";return('+q2.replace(/[^0-9\+\-\*\/\(\)\. ]/g,"")+')' )();
+          if(!isNaN(res2)) ans = res2+" love! Numbers are the secret language of the universe!";
+        } catch(e){}
+      }
+    }
+
+    if(!ans) {
+      if(/lad|music|song|beatl/i.test(q2)) ans = "What a musical question love! The Lads say every answer can be found in a great song. Keep listening and learning!";
+      else if(/who|what|when|where|why|how/i.test(q2)) ans = "What a brilliant question love! The Smart Lad says: keep asking and keep learning. That is how great minds are made!";
+      else ans = "Oh what a lovely thing to wonder about love! The Quiet Lad always says the best questions lead to the most magical answers!";
+    }
+
+    updateRitaDisplay("♪ " + ans);
+    document.getElementById('rita-input').value = '';
+    window.speechSynthesis && window.speechSynthesis.cancel();
+    setTimeout(() => ritaSpeak(ans), 400);
   }
 }
 
@@ -744,7 +777,6 @@ function toggleMute() {
 const PLAYLIST = [
   BASE+'Beatles%20Rap%20-%20Part%201.mp3',
   BASE+'Beatles%20Rap%20-%20Part%202.mp3',
-  BASE+'Beatles%20Rap%20-%20Part%201%20x%20Part%202%20(Mashup)%202.mp3',
   BASE+'Beatles%20Rap%201.mp3',
   BASE+'Beatles%20Rap%201%20part%20B.mp3',
   BASE+'Beatles%20Rap%201%20x%20Beatles%20Rap%201%20part%20B%20(Mashup).mp3'
