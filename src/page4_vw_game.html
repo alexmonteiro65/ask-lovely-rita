@@ -764,6 +764,12 @@ function handlePlace(carKey, garageKey) {
 //  GAME FLOW
 // ════════════════════════════════
 
+function ritaSpeakText(text) {
+  const el = document.getElementById('rita-text-bottom');
+  if(el) el.textContent = text;
+  speak(text);
+}
+
 function startGame() {
   S.gameActive = true;
   S.placed = {}; S.correct = 0;
@@ -914,11 +920,6 @@ function speak(text) {
   img.classList.add('speaking');
   u.onend = () => img.classList.remove('speaking');
   window.speechSynthesis.speak(u);
-}
-function ritaSpeakText(text) {
-  const el = document.getElementById('rita-text-bottom');
-  if(el) el.textContent = text;
-  speak(text);
 }
 function ritaSpeak() { speak(RITA_INTRO[S.level]); }
 if (window.speechSynthesis) {
