@@ -382,8 +382,8 @@
 
       <!-- HEADER -->
       <div id="vw-header">
-        <h1>🚗 VW Beetle Match</h1>
-        <p>Drag each Beetle to its Lad's garage!</p>
+        <h1>VW Beetle Match</h1>
+        <p>Match each Lad with their own car!</p>
       </div>
 
       <!-- LEVEL TABS -->
@@ -395,10 +395,6 @@
 
       <!-- STATUS -->
       <div id="status-bar">
-        <div class="status-card">
-          <div class="status-label">Educational BeatCoins</div>
-          <div class="status-value" id="bc-val">80</div>
-        </div>
         <div class="status-card" id="timer-card">
           <div class="status-label">Time Left</div>
           <div class="status-value" id="timer-val">30</div>
@@ -409,12 +405,12 @@
       <div id="garages"></div>
 
       <!-- CARS -->
-      <div id="cars-label">Drag a Beetle to the right garage!</div>
+      <div id="cars-label">Drag each Lad to their own car!</div>
       <div id="cars-area"></div>
 
       <!-- ACTION BTNS -->
       <div id="action-btns">
-        <button class="action-btn" id="play-btn" onclick="startGame()">🚗 Start Matching!</button>
+        <button class="action-btn" id="play-btn" onclick="startGame()">Start Matching!</button>
         <button class="action-btn" id="next-btn" onclick="nextGame()">Continue to Question ♪</button>
       </div>
 
@@ -432,8 +428,7 @@
           <img id="rita-img"
             src="https://alexmonteiro65.github.io/ask-lovely-rita/src/rita_beatcorps_clean.png"
             alt="Lovely Rita"
-            onerror="this.style.display='none'; document.getElementById('rita-fallback').style.display='block'"/>
-          <div id="rita-fallback" style="display:none;font-size:52px;line-height:1;text-align:center;">🎤</div>
+            onerror="this.style.display='none'"/>
           <div id="flag-wrap">
             <div id="flag-pole"></div>
             <canvas id="flag-canvas" width="44" height="34"></canvas>
@@ -495,9 +490,14 @@ const LEVEL_CFG = {
 
 // Rita speech — no commas on short phrases
 const RITA_INTRO = {
-  youngsters: "Hello love! Welcome to the VW Beetle Match! Each Lad has his very own Beetle. Drag each car to the right garage and park them all correctly! Take your time darling. No rush at all!",
-  grownups:   "Hello there! Time to match the Beetles! You have got 30 seconds to drag each VW to the right Lad's garage. Think fast and think smart! John would be proud!",
-  experts:    "Right then! Only 15 seconds on the clock! Match all four Beetles to their Lads as fast as you can. One wrong move and the clock keeps ticking. Go go go!",
+  youngsters: "Welcome love! Choose your level then click Start Matching to play! Take your time darling. No rush at all!",
+  grownups:   "Welcome love! Choose your level then click Start Matching to play! You have got 30 seconds love. Think fast!",
+  experts:    "Welcome love! Choose your level then click Start Matching to play! Only 15 seconds on the clock. Are you ready?",
+};
+const RITA_GO = {
+  youngsters: "Go! Match each Lad with their own car love! Drag them to the right spot!",
+  grownups:   "Go! Match each Lad with their car! The clock is ticking love!",
+  experts:    "Go go go! Match each Lad with their car as fast as you can love!",
 };
 const RITA_INTRO_DISPLAY = {
   youngsters: "Hello love! 🚗 Each Lad has his own Beetle. Drag each car to the right garage! Take your time darling — no rush at all!",
@@ -619,11 +619,10 @@ function buildGarages(suffix) {
     const el = document.createElement('div');
     el.className = 'garage';
     el.dataset.key = lad.key;
-    const imgFile = LAD_IMG[lad.key][suffix];
     el.innerHTML = `
       <div class="garage-lad">
-        <img src="${BASE}${imgFile}" alt="${lad.name}"
-          onerror="this.style.display='none';this.parentElement.textContent='${lad.emoji}'"/>
+        <img src="${lad.vw}" alt="${lad.name} VW"
+          onerror="this.style.display='none';this.parentElement.textContent='🚗'"/>
       </div>
       <div class="garage-lad-name">${lad.name}</div>
       <div class="garage-slot" id="slot-${lad.key}"></div>
@@ -643,6 +642,7 @@ function buildGarages(suffix) {
 function buildCars() {
   const area = document.getElementById('cars-area');
   area.innerHTML = '';
+  const cfg = LEVEL_CFG[S.level];
   const shuffled = [...LADS].sort(() => Math.random() - .5);
   shuffled.forEach(lad => {
     const el = document.createElement('div');
@@ -650,8 +650,9 @@ function buildCars() {
     el.dataset.key = lad.key;
     el.id = `car-${lad.key}`;
     el.draggable = true;
-    el.innerHTML = `<img src="${BASE}${lad.vw}" alt="${lad.name} VW"
-      onerror="this.parentElement.style.cssText='background:rgba(255,255,255,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:28px';this.parentElement.innerHTML='🚗'"/>`;
+    const ladImg = LAD_IMG[lad.key][cfg.suffix];
+    el.innerHTML = `<img src="${BASE}${ladImg}" alt="${lad.name}"
+      onerror="this.parentElement.style.cssText='background:rgba(255,255,255,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:28px';this.parentElement.innerHTML='${lad.emoji}'"/>`;
     el.addEventListener('dragstart', onDragStart);
     el.addEventListener('dragend',   onDragEnd);
     el.addEventListener('pointerdown', onPointerDown);
@@ -766,6 +767,7 @@ function handlePlace(carKey, garageKey) {
 function startGame() {
   S.gameActive = true;
   S.placed = {}; S.correct = 0;
+  ritaSpeakText(RITA_GO[S.level]);
   document.getElementById('play-btn').style.display = 'none';
   document.getElementById('result-panel').classList.remove('show');
   document.getElementById('next-btn').style.display = 'none';
@@ -912,6 +914,11 @@ function speak(text) {
   img.classList.add('speaking');
   u.onend = () => img.classList.remove('speaking');
   window.speechSynthesis.speak(u);
+}
+function ritaSpeakText(text) {
+  const el = document.getElementById('rita-text-bottom');
+  if(el) el.textContent = text;
+  speak(text);
 }
 function ritaSpeak() { speak(RITA_INTRO[S.level]); }
 if (window.speechSynthesis) {
