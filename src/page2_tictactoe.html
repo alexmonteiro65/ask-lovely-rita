@@ -102,24 +102,33 @@ body { background:#0a0a0a; display:flex; flex-direction:column; align-items:cent
       <span id="rita-greet-text">Wonderful! Now pick your player, love! Who will join you on this musical adventure?</span>
     </div>
     <div id="lad-select-title">Choose Your Player</div>
-    <div id="lad-select-sub">Pick your Fab Four companion to play!</div>
+    <div id="lad-select-sub">Pick your Lad companion to play!</div>
+
+    <!-- LEADERBOARD GLOBAL -->
+    <div id="lad-leaderboard">
+      <div id="leaderboard-title">🏆 Lads Global Leaderboard</div>
+      <div id="lb-rows">
+        <!-- preenchido por JS -->
+        <div style="text-align:center;font-size:9px;color:rgba(255,255,255,.3)">Loading scores...</div>
+      </div>
+    </div>
     <div id="lad-grid">
-      <div class="lad-card" onclick="chooseLad(0)">
+      <div class="lad-card" onclick="chooseLad(0)"><div class="pick-me-bubble">Pick me love! Together we shall be brilliant!</div>
         <img id="lad-card-0" alt="Smart">
         <div class="lad-card-name">The Smart One</div>
-        <div class="lad-card-desc">Takes you to Strawberry Fields forever!</div>
+        <div class="lad-card-desc">Master of music and mystery!</div>
       </div>
-      <div class="lad-card" onclick="chooseLad(1)">
+      <div class="lad-card" onclick="chooseLad(1)"><div class="pick-me-bubble">Choose me! I promise we will shine together!</div>
         <img id="lad-card-1" alt="Cute">
         <div class="lad-card-name">The Cute One</div>
         <div class="lad-card-desc">Walks down Penny Lane together with you!</div>
       </div>
-      <div class="lad-card" onclick="chooseLad(2)">
+      <div class="lad-card" onclick="chooseLad(2)"><div class="pick-me-bubble">I may be quiet but I play to win! Pick me please!</div>
         <img id="lad-card-2" alt="Quiet">
         <div class="lad-card-name">The Quiet One</div>
         <div class="lad-card-desc">Finds your inner peace. Here comes the sun.</div>
       </div>
-      <div class="lad-card" onclick="chooseLad(3)">
+      <div class="lad-card" onclick="chooseLad(3)"><div class="pick-me-bubble">Oi! Pick me! I am way more fun than the others!</div>
         <img id="lad-card-3" alt="Funny">
         <div class="lad-card-name">The Funny One</div>
         <div class="lad-card-desc">Shares the Octopus Garden with you!</div>
@@ -432,6 +441,97 @@ if(window.speechSynthesis){window.speechSynthesis.getVoices();window.speechSynth
 function toggleMute(){muted=!muted;if(muted)window.speechSynthesis&&window.speechSynthesis.cancel();document.getElementById("mute-icon").textContent=muted?"🔇":"🔊";}
 
 init();
+// ════════════════════════════════
+//  GLOBAL LEADERBOARD (GitHub JSON)
+// ════════════════════════════════
+
+const LB_URL  = 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/leaderboard.json';
+const LB_API  = 'https://api.github.com/repos/alexmonteiro65/ask-lovely-rita/contents/src/leaderboard.json';
+
+const LAD_META = [
+  { key:'smart', name:'Smart Lad', img: IMG_BASE + 'lad-smart-regular.png', color:'#a78bfa',
+    pick: 'Pick me love! Together we shall be brilliant!' },
+  { key:'cute',  name:'Cute Lad',  img: IMG_BASE + 'lad-cute-regular.png',  color:'#f472b6',
+    pick: 'Choose me! I promise we will shine together!' },
+  { key:'quiet', name:'Quiet Lad', img: IMG_BASE + 'lad-quiet-regular.png', color:'#34d399',
+    pick: 'I may be quiet but I play to win! Pick me!' },
+  { key:'funny', name:'Funny Lad', img: IMG_BASE + 'lad-funny-regular.png', color:'#fb923c',
+    pick: 'Oi! Pick me! I am way more fun than the others!' },
+];
+
+let lbData = { smart:0, cute:0, quiet:0, funny:0 };
+let lbSha  = null;
+
+async function loadLeaderboard() {
+  // 1. Tentar carregar do GitHub (dados globais)
+  try {
+    const r = await fetch(LB_URL + '?t=' + Date.now());
+    if (r.ok) {
+      const remote = await r.json();
+      // Merge com dados locais (soma)
+      const local = JSON.parse(localStorage.getItem('askLovelyRitaV4_lb') || '{}');
+      lbData = {
+        smart: Math.max(remote.smart||0, local.smart||0),
+        cute:  Math.max(remote.cute||0,  local.cute||0),
+        quiet: Math.max(remote.quiet||0, local.quiet||0),
+        funny: Math.max(remote.funny||0, local.funny||0),
+      };
+    }
+  } catch(e) {
+    // Fallback para localStorage
+    try {
+      const local = JSON.parse(localStorage.getItem('askLovelyRitaV4_lb') || '{}');
+      if (Object.keys(local).length > 0) lbData = local;
+    } catch(e2) {}
+  }
+  renderLeaderboard();
+}
+
+function renderLeaderboard() {
+  const rows = document.getElementById('lb-rows');
+  if (!rows) return;
+
+  // Ordenar por pontos
+  const sorted = [...LAD_META].sort((a,b) => (lbData[b.key]||0) - (lbData[a.key]||0));
+  const maxPts = Math.max(...sorted.map(l => lbData[l.key]||0), 1);
+  const medals = ['🥇','🥈','🥉','4️⃣'];
+
+  // Marcar último lugar no card para animação
+  document.querySelectorAll('.lad-card').forEach(c => c.classList.remove('last-place'));
+  const lastKey = sorted[3].key;
+  const ladKeys = ['smart','cute','quiet','funny'];
+  const lastIdx = ladKeys.indexOf(lastKey);
+  const lastCard = document.querySelectorAll('.lad-card')[lastIdx];
+  if (lastCard) lastCard.classList.add('last-place');
+
+  rows.innerHTML = sorted.map((lad, i) => {
+    const pts = lbData[lad.key] || 0;
+    const pct = Math.max(4, Math.round((pts / maxPts) * 100));
+    return `
+      <div class="lb-row">
+        <div class="lb-rank">${medals[i]}</div>
+        <img class="lb-avatar" src="${lad.img}" alt="${lad.name}">
+        <div class="lb-info">
+          <div class="lb-name">${lad.name}</div>
+          <div class="lb-bar-wrap">
+            <div class="lb-bar" style="width:${pct}%;background:linear-gradient(90deg,${lad.color},${lad.color}88)"></div>
+          </div>
+        </div>
+        <div class="lb-pts">${pts.toLocaleString()}</div>
+      </div>`;
+  }).join('');
+}
+
+function updateLeaderboard(ladKey, points) {
+  // Acumular localmente e guardar no localStorage
+  lbData[ladKey] = (lbData[ladKey] || 0) + points;
+  try { localStorage.setItem('askLovelyRitaV4_lb', JSON.stringify(lbData)); } catch(e) {}
+  renderLeaderboard();
+}
+
+// Carregar leaderboard ao iniciar
+loadLeaderboard();
+
 </script>
 </body>
 </html>
