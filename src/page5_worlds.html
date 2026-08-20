@@ -732,7 +732,7 @@
         </div>
 
         <!-- OCEAN -->
-        <div class="world-card ocean" onclick="openWorld('ocean')">
+        <div class="world-card ocean" onclick="goDirectToWorld('ocean')">
           <div class="world-scene scene-ocean">
             <!-- Bubbles -->
             <div class="bubble" style="width:6px;height:6px;left:20%;bottom:10px;--bd:2.5s;animation-delay:0s"></div>
@@ -771,7 +771,7 @@
         </div>
 
         <!-- ACROSS THE UNIVERSE -->
-        <div class="world-card space" onclick="openWorld('space')">
+        <div class="world-card space" onclick="goDirectToWorld('space')">
           <div class="world-scene scene-space">
             <!-- Shooting stars -->
             <div class="shooting-star" style="top:20px;left:10px;--ss:3s;animation-delay:0s"></div>
@@ -802,7 +802,7 @@
         </div>
 
         <!-- THE INNER LIGHT -->
-        <div class="world-card india" onclick="openWorld('india')">
+        <div class="world-card india" onclick="goDirectToWorld('india')">
           <div class="world-scene scene-india">
             <!-- Sun -->
             <div class="sun-inner"></div>
@@ -835,7 +835,7 @@
         </div>
 
         <!-- PENNY LANE -->
-        <div class="world-card city" onclick="openWorld('city')">
+        <div class="world-card city" onclick="goDirectToWorld('city')">
           <div class="world-scene scene-city">
             <!-- Sun -->
             <div class="sun-city">☀️</div>
@@ -1051,6 +1051,18 @@ function buildStars() {
 // ════════════════════════════════
 //  OPEN WORLD MODAL
 // ════════════════════════════════
+
+function goDirectToWorld(key) {
+  const level = S.level || localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
+  const pageMap = {
+    ocean: 'page6_octopus.html',
+    space: 'page7_space.html',
+    india: 'page8_india.html',
+    city:  'page9_city.html'
+  };
+  const dest = pageMap[key];
+  if (dest) window.location.href = dest + '?level=' + level;
+}
 
 function openWorld(key) {
   const w = WORLDS[key];
