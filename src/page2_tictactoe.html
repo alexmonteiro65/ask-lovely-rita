@@ -270,6 +270,12 @@ function init() {
 
 function chooseLad(i) {
   selectedLad = i;
+  // Salvar lad selecionado no localStorage para outras páginas
+  var ladKeys = ['smart','cute','quiet','funny'];
+  var d = JSON.parse(localStorage.getItem('askLovelyRitaV4') || '{}');
+  d.selectedLad = ladKeys[i];
+  d.theme = currentTheme;
+  localStorage.setItem('askLovelyRitaV4', JSON.stringify(d));
   var lads = LADS[currentTheme];
   document.getElementById("selected-lad-img").src = lads[i];
   document.getElementById("selected-lad-name").textContent = LAD_NAMES[i];
