@@ -254,17 +254,12 @@
     margin-bottom: 8px;
   }
   #lad-avatar {
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    border: 2px solid var(--accent);
-    box-shadow: 0 0 9px var(--glow);
-    background: rgba(255,255,255,.1);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-    overflow: hidden;
+    width: 64px; height: 80px;
     flex-shrink: 0;
+    display: flex; align-items: flex-end; justify-content: center;
+    overflow: visible;
   }
-  #lad-avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+  #lad-avatar img { width:100%; height:100%; object-fit:contain; border-radius:0; }
   #lad-text { flex:1; }
   #lad-name { font-size: 12px; font-weight: 700; color: var(--accent); }
   #lad-instr { font-size: 13px; color: #e0e0ff; margin-top: 1px; font-weight: 600; text-shadow: 0 0 6px rgba(180,180,255,.5); }
@@ -608,10 +603,10 @@ const LAD_IMG = {
 };
 
 const INSTR = {
-  hootenanny:      { label:'Hootenanny',   emoji:'🎸' },
-  rickenbecker:    { label:'Rickenbecker', emoji:'🎵' },
-  lady_sharma:     { label:'Lady Sharma',  emoji:'🪕' },
-  miss_ludwig:     { label:'Miss Ludwig',  emoji:'🥁' },
+  hootenanny:      { label:'Hootenanny',   emoji:'🎸', img_youngsters:'https://alexmonteiro65.github.io/ask-lovely-rita/src/hootenanny_youngsters.png',   img_grownups:'https://alexmonteiro65.github.io/ask-lovely-rita/src/hootenanny_transparent.png',   img_experts:'https://alexmonteiro65.github.io/ask-lovely-rita/src/hootenanny_transparent.png'   },
+  rickenbecker:    { label:'Rickenbecker', emoji:'🎵', img_youngsters:'https://alexmonteiro65.github.io/ask-lovely-rita/src/rickenbecker_youngsters.png', img_grownups:'https://alexmonteiro65.github.io/ask-lovely-rita/src/rickenbecker_transparent.png', img_experts:'https://alexmonteiro65.github.io/ask-lovely-rita/src/rickenbecker_transparent.png' },
+  lady_sharma:     { label:'Lady Sharma',  emoji:'🪕', img_youngsters:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lady_sharma_youngsters.png',  img_grownups:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lady_sharma_transparent.png',  img_experts:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lady_sharma_transparent.png'  },
+  miss_ludwig:     { label:'Miss Ludwig',  emoji:'🥁', img_youngsters:'https://alexmonteiro65.github.io/ask-lovely-rita/src/miss_ludwig_youngsters.png',  img_grownups:'https://alexmonteiro65.github.io/ask-lovely-rita/src/miss_ludwig_transparent.png',  img_experts:'https://alexmonteiro65.github.io/ask-lovely-rita/src/miss_ludwig_transparent.png'  },
   guitar_extra:    { label:'Guitar',       emoji:'🎸' },
   harmonica_extra: { label:'Harmonica',    emoji:'🎶' },
   banjo_extra:     { label:'Banjo',        emoji:'🪗' },
@@ -774,10 +769,12 @@ function applyLevel(lvl, resetRound) {
   // Lad bar
   document.getElementById('lad-name').textContent = lad.name + ' Lad';
   document.getElementById('lad-instr').textContent = `His instrument: ${lad.label} ${lad.emoji}`;
-  // Instrumento no result-icon
-  const instrImg = BASE_URL + lad.instrument + '_transparent.png';
+  // Instrumento no result-icon e no lad-bar
+  const instrKey = `img_${lvl}`;
+  const instrData = INSTR[lad.instrument];
+  const instrImg = instrData && instrData[instrKey] ? instrData[instrKey] : BASE_URL + lad.instrument + '_transparent.png';
   const riEl = document.getElementById('result-icon');
-  if(riEl) riEl.innerHTML = `<img src="${instrImg}" alt="${lad.label}" style="width:56px;height:56px;object-fit:contain;" onerror="this.parentElement.textContent='${lad.emoji}'"/>`;
+  if(riEl) riEl.innerHTML = `<img src="${instrImg}" alt="${lad.label}" style="width:64px;height:64px;object-fit:contain;" onerror="this.parentElement.textContent='${lad.emoji}'"/>`;
   document.getElementById('level-badge').textContent =
     lvl==='youngsters' ? 'Youngsters' : lvl==='grownups' ? 'Grown Ups' : 'Experts';
 
