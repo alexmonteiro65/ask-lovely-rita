@@ -748,7 +748,7 @@ function handlePlace(carKey, garageKey) {
     garage.classList.add('correct');
     const lad = LADS.find(l => l.key===carKey);
     document.getElementById(`slot-${garageKey}`).innerHTML =
-      `<div style="font-size:28px;text-align:center;line-height:1.2">🚗<br><span style="font-size:9px;color:var(--accent);font-weight:700">${lad.name}</span></div>`;
+      `<div style="font-size:10px;font-weight:900;color:var(--accent);text-align:center;letter-spacing:1px">MATCHED</div>`;
     document.getElementById(`check-${garageKey}`).style.display = 'block';
     car.classList.add('placed');
     S.correct++;
