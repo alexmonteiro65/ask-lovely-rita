@@ -29,17 +29,21 @@ body { background:#0a0a0a; display:flex; flex-direction:column; align-items:cent
 .lad-card img { width:56px; height:56px; border-radius:50%; object-fit:cover; border:2px solid var(--accent); margin-bottom:6px; }
 .lad-card-name { font-size:0.7rem; color:#ffffff !important; font-weight:bold; margin-bottom:2px; }
 .lad-card-desc { font-size:0.55rem; color:rgba(255,255,255,0.8) !important; font-style:italic; line-height:1.3; }
+.lad-card-pts { font-size:0.85rem; font-weight:900; color:#ffde59; margin-top:5px; text-shadow:0 0 8px rgba(255,222,89,0.6); }
+.lad-card-pts::before { content:"⭐ "; font-size:0.75rem; }
 #rita-float-p2 { position:absolute; bottom:70px; right:2px; width:88px; pointer-events:none; filter:drop-shadow(0 0 18px var(--glow)); animation:float 3s ease-in-out infinite; z-index:10; }
 #rita-greeting {
-  margin: 10px 12px 6px;
+  position: absolute; bottom: 110px; right: 94px;
+  left: 12px;
   background: rgba(255,255,255,.05);
   border: 1px solid var(--accent);
   border-radius: 12px;
-  padding: 10px 14px;
+  padding: 10px 12px;
   font-size: 10px; color: #ffffff;
-  line-height: 1.5; font-weight: 400;
+  line-height: 1.5; z-index: 15;
+  font-weight: 400;
+  display: flex; align-items: center;
   box-shadow: 0 0 12px rgba(255,110,247,.15);
-  min-height: 52px;
 }
 #rita-greet-img { width:44px; height:44px; flex-shrink:0; filter:drop-shadow(0 0 8px var(--glow)); animation:float 3s ease-in-out infinite; }
 @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-6px);} }
@@ -114,23 +118,34 @@ body { background:#0a0a0a; display:flex; flex-direction:column; align-items:cent
         <img id="lad-card-0" alt="Smart">
         <div class="lad-card-name">The Smart One</div>
         <div class="lad-card-desc">Master of music and mystery!</div>
+        <div class="lad-card-pts" id="pts-smart">12,500</div>
       </div>
       <div class="lad-card" onclick="chooseLad(1)"><div class="pick-me-bubble">Choose me! I promise we will shine together!</div>
         <img id="lad-card-1" alt="Cute">
         <div class="lad-card-name">The Cute One</div>
         <div class="lad-card-desc">Walks down Penny Lane together with you!</div>
+        <div class="lad-card-pts" id="pts-cute">9,800</div>
       </div>
       <div class="lad-card" onclick="chooseLad(2)"><div class="pick-me-bubble">I may be quiet but I play to win! Pick me please!</div>
         <img id="lad-card-2" alt="Quiet">
         <div class="lad-card-name">The Quiet One</div>
         <div class="lad-card-desc">Finds your inner peace. Here comes the sun.</div>
+        <div class="lad-card-pts" id="pts-quiet">4,200</div>
       </div>
       <div class="lad-card" onclick="chooseLad(3)"><div class="pick-me-bubble">Oi! Pick me! I am way more fun than the others!</div>
         <img id="lad-card-3" alt="Funny">
         <div class="lad-card-name">The Funny One</div>
         <div class="lad-card-desc">Shares the Octopus Garden with you!</div>
+        <div class="lad-card-pts" id="pts-funny">7,600</div>
       </div>
-</div>
+
+
+    <!-- LEADERBOARD GLOBAL -->
+    <div id="lad-leaderboard">
+      <div id="leaderboard-title">🏆 Lads Global Leaderboard</div>
+      <div id="lb-rows"></div>
+    </div>
+    </div>
   </div>
 
   <!-- GAME SCREEN -->
@@ -460,10 +475,15 @@ const LAD_META = [
 ];
 
 let lbData = { smart:12500, cute:9800, quiet:4200, funny:7600 };
-function updateTotalBeatcoins() {
-  const total = Object.values(lbData).reduce((a,b) => a+b, 0);
-  const el = document.getElementById('bc-mini-count');
-  if (el) el.textContent = total.toLocaleString() + ' BeatCoins';
+function updateCardPts() {
+  const keys = ['smart','cute','quiet','funny'];
+  keys.forEach(k => {
+    const el = document.getElementById('pts-' + k);
+    if (el) el.textContent = (lbData[k]||0).toLocaleString();
+  });
+  const total = Object.values(lbData).reduce((a,b)=>a+b,0);
+  const bc = document.getElementById('bc-mini-count');
+  if (bc) bc.textContent = total.toLocaleString();
 }
 renderLeaderboard(); // mostrar imediatamente com dados de fallback
 let lbSha  = null;
