@@ -285,15 +285,13 @@
 
   /* ── BEATCOINS ── */
   #bc-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: rgba(255,255,255,.04);
-    border: 1px solid rgba(255,255,255,.07);
-    border-radius: 11px;
-    padding: 6px 11px;
-    margin-bottom: 8px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
+    border-radius: 12px; padding: 7px 14px; margin: 0 0 8px;
+    position: relative; z-index: 2;
   }
+  #bc-label { font-size: 9px; color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing:.5px; font-weight:600; }
+  #bc-amount { font-size: 17px; font-weight: 900; color: #ffde59; }
   #bc-label { font-size: 9px; color: rgba(255,255,255,.32); text-transform: uppercase; letter-spacing: .5px; }
   #bc-amount { font-size: 15px; font-weight: 900; color: #ffde59; }
 
@@ -510,7 +508,7 @@
 
       <!-- RITA -->
       <div id="rita-greeting">
-        <div id="rita-face">🎤</div>
+        <div id="rita-face"><img src="https://alexmonteiro65.github.io/ask-lovely-rita/src/rita_beatcorps_clean.png" alt="Rita" onerror="this.parentElement.textContent='🎤'"/></div>
         <div id="rita-bubble">
           <div id="rita-name-tag">♪ Lovely Rita</div>
           <div id="rita-speech">Loading...</div>
@@ -533,11 +531,8 @@
 
       <!-- BEATCOINS -->
       <div id="bc-bar">
-        <div>
-          <div id="bc-label">Educational BeatCoins</div>
-          <div id="bc-amount">80</div>
-        </div>
-        <div style="font-size:20px">🪙</div>
+        <div id="bc-label">🎵 Educational BeatCoins</div>
+        <div id="bc-amount">80</div>
       </div>
 
       <!-- ATTEMPTS -->
@@ -557,7 +552,7 @@
 
       <!-- RESULT -->
       <div id="result-panel">
-        <div id="result-icon">🎯</div>
+        <div id="result-icon" id="result-icon"></div>
         <div id="result-title">Spin to find out!</div>
         <div id="result-sub">Land on your Lad's instrument for a bonus</div>
         <div id="result-points"></div>
@@ -574,9 +569,17 @@
         <span class="nav-icon">◀️</span>
         <span>Back</span>
       </button>
+      <button class="nav-btn" onclick="toggleMute()">
+        <span class="nav-icon" id="nav-sound-icon">🔊</span>
+        <span>Sound</span>
+      </button>
       <button class="nav-btn nav-home" onclick="goHome()">
         <span class="nav-icon">🏠</span>
         <span>Home</span>
+      </button>
+      <button class="nav-btn" onclick="spinWheel()">
+        <span class="nav-icon">🔄</span>
+        <span>Spin</span>
       </button>
       <button class="nav-btn" onclick="goForward()">
         <span class="nav-icon">▶️</span>
@@ -604,10 +607,10 @@ const LADS = {
 };
 
 const LAD_IMG = {
-  smart:  { regular:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-smart-regular.png', pepper:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-smart-regular.png', abbey:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-smart-abbey.png' },
-  cute:   { regular:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-cute-regular.png',  pepper:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-cute-regular.png',  abbey:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-cute-abbey.png'  },
+  smart:  { regular:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-smart-regular.png', pepper:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-smart-pepper.png', abbey:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-smart-abbey.png' },
+  cute:   { regular:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-cute-regular.png',  pepper:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-cute-pepper.png',  abbey:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-cute-abbey.png'  },
   quiet:  { regular:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-quiet-regular.png', pepper:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-quiet-pepper.png',  abbey:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-quiet-abbey.png' },
-  funny:  { regular:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-funny-regular.png', pepper:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-funny-regular.png', abbey:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-funny-abbey.png' },
+  funny:  { regular:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-funny-regular.png', pepper:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-funny-pepper.png', abbey:'https://alexmonteiro65.github.io/ask-lovely-rita/src/lad-funny-abbey.png' },
 };
 
 const INSTR = {
@@ -777,6 +780,10 @@ function applyLevel(lvl, resetRound) {
   // Lad bar
   document.getElementById('lad-name').textContent = lad.name + ' Lad';
   document.getElementById('lad-instr').textContent = `His instrument: ${lad.label} ${lad.emoji}`;
+  // Instrumento no result-icon
+  const instrImg = BASE_URL + lad.instrument + '_transparent.png';
+  const riEl = document.getElementById('result-icon');
+  if(riEl) riEl.innerHTML = `<img src="${instrImg}" alt="${lad.label}" style="width:56px;height:56px;object-fit:contain;" onerror="this.parentElement.textContent='${lad.emoji}'"/>`;
   document.getElementById('level-badge').textContent =
     lvl==='youngsters' ? 'Youngsters' : lvl==='grownups' ? 'Grown Ups' : 'Experts';
 
@@ -873,6 +880,7 @@ function resetResult() {
 function spinWheel() {
   if (S.spinning || S.roundOver || S.attemptsLeft <= 0) return;
   S.spinning = true;
+  window.speechSynthesis && window.speechSynthesis.cancel();
   document.getElementById('spin-btn').disabled = true;
   playRandomTrack();
 
@@ -890,11 +898,12 @@ function spinWheel() {
 
   setTimeout(() => {
     S.spinning = false;
-    stopAudio();
     S.attemptsLeft--;
     renderAttempts();
     showResult(landIdx);
   }, 4300);
+  // Música continua por +10 segundos após o spin
+  setTimeout(() => stopAudio(), 14300);
 }
 
 // ════════════════════════════════
@@ -967,6 +976,13 @@ function showContinue() {
 function continueTo() {
   // Em produção: navegar para página de pergunta
   toast('🎵 Off to the next game! Coming soon...');
+}
+
+function toggleMute() {
+  S.muted = !S.muted;
+  const icon = document.getElementById('nav-sound-icon');
+  if(icon) icon.textContent = S.muted ? '🔇' : '🔊';
+  if(S.muted) window.speechSynthesis && window.speechSynthesis.cancel();
 }
 
 function goBack() {
