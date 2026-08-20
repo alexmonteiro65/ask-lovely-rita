@@ -189,16 +189,17 @@
     justify-content: center; margin-bottom: 10px; min-height: 60px;
   }
   .vw-car {
-    width: 68px; height: 48px; cursor: grab;
+    width: 72px; height: 72px; cursor: grab;
     user-select: none; -webkit-user-select: none; touch-action: none;
     display: flex; align-items:center; justify-content:center;
     filter: drop-shadow(0 4px 8px rgba(0,0,0,.5));
     transition: transform .15s, opacity .3s;
+    background: transparent;
   }
   .vw-car:hover { transform: scale(1.1) translateY(-2px); }
   .vw-car.dragging { opacity: .45; transform: scale(1.1); }
   .vw-car.placed { opacity: 0; pointer-events: none; }
-  .vw-car img { width:100%; height:100%; object-fit:contain; pointer-events:none; }
+  .vw-car img { width:100%; height:100%; object-fit:contain; pointer-events:none; background:transparent; }
 
   /* ── DRAG GHOST ── */
   #drag-ghost {
@@ -418,20 +419,6 @@
       <div id="cars-label">Drag each Lad to their own car!</div>
       <div id="cars-area"></div>
 
-      <!-- ACTION BTNS -->
-      <div id="action-btns">
-        <button class="action-btn" id="play-btn" onclick="startGame()">Start Matching!</button>
-        <button class="action-btn" id="next-btn" onclick="nextGame()">Continue to Question ♪</button>
-      </div>
-
-      <!-- RESULT -->
-      <div id="result-panel">
-        <div id="result-icon">🏁</div>
-        <div id="result-title"></div>
-        <div id="result-sub"></div>
-        <div id="result-pts"></div>
-      </div>
-
       <!-- RITA BOTTOM -->
       <div id="rita-section">
         <div id="rita-img-wrap">
@@ -449,6 +436,20 @@
           <div id="rita-text-bottom">Loading...</div>
           <button id="rita-speak-btn" onclick="ritaSpeak()">🔊</button>
         </div>
+      </div>
+
+            <!-- ACTION BTNS -->
+      <div id="action-btns">
+        <button class="action-btn" id="play-btn" onclick="startGame()">Start Matching!</button>
+        <button class="action-btn" id="next-btn" onclick="nextGame()">Continue to Question ♪</button>
+      </div>
+
+      <!-- RESULT -->
+      <div id="result-panel">
+        <div id="result-icon">🏁</div>
+        <div id="result-title"></div>
+        <div id="result-sub"></div>
+        <div id="result-pts"></div>
       </div>
 
     </div><!-- /scroll-area -->
@@ -601,7 +602,7 @@ function applyLevel(lvl) {
   const _bcEl = document.getElementById('bc-val'); if(_bcEl) _bcEl.textContent = S.beatcoins;
 
   // Rita image — use Beat Corps (abbey) image always for Rita
-  document.getElementById('rita-img').src = BASE + 'https://alexmonteiro65.github.io/ask-lovely-rita/src/rita_beatcorps_clean.png';
+  document.getElementById('rita-img').src = 'https://alexmonteiro65.github.io/ask-lovely-rita/src/rita_beatcorps_clean.png';
 
   // Timer
   const tc = document.getElementById('timer-card');
@@ -779,11 +780,13 @@ function startGame() {
   document.querySelectorAll('.garage-check').forEach(c => c.style.display='none');
   buildCars();
 
-  // Wave flag!
+  // Rita some, bandeira aparece!
+  const ritaEl = document.getElementById('rita-img');
+  ritaEl.style.opacity = '0';
+  ritaEl.style.transition = 'opacity 0.4s';
   startFlag();
-  document.getElementById('rita-img').classList.add('wave');
   setTimeout(() => {
-    document.getElementById('rita-img').classList.remove('wave');
+    ritaEl.style.opacity = '1';
     stopFlag();
   }, 3000);
 
