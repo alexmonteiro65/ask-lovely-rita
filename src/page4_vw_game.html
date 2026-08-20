@@ -441,7 +441,6 @@
             <!-- ACTION BTNS -->
       <div id="action-btns">
         <button class="action-btn" id="play-btn" onclick="startGame()">Start Matching!</button>
-        <button class="action-btn" id="next-btn" onclick="nextGame()">Continue to Question ♪</button>
       </div>
 
       <!-- RESULT -->
@@ -749,7 +748,7 @@ function handlePlace(carKey, garageKey) {
     garage.classList.add('correct');
     const lad = LADS.find(l => l.key===carKey);
     document.getElementById(`slot-${garageKey}`).innerHTML =
-      `<img src="${BASE}${lad.vw}" alt="${lad.name} VW"/>`;
+      `<div style="font-size:28px;text-align:center;line-height:1.2">🚗<br><span style="font-size:9px;color:var(--accent);font-weight:700">${lad.name}</span></div>`;
     document.getElementById(`check-${garageKey}`).style.display = 'block';
     car.classList.add('placed');
     S.correct++;
@@ -774,7 +773,6 @@ function startGame() {
   S.placed = {}; S.correct = 0;
   document.getElementById('play-btn').style.display = 'none';
   document.getElementById('result-panel').classList.remove('show');
-  document.getElementById('next-btn').style.display = 'none';
   document.querySelectorAll('.garage').forEach(g => g.classList.remove('correct','wrong'));
   document.querySelectorAll('.garage-slot').forEach(s => s.innerHTML='');
   document.querySelectorAll('.garage-check').forEach(c => c.style.display='none');
@@ -835,7 +833,6 @@ function finishGame(reason) {
   const _bcEl = document.getElementById('bc-val'); if(_bcEl) _bcEl.textContent = S.beatcoins;
   saveStorage();
   panel.classList.add('show');
-  document.getElementById('next-btn').style.display = 'block';
   setTimeout(() => speak(ritaLine), 500);
   setTimeout(() => document.getElementById('scroll-area').scrollTo({top:9999,behavior:'smooth'}), 300);
 }
@@ -853,7 +850,6 @@ function resetUI() {
   stopTimer(); stopFlag();
   document.getElementById('rita-img').classList.remove('wave');
   document.getElementById('play-btn').style.display = 'block';
-  document.getElementById('next-btn').style.display = 'none';
   document.getElementById('result-panel').classList.remove('show');
   document.querySelectorAll('.garage').forEach(g=>g.classList.remove('correct','wrong'));
   document.querySelectorAll('.garage-slot').forEach(s=>s.innerHTML='');
