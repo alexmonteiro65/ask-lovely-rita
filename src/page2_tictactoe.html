@@ -106,6 +106,60 @@ body { background:#0a0a0a; display:flex; flex-direction:column; align-items:cent
     padding: 4px 2px 8px;
     line-height: 1.3;
   }
+
+  /* ── LEADERBOARD NOVO ─────────────────── */
+  #lad-leaderboard {
+    margin: 10px 12px;
+    background: rgba(255,255,255,.06);
+    border: 1.5px solid #ff6ef7;
+    border-radius: 14px;
+    padding: 10px 8px 8px;
+    box-sizing: border-box;
+  }
+  #leaderboard-title {
+    font-size: 10px; font-weight: 900;
+    letter-spacing: 2px; color: #ff6ef7;
+    text-align: center; margin-bottom: 10px;
+    text-shadow: 0 0 10px #ff6ef7;
+    text-transform: uppercase;
+  }
+  .lb-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .lb-cell {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 3px;
+  }
+  .lb-cell img {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    object-fit: cover;
+  }
+  .lb-cell-name {
+    font-size: 7px; color: #ff6ef7;
+    font-weight: 700; text-align: center;
+    text-shadow: 0 0 6px #ff6ef7;
+  }
+  .lb-cell-pts {
+    font-size: 11px; font-weight: 900;
+    color: #ffde59;
+    text-shadow: 0 0 8px #ffde59;
+    text-align: center;
+  }
+  .lb-cell-bar-wrap {
+    width: 100%; height: 5px;
+    background: rgba(255,255,255,.1);
+    border-radius: 3px; overflow: hidden;
+  }
+  .lb-cell-bar {
+    height: 100%; border-radius: 3px;
+    background: linear-gradient(90deg, #ff6ef7, #a855f7);
+    transition: width 1s ease;
+  }
+  .lb-medal { font-size: 12px; }
 </style>
 </head>
 <body>
@@ -145,11 +199,14 @@ body { background:#0a0a0a; display:flex; flex-direction:column; align-items:cent
       </div>
 
 
-    <!-- LEADERBOARD GLOBAL -->
+    <!-- LEADERBOARD GLOBAL NOVO -->
     <div id="lad-leaderboard">
       <div id="leaderboard-title">🏆 LADS GLOBAL LEADERBOARD</div>
-      <div id="lb-rows"></div>
+      <div class="lb-grid" id="lb-grid">
+        <!-- preenchido pelo JS -->
+      </div>
     </div>
+
     </div>
   </div>
 
@@ -509,36 +566,23 @@ async function loadLeaderboard() {
 }
 
 function renderLeaderboard() {
-  const rows = document.getElementById('lb-rows');
-  if (!rows) return;
-
-  // Ordenar por pontos
+  const grid = document.getElementById('lb-grid');
+  if (!grid) return;
   const sorted = [...LAD_META].sort((a,b) => (lbData[b.key]||0) - (lbData[a.key]||0));
   const maxPts = Math.max(...sorted.map(l => lbData[l.key]||0), 1);
   const medals = ['🥇','🥈','🥉','4️⃣'];
-
-  // Marcar último lugar no card para animação
-  document.querySelectorAll('.lad-card').forEach(c => c.classList.remove('last-place'));
-  const lastKey = sorted[3].key;
-  const ladKeys = ['smart','cute','quiet','funny'];
-  const lastIdx = ladKeys.indexOf(lastKey);
-  const lastCard = document.querySelectorAll('.lad-card')[lastIdx];
-  if (lastCard) lastCard.classList.add('last-place');
-
-  rows.innerHTML = sorted.map((lad, i) => {
+  grid.innerHTML = sorted.map((lad, i) => {
     const pts = lbData[lad.key] || 0;
     const pct = Math.max(4, Math.round((pts / maxPts) * 100));
     return `
-      <div class="lb-row">
-        <div class="lb-rank">${medals[i]}</div>
-        <img class="lb-avatar" src="${lad.img}" alt="${lad.name}">
-        <div class="lb-info">
-          <div class="lb-name">${lad.name}</div>
-          <div class="lb-bar-wrap">
-            <div class="lb-bar" style="width:${pct}%;background:linear-gradient(90deg,${lad.color},${lad.color}88)"></div>
-          </div>
+      <div class="lb-cell">
+        <div class="lb-medal">${medals[i]}</div>
+        <img src="${lad.img}" alt="${lad.name}">
+        <div class="lb-cell-name">${lad.name.replace(' Lad','')}</div>
+        <div class="lb-cell-pts">${pts.toLocaleString()}</div>
+        <div class="lb-cell-bar-wrap">
+          <div class="lb-cell-bar" style="width:${pct}%"></div>
         </div>
-        <div class="lb-pts">${pts.toLocaleString()}</div>
       </div>`;
   }).join('');
 }
