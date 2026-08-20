@@ -1010,37 +1010,7 @@ let S = { beatcoins: 80, selectedWorld: null, level: 'youngsters' };
 function init() {
   loadStorage();
   buildStars();
-
-  // Estratégia dupla para fala automática:
-  // 1. Tentar imediatamente (funciona se vem de outra página via botão)
-  // 2. Se browser bloquear, falar na primeira interação do utilizador
-  let ritaSpoken = false;
-
-  const doSpeak = () => {
-    if (ritaSpoken) return;
-    const voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
-    if (voices.length > 0) {
-      speak(RITA_INTRO);
-      ritaSpoken = true;
-    }
-  };
-
-  // Tentativa automática após 1 segundo
-  if (window.speechSynthesis) {
-    window.speechSynthesis.onvoiceschanged = () => {
-      setTimeout(doSpeak, 800);
-    };
-    setTimeout(doSpeak, 1000);
-  }
-
-  // Fallback: falar na primeira interação do utilizador
-  const firstTouch = () => {
-    doSpeak();
-    document.removeEventListener('click', firstTouch);
-    document.removeEventListener('touchstart', firstTouch);
-  };
-  document.addEventListener('click', firstTouch);
-  document.addEventListener('touchstart', firstTouch);
+  setTimeout(() => speak(RITA_INTRO), 800);
 }
 
 function loadStorage() {
