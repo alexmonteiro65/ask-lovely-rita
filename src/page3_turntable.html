@@ -143,10 +143,12 @@
     text-transform: uppercase;
   }
   #tt-header p {
-    font-size: 10px;
-    color: rgba(255,255,255,.38);
+    font-size: 13px;
+    color: #c0e0ff;
+    text-shadow: 0 0 8px rgba(160,200,255,.7);
     letter-spacing: .4px;
-    margin-top: 2px;
+    font-weight: 600;
+    margin-top: 3px;
   }
 
   /* ── LEVEL TABS ── */
@@ -192,18 +194,12 @@
     to   { opacity:1; transform:translateY(0); }
   }
   #rita-face {
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    border: 2px solid var(--accent);
-    box-shadow: 0 0 10px var(--glow);
-    background: rgba(255,255,255,.08);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 24px;
-    overflow: hidden;
+    width: 64px; height: 80px;
     flex-shrink: 0;
-    position: relative;
+    display: flex; align-items: flex-end; justify-content: center;
+    overflow: visible;
   }
-  #rita-face img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+  #rita-face img { width:100%; height:100%; object-fit:contain; border-radius:0; }
   /* speaking pulse */
   #rita-face.speaking::after {
     content: '';
@@ -271,7 +267,7 @@
   #lad-avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
   #lad-text { flex:1; }
   #lad-name { font-size: 12px; font-weight: 700; color: var(--accent); }
-  #lad-instr { font-size: 10px; color: rgba(255,255,255,.42); margin-top: 1px; }
+  #lad-instr { font-size: 13px; color: #e0e0ff; margin-top: 1px; font-weight: 600; text-shadow: 0 0 6px rgba(180,180,255,.5); }
   #level-badge {
     background: var(--btn-grad);
     border-radius: 20px;
@@ -417,7 +413,7 @@
     gap: 3px;
   }
   #result-icon { font-size: 24px; line-height: 1; }
-  #result-title { font-size: 13px; font-weight: 800; color: var(--accent); }
+  #result-title { font-size: 16px; font-weight: 800; color: var(--accent); text-shadow: 0 0 12px var(--glow); }
   #result-sub { font-size: 10px; color: rgba(255,255,255,.45); }
   #result-points { font-size: 18px; font-weight: 900; letter-spacing: 1px; display: none; }
   .points-win { color: #4ade80; text-shadow: 0 0 12px #22c55e; }
@@ -497,7 +493,7 @@
 
       <div id="tt-header">
         <h1>🎵 The Turntable</h1>
-        <p>Spin the record — land on your Lad's instrument!</p>
+        <p id="page-sub">Spin the record — land on your Lad's instrument!</p>
       </div>
 
       <div id="level-tabs">
@@ -552,14 +548,12 @@
 
       <!-- RESULT -->
       <div id="result-panel">
-        <div id="result-icon" id="result-icon"></div>
+        <div id="result-icon"></div>
         <div id="result-title">Spin to find out!</div>
         <div id="result-sub">Land on your Lad's instrument for a bonus</div>
         <div id="result-points"></div>
       </div>
 
-      <!-- CONTINUE -->
-      <button id="continue-btn" onclick="continueTo()">Continue to Next Game ♪</button>
 
     </div><!-- /scroll-area -->
 
@@ -628,7 +622,7 @@ const INSTR = {
 
 const SLICE_COLORS = {
   youngsters: ['#ff6ef7','#a855f7','#ffde59','#c084fc','#ff9ef9','#9040e0','#ffe080','#d070f0'],
-  grownups:   ['#c8a96e','#6677aa','#e8d5b0','#8899bb','#a07840','#445588'],
+  grownups:   ['#c8a96e','#6677aa','#e8d5b0','#8899bb','#a07840','#445588','#d4b87e','#778acc'],
   experts:    ['#ffd700','#c8860a','#e8a020','#a06000','#ffee80','#805000','#d4a000','#603800'],
 };
 
@@ -726,7 +720,7 @@ function buildSlices(level, ladKey) {
     return shuffle([target, target, others[0], others[0], others[1], others[1], others[2], others[2]]);
   }
   if (level === 'grownups') {
-    return shuffle([...all4, 'guitar_extra', 'harmonica_extra']);
+    return shuffle([target, target, others[0], others[0], others[1], others[1], others[2], others[2]]);
   }
   return shuffle([...all4, 'banjo_extra', 'trumpet_extra', 'violin_extra', 'bagpipe_extra']);
 }
@@ -817,8 +811,7 @@ function applyLevel(lvl, resetRound) {
     const sb = document.getElementById('spin-btn');
     sb.disabled    = false;
     sb.textContent = '🎵 Spin The Turntable!';
-    document.getElementById('continue-btn').style.display = 'none';
-  }
+    }
 }
 
 // ════════════════════════════════
@@ -866,7 +859,7 @@ function renderAttempts() {
 }
 
 function resetResult() {
-  document.getElementById('result-icon').textContent  = '🎯';
+  document.getElementById('result-icon').textContent  = '';
   document.getElementById('result-title').textContent = 'Spin to find out!';
   document.getElementById('result-sub').textContent   = "Land on your Lad's instrument for a bonus";
   const p = document.getElementById('result-points');
@@ -925,7 +918,7 @@ function showResult(idx) {
   const ptsEl   = document.getElementById('result-points');
 
   if (isWin) {
-    iconEl.textContent  = '🎉';
+    iconEl.innerHTML  = '';
     titleEl.textContent = `${info.emoji} ${info.label}!`;
     subEl.textContent   = `That's ${lad.name}'s instrument — BONUS!`;
     ptsEl.style.display = 'block';
@@ -967,7 +960,6 @@ function showResult(idx) {
 // ════════════════════════════════
 
 function showContinue() {
-  document.getElementById('continue-btn').style.display = 'block';
   setTimeout(() => {
     document.getElementById('scroll-area').scrollTo({ top: 9999, behavior:'smooth' });
   }, 300);
