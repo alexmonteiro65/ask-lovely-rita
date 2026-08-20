@@ -201,7 +201,7 @@ body { background:#0a0a0a; display:flex; flex-direction:column; align-items:cent
 
     <!-- LEADERBOARD GLOBAL NOVO -->
     <div id="lad-leaderboard">
-      <div id="leaderboard-title">🏆 LADS GLOBAL LEADERBOARD</div>
+      <div id="leaderboard-title">LADS GLOBAL LEADERBOARD</div>
       <div class="lb-grid" id="lb-grid">
         <!-- preenchido pelo JS -->
       </div>
@@ -537,7 +537,6 @@ const LAD_META = [
 ];
 
 let lbData = { smart:12500, cute:9800, quiet:4200, funny:7600 };
-renderLeaderboard(); // mostrar imediatamente com dados de fallback
 let lbSha  = null;
 
 async function loadLeaderboard() {
@@ -570,13 +569,13 @@ function renderLeaderboard() {
   if (!grid) return;
   const sorted = [...LAD_META].sort((a,b) => (lbData[b.key]||0) - (lbData[a.key]||0));
   const maxPts = Math.max(...sorted.map(l => lbData[l.key]||0), 1);
-  const medals = ['🥇','🥈','🥉','4️⃣'];
+  const medals = ['1ST','2ND','3RD','4TH'];
   grid.innerHTML = sorted.map((lad, i) => {
     const pts = lbData[lad.key] || 0;
     const pct = Math.max(4, Math.round((pts / maxPts) * 100));
     return `
       <div class="lb-cell">
-        <div class="lb-medal">${medals[i]}</div>
+        <div class="lb-medal" style="font-size:7px;font-weight:900;color:#ff6ef7">${medals[i]}</div>
         <img src="${lad.img}" alt="${lad.name}">
         <div class="lb-cell-name">${lad.name.replace(' Lad','')}</div>
         <div class="lb-cell-pts">${pts.toLocaleString()}</div>
