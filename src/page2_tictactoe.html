@@ -29,9 +29,9 @@ body { background:#0a0a0a; display:flex; flex-direction:column; align-items:cent
 .lad-card img { width:56px; height:56px; border-radius:50%; object-fit:cover; border:2px solid var(--accent); margin-bottom:6px; }
 .lad-card-name { font-size:0.7rem; color:#ffffff !important; font-weight:bold; margin-bottom:2px; }
 .lad-card-desc { font-size:0.55rem; color:rgba(255,255,255,0.8) !important; font-style:italic; line-height:1.3; }
-#rita-float-p2 { position:absolute; bottom:70px; right:2px; width:88px; pointer-events:none; filter:drop-shadow(0 0 18px var(--glow)); animation:float 3s ease-in-out infinite; z-index:10; }
+#rita-float-p2 { position:absolute; bottom:70px; right:2px; width:110px; pointer-events:none; filter:drop-shadow(0 0 18px var(--glow)); animation:float 3s ease-in-out infinite; z-index:10; }
 #rita-greeting {
-  position: absolute; bottom: 110px; right: 94px;
+  position: absolute; bottom: 130px; right: 116px;
   left: 12px;
   background: rgba(255,255,255,.05);
   border: 1px solid var(--accent);
@@ -95,6 +95,17 @@ body { background:#0a0a0a; display:flex; flex-direction:column; align-items:cent
 .result-btn { border:none; color:#fff; font-size:0.8rem; font-weight:bold; letter-spacing:1px; padding:14px 32px; border-radius:28px; cursor:pointer; text-transform:uppercase; }
 #btn-play-again { background:var(--btn-grad); }
 #btn-next-game { background:rgba(255,255,255,0.15); border:1px solid var(--accent); }
+
+  /* Pick Me text — always visible at top of card */
+  .pick-me-bubble {
+    display: block !important;
+    font-size: 0.65rem;
+    color: #ffffff !important;
+    font-weight: 600;
+    text-align: center;
+    padding: 4px 2px 8px;
+    line-height: 1.3;
+  }
 </style>
 </head>
 <body>
