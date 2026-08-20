@@ -512,7 +512,7 @@ const RITA_INTRO_DISPLAY = {
 const RITA_WIN_ALL = [
   "Absolutely smashing! All four Beetles parked perfectly! The Fab Four would give you a standing ovation!",
   "Brilliant! Every single Beetle in the right garage! You know your Lads as well as Abbey Road knows its crosswalk!",
-  "Wonderful! Perfect score! George Harrison once said the best things come to those who pay attention. And you certainly did!",
+  "Wonderful! Perfect score! Quiet Lad always says the best things come to those who pay attention. And you certainly did love!",
 ];
 const RITA_WIN_PARTIAL = [
   "Well done! Not a perfect run but you got most of them right. Keep practising darling and you will be a Fab Four expert in no time!",
@@ -856,7 +856,7 @@ function resetUI() {
   document.querySelectorAll('.garage-check').forEach(c=>c.style.display='none');
 }
 
-function nextGame() { toast('🎵 Off to the question! Coming soon...'); }
+function nextGame() { goForward(); }
 
 // ════════════════════════════════
 //  CHECKERED FLAG ANIMATION
