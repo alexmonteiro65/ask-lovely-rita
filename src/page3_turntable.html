@@ -409,7 +409,7 @@
   }
   #result-icon { font-size: 24px; line-height: 1; }
   #result-title { font-size: 16px; font-weight: 800; color: var(--accent); text-shadow: 0 0 12px var(--glow); }
-  #result-sub { font-size: 10px; color: rgba(255,255,255,.45); }
+  #result-sub { font-size: 13px; color: #a0f8ff; font-weight: 700; text-shadow: 0 0 8px rgba(160,248,255,.7); }
   #result-points { font-size: 18px; font-weight: 900; letter-spacing: 1px; display: none; }
   .points-win { color: #4ade80; text-shadow: 0 0 12px #22c55e; }
 
@@ -566,10 +566,6 @@
         <span class="nav-icon">🏠</span>
         <span>Home</span>
       </button>
-      <button class="nav-btn" onclick="spinWheel()">
-        <span class="nav-icon">🔄</span>
-        <span>Spin</span>
-      </button>
       <button class="nav-btn" onclick="goForward()">
         <span class="nav-icon">▶️</span>
         <span>Next</span>
@@ -712,9 +708,22 @@ function shuffle(a) {
 }
 
 function buildSlices(level, ladKey) {
-  const all4 = ['hootenanny','rickenbecker','lady_sharma','miss_ludwig'];
-  // Todos os níveis: 4 instrumentos + 4 notas musicais
-  return shuffle([...all4, 'note1','note2','note3','note4']);
+  const target = LADS[ladKey].instrument;
+  const others = ['hootenanny','rickenbecker','lady_sharma','miss_ludwig'].filter(i => i !== target);
+  // Odds por nível (8 fatias sempre):
+  // Youngsters: 4 do instrumento certo + 2 outros + 2 notas = ~50% chance (justo para crianças)
+  // Grown Ups:  2 do instrumento certo + 2 outros + 4 notas = ~25% chance
+  // Experts:    1 do instrumento certo + 3 outros + 4 notas = ~12.5% chance
+  if (level === 'youngsters') {
+    // 4 fatias corretas = 50% — suficientemente fácil
+    return shuffle([target, target, target, target, others[0], others[1], 'note1', 'note2']);
+  } else if (level === 'grownups') {
+    // 2 fatias corretas = 25%
+    return shuffle([target, target, others[0], others[1], others[2], 'note1', 'note2', 'note3']);
+  } else {
+    // experts: 1 fatia correta = 12.5%
+    return shuffle([target, others[0], others[1], others[2], 'note1', 'note2', 'note3', 'note4']);
+  }
 }
 
 function pick(arr) {
