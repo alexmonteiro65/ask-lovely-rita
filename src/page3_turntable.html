@@ -613,6 +613,10 @@ const INSTR = {
   trumpet_extra:   { label:'Trumpet',      emoji:'🎺' },
   violin_extra:    { label:'Violin',       emoji:'🎻' },
   bagpipe_extra:   { label:'Bagpipes',     emoji:'🎵' },
+  note1: { label:'Music',  emoji:'♪' },
+  note2: { label:'Music',  emoji:'♩' },
+  note3: { label:'Music',  emoji:'♫' },
+  note4: { label:'Music',  emoji:'♬' },
 };
 
 const SLICE_COLORS = {
@@ -709,15 +713,8 @@ function shuffle(a) {
 
 function buildSlices(level, ladKey) {
   const all4 = ['hootenanny','rickenbecker','lady_sharma','miss_ludwig'];
-  const target = LADS[ladKey].instrument;
-  const others = all4.filter(i => i !== target);
-  if (level === 'youngsters') {
-    return shuffle([target, target, others[0], others[0], others[1], others[1], others[2], others[2]]);
-  }
-  if (level === 'grownups') {
-    return shuffle([target, target, others[0], others[0], others[1], others[1], others[2], others[2]]);
-  }
-  return shuffle([...all4, 'banjo_extra', 'trumpet_extra', 'violin_extra', 'bagpipe_extra']);
+  // Todos os níveis: 4 instrumentos + 4 notas musicais
+  return shuffle([...all4, 'note1','note2','note3','note4']);
 }
 
 function pick(arr) {
@@ -939,8 +936,14 @@ function showResult(idx) {
   const ptsEl   = document.getElementById('result-points');
 
   if (isWin) {
-    iconEl.innerHTML  = '';
-    titleEl.textContent = `${info.emoji} ${info.label}!`;
+    const winKey = 'img_' + S.level;
+    const winInfo = INSTR[lad.instrument];
+    if (winInfo && winInfo[winKey]) {
+      iconEl.innerHTML = `<img src="${winInfo[winKey]}" style="width:56px;height:56px;object-fit:contain;" onerror="this.parentElement.textContent='🎉'"/>`;
+    } else {
+      iconEl.innerHTML = '🎉';
+    }
+    titleEl.textContent = `${info.label}!`;
     subEl.textContent   = `That's ${lad.name}'s instrument — BONUS!`;
     ptsEl.style.display = 'block';
     ptsEl.className     = 'points-win';
@@ -956,7 +959,7 @@ function showResult(idx) {
 
   } else if (S.attemptsLeft > 0) {
     // Miss mas ainda tem tentativas
-    iconEl.textContent  = info.emoji;
+    iconEl.innerHTML  = '';
     titleEl.textContent = info.label;
     subEl.textContent   = `Not your instrument! ${S.attemptsLeft} spin${S.attemptsLeft>1?'s':''} left — try again!`;
     ptsEl.style.display = 'none';
