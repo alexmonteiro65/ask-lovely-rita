@@ -898,7 +898,10 @@ function spinWheel() {
   const n = S.slices.length;
   const step = 360 / n;
   const landIdx = Math.floor(Math.random() * n);
-  const targetOffset = 90 - (landIdx + 0.5) * step;
+  // Fix: fatias SVG têm offset -90, então para pousar a fatia landIdx no topo (270° no SVG):
+  // centro da fatia no SVG = (landIdx+0.5)*step - 90
+  // rotação necessária para chegar a 270°: 360 - (landIdx+0.5)*step
+  const targetOffset = (360 - (landIdx + 0.5) * step + 360) % 360;
   const spins = 5 + Math.floor(Math.random() * 3);
   const finalDeg = S.currentDeg + spins*360 + ((targetOffset - S.currentDeg%360 + 360)%360);
   S.currentDeg = finalDeg;
