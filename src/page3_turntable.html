@@ -778,14 +778,16 @@ function applyLevel(lvl, resetRound) {
   document.getElementById('level-badge').textContent =
     lvl==='youngsters' ? 'Youngsters' : lvl==='grownups' ? 'Grown Ups' : 'Experts';
 
-  // Lad image
-  const suffix = lvl==='youngsters' ? 'regular' : lvl==='grownups' ? 'pepper' : 'abbey';
+  // Instrumento do Lad na caixa (em vez da imagem do Lad)
+  const instrKey2 = 'img_' + lvl;
+  const instrData2 = INSTR[lad.instrument];
+  const instrSrc = instrData2 && instrData2[instrKey2] ? instrData2[instrKey2] : BASE_URL + lad.instrument + '_transparent.png';
   const imgEl  = document.getElementById('lad-img');
   const emEl   = document.getElementById('lad-emoji');
   imgEl.style.display = 'block';
   emEl.style.display  = 'none';
   emEl.textContent    = lad.emoji;
-  imgEl.src = BASE_URL + LAD_IMG[S.lad][suffix];
+  imgEl.src = instrSrc;
 
   // BeatCoins
   document.getElementById('bc-amount').textContent = S.beatcoins;
