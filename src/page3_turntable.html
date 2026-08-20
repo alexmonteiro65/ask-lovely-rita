@@ -823,7 +823,21 @@ function drawWheel() {
   const R = 100;
   const step = 360 / n;
   const colors = SLICE_COLORS[S.level];
-  let paths = '', labels = '';
+  const instrKey = 'img_' + S.level;
+  let paths = '', labels = '', defs = '';
+
+  // Pre-carrega imagens para o SVG
+  const imgIds = {};
+  for (let i = 0; i < n; i++) {
+    const info = INSTR[slices[i]];
+    if (info && info[instrKey]) {
+      const imgId = 'wheel-img-' + slices[i];
+      if (!imgIds[slices[i]]) {
+        imgIds[slices[i]] = imgId;
+        defs += `<image id="${imgId}" href="${info[instrKey]}" width="36" height="36" style="display:none"/>`;
+      }
+    }
+  }
 
   for (let i = 0; i < n; i++) {
     const a1 = (i*step - 90) * Math.PI/180;
@@ -836,7 +850,15 @@ function drawWheel() {
     const lx = R + R*.65*Math.cos(mid);
     const ly = R + R*.65*Math.sin(mid);
     const info = INSTR[slices[i]] || { emoji:'🎵' };
-    labels += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="17" style="user-select:none">${info.emoji}</text>`;
+    if (info[instrKey]) {
+      // Usar imagem proprietária — centralizada na fatia
+      const ix = lx - 18;
+      const iy = ly - 18;
+      const angle = (i + 0.5) * step;
+      labels += `<image href="${info[instrKey]}" x="${ix}" y="${iy}" width="36" height="36" transform="rotate(${angle},${lx},${ly})" style="border-radius:4px"/>`;
+    } else {
+      labels += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="17" style="user-select:none">${info.emoji}</text>`;
+    }
   }
 
   document.getElementById('roulette-wheel').innerHTML =
