@@ -29,8 +29,6 @@ body { background:#0a0a0a; display:flex; flex-direction:column; align-items:cent
 .lad-card img { width:56px; height:56px; border-radius:50%; object-fit:cover; border:2px solid var(--accent); margin-bottom:6px; }
 .lad-card-name { font-size:0.7rem; color:#ffffff !important; font-weight:bold; margin-bottom:2px; }
 .lad-card-desc { font-size:0.55rem; color:rgba(255,255,255,0.8) !important; font-style:italic; line-height:1.3; }
-.lad-card-pts { font-size:0.85rem; font-weight:900; color:#ffde59; margin-top:5px; text-shadow:0 0 8px rgba(255,222,89,0.6); }
-.lad-card-pts::before { content:"⭐ "; font-size:0.75rem; }
 #rita-float-p2 { position:absolute; bottom:70px; right:2px; width:88px; pointer-events:none; filter:drop-shadow(0 0 18px var(--glow)); animation:float 3s ease-in-out infinite; z-index:10; }
 #rita-greeting {
   position: absolute; bottom: 110px; right: 94px;
@@ -77,9 +75,9 @@ body { background:#0a0a0a; display:flex; flex-direction:column; align-items:cent
 @keyframes pulse { from{box-shadow:0 0 8px var(--glow);} to{box-shadow:0 0 24px var(--glow);} }
 #rita-comment { margin:8px 16px; padding:10px 14px; background:rgba(255,255,255,0.05); border-radius:12px; border-left:3px solid var(--accent); font-size:0.72rem; color:#fff; line-height:1.5; min-height:52px; display:flex; align-items:center; gap:10px; }
 #rita-mini { width:38px; height:38px; flex-shrink:0; filter:drop-shadow(0 0 6px var(--glow)); animation:float 3s ease-in-out infinite; }
-#bc-mini { display:flex; justify-content:space-between; align-items:center; margin:6px 16px; padding:8px 14px; background:rgba(255,255,255,0.04); border-radius:10px; border:1px solid rgba(255,255,255,0.08); }
-#bc-mini-label { font-size:0.65rem; color:var(--accent); letter-spacing:1px; }
-#bc-mini-count { font-size:0.85rem; color:var(--accent2); font-weight:bold; }
+
+
+
 
 #nav-bar { flex-shrink:0; display:flex; align-items:center; justify-content:space-around; padding:10px 20px 14px; border-top:1px solid rgba(255,255,255,.08); background:rgba(0,0,0,.35); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
 .nav-btn { display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; color:rgba(255,255,255,.5); cursor:pointer; padding:6px 14px; border-radius:12px; transition:all .2s; font-size:10px; letter-spacing:.3px; }
@@ -97,6 +95,19 @@ body { background:#0a0a0a; display:flex; flex-direction:column; align-items:cent
 .result-btn { border:none; color:#fff; font-size:0.8rem; font-weight:bold; letter-spacing:1px; padding:14px 32px; border-radius:28px; cursor:pointer; text-transform:uppercase; }
 #btn-play-again { background:var(--btn-grad); }
 #btn-next-game { background:rgba(255,255,255,0.15); border:1px solid var(--accent); }
+
+  /* BeatCoins box — copiado da Page 1 */
+  #bc-wrap {
+    display:flex; flex-direction:column;
+    background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+    border-radius:22px; padding:8px 12px;
+    font-family:monospace; color:var(--accent2);
+    margin:8px 12px 6px; width:calc(100% - 24px); box-sizing:border-box;
+  }
+  .bc-top { display:flex; align-items:center; gap:8px; }
+  .bc-label { font-size:11px; flex:1; color:var(--accent2); font-weight:bold; }
+  .bc-count { font-weight:bold; font-size:15px; color:var(--accent2); }
+  .bc-fans { font-size:8px; color:var(--accent); letter-spacing:2px; text-transform:uppercase; font-family:monospace; margin-top:3px; font-weight:bold; text-align:center; }
 </style>
 </head>
 <body>
@@ -113,30 +124,40 @@ body { background:#0a0a0a; display:flex; flex-direction:column; align-items:cent
   <div id="lad-select-screen">
     <div id="lad-select-sub">Pick your Lad companion to play!</div>
 
+    <div id="bc-wrap">
+      <div class="bc-top">
+        <svg width="22" height="22" viewBox="0 0 40 40" style="flex-shrink:0">
+          <circle cx="20" cy="20" r="19" fill="#111"/>
+          <circle cx="20" cy="20" r="13" fill="#1a1a1a"/>
+          <circle cx="20" cy="20" r="7" fill="var(--vinil-label)"/>
+          <circle cx="20" cy="20" r="4" fill="#111"/>
+          <circle cx="20" cy="20" r="1.5" fill="var(--vinil-label2)"/>
+        </svg>
+        <span class="bc-label">Educational BeatCoins</span>
+        <span class="bc-count" id="bc-display">34,100</span>
+      </div>
+      <div class="bc-fans" id="bc-fans-text">34,100 Fans Learning Worldwide</div>
+    </div>
     <div id="lad-grid">
       <div class="lad-card" onclick="chooseLad(0)"><div class="pick-me-bubble">Pick me love! Together we shall be brilliant!</div>
         <img id="lad-card-0" alt="Smart">
         <div class="lad-card-name">The Smart One</div>
         <div class="lad-card-desc">Master of music and mystery!</div>
-        <div class="lad-card-pts" id="pts-smart">12,500</div>
       </div>
       <div class="lad-card" onclick="chooseLad(1)"><div class="pick-me-bubble">Choose me! I promise we will shine together!</div>
         <img id="lad-card-1" alt="Cute">
         <div class="lad-card-name">The Cute One</div>
         <div class="lad-card-desc">Walks down Penny Lane together with you!</div>
-        <div class="lad-card-pts" id="pts-cute">9,800</div>
       </div>
       <div class="lad-card" onclick="chooseLad(2)"><div class="pick-me-bubble">I may be quiet but I play to win! Pick me please!</div>
         <img id="lad-card-2" alt="Quiet">
         <div class="lad-card-name">The Quiet One</div>
         <div class="lad-card-desc">Finds your inner peace. Here comes the sun.</div>
-        <div class="lad-card-pts" id="pts-quiet">4,200</div>
       </div>
       <div class="lad-card" onclick="chooseLad(3)"><div class="pick-me-bubble">Oi! Pick me! I am way more fun than the others!</div>
         <img id="lad-card-3" alt="Funny">
         <div class="lad-card-name">The Funny One</div>
         <div class="lad-card-desc">Shares the Octopus Garden with you!</div>
-        <div class="lad-card-pts" id="pts-funny">7,600</div>
       </div>
 
 
@@ -170,10 +191,7 @@ body { background:#0a0a0a; display:flex; flex-direction:column; align-items:cent
       <img id="rita-mini" alt="Rita">
       <span id="rita-text">Pick any album to start! Can you beat me, love?</span>
     </div>
-    <div id="bc-mini">
-      <span id="bc-mini-label">&#9835; Educational BeatCoins</span>
-      <span id="bc-mini-count">80</span>
-    </div>
+    
   </div>
 
 </div>
@@ -475,15 +493,12 @@ const LAD_META = [
 ];
 
 let lbData = { smart:12500, cute:9800, quiet:4200, funny:7600 };
-function updateCardPts() {
-  const keys = ['smart','cute','quiet','funny'];
-  keys.forEach(k => {
-    const el = document.getElementById('pts-' + k);
-    if (el) el.textContent = (lbData[k]||0).toLocaleString();
-  });
+function updateTotalBeatcoins() {
   const total = Object.values(lbData).reduce((a,b)=>a+b,0);
-  const bc = document.getElementById('bc-mini-count');
-  if (bc) bc.textContent = total.toLocaleString();
+  const el = document.getElementById('bc-display');
+  if (el) el.textContent = total.toLocaleString();
+  const fans = document.getElementById('bc-fans-text');
+  if (fans) fans.textContent = total.toLocaleString() + ' Fans Learning Worldwide';
 }
 renderLeaderboard(); // mostrar imediatamente com dados de fallback
 let lbSha  = null;
