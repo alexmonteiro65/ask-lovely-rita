@@ -66,6 +66,8 @@
   .bg-fish {
     position: absolute; font-size: var(--fs);
     animation: fish-drift var(--fd) linear infinite; opacity: .3;
+    transform: scaleX(-1);
+    display: inline-block;
   }
   @keyframes fish-drift {
     0%   { transform: translateX(-60px); }
