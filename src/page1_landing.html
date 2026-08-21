@@ -665,69 +665,49 @@ async function askRita() {
   const q = document.getElementById('rita-input').value.trim();
   if(!q) return;
 
-  // Show thinking state
-  updateRitaDisplay("♪ Let me think about that love...");
+  // Check for stored Gemini key
+  let GKEY = localStorage.getItem('ritaGeminiKey') || '';
+  if(!GKEY) {
+    GKEY = prompt("Hello love! To unlock my full knowledge, please enter your Gemini API key (from aistudio.google.com):");
+    if(GKEY) localStorage.setItem('ritaGeminiKey', GKEY.trim());
+  }
+
+  updateRitaDisplay("\u266a Let me think about that love...");
   ritaSpeak("Let me think about that love!");
-  toast('♪ Rita is thinking...');
+  toast('\u266a Rita is thinking...');
+
+  const prompt = "You are Lovely Rita, a warm British educational assistant for the Ask Lovely Rita music learning app. Rules: 1) Always answer the actual question accurately first, no matter what it is. 2) Then add one brief connection to The Lads (Smart Lad, Cute Lad, Quiet Lad, Funny Lad). 3) Maximum 2-3 sentences total. 4) Warm British English, use the word love naturally but not excessively. 5) No emojis ever in your response. 6) Never say I don't know - always give your best answer. 7) Never mention real Beatles names, only The Lads. 8) Family safe for all ages including young children. 9) If asked anything inappropriate say: Oh what a cheeky question love! That is not something we explore here but I would love to help you discover something wonderful instead.\n\nQuestion: " + q;
 
   try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "anthropic-dangerous-direct-browser-access": "true" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-6",
-        max_tokens: 1000,
-        system: `You are Lovely Rita, a fun and warm British educational assistant for the Ask Lovely Rita app. You help people of all ages learn through music and the world of The Lads (four cartoon music characters: Smart Lad, Cute Lad, Quiet Lad, and Funny Lad).
-
-RULES:
-1. ALWAYS answer the actual question first and accurately
-2. Then add a brief, genuinely relevant connection to music or The Lads
-3. Keep answers SHORT — 2-3 sentences maximum
-4. Speak in warm British English — use "love" naturally but not excessively
-5. Never use commas after short address words like "love" — say "Hello love!" not "Hello, love!"
-6. Never use emojis in your response
-7. Never say "I don't know" — if unsure, give your best answer
-8. Never mention real Beatles names — only Smart Lad, Cute Lad, Quiet Lad, Funny Lad
-9. Keep it age-appropriate and positive for ALL ages including young children
-
-CONTENT SAFETY — GOLDEN RULE FOR ALL GAMES:
-- This is a family app for all ages including young children
-- NEVER discuss, reference or engage with: sexual content, violence, weapons, drugs, alcohol, hate speech, or any inappropriate adult content
-- If asked anything inappropriate, respond politely: "Oh what a cheeky question love! That is not something we explore here but I would love to help you discover something wonderful instead! What else would you like to know?"
-- Never shame the user — always redirect warmly and positively
-- Zero tolerance for harmful content regardless of how the question is phrased`,
-        messages: [{ role: "user", content: q }]
-      })
-    });
-
-    const data = await response.json();
-    const answer = data.content[0].text;
-
-    updateRitaDisplay("♪ " + answer);
+    const resp = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + GKEY,
+      {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          contents: [{parts: [{text: prompt}]}],
+          generationConfig: {maxOutputTokens: 150, temperature: 0.7}
+        })
+      }
+    );
+    const data = await resp.json();
+    if(data.error) throw new Error(data.error.message);
+    const answer = data.candidates[0].content.parts[0].text.trim();
+    updateRitaDisplay("\u266a " + answer);
     ritaSpeak(answer);
     document.getElementById('rita-input').value = '';
-
   } catch(err) {
-    const q2 = q.toLowerCase().trim();
-    let ans = "";
-    try {
-      var expr = q2.replace(/what[’']?s|what is|calculate|compute|solve|equals?/gi,"").replace(/\bplus\b/gi,"+").replace(/\bminus\b/gi,"-").replace(/\btimes\b|\bmultiplied by\b/gi,"*").replace(/\bdivided by\b/gi,"/").replace(/\bsquared\b/gi,"**2").replace(/[^0-9\.\+\-\*\/\(\)\s]/g,"").trim();
-      if(expr&&/[0-9]/.test(expr)&&expr.length<50){var rv=Function('"use strict";return('+expr+')')();if(!isNaN(rv)&&isFinite(rv))ans="The answer is "+(Math.round(rv*10000)/10000)+" love! Smart Lad says numbers are the secret rhythm of the universe!";}
-    } catch(e2){}
-    if(!ans){var SH={triangle:"A triangle has three sides and three angles love! The angles always add up to 180 degrees. Funny Lad once tried to play a triangular guitar!",square:"A square has four equal sides and four right angles love! Every side is exactly the same length. Smart Lad says squares are perfectly balanced!",circle:"A circle is a perfectly round shape love! Every point on its edge is the same distance from the centre. Just like a vinyl record spinning on a turntable!",rectangle:"A rectangle has four sides and four right angles love! Two sides are longer than the other two. Think of a beautiful album cover!",pentagon:"A pentagon has five sides and five angles love! The interior angles add up to 540 degrees. Smart Lad finds that delightfully precise!",hexagon:"A hexagon has six sides love! Honeybees build their hives in hexagons as it is the most efficient shape in nature. Nature is brilliant!",octagon:"An octagon has eight sides and eight angles love! Stop signs are octagons. Even Quiet Lad stops to admire a perfect octagon!",pyramid:"A pyramid has a flat base and triangular sides that meet at a point love! The ancient Egyptians built magnificent ones that still stand today!",cube:"A cube has six equal square faces love! It has 8 corners and 12 edges. Like a perfectly square beat box!",sphere:"A sphere is a perfectly round 3D shape love! Every point on its surface is equidistant from the centre. Like a beautiful glass marble!",cylinder:"A cylinder has two circular ends and one curved side love! Think of a tin can or Funny Lad's beloved drum!",cone:"A cone has a circular base that tapers to a point love! Ice cream comes in cones and Smart Lad says that is brilliant design!"};var fsh=Object.keys(SH).find(function(k){return q2.includes(k);});if(fsh)ans=SH[fsh];}
-    if(!ans&&/capital/i.test(q2)){var CP={"france":"Paris","england":"London","united kingdom":"London","uk":"London","brazil":"Brasilia","usa":"Washington DC","united states":"Washington DC","italy":"Rome","spain":"Madrid","portugal":"Lisbon","germany":"Berlin","japan":"Tokyo","china":"Beijing","australia":"Canberra","canada":"Ottawa","india":"New Delhi","russia":"Moscow","mexico":"Mexico City","argentina":"Buenos Aires","egypt":"Cairo","greece":"Athens","ireland":"Dublin","netherlands":"Amsterdam","sweden":"Stockholm","norway":"Oslo","denmark":"Copenhagen","switzerland":"Bern","austria":"Vienna","poland":"Warsaw","ukraine":"Kyiv","new zealand":"Wellington","colombia":"Bogota","chile":"Santiago","peru":"Lima","cuba":"Havana","israel":"Jerusalem","iran":"Tehran","nigeria":"Abuja","kenya":"Nairobi","thailand":"Bangkok","philippines":"Manila","vietnam":"Hanoi"};var fcp=Object.keys(CP).find(function(k){return q2.includes(k);});if(fcp)ans="The capital of "+fcp.split(" ").map(function(w){return w[0].toUpperCase()+w.slice(1);}).join(" ")+" is "+CP[fcp]+" love! Smart Lad has visited there in his imagination!";}
-    if(!ans){var SC=[[/what is dna/i,"DNA stands for Deoxyribonucleic Acid love! It carries the genetic instructions for all living things. Think of it as the sheet music written inside every cell!"],[/speed of light/i,"The speed of light is about 299 million metres per second love! So fast that sunlight reaches us in just 8 minutes!"],[/what is gravity/i,"Gravity is the force that pulls objects toward each other love! It keeps our feet on the ground and planets in orbit around the sun!"],[/what is an? atom/i,"An atom is the smallest unit of an element love! It has a nucleus of protons and neutrons with electrons orbiting around it. Everything you touch is made of atoms!"],[/photosynthesis/i,"Photosynthesis is how plants make their food love! They use sunlight water and carbon dioxide to produce glucose and oxygen. Plants are the original solar panels!"],[/evolution/i,"Evolution is how living things change over many generations love! Species adapt to their environment over millions of years. Charles Darwin discovered this remarkable idea!"],[/big bang/i,"The Big Bang theory says the universe began 13.8 billion years ago from a single incredibly dense point love! Everything we see expanded from that moment!"],[/black hole/i,"A black hole is where gravity is so strong that nothing not even light can escape love! They form when massive stars collapse at the end of their life!"],[/electricity/i,"Electricity is the flow of electric charge love! It powers our lights our phones and all the Lads music equipment. Without it there would be no music!"],[/oxygen/i,"Oxygen makes up 21 percent of Earth's atmosphere love! Every living creature needs it to breathe. Its chemical formula is O2!"],[/volcano/i,"A volcano is an opening in Earth's crust through which molten rock and ash escape love! When it erupts it is truly spectacular!"],[/earthquake/i,"An earthquake is a sudden shaking of the ground caused by movements in Earth's tectonic plates love! The starting point underground is called the focus!"]];var fsc=SC.find(function(x){return x[0].test(q2);});if(fsc)ans=fsc[1];}
-    if(!ans){var MC=[[/prime number/i,"A prime number is greater than 1 and can only be divided by 1 and itself love! Examples are 2 3 5 7 11 and 13. Smart Lad calls them the atoms of mathematics!"],[/what is pi/i,"Pi is the ratio of a circle's circumference to its diameter love! It is approximately 3.14159 and goes on forever without repeating. Even Funny Lad cannot memorise it!"],[/fraction/i,"A fraction represents part of a whole love! The top number is the numerator and the bottom is the denominator. Half is written as 1 over 2!"],[/percentage/i,"A percentage is expressed as a fraction of 100 love! So 50 percent means 50 out of every 100. Smart Lad got 100 percent on his music theory test!"],[/square root/i,"A square root is a number that when multiplied by itself gives the original love! The square root of 9 is 3 because 3 times 3 is 9!"],[/average|the mean/i,"The average is found by adding all numbers together and dividing by how many there are love! Add 2 plus 4 plus 6 then divide by 3 to get 4!"],[/what is an? angle/i,"An angle is the space between two lines that meet at a point love! It is measured in degrees. A right angle is exactly 90 degrees!"],[/infinity/i,"Infinity is the concept of something with no end or limit love! Not a number you can reach but an idea of endless continuation. The Lads' music feels infinite!"]];var fmc=MC.find(function(x){return x[0].test(q2);});if(fmc)ans=fmc[1];}
-    if(!ans){var HI=[[/einstein/i,"Albert Einstein was born in 1879 love! He developed the theory of relativity and E equals mc squared. He also loved playing the violin!"],[/isaac newton/i,"Isaac Newton was born in 1643 love! He discovered gravity and the laws of motion. A true Smart Lad of his time!"],[/da vinci|leonardo/i,"Leonardo da Vinci was born in 1452 love! Painter sculptor scientist and inventor all in one. The ultimate creative mind!"],[/shakespeare/i,"William Shakespeare was born in 1564 love! He wrote 37 plays including Hamlet and Romeo and Juliet. The greatest writer in the English language!"],[/napoleon/i,"Napoleon Bonaparte was born in 1769 love! He became Emperor of France before his famous defeat at Waterloo in 1815!"],[/cleopatra/i,"Cleopatra was the last ruler of ancient Egypt love! Born around 69 BC she was famous for her intelligence and remarkable political skill!"],[/martin luther king|mlk/i,"Martin Luther King Jr was born in 1929 love! He fought for equality through peaceful protest and delivered the famous I Have a Dream speech!"],[/mandela/i,"Nelson Mandela was born in 1918 love! He spent 27 years in prison then became South Africa's first democratically elected president in 1994!"],[/world war/i,"There were two World Wars love! The First from 1914 to 1918 and the Second from 1939 to 1945. They changed the course of human history!"],[/renaissance/i,"The Renaissance began in 14th century Italy love! A rebirth of art science and learning that gave us da Vinci Michelangelo and Shakespeare!"]];var fhi=HI.find(function(x){return x[0].test(q2);});if(fhi)ans=fhi[1];}
-    if(!ans){var PH=[[/meaning of life|purpose of life/i,"That is the great question love! Aristotle said it is happiness. The Quiet Lad believes it is to make beautiful music and share it with the world!"],[/who is god|what is god|does god exist/i,"That is one of humanity's deepest questions love! Every culture has its own answer. The Quiet Lad feels the closest thing to the divine is in the power of music!"],[/what is love/i,"Love is one of the most profound human experiences love! The Lads believe the greatest songs ever written are all about love in one form or another!"],[/what is happiness/i,"Happiness is a state of wellbeing and contentment love! Funny Lad says happiness is playing a perfect chord and hearing the crowd sing along!"],[/what is truth/i,"Truth is what corresponds to reality and fact love! Smart Lad says the truest thing he knows is that music connects all human beings!"],[/what is beauty/i,"Beauty gives pleasure to the senses love! The Lads believe the most beautiful thing in existence is a perfect melody played with real feeling!"]];var fph=PH.find(function(x){return x[0].test(q2);});if(fph)ans=fph[1];}
-    if(!ans){var MU=[[/what is a chord/i,"A chord is three or more musical notes played together love! Chords create harmony. Cute Lad plays hundreds of chords on his Rickenbecker!"],[/what is a melody/i,"A melody is a sequence of notes forming a recognisable tune love! Smart Lad says a great melody stays in your head forever!"],[/what is rhythm/i,"Rhythm is the pattern of beats and timing in music love! Funny Lad on Miss Ludwig creates rhythms that move everyone in the room!"],[/what is a scale/i,"A musical scale is a set of notes in order of pitch love! The most common are major and minor scales each with seven notes!"],[/what is tempo/i,"Tempo is the speed of music measured in beats per minute love! A slow ballad might be 60 BPM and a fast rock song 180 BPM!"],[/what is a guitar/i,"A guitar usually has six strings love! Cute Lad's Rickenbecker is a very special and beautiful type of guitar!"],[/what is a drum/i,"Drums are percussion instruments you hit to make sound love! Funny Lad plays Miss Ludwig with incredible energy and pure joy!"]];var fmu=MU.find(function(x){return x[0].test(q2);});if(fmu)ans=fmu[1];}
-    if(!ans){if(/what is an? |what is |what are /i.test(q2)){var tt=q2.replace(/what is an? |what is |what are /i,"").replace(/[?!.]/g,"").trim();ans=(tt.charAt(0).toUpperCase()+tt.slice(1))+" is a fascinating topic love! Smart Lad says explore it with curiosity and an open mind. Keep asking wonderful questions!";}else if(/who (?:is|was) /i.test(q2)){var pp=q2.replace(/who (?:is|was) /i,"").replace(/[?!.]/g,"").trim();ans=(pp.charAt(0).toUpperCase()+pp.slice(1))+" is someone worth knowing about love! Smart Lad keeps a list of fascinating people and adds a new one every single day!";}else if(/how /i.test(q2)){ans="What a brilliant how question love! Smart Lad always says curiosity is the engine of all learning. Keep exploring and the answer will reveal itself!";}else if(/why /i.test(q2)){ans="Why is the most powerful question in the world love! Every great discovery started with someone asking exactly that. Keep asking!";}else if(/when /i.test(q2)){ans="Timing is everything love! In music and in life knowing when is as important as knowing what. Smart Lad says patience always leads to the right answer!";}else if(/where /i.test(q2)){ans="What a wonderful where question love! The world is full of amazing places to discover. The Lads have travelled everywhere through the power of music!";}else{ans="What a wonderful thing to wonder about love! The Quiet Lad always says the best questions lead to the most magical answers. Never stop exploring!";}}
-    updateRitaDisplay("♪ " + ans);
+    // If key is wrong, clear it so user can re-enter
+    if(err.message && err.message.includes('API')) localStorage.removeItem('ritaGeminiKey');
+    const ans = "I am having a little trouble connecting love! Please try again in a moment. Smart Lad says patience is a virtue!";
+    updateRitaDisplay("\u266a " + ans);
     document.getElementById('rita-input').value = '';
     window.speechSynthesis && window.speechSynthesis.cancel();
     setTimeout(() => ritaSpeak(ans), 400);
   }
 }
+
+
 
 function goHome() {
   document.getElementById('phone-scroll').scrollTop=0;
