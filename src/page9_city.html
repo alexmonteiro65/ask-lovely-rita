@@ -117,7 +117,6 @@
 <div id="phone-outer">
   <div id="phone">
     <div id="notch"></div>
-    <div id="city-bg"></div>
     <div id="celebrate"></div>
     <div id="scroll-area">
       <div id="page-header">
@@ -125,9 +124,9 @@
         <p>The Cute Lad's city adventure!</p>
       </div>
       <div id="level-tabs">
-        <button onclick="setLevel('youngsters')" class="active">🟣 Youngsters</button>
-        <button onclick="setLevel('grownups')">🟡 Grown Ups</button>
-        <button onclick="setLevel('experts')">⭐ Experts</button>
+        <button id="tab-youngsters" class="active">🟣 Youngsters</button>
+        <button id="tab-grownups">🟡 Grown Ups</button>
+        <button id="tab-experts">⭐ Experts</button>
       </div>
       <div id="rita-wrap">
         <div id="rita-name">♪ Lovely Rita</div>
@@ -223,7 +222,17 @@ let S={level:'youngsters',beatcoins:80,score:0,qIndex:0,order:[],gameActive:fals
 function loadStorage(){try{const d=JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');if(d.theme&&LEVEL_CFG[d.theme])S.level=d.theme;if(typeof d.beatcoins==='number')S.beatcoins=d.beatcoins;}catch(e){}}
 function saveStorage(){try{const d=JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');d.beatcoins=S.beatcoins;localStorage.setItem('askLovelyRitaV4',JSON.stringify(d));}catch(e){}}
 
-function init(){loadStorage();buildCityBg();applyLevel(S.level);highlightTab(S.level);setTimeout(()=>speak(RITA_INTRO[S.level]),900);}
+function init(){
+  loadStorage();
+  buildCityBg();
+  applyLevel(S.level);
+  highlightTab(S.level);
+  setTimeout(()=>speak(RITA_INTRO[S.level]),900);
+  // Attach tab clicks via JS (bypasses any z-index blocking)
+  document.getElementById('tab-youngsters').addEventListener('click', ()=>setLevel('youngsters'));
+  document.getElementById('tab-grownups').addEventListener('click', ()=>setLevel('grownups'));
+  document.getElementById('tab-experts').addEventListener('click', ()=>setLevel('experts'));
+}
 
 function setLevel(lvl){
 S.level=lvl;window.speechSynthesis&&window.speechSynthesis.cancel();applyLevel(lvl);highlightTab(lvl);setTimeout(()=>speak(RITA_INTRO[lvl]),400);}
@@ -264,7 +273,7 @@ function buildCityBg(){
   bg.appendChild(bus);
   // Road
   const road=document.createElement('div');
-  road.style.cssText='position:absolute;bottom:0;left:0;right:0;height:20px;background:#555';
+  road.style.cssText='position:absolute;bottom:0;left:0;right:0;height:20px;background:#555;pointer-events:none';
   bg.appendChild(road);
 }
 
