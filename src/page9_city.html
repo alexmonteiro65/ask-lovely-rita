@@ -95,16 +95,21 @@
 
 
   /* PENNY LANE IMAGE */
-  #city-card { position: relative; }
+  #penny-lane-wrap {
+    margin: 0 12px 8px;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 120px;
+  }
   #penny-lane-img {
     width: 100%;
-    height: 140px;
+    height: 120px;
     object-fit: cover;
     object-position: center;
-    border-radius: 12px 12px 0 0;
     display: block;
-    margin-bottom: 8px;
+    pointer-events: none;
   }
+  #penny-lane-wrap.hidden { display:none; }
   #lad-bottom-wrap { flex-shrink:0; display:flex; align-items:flex-end; justify-content:center; height:110px; background:rgba(26,13,0,.4); border-top:1px solid rgba(255,222,89,.1); }
   #lad-bottom-img { height:128px; width:auto; object-fit:contain; filter:drop-shadow(0 -4px 20px rgba(255,222,89,.4)); animation:city-lad-float 3s ease-in-out infinite alternate; margin-bottom:-8px; }
   @keyframes city-lad-float { from{transform:translateY(0) rotate(-1deg)} to{transform:translateY(-8px) rotate(1deg)} }
@@ -150,8 +155,8 @@
         <div class="stat-card"><div class="stat-label">Score</div><div class="stat-val" id="score-val">0</div></div>
         <div class="stat-card"><div class="stat-label">City</div><div class="stat-val" id="q-num-val">0/8</div></div>
       </div>
+      <div id="penny-lane-wrap"><img id="penny-lane-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/penny_lane_image.png" alt="Penny Lane"/></div>
       <div id="city-card">
-        <img id="penny-lane-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/penny_lane_image.png" alt="Penny Lane"/>
         <div id="city-name">Press Start!</div>
         <div id="facts-label">Which fact is FALSE?</div>
         <div id="facts-list"></div>
@@ -237,7 +242,8 @@ function saveStorage(){try{const d=JSON.parse(localStorage.getItem('askLovelyRit
 
 function init(){loadStorage();buildCityBg();applyLevel(S.level);highlightTab(S.level);setTimeout(()=>speak(RITA_INTRO[S.level]),900);}
 
-function setLevel(lvl){S.level=lvl;window.speechSynthesis&&window.speechSynthesis.cancel();applyLevel(lvl);highlightTab(lvl);setTimeout(()=>speak(RITA_INTRO[lvl]),400);}
+function setLevel(lvl){
+  const plw=document.getElementById('penny-lane-wrap'); if(plw) plw.classList.remove('hidden');S.level=lvl;window.speechSynthesis&&window.speechSynthesis.cancel();applyLevel(lvl);highlightTab(lvl);setTimeout(()=>speak(RITA_INTRO[lvl]),400);}
 function highlightTab(lvl){document.querySelectorAll('#level-tabs button').forEach(b=>b.classList.toggle('active',(lvl==='youngsters'&&b.textContent.includes('Young'))||(lvl==='grownups'&&b.textContent.includes('Grown'))||(lvl==='experts'&&b.textContent.includes('Expert'))));}
 
 function applyLevel(lvl){
@@ -295,6 +301,7 @@ function resetGame(){
 }
 
 function startGame(){
+    const plw=document.getElementById('penny-lane-wrap'); if(plw) plw.classList.add('hidden');
   S.gameActive=true;
   document.getElementById('start-btn').style.display='none';
   loadCity();
