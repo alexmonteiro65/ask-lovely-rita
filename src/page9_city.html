@@ -140,7 +140,7 @@
         <div class="stat-card"><div class="stat-label">City</div><div class="stat-val" id="q-num-val">0/8</div></div>
       </div>
       <div id="city-card">
-        <div id="city-emoji">🌆</div>
+        <img id="city-emoji" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/penny_lane_image.png" alt="Penny Lane" style="width:100%;max-width:260px;border-radius:12px;display:block;margin:0 auto 6px;"/>
         <div id="city-name">Press Start!</div>
         <div id="facts-label">Which fact is FALSE?</div>
         <div id="facts-list"></div>
@@ -275,7 +275,7 @@ function resetGame(){
   const $ = id => document.getElementById(id);
   if($('score-val')) $('score-val').textContent='0';
   if($('q-num-val')) $('q-num-val').textContent='0/8';
-  if($('city-emoji')) $('city-emoji').textContent='🌆';
+  // city-emoji is an image, no textContent needed
   if($('city-name')) $('city-name').textContent='Press Start!';
   if($('facts-list')) $('facts-list').innerHTML='';
   if($('result-panel')) $('result-panel').classList.remove('show');
@@ -294,7 +294,7 @@ function loadCity(){
   const cities=CITIES[S.level];
   const city=cities[S.order[S.qIndex%cities.length]];
   S.answered=false;
-  document.getElementById('city-emoji').textContent=city.emoji;
+  // city-emoji is now an image
   document.getElementById('city-name').textContent=city.name;
   document.getElementById('result-panel').classList.remove('show');
   document.getElementById('next-btn').style.display='none';
