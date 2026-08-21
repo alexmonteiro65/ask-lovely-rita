@@ -765,13 +765,16 @@ function goNext() {
 
 function toggleMute() {
   muteState=!muteState;
-  if(muteState) window.speechSynthesis&&window.speechSynthesis.cancel();
+  localStorage.setItem('askLovelyRitaV4_mute', muteState?'1':'0');
   document.getElementById('sound-icon').textContent=muteState?'🔇':'🔊';
-  if(!muteState) {
-    const msg = "Shh! Going quiet are we love? I will be here when you are ready!";
-    ritaSpeak(msg); updateRitaDisplay(msg);
+  if(muteState) {
+    window.speechSynthesis&&window.speechSynthesis.cancel();
+    toast('🔇 Going quietly...');
+  } else {
+    const msg = "Hello love! I am back! Ready to make some music magic!";
+    setTimeout(()=>{ ritaSpeak(msg); updateRitaDisplay(msg); }, 200);
+    toast('🔊 Sound on!');
   }
-  toast(muteState?'🔇 Sound off':'🔊 Sound on');
 }
 
 const PLAYLIST = [
