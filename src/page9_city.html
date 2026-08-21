@@ -17,7 +17,7 @@
   #scroll-area::-webkit-scrollbar { display:none; }
 
   /* CITY BG */
-  #city-bg { position:absolute; inset:0; z-index:0; background:linear-gradient(180deg,#ff6b35 0%,#ffde59 30%,#87ceeb 60%,#4a90d9 100%); border-radius:40px; overflow:hidden; pointer-events:none; }
+  #city-bg { position:absolute; inset:0; z-index:-1; background:linear-gradient(180deg,#ff6b35 0%,#ffde59 30%,#87ceeb 60%,#4a90d9 100%); border-radius:40px; overflow:hidden; pointer-events:none; }
   .city-building { position:absolute; bottom:0; background:var(--bc); border-radius:4px 4px 0 0; pointer-events:none; }
   .city-window { position:absolute; background:#ffde59; border-radius:1px; animation:win-blink var(--wb) ease-in-out infinite alternate; pointer-events:none; }
   @keyframes win-blink { from{opacity:.2} to{opacity:1} }
@@ -117,9 +117,9 @@
 <div id="phone-outer">
   <div id="phone">
     <div id="notch"></div>
-    <div id="city-bg"></div>
     <div id="celebrate"></div>
     <div id="scroll-area">
+      <div id="city-bg"></div>
       <div id="page-header">
         <h1>🌆 Penny Lane</h1>
         <p>The Cute Lad's city adventure!</p>
