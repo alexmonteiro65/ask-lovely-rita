@@ -199,7 +199,7 @@
   .vw-car:hover { transform: scale(1.1) translateY(-2px); }
   .vw-car.dragging { opacity: .45; transform: scale(1.1); }
   .vw-car.placed { opacity: 0; pointer-events: none; }
-  .vw-car img { width:100%; height:100%; object-fit:contain; pointer-events:none; background:transparent; }
+  .vw-car img { width:100%; height:100%; object-fit:contain; pointer-events:none; background:transparent; mix-blend-mode:multiply; }
 
   /* ── DRAG GHOST ── */
   #drag-ghost {
@@ -316,10 +316,10 @@
   #rita-bubble-bottom::before {
     content: '';
     position: absolute;
-    left: -8px; bottom: 18px;
+    right: -8px; bottom: 18px;
     border-top: 6px solid transparent;
     border-bottom: 6px solid transparent;
-    border-right: 8px solid rgba(255,255,255,.13);
+    border-left: 8px solid rgba(255,255,255,.13);
   }
   #rita-name-bottom {
     font-size: 9px; font-weight:700; color:var(--accent);
@@ -421,20 +421,20 @@
 
       <!-- RITA BOTTOM -->
       <div id="rita-section">
+        <div id="rita-bubble-bottom">
+          <div id="rita-name-bottom">♪ Lovely Rita</div>
+          <div id="rita-text-bottom">Loading...</div>
+          <button id="rita-speak-btn" onclick="ritaSpeak()">🔊</button>
+        </div>
         <div id="rita-img-wrap">
           <img id="rita-img"
-            src="https://alexmonteiro65.github.io/ask-lovely-rita/src/rita_beatcorps_clean.png"
+            src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/rita_beatcorps_clean.png"
             alt="Lovely Rita"
             onerror="this.style.display='none'"/>
           <div id="flag-wrap">
             <div id="flag-pole"></div>
             <canvas id="flag-canvas" width="44" height="34"></canvas>
           </div>
-        </div>
-        <div id="rita-bubble-bottom">
-          <div id="rita-name-bottom">♪ Lovely Rita</div>
-          <div id="rita-text-bottom">Loading...</div>
-          <button id="rita-speak-btn" onclick="ritaSpeak()">🔊</button>
         </div>
       </div>
 
@@ -601,7 +601,7 @@ function applyLevel(lvl) {
   const _bcEl = document.getElementById('bc-val'); if(_bcEl) _bcEl.textContent = S.beatcoins;
 
   // Rita image — use Beat Corps (abbey) image always for Rita
-  document.getElementById('rita-img').src = 'https://alexmonteiro65.github.io/ask-lovely-rita/src/rita_beatcorps_clean.png';
+  document.getElementById('rita-img').src = 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/rita_beatcorps_clean.png';
 
   // Timer
   const tc = document.getElementById('timer-card');
