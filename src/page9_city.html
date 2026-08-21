@@ -232,7 +232,7 @@ function applyLevel(lvl){
   document.body.className=`theme-${lvl}`;
   document.getElementById('rita-text').textContent=RITA_INTRO[lvl];
   document.getElementById('bc-val').textContent=S.beatcoins;
-  document.getElementById('lad-bottom-img').src=BASE+LEVEL_CFG[lvl].ladImg;
+  document.getElementById('lad-bottom-img').src=LEVEL_CFG[lvl].ladImg;
   resetGame();
 }
 
