@@ -269,7 +269,7 @@
     </div>
     <div id="lad-bottom-wrap">
       <img id="lad-bottom-img"
-        src="https://alexmonteiro65.github.io/ask-lovely-rita/src/space_lad_youngsters.png" alt="Smart Lad"
+        src="https://alexmonteiro65.github.io/ask-lovely-rita/src/space_lad_grownups.png" alt="Smart Lad"
         onerror="this.style.display='none'"/>
     </div>
     <nav id="nav-bar">
@@ -569,19 +569,6 @@ function setDevice(w,h,name){const p=document.getElementById('phone');p.style.wi
 
 init();
 </script>
-<script>
-// Swap lad image by level
-(function() {
-  const params = new URLSearchParams(window.location.search);
-  const lvl = params.get('level') || localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
-  const ladImg = document.getElementById('lad-bottom-img');
-  if (ladImg) {
-    ladImg.src = (lvl === 'youngsters')
-      ? 'https://alexmonteiro65.github.io/ask-lovely-rita/src/space_lad_youngsters.png'
-      : 'https://alexmonteiro65.github.io/ask-lovely-rita/src/space_lad_grownups.png';
-    ladImg.alt = 'Space Lad';
-  }
-})();
-</script>
+
 </body>
 </html>
