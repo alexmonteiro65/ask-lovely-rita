@@ -280,12 +280,14 @@ function resetGame(){
   if($('facts-list')) $('facts-list').innerHTML='';
   if($('result-panel')) $('result-panel').classList.remove('show');
   if($('start-btn')){ $('start-btn').style.display='block'; $('start-btn').textContent='🚌 Explore Cities!'; $('start-btn').onclick=startGame; }
+  const ce=$('city-emoji'); if(ce) ce.style.display='block';
   if($('next-btn')) $('next-btn').style.display='none';
 }
 
 function startGame(){
   S.gameActive=true;
   document.getElementById('start-btn').style.display='none';
+  document.getElementById('city-emoji').style.display='none';
   loadCity();
 }
 
