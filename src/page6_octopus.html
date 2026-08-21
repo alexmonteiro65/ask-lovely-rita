@@ -607,7 +607,7 @@ function applyLevel(lvl) {
   if(ladBottomEl) {
     ladBottomEl.style.display = 'block';
     ladBottomFallback.style.display = 'none';
-    ladBottomEl.src = BASE + cfg.ladImg;
+    ladBottomEl.src = cfg.ladImg;
     ladBottomEl.onerror = () => {
       ladBottomEl.style.display = 'none';
       ladBottomFallback.style.display = 'block';
