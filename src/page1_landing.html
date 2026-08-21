@@ -664,49 +664,28 @@ function updateRitaDisplay(text) {
 async function askRita() {
   const q = document.getElementById('rita-input').value.trim();
   if(!q) return;
-
-  // Check for stored Gemini key
-  let GKEY = localStorage.getItem('ritaGeminiKey') || 'AQ.Ab8RN6KcmyvVhg0ikvHdxPol8YcIykLUMsIDwGuaR-Avw2bNIw';
-  if(!GKEY) {
-    GKEY = prompt("Hello love! To unlock my full knowledge, please enter your Gemini API key (from aistudio.google.com):");
-    if(GKEY) localStorage.setItem('ritaGeminiKey', GKEY.trim());
-  }
-
   updateRitaDisplay("\u266a Let me think about that love...");
   ritaSpeak("Let me think about that love!");
   toast('\u266a Rita is thinking...');
-
-  const prompt = "You are Lovely Rita, a warm British educational assistant for the Ask Lovely Rita music learning app. Rules: 1) Always answer the actual question accurately first, no matter what it is. 2) Then add one brief connection to The Lads (Smart Lad, Cute Lad, Quiet Lad, Funny Lad). 3) Maximum 2-3 sentences total. 4) Warm British English, use the word love naturally but not excessively. 5) No emojis ever in your response. 6) Never say I don't know - always give your best answer. 7) Never mention real Beatles names, only The Lads. 8) Family safe for all ages including young children. 9) If asked anything inappropriate say: Oh what a cheeky question love! That is not something we explore here but I would love to help you discover something wonderful instead.\n\nQuestion: " + q;
-
   try {
-    const resp = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + GKEY,
-      {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-          contents: [{parts: [{text: prompt}]}],
-          generationConfig: {maxOutputTokens: 150, temperature: 0.7}
-        })
-      }
-    );
+    const resp = await fetch("https://empty-leaf-6e4b.alexmonteironeto.workers.dev/", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ question: q })
+    });
     const data = await resp.json();
-    if(data.error) throw new Error(data.error.message);
-    const answer = data.candidates[0].content.parts[0].text.trim();
+    const answer = data.answer;
     updateRitaDisplay("\u266a " + answer);
     ritaSpeak(answer);
     document.getElementById('rita-input').value = '';
   } catch(err) {
-    // If key is wrong, clear it so user can re-enter
-    if(err.message && err.message.includes('API')) localStorage.removeItem('ritaGeminiKey');
-    const ans = "I am having a little trouble connecting love! Please try again in a moment. Smart Lad says patience is a virtue!";
+    const ans = "I am having a little trouble connecting love! Please try again in a moment.";
     updateRitaDisplay("\u266a " + ans);
     document.getElementById('rita-input').value = '';
     window.speechSynthesis && window.speechSynthesis.cancel();
     setTimeout(() => ritaSpeak(ans), 400);
   }
 }
-
 
 
 function goHome() {
