@@ -118,22 +118,14 @@
   #result-sub { font-size:10px; color:rgba(255,255,255,.5); } #result-pts { font-size:16px; font-weight:900; }
 
 
-  /* INNER LIGHT IMAGE BOX */
-  #inner-light-box {
-    margin: 0 12px 12px;
-    border-radius: 16px;
-    overflow: hidden;
-    background: rgba(255,107,53,0.1);
-    border: 1px solid rgba(255,107,53,0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 160px;
-  }
-  #inner-light-box img {
-    height: 155px;
-    width: auto;
-    object-fit: contain;
+  /* INNER LIGHT IMAGE — compact in header */
+  #inner-light-img {
+    display:block;
+    height:90px;
+    width:auto;
+    margin:4px auto 0;
+    object-fit:contain;
+    filter:drop-shadow(0 2px 8px rgba(255,107,53,.4));
   }
   #lad-bottom-wrap { flex-shrink:0; display:flex; align-items:flex-end; justify-content:center; height:110px; background:rgba(26,8,0,.4); border-top:1px solid rgba(255,107,53,.1); }
   #lad-bottom-img { height:128px; width:auto; object-fit:contain; filter:drop-shadow(0 -4px 20px rgba(255,107,53,.4)); animation:peaceful-float 3s ease-in-out infinite alternate; margin-bottom:-8px; }
@@ -164,6 +156,7 @@
       <div id="page-header">
         <h1>🌿 The Inner Light</h1>
         <p>The Quiet Lad's world of culture and nature!</p>
+        <img id="inner-light-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/inner_light_image.png" alt="The Inner Light"/>
       </div>
       <div id="level-tabs">
         <button onclick="setLevel('youngsters')" class="active">🟣 Youngsters</button>
@@ -179,9 +172,6 @@
         <div class="stat-card"><div class="stat-label">BeatCoins</div><div class="stat-val" id="bc-val">80</div></div>
         <div class="stat-card"><div class="stat-label">Score</div><div class="stat-val" id="score-val">0</div></div>
         <div class="stat-card"><div class="stat-label">Pairs</div><div class="stat-val" id="pairs-val">0/4</div></div>
-      </div>
-      <div id="inner-light-box">
-        <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/inner_light_image.png" alt="The Inner Light"/>
       </div>
       <div id="timer-display"></div>
       <div id="progress-row"></div>
