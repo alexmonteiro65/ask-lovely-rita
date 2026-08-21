@@ -455,7 +455,7 @@
     <!-- FUNNY LAD FIXED AT BOTTOM -->
     <div id="lad-bottom-wrap">
       <img id="lad-bottom-img"
-        src="https://alexmonteiro65.github.io/ask-lovely-rita/src/Funny_Aqua_Lad.png"
+        src="https://alexmonteiro65.github.io/ask-lovely-rita/src/aqua_lad_youngsters.png"
         alt="Funny Lad"
         onerror="this.style.display='none';document.getElementById('lad-bottom-fallback').style.display='block'"/>
       <div id="lad-bottom-fallback" style="display:none;font-size:64px;line-height:1">🤿</div>
@@ -1054,6 +1054,20 @@ function setDevice(w,h,name){
 
 // ── BOOT ──────────────────────────────────────────────────
 init();
+</script>
+<script>
+// Swap lad image by level
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const lvl = params.get('level') || localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
+  const ladImg = document.getElementById('lad-bottom-img');
+  if (ladImg) {
+    ladImg.src = (lvl === 'youngsters')
+      ? 'https://alexmonteiro65.github.io/ask-lovely-rita/src/aqua_lad_youngsters.png'
+      : 'https://alexmonteiro65.github.io/ask-lovely-rita/src/aqua_lad_grownups.png';
+    ladImg.alt = 'Aqua Lad';
+  }
+})();
 </script>
 </body>
 </html>
