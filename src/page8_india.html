@@ -428,6 +428,7 @@ function goHome(){window.location.href='https://alexmonteiro65.github.io/ask-lov
 function goForward(){window.location.href='https://alexmonteiro65.github.io/ask-lovely-rita/src/page9_city.html';}
 
 function speak(text){
+  if(localStorage.getItem('askLovelyRitaV4_mute')==='1') return;
   if(!window.speechSynthesis)return;
   window.speechSynthesis.cancel();
   const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.9;u.pitch=1.1;
