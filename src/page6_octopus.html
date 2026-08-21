@@ -418,7 +418,7 @@
         <!-- Youngsters: real creature image -->
         <div id="creature-wrap">
           <img id="creature-img" src="" alt="" style="display:none"/>
-          <div id="creature-emoji" style="display:block">🌊</div>
+          <div id="creature-emoji" style="display:block"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus_garden_drum.png" style="width:100%;max-width:260px;border-radius:12px;display:block;margin:0 auto" alt="Octopus Garden"/></div>
         </div>
         <!-- Grown Ups / Experts: riddle -->
         <div id="riddle-wrap">
@@ -478,7 +478,7 @@ const WORDS_BY_LEVEL = {
   youngsters: [
     { word:'CORAL',     emoji:'🪸', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Coral_reef_at_palmyra.jpg/320px-Coral_reef_at_palmyra.jpg', cat:'Ocean Life',    riddle:"I live underwater and come in many colours. Fish love to hide inside me. I look like a plant but I am actually made of tiny animals!" },
     { word:'FISH',      emoji:'🐟', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Tropical_fish_schools.jpg/320px-Tropical_fish_schools.jpg',   cat:'Ocean Life',    riddle:"I live in the water and breathe through gills. I have fins and scales. You might find me in an aquarium or on your dinner plate!" },
-    { word:'WAVE',      emoji:'🌊', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Mavericks_Surf_Contest_2010b.jpg/320px-Mavericks_Surf_Contest_2010b.jpg', cat:'Ocean Science', riddle:"I rise and fall in the sea. Surfers love to ride me! The wind creates me and I travel far across the ocean." },
+    { word:'WAVE',      emoji:'<img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus_garden_drum.png" style="width:100%;max-width:260px;border-radius:12px" alt="Octopus Garden">', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Mavericks_Surf_Contest_2010b.jpg/320px-Mavericks_Surf_Contest_2010b.jpg', cat:'Ocean Science', riddle:"I rise and fall in the sea. Surfers love to ride me! The wind creates me and I travel far across the ocean." },
     { word:'DOLPHIN',   emoji:'🐬', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Tursiops_truncatus_01.jpg/320px-Tursiops_truncatus_01.jpg',    cat:'Ocean Life',    riddle:"I am one of the smartest animals in the sea! I jump and play. I am not a fish. I breathe air just like you!" },
     { word:'SEAHORSE',  emoji:'🐠', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Pacific_Seahorse_Monterey.jpg/180px-Pacific_Seahorse_Monterey.jpg', cat:'Ocean Life', riddle:"I look like a tiny horse but I swim in the sea! The daddy in my family carries the babies." },
     { word:'SEAWEED',   emoji:'🌿', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Kelp_forest_at_Anacapa_Island.jpg/320px-Kelp_forest_at_Anacapa_Island.jpg', cat:'Ocean Plants', riddle:"I am a plant that grows in the sea. Humans use me in sushi and even in ice cream!" },
@@ -489,7 +489,7 @@ const WORDS_BY_LEVEL = {
     { word:'SUBMARINE',  emoji:'🚢', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/USS_Alexandria_%28SSN_757%29.jpg/320px-USS_Alexandria_%28SSN_757%29.jpg', cat:'Ocean Vehicles', riddle:"I travel deep below the surface of the sea. Sailors live inside me for months at a time without seeing sunlight. What am I?" },
     { word:'PLANKTON',   emoji:'🦠', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Haeckel_Peridinea.jpg/240px-Haeckel_Peridinea.jpg',           cat:'Ocean Science',  riddle:"I am invisible to the naked eye but I am the foundation of all ocean life. Whales eat billions of me every day. What am I?" },
     { word:'BARNACLE',   emoji:'🐚', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Cirripedia_Gould_1841.jpg/240px-Cirripedia_Gould_1841.jpg',   cat:'Ocean Life',     riddle:"I attach myself to rocks and ships and never move again. I am a crustacean that feeds by waving feathery legs through the water. What am I?" },
-    { word:'CURRENT',    emoji:'🌊', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Corrientes-oceanicas.gif/320px-Corrientes-oceanicas.gif',      cat:'Ocean Science',  riddle:"I am an invisible river flowing through the ocean. I move heat around the planet and guide ships across the seas. What am I?" },
+    { word:'CURRENT',    emoji:'<img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus_garden_drum.png" style="width:100%;max-width:260px;border-radius:12px" alt="Octopus Garden">', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Corrientes-oceanicas.gif/320px-Corrientes-oceanicas.gif',      cat:'Ocean Science',  riddle:"I am an invisible river flowing through the ocean. I move heat around the planet and guide ships across the seas. What am I?" },
     { word:'ANEMONE',    emoji:'🌺', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Clownfish_in_sea_anemone.jpg/240px-Clownfish_in_sea_anemone.jpg', cat:'Ocean Life',  riddle:"I look like a flower but I am an animal! Clownfish live inside my tentacles and I protect them from predators. What am I?" },
     { word:'NAUTILUS',   emoji:'🐚', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Nautilus_pompilius_%28Pieter_Bleeker%29.jpg/240px-Nautilus_pompilius_%28Pieter_Bleeker%29.jpg', cat:'Ocean Life', riddle:"I am a living fossil that has barely changed in 500 million years. I live in a beautiful spiral shell with many chambers. What am I?" },
     { word:'SQUID',      emoji:'🦑', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Loligo_vulgaris.jpg/240px-Loligo_vulgaris.jpg',               cat:'Ocean Life',     riddle:"I have ten arms and can change colour in an instant. I shoot ink to escape predators and can swim backwards faster than most fish. What am I?" },
@@ -677,7 +677,7 @@ function resetGame() {
   document.getElementById('start-btn').onclick = startGame;
   document.getElementById('next-btn').style.display = 'none';
   document.getElementById('hint-btn').style.display = 'none';
-  document.getElementById('creature-emoji').textContent = '🌊';
+  document.getElementById('creature-emoji').textContent = '<img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus_garden_drum.png" style="width:100%;max-width:260px;border-radius:12px" alt="Octopus Garden">';
   document.getElementById('creature-emoji').style.display = 'block';
   document.getElementById('creature-img').style.display = 'none';
   document.getElementById('riddle-wrap').style.display = 'none';
