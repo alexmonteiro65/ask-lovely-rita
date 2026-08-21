@@ -1185,6 +1185,7 @@ function playChime() {
 }
 
 function speak(text) {
+  if(localStorage.getItem('askLovelyRitaV4_mute')==='1') return;
   if(!window.speechSynthesis)return;
   window.speechSynthesis.cancel();
   const u=new SpeechSynthesisUtterance(text);
