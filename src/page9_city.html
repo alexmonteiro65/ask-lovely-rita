@@ -13,7 +13,7 @@
   #phone-outer { background:#1c1c1c; border-radius:50px; padding:12px; box-shadow:0 0 0 2px #333,0 20px 60px rgba(0,0,0,.8); }
   #phone { width:369px; height:828px; border-radius:40px; overflow:hidden; position:relative; display:flex; flex-direction:column; background:#1a0d00; transition:width .3s,height .3s; }
   #notch { position:absolute; top:0; left:50%; transform:translateX(-50%); width:120px; height:30px; background:#1c1c1c; border-radius:0 0 20px 20px; z-index:20; }
-  #scroll-area { flex:1; overflow-y:auto; overflow-x:hidden; padding:36px 12px 8px; scrollbar-width:none; position:relative; z-index:5; isolation:isolate; }
+  #scroll-area { flex:1; overflow-y:auto; overflow-x:hidden; padding:36px 12px 8px; scrollbar-width:none; position:relative; z-index:5; }
   #scroll-area::-webkit-scrollbar { display:none; }
 
   /* CITY BG */
@@ -117,6 +117,7 @@
 <div id="phone-outer">
   <div id="phone">
     <div id="notch"></div>
+    <div id="city-bg"></div>
     <div id="celebrate"></div>
     <div id="scroll-area">
       <div id="page-header">
@@ -124,9 +125,9 @@
         <p>The Cute Lad's city adventure!</p>
       </div>
       <div id="level-tabs">
-        <button id="tab-youngsters" class="active">🟣 Youngsters</button>
-        <button id="tab-grownups">🟡 Grown Ups</button>
-        <button id="tab-experts">⭐ Experts</button>
+        <button onclick="setLevel('youngsters')" class="active">🟣 Youngsters</button>
+        <button onclick="setLevel('grownups')">🟡 Grown Ups</button>
+        <button onclick="setLevel('experts')">⭐ Experts</button>
       </div>
       <div id="rita-wrap">
         <div id="rita-name">♪ Lovely Rita</div>
@@ -222,17 +223,7 @@ let S={level:'youngsters',beatcoins:80,score:0,qIndex:0,order:[],gameActive:fals
 function loadStorage(){try{const d=JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');if(d.theme&&LEVEL_CFG[d.theme])S.level=d.theme;if(typeof d.beatcoins==='number')S.beatcoins=d.beatcoins;}catch(e){}}
 function saveStorage(){try{const d=JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');d.beatcoins=S.beatcoins;localStorage.setItem('askLovelyRitaV4',JSON.stringify(d));}catch(e){}}
 
-function init(){
-  loadStorage();
-  buildCityBg();
-  applyLevel(S.level);
-  highlightTab(S.level);
-  setTimeout(()=>speak(RITA_INTRO[S.level]),900);
-  // Attach tab clicks via JS (bypasses any z-index blocking)
-  document.getElementById('tab-youngsters').addEventListener('click', ()=>setLevel('youngsters'));
-  document.getElementById('tab-grownups').addEventListener('click', ()=>setLevel('grownups'));
-  document.getElementById('tab-experts').addEventListener('click', ()=>setLevel('experts'));
-}
+function init(){loadStorage();buildCityBg();applyLevel(S.level);highlightTab(S.level);setTimeout(()=>speak(RITA_INTRO[S.level]),900);}
 
 function setLevel(lvl){
 S.level=lvl;window.speechSynthesis&&window.speechSynthesis.cancel();applyLevel(lvl);highlightTab(lvl);setTimeout(()=>speak(RITA_INTRO[lvl]),400);}
