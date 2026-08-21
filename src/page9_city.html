@@ -157,7 +157,8 @@
       </div>
     </div>
     <div id="lad-bottom-wrap">
-      <img id="lad-bottom-img" src="https://alexmonteiro65.github.io/ask-lovely-rita/src/Cute_Urban_Lad.png" alt="Cute Lad" onerror="this.style.display='none'"/>
+      <img id="lad-bottom-img"
+        src="https://alexmonteiro65.github.io/ask-lovely-rita/src/urban_lad_youngsters.png" alt="Cute Lad" onerror="this.style.display='none'"/>
     </div>
     <nav id="nav-bar">
       <button class="nav-btn" onclick="goBack()"><span class="nav-icon">◀️</span><span>Back</span></button>
@@ -405,6 +406,20 @@ function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
 function setDevice(w,h,name){const p=document.getElementById('phone');p.style.width=w+'px';p.style.height=h+'px';document.querySelectorAll('#device-bar button').forEach(b=>b.classList.toggle('active',b.textContent===name));}
 
 init();
+</script>
+<script>
+// Swap lad image by level
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const lvl = params.get('level') || localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
+  const ladImg = document.getElementById('lad-bottom-img');
+  if (ladImg) {
+    ladImg.src = (lvl === 'youngsters')
+      ? 'https://alexmonteiro65.github.io/ask-lovely-rita/src/urban_lad_youngsters.png'
+      : 'https://alexmonteiro65.github.io/ask-lovely-rita/src/urban_lad_grownups.png';
+    ladImg.alt = 'Urban Lad';
+  }
+})();
 </script>
 </body>
 </html>
