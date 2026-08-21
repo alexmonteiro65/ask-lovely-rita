@@ -768,10 +768,13 @@ function toggleMute() {
   localStorage.setItem('askLovelyRitaV4_mute', muteState?'1':'0');
   document.getElementById('sound-icon').textContent=muteState?'🔇':'🔊';
   if(muteState) {
-    window.speechSynthesis&&window.speechSynthesis.cancel();
+    const msg = "Going quietly love! I will be here when you are ready!";
+    updateRitaDisplay(msg);
+    ritaSpeak(msg);
+    setTimeout(()=>window.speechSynthesis&&window.speechSynthesis.cancel(), 3000);
     toast('🔇 Going quietly...');
   } else {
-    const msg = "Hello love! I am back! Ready to make some music magic!";
+    const msg = "Hello love! I am back! Let us make some music magic!";
     setTimeout(()=>{ ritaSpeak(msg); updateRitaDisplay(msg); }, 200);
     toast('🔊 Sound on!');
   }
