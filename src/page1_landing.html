@@ -666,7 +666,7 @@ async function askRita() {
   if(!q) return;
 
   // Check for stored Gemini key
-  let GKEY = localStorage.getItem('ritaGeminiKey') || '';
+  let GKEY = localStorage.getItem('ritaGeminiKey') || 'AQ.Ab8RN6KcmyvVhg0ikvHdxPol8YcIykLUMsIDwGuaR-Avw2bNIw';
   if(!GKEY) {
     GKEY = prompt("Hello love! To unlock my full knowledge, please enter your Gemini API key (from aistudio.google.com):");
     if(GKEY) localStorage.setItem('ritaGeminiKey', GKEY.trim());
