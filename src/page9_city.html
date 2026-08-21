@@ -380,6 +380,7 @@ function goHome(){window.location.href='page1_landing.html';}
 function goForward(){window.location.href='page1_landing.html';}
 
 function speak(text){
+  if(localStorage.getItem('askLovelyRitaV4_mute')==='1') return;
   if(!window.speechSynthesis)return;
   window.speechSynthesis.cancel();
   const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.9;u.pitch=1.1;
