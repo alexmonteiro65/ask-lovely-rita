@@ -379,7 +379,7 @@ function applyLevel(lvl) {
   document.getElementById('rita-text').textContent=RITA_INTRO[lvl];
   document.getElementById('bc-val').textContent=S.beatcoins;
   const ladEl=document.getElementById('lad-bottom-img');
-  ladEl.src=BASE+LEVEL_CFG[lvl].ladImg;
+  ladEl.src=LEVEL_CFG[lvl].ladImg;
   resetGame();
 }
 
