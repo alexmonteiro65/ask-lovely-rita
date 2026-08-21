@@ -418,7 +418,7 @@
         <!-- Youngsters: real creature image -->
         <div id="creature-wrap">
           <img id="creature-img" src="" alt="" style="display:none"/>
-          <div id="creature-emoji" style="display:block"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus_garden_drum.png" style="width:100%;max-width:260px;border-radius:12px;display:block;margin:0 auto" alt="Octopus Garden"/></div>
+          <div id="creature-emoji" style="display:block"><img id="drum-bg-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus_garden_drum.png" style="width:100%;max-width:260px;border-radius:12px;display:block;margin:0 auto" alt="Octopus Garden"/></div>
         </div>
         <!-- Grown Ups / Experts: riddle -->
         <div id="riddle-wrap">
@@ -677,7 +677,7 @@ function resetGame() {
   document.getElementById('start-btn').onclick = startGame;
   document.getElementById('next-btn').style.display = 'none';
   document.getElementById('hint-btn').style.display = 'none';
-  document.getElementById('creature-emoji').textContent = '<img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus_garden_drum.png" style="width:100%;max-width:260px;border-radius:12px" alt="Octopus Garden">';
+  // drum image is always visible in creature-emoji div
   document.getElementById('creature-emoji').style.display = 'block';
   document.getElementById('creature-img').style.display = 'none';
   document.getElementById('riddle-wrap').style.display = 'none';
