@@ -535,6 +535,7 @@ function goHome(){window.location.href='https://alexmonteiro65.github.io/ask-lov
 function goForward(){window.location.href='https://alexmonteiro65.github.io/ask-lovely-rita/src/page8_india.html';}
 
 function speak(text){
+  if(localStorage.getItem('askLovelyRitaV4_mute')==='1') return;
   if(!window.speechSynthesis)return;
   window.speechSynthesis.cancel();
   const u=new SpeechSynthesisUtterance(text);
