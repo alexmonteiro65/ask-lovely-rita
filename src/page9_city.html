@@ -140,6 +140,7 @@
         <div class="stat-card"><div class="stat-label">City</div><div class="stat-val" id="q-num-val">0/8</div></div>
       </div>
       <div id="city-card">
+        <div id="city-emoji">🌆</div>
         <div id="city-name">Press Start!</div>
         <div id="facts-label">Which fact is FALSE?</div>
         <div id="facts-list"></div>
@@ -271,16 +272,15 @@ function buildCityBg(){
 function resetGame(){
   S.score=0;S.qIndex=0;S.gameActive=false;S.answered=false;
   S.order=shuffle([...Array(CITIES[S.level].length).keys()]);
-  document.getElementById('score-val').textContent='0';
-  document.getElementById('q-num-val').textContent='0/8';
-  document.getElementById('city-emoji').textContent='🌆';
-  document.getElementById('city-name').textContent='Press Start!';
-  document.getElementById('facts-list').innerHTML='';
-  document.getElementById('result-panel').classList.remove('show');
-  document.getElementById('start-btn').style.display='block';
-  document.getElementById('start-btn').textContent='🚌 Explore Cities!';
-  document.getElementById('start-btn').onclick=startGame;
-  document.getElementById('next-btn').style.display='none';
+  const $ = id => document.getElementById(id);
+  if($('score-val')) $('score-val').textContent='0';
+  if($('q-num-val')) $('q-num-val').textContent='0/8';
+  if($('city-emoji')) $('city-emoji').textContent='🌆';
+  if($('city-name')) $('city-name').textContent='Press Start!';
+  if($('facts-list')) $('facts-list').innerHTML='';
+  if($('result-panel')) $('result-panel').classList.remove('show');
+  if($('start-btn')){ $('start-btn').style.display='block'; $('start-btn').textContent='🚌 Explore Cities!'; $('start-btn').onclick=startGame; }
+  if($('next-btn')) $('next-btn').style.display='none';
 }
 
 function startGame(){
