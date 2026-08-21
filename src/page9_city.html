@@ -13,15 +13,15 @@
   #phone-outer { background:#1c1c1c; border-radius:50px; padding:12px; box-shadow:0 0 0 2px #333,0 20px 60px rgba(0,0,0,.8); }
   #phone { width:369px; height:828px; border-radius:40px; overflow:hidden; position:relative; display:flex; flex-direction:column; background:#1a0d00; transition:width .3s,height .3s; }
   #notch { position:absolute; top:0; left:50%; transform:translateX(-50%); width:120px; height:30px; background:#1c1c1c; border-radius:0 0 20px 20px; z-index:20; }
-  #scroll-area { flex:1; overflow-y:auto; overflow-x:hidden; padding:36px 12px 8px; scrollbar-width:none; }
+  #scroll-area { flex:1; overflow-y:auto; overflow-x:hidden; padding:36px 12px 8px; scrollbar-width:none; position:relative; z-index:5; }
   #scroll-area::-webkit-scrollbar { display:none; }
 
   /* CITY BG */
   #city-bg { position:absolute; inset:0; z-index:0; background:linear-gradient(180deg,#ff6b35 0%,#ffde59 30%,#87ceeb 60%,#4a90d9 100%); border-radius:40px; overflow:hidden; pointer-events:none; }
-  .city-building { position:absolute; bottom:0; background:var(--bc); border-radius:4px 4px 0 0; }
-  .city-window { position:absolute; background:#ffde59; border-radius:1px; animation:win-blink var(--wb) ease-in-out infinite alternate; }
+  .city-building { position:absolute; bottom:0; background:var(--bc); border-radius:4px 4px 0 0; pointer-events:none; }
+  .city-window { position:absolute; background:#ffde59; border-radius:1px; animation:win-blink var(--wb) ease-in-out infinite alternate; pointer-events:none; }
   @keyframes win-blink { from{opacity:.2} to{opacity:1} }
-  .city-bus { position:absolute; bottom:20px; font-size:22px; animation:bus-move 7s linear infinite; }
+  .city-bus { position:absolute; bottom:20px; font-size:22px; animation:bus-move 7s linear infinite; pointer-events:none; }
   @keyframes bus-move { 0%{transform:translateX(-50px);opacity:0} 5%{opacity:1} 95%{opacity:1} 100%{transform:translateX(400px);opacity:0} }
 
   /* NAV */
@@ -39,7 +39,7 @@
   #page-header h1 { font-size:17px; font-weight:900; letter-spacing:1px; text-transform:uppercase; color:#fff; text-shadow:0 0 20px rgba(255,107,53,.8), 0 2px 8px rgba(0,0,0,.9), 0 0 40px rgba(255,222,89,.4); -webkit-text-fill-color:#fff; }
   #page-header p { font-size:10px; color:rgba(255,255,255,.35); margin-top:2px; }
 
-  #level-tabs { display:flex; gap:5px; justify-content:center; margin-bottom:8px; position:relative; z-index:2; }
+  #level-tabs { display:flex; gap:5px; justify-content:center; margin-bottom:8px; position:relative; z-index:10; }
   #level-tabs button { padding:4px 10px; border-radius:20px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.05); color:rgba(255,255,255,.5); font-size:9px; font-weight:700; cursor:pointer; transition:all .2s; text-transform:uppercase; }
   #level-tabs button.active { background:var(--btn-grad); border-color:transparent; color:#000; font-weight:900; }
 
