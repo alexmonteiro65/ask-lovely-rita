@@ -264,10 +264,10 @@
     transform: scaleX(-1);
   }
   @keyframes fish-swim {
-    0%   { transform: translateX(340px); opacity:0; }
+    0%   { transform: translateX(340px) scaleX(-1); opacity:0; }
     10%  { opacity:1; }
     90%  { opacity:1; }
-    100% { transform: translateX(-40px); opacity:0; }
+    100% { transform: translateX(-40px) scaleX(-1); opacity:0; }
   }
   .octopus {
     position: absolute; font-size: 32px;
@@ -1010,7 +1010,20 @@ let S = { beatcoins: 80, selectedWorld: null, level: 'youngsters' };
 function init() {
   loadStorage();
   buildStars();
-  setTimeout(() => speak(RITA_INTRO), 800);
+  // Unlock speechSynthesis on first user interaction (browser requirement)
+  let gestureUnlocked = false;
+  const unlockSpeech = () => {
+    if (gestureUnlocked) return;
+    gestureUnlocked = true;
+    const u = new SpeechSynthesisUtterance('');
+    u.volume = 0;
+    window.speechSynthesis.speak(u);
+    setTimeout(() => speak(RITA_INTRO), 400);
+  };
+  document.getElementById('phone').addEventListener('click', unlockSpeech, { once: true });
+  document.getElementById('phone').addEventListener('touchstart', unlockSpeech, { once: true });
+  // Try immediately too (works if page was already interacted with)
+  setTimeout(() => { if (!gestureUnlocked) speak(RITA_INTRO); }, 1200);
 }
 
 function loadStorage() {
