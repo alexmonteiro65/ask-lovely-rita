@@ -450,7 +450,7 @@ function finishGame() {
   S.gameActive=false;
   const bonus=LEVEL_CFG[S.level].bonusAll;
   S.beatcoins+=bonus; S.score+=bonus;
-  saveBC(); saveLadBC(bonus);
+  saveBC(); saveLadBC(bonus); postGlobalScore(bonus);
   document.getElementById('bc-val').textContent=S.beatcoins.toLocaleString();
   document.getElementById('score-val').textContent=S.score;
   document.getElementById('progress-fill').style.width='100%';
@@ -542,6 +542,18 @@ function toast(msg){ const t=document.getElementById('toast');t.textContent=msg;
 
 
 // Save BeatCoins per chosen Lad for global scoreboard
+
+function postGlobalScore(amount) {
+  try {
+    const lad = localStorage.getItem('askLovelyRitaV4_chosen_lad') || 'smart';
+    fetch('https://empty-leaf-6e4b.alexmonteironeto.workers.dev/score', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ lad: lad, amount: amount })
+    }).catch(()=>{});
+  } catch(e) {}
+}
+
 function saveLadBC(amount) {
   try {
     const lad = localStorage.getItem('askLovelyRitaV4_chosen_lad') || 'smart';
