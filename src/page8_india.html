@@ -211,24 +211,23 @@ const RITA_TIMEOUT=["Oh nearly darling! Time ran out but no points lost. Try aga
 
 // Pairs data: each pair has an image card and a label card
 const ALL_PAIRS=[
-  {id:'sitar',   img:'🪕', label:'Sitar',      fact:'Indian string instrument'},
-  {id:'lotus',   img:'🪷', label:'India',       fact:'National flower of India'},
-  {id:'panda',   img:'🐼', label:'China',       fact:'Giant Panda lives in China'},
-  {id:'tulip',   img:'🌷', label:'Netherlands', fact:'Famous Dutch flower'},
-  {id:'kangaroo',img:'🦘', label:'Australia',   fact:'Found only in Australia'},
-  {id:'maple',   img:'🍁', label:'Canada',       fact:'Symbol of Canada'},
-  {id:'cherry',  img:'🌸', label:'Japan',       fact:'Cherry blossom of Japan'},
-  {id:'elephant',img:'🐘', label:'Thailand',    fact:'Sacred animal in Thailand'},
-  {id:'drum',    img:'🥁',  label:'Africa',      fact:'Drums originate in Africa'},
-  {id:'cactus',  img:'🌵', label:'Mexico',      fact:'Symbol of Mexican desert'},
-  {id:'windmill',img:'🌬️', label:'Holland',     fact:'Windmills of the Netherlands'},
-  {id:'koala',   img:'🐨', label:'Australia',   fact:'Koala sleeps 22 hours a day'},
-  {id:'tea',     img:'🍵', label:'China',       fact:'Tea originated in China'},
-  {id:'dragon',  img:'🐉', label:'Wales',       fact:'Dragon on the Welsh flag'},
-  {id:'bagpipe', img:'🎵', label:'Scotland',    fact:'Bagpipes are Scottish'},
-  {id:'camel',   img:'🐪', label:'Egypt',       fact:'Camels cross the Sahara Desert'},
+  {id:'sitar',   img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/01_sitar.png',    label:'Sitar',      fact:'The sitar is a beautiful string instrument from India with a rich warm sound love!'},
+  {id:'lotus',   img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/02_lotus.png',    label:'India',       fact:'The lotus is the national flower of India and a symbol of purity and beauty!'},
+  {id:'panda',   img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/03_panda.png',    label:'China',       fact:'Giant pandas live only in China and spend 16 hours a day eating bamboo love!'},
+  {id:'tulip',   img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/04_tulip.png',    label:'Netherlands', fact:'The Netherlands is famous for its tulip fields that bloom spectacularly every spring!'},
+  {id:'kangaroo',img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/05_kangaroo.png', label:'Australia',   fact:'Kangaroos are found only in Australia and can jump over 3 metres high darling!'},
+  {id:'maple',   img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/06_maple_leaf.png',label:'Canada',     fact:'The red maple leaf on the Canadian flag represents unity and beautiful autumn forests!'},
+  {id:'cherry',  img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/07_cherry_blossom.png',label:'Japan',  fact:'Cherry blossoms bloom for only two weeks in Japan and millions celebrate their beauty!'},
+  {id:'elephant',img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/08_elephant.png', label:'Thailand',    fact:'Elephants are sacred in Thailand and appear on ancient temples and royal ceremonies!'},
+  {id:'drum',    img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/09_djembe.png',   label:'Africa',      fact:'The djembe drum from West Africa can be heard for miles and brings communities together!'},
+  {id:'cactus',  img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/10_cactus.png',   label:'Mexico',      fact:'Cacti in the Mexican desert can live for hundreds of years and store huge amounts of water!'},
+  {id:'windmill',img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/14_windmill.png', label:'Holland',     fact:'The Netherlands has over 1000 windmills used for centuries to pump water from the land!'},
+  {id:'koala',   img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/15_koala.png',    label:'Australia',   fact:'Koalas sleep up to 22 hours a day because their eucalyptus diet is very low in energy!'},
+  {id:'tea',     img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/02_lotus.png',    label:'China',       fact:'Tea was discovered in China over 4000 years ago and is now the most popular drink in the world!'},
+  {id:'dragon',  img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/12_dragon.png',   label:'Wales',       fact:'The red dragon has been a symbol of Wales for over a thousand years and represents courage!'},
+  {id:'bagpipe', img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/11_bagpipes.png', label:'Scotland',    fact:'Bagpipes have been played in Scotland for centuries and carry across the Highland hills!'},
+  {id:'camel',   img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/13_camel_pyramids.png',label:'Egypt',  fact:'Camels have crossed the Egyptian desert for thousands of years beside the ancient pyramids!'},
 ];
-
 const LEVEL_CFG={
   youngsters:{pairs:4,timer:0,   bonusMatch:25,bonusAll:80, ladImg:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/peaceful_lad_grownups.png'},
   grownups:  {pairs:6,timer:0,   bonusMatch:20,bonusAll:100,ladImg:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/peaceful_lad_grownups.png'},
@@ -317,12 +316,13 @@ function startGame(){
     const cl=cfg.pairs<=4?10:9;
     el.style.setProperty('--ce',ce+'px');
     el.style.setProperty('--cl',cl+'px');
+    const backSrc = S.level==='youngsters' ? 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/card_back_youngsters.png' : S.level==='grownups' ? 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/card_back_grownups.png' : 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/card_back_experts.png';
+    const frontHTML = card.type==='img'
+      ? `<img src="${card.content}" style="width:80%;max-width:90px;border-radius:8px;display:block;margin:0 auto" onerror="this.style.display='none'"/>`
+      : `<div class="card-label" style="font-size:var(--cl);font-weight:900;text-align:center;padding:4px;color:#fff">${card.content}</div>`;
     el.innerHTML=`
-      <div class="card-back">🌀</div>
-      <div class="card-front">
-        <div class="card-emoji">${card.content}</div>
-        ${card.type==='label'?`<div class="card-label">${card.content}</div>`:''}
-      </div>`;
+      <div class="card-back"><img src="${backSrc}" style="width:100%;height:100%;object-fit:cover;border-radius:8px" onerror="this.textContent='\u{1F300}'"/></div>
+      <div class="card-front">${frontHTML}</div>`;
     el.onclick=()=>flipCard(idx);
     grid.appendChild(el);
   });
@@ -375,16 +375,14 @@ function checkMatch(){
     speak(pick(RITA_MATCH));
     if(S.matched.length===LEVEL_CFG[S.level].pairs){setTimeout(()=>finishGame(true),600);}
   } else {
-    // NO MATCH
-    setTimeout(()=>{
-      [a,b].forEach(i=>{document.querySelector(`.match-card[data-idx="${i}"]`).classList.remove('flipped');});
-    },400);
+    // NO MATCH — flip back, Rita teaches
     document.querySelector(`.match-card[data-idx="${a}"]`).classList.add('wrong-flash');
     document.querySelector(`.match-card[data-idx="${b}"]`).classList.add('wrong-flash');
     setTimeout(()=>{
-      document.querySelector(`.match-card[data-idx="${a}"]`).classList.remove('wrong-flash');
-      document.querySelector(`.match-card[data-idx="${b}"]`).classList.remove('wrong-flash');
-    },400);
+      [a,b].forEach(i=>{document.querySelector(`.match-card[data-idx="${i}"]`).classList.remove('flipped','wrong-flash');});
+      const hintCard = ca.type==='img' ? ca : cb;
+      speak('That is ' + hintCard.label + ' love! ' + hintCard.fact);
+    },700);
   }
   S.flipped=[];
 }
