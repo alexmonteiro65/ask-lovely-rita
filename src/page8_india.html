@@ -3,488 +3,567 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ask Lovely Rita — The Inner Light</title>
+<title>Lovely Rita Adventures — World Beats</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    background: #0a0a14; color: #fff;
-    min-height: 100vh; display: flex; flex-direction: column;
-    align-items: center; padding: 20px 16px 40px;
-  }
-  #device-bar { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; justify-content:center; }
-  #device-bar button { background:#1a1a2e; border:1px solid #333; color:#aaa; padding:6px 12px; border-radius:20px; font-size:11px; cursor:pointer; transition:all .2s; }
-  #device-bar button:hover, #device-bar button.active { background:#333; color:#fff; border-color:#666; }
-  #phone-outer { background:#1c1c1c; border-radius:50px; padding:12px; box-shadow:0 0 0 2px #333,0 20px 60px rgba(0,0,0,.8); }
-  #phone { width:369px; height:828px; border-radius:40px; overflow:hidden; position:relative; display:flex; flex-direction:column; background:#1a0800; transition:width .3s,height .3s; }
-  #notch { position:absolute; top:0; left:50%; transform:translateX(-50%); width:120px; height:30px; background:#1c1c1c; border-radius:0 0 20px 20px; z-index:20; }
-  #scroll-area { flex:1; overflow-y:auto; overflow-x:hidden; padding:36px 12px 8px; scrollbar-width:none; }
-  #scroll-area::-webkit-scrollbar { display:none; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#3d1a00; display:flex; flex-direction:column; align-items:center; min-height:100vh; font-family:Georgia,serif; }
 
-  /* INDIA BG */
-  #india-bg {
-    position:absolute; inset:0; z-index:0;
-    background:linear-gradient(180deg,#2d0a00 0%,#8b2500 25%,#d4590a 55%,#c8a96e 85%,#7bc67e 100%);
-    border-radius:40px; overflow:hidden; pointer-events:none;
-  }
-  .petal { position:absolute; font-size:var(--ps); animation:petal-fall var(--pd) linear infinite; opacity:.6; }
-  @keyframes petal-fall { 0%{transform:translateY(-30px) rotate(0deg);opacity:0} 10%{opacity:.6} 90%{opacity:.6} 100%{transform:translateY(900px) rotate(360deg);opacity:0} }
+#phone {
+  background:linear-gradient(180deg,#3d1a00,#1a0800); width:393px; min-height:852px;
+  border-radius:48px; position:relative; overflow:hidden; display:flex; flex-direction:column;
+  box-shadow:0 0 0 10px #1a1a1a,0 0 0 12px #333,0 30px 80px rgba(0,0,0,0.8); margin:20px 0 40px;
+}
+#phone::before { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:120px; height:34px; background:#0a0a0a; border-radius:0 0 20px 20px; z-index:100; }
 
-  /* NAV */
-  #nav-bar { flex-shrink:0; display:flex; align-items:center; justify-content:space-around; padding:8px 20px 12px; border-top:1px solid rgba(255,255,255,.08); background:rgba(26,8,0,.7); backdrop-filter:blur(12px); position:relative; z-index:10; }
-  .nav-btn { display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; color:rgba(255,255,255,.5); cursor:pointer; padding:5px 14px; border-radius:12px; transition:all .2s; font-size:10px; }
-  .nav-btn:hover { background:rgba(255,255,255,.08); color:#fff; }
-  .nav-btn .nav-icon { font-size:20px; line-height:1; }
-  .nav-btn.nav-home { color:#ff6b35; }
+/* THEMES */
+:root { --accent:#ff6b35; --accent2:#c8a96e; --glow:#ff6b35; --btn-grad:linear-gradient(135deg,#ff6b35,#c8a96e); }
+.theme-youngsters { --accent:#ff6ef7; --accent2:#ffde59; --glow:#ff6ef7; --btn-grad:linear-gradient(135deg,#ff6ef7,#a855f7); }
+.theme-grownups   { --accent:#ffde59; --accent2:#fff3a0; --glow:#ffde59; --btn-grad:linear-gradient(135deg,#ffde59,#c8860a); }
+.theme-experts    { --accent:#c8a96e; --accent2:#e8d5b0; --glow:#c8a96e; --btn-grad:linear-gradient(135deg,#c8a96e,#6677aa); }
 
-  body.theme-youngsters { --accent:#ff6b35; --glow:#ff6b35; --btn-grad:linear-gradient(135deg,#ff6b35,#c8a96e); }
-  body.theme-grownups   { --accent:#ffde59; --glow:#ffde59; --btn-grad:linear-gradient(135deg,#c8a96e,#8b4513); }
-  body.theme-experts    { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-gradient(135deg,#ffd700,#c8860a); }
+/* PETALS */
+.petal { position:absolute; font-size:16px; animation:petalfall var(--pf,3s) ease-in infinite; opacity:0.6; pointer-events:none; z-index:0; }
+@keyframes petalfall { 0%{transform:translateY(-20px) rotate(0deg);opacity:.8;} 100%{transform:translateY(900px) rotate(360deg);opacity:0;} }
 
-  #page-header { text-align:center; margin-bottom:8px; position:relative; z-index:2; }
-  #page-header h1 {
-    font-size:17px; font-weight:900; letter-spacing:1px; text-transform:uppercase;
-    background:linear-gradient(135deg,#ff6b35,#ffde59,#7bc67e);
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-    filter:drop-shadow(0 0 14px rgba(255,107,53,.5));
-  }
-  #page-header p { font-size:10px; color:rgba(255,255,255,.35); margin-top:2px; }
+#phone-scroll { flex:1; overflow-y:auto; overflow-x:hidden; scrollbar-width:none; padding-top:44px; padding-bottom:70px; position:relative; z-index:1; }
+#phone-scroll::-webkit-scrollbar { display:none; }
 
-  #level-tabs { display:flex; gap:5px; justify-content:center; margin-bottom:8px; position:relative; z-index:2; }
-  #level-tabs button { padding:4px 10px; border-radius:20px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.05); color:rgba(255,255,255,.5); font-size:9px; font-weight:700; cursor:pointer; transition:all .2s; text-transform:uppercase; }
-  #level-tabs button.active { background:var(--btn-grad); border-color:transparent; color:#fff; }
+/* TOP BAR */
+#top-bar { display:flex; align-items:center; gap:8px; padding:8px 14px; background:rgba(0,0,0,0.4); border-bottom:1px solid rgba(255,255,255,0.08); }
+.stat-card { flex:1; background:rgba(255,255,255,0.06); border-radius:8px; padding:5px 8px; text-align:center; }
+.stat-label { font-size:8px; color:rgba(255,255,255,0.5); letter-spacing:1px; }
+.stat-val { font-size:15px; font-weight:bold; color:var(--accent); }
+#bc-val { color:#ffde59; }
 
-  #rita-wrap { background:rgba(255,255,255,.06); border:1px solid rgba(255,107,53,.3); border-radius:14px; padding:8px 26px 8px 10px; position:relative; margin-bottom:8px; z-index:2; }
-  #rita-name { font-size:9px; font-weight:700; color:#ff6b35; text-transform:uppercase; letter-spacing:.8px; margin-bottom:3px; }
-  #rita-text { font-size:10px; color:rgba(255,255,255,.8); line-height:1.5; }
-  #rita-speak-btn { position:absolute; top:7px; right:6px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15); border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:10px; cursor:pointer; color:#fff; }
+/* LEVEL TABS */
+#level-tabs { display:flex; gap:5px; padding:8px 12px; }
+#level-tabs button {
+  flex:1; padding:6px 4px; border:1px solid rgba(255,255,255,0.15);
+  border-radius:8px; background:rgba(255,255,255,0.05);
+  color:rgba(255,255,255,0.5); font-size:9px; cursor:pointer;
+  font-family:Georgia,serif; transition:all 0.2s;
+}
+#level-tabs button.active { background:var(--btn-grad); color:#000; border-color:transparent; font-weight:bold; }
 
-  #status-bar { display:flex; gap:6px; margin-bottom:8px; position:relative; z-index:2; }
-  .stat-card { flex:1; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:4px 8px; }
-  .stat-label { font-size:7px; color:rgba(255,255,255,.3); text-transform:uppercase; letter-spacing:.5px; }
-  .stat-val { font-size:13px; font-weight:900; }
-  #bc-val { color:#ffde59; } #score-val { color:#ff6b35; } #pairs-val { color:#7bc67e; }
+/* LAD ROW */
+#lad-rita-row { display:flex; align-items:center; gap:10px; padding:8px 14px; background:rgba(0,0,0,0.3); border-bottom:1px solid rgba(255,255,255,0.06); }
+#lad-img { width:52px; height:52px; object-fit:contain; filter:drop-shadow(0 0 8px var(--glow)); }
+#rita-text { flex:1; font-size:11px; color:#ddd; line-height:1.5; font-style:italic; }
 
-  /* PROGRESS MANDALA */
-  #progress-row { display:flex; gap:5px; justify-content:center; margin-bottom:8px; position:relative; z-index:2; flex-wrap:wrap; }
-  .prog-dot { width:22px; height:22px; border-radius:50%; border:2px solid rgba(255,255,255,.2); background:rgba(255,255,255,.05); display:flex; align-items:center; justify-content:center; font-size:11px; transition:all .3s; }
-  .prog-dot.found { background:rgba(255,107,53,.3); border-color:#ff6b35; box-shadow:0 0 8px rgba(255,107,53,.5); }
+/* INSTRUMENT CARD */
+#game-area { padding:12px 14px; display:flex; flex-direction:column; gap:12px; }
 
-  /* CARDS GRID */
-  #cards-grid { display:grid; gap:6px; margin-bottom:10px; position:relative; z-index:2; }
-  .match-card {
-    aspect-ratio:1; border-radius:12px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    font-size:var(--card-fs,18px); position:relative; overflow:hidden;
-    transition:transform .15s; user-select:none;
-    border:2px solid rgba(255,255,255,.15);
-    background:linear-gradient(135deg,rgba(139,69,19,.4),rgba(200,169,110,.2));
-  }
-  .match-card:hover:not(.flipped):not(.matched) { transform:scale(1.04); }
-  .match-card .card-back {
-    position:absolute; inset:0; border-radius:10px;
-    background:linear-gradient(135deg,#8b4513,#c8a96e);
-    display:flex; align-items:center; justify-content:center;
-    font-size:20px; transition:opacity .3s;
-  }
-  .match-card .card-front {
-    position:absolute; inset:0; border-radius:10px;
-    background:rgba(0,0,0,.4);
-    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:2px;
-    opacity:0; transition:opacity .3s; padding:4px; text-align:center;
-  }
-  .match-card.flipped .card-back { opacity:0; }
-  .match-card.flipped .card-front { opacity:1; }
-  .match-card.matched { border-color:#7bc67e; background:rgba(123,198,126,.15); }
-  .match-card.matched .card-back { opacity:0; }
-  .match-card.matched .card-front { opacity:1; }
-  .match-card.wrong-flash { animation:card-wrong .4s ease; }
-  @keyframes card-wrong { 0%,100%{transform:scale(1)} 25%{transform:scale(.95) rotate(-2deg)} 75%{transform:scale(.95) rotate(2deg)} }
-  .card-emoji { font-size:var(--ce,20px); line-height:1; }
-  .card-label { font-size:var(--cl,9px); color:rgba(255,255,255,.85); font-weight:700; letter-spacing:.3px; line-height:1.2; }
+#progress-bar { height:3px; background:rgba(255,255,255,0.1); border-radius:2px; margin:0 14px 4px; }
+#progress-fill { height:100%; background:var(--btn-grad); border-radius:2px; transition:width 0.4s; }
 
-  #act-btns { display:flex; gap:7px; margin-bottom:8px; position:relative; z-index:2; }
-  .act-btn { flex:1; padding:10px; border:none; border-radius:24px; font-size:11px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; cursor:pointer; transition:transform .15s; position:relative; overflow:hidden; }
-  .act-btn::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(255,255,255,.14),transparent); border-radius:inherit; }
-  .act-btn:hover:not(:disabled) { transform:scale(1.03); }
-  .act-btn:disabled { opacity:.35; cursor:not-allowed; }
-  #start-btn { background:var(--btn-grad); color:#fff; box-shadow:0 4px 14px rgba(0,0,0,.4); }
-  #timer-display { text-align:center; font-size:11px; color:rgba(255,255,255,.5); margin-bottom:6px; position:relative; z-index:2; min-height:16px; }
+#q-counter { text-align:center; font-size:9px; color:rgba(255,255,255,0.4); letter-spacing:1px; }
 
-  #result-panel { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:13px; padding:10px; margin-bottom:8px; text-align:center; display:none; flex-direction:column; align-items:center; gap:3px; position:relative; z-index:2; animation:slideIn .35s ease; }
-  #result-panel.show { display:flex; }
-  @keyframes slideIn { from{opacity:0;transform:translateY(-5px)} to{opacity:1;transform:translateY(0)} }
-  #result-icon { font-size:24px; } #result-title { font-size:13px; font-weight:800; color:#ff6b35; }
-  #result-sub { font-size:10px; color:rgba(255,255,255,.5); } #result-pts { font-size:16px; font-weight:900; }
+/* SOUND BUTTON (Grown Ups/Experts) */
+#sound-btn-wrap { display:none; justify-content:center; margin-bottom:4px; }
+#sound-btn {
+  width:60px; height:60px; border-radius:50%;
+  background:rgba(0,0,0,0.6); border:2px solid var(--accent);
+  color:var(--accent); font-size:28px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 0 20px var(--glow); transition:transform 0.15s;
+}
+#sound-btn:hover { transform:scale(1.1); }
+.sound-waves { display:flex; gap:3px; align-items:center; position:absolute; }
 
+/* INSTRUMENT IMAGE */
+#instrument-card {
+  background:linear-gradient(135deg,rgba(255,165,0,0.15),rgba(200,130,0,0.1));
+  border:2px solid rgba(255,165,0,0.4); border-radius:16px;
+  padding:14px; display:flex; align-items:center; justify-content:center;
+  min-height:200px;
+}
+#instrument-img { max-width:100%; max-height:180px; object-fit:contain; filter:drop-shadow(0 0 16px rgba(255,165,0,0.5)); }
+#instrument-name-exp { display:none; text-align:center; margin-top:8px; }
+#instrument-name-input {
+  width:100%; background:rgba(255,255,255,0.07); border:1px solid var(--accent);
+  border-radius:10px; padding:8px 12px; color:#fff; font-size:13px;
+  outline:none; font-family:Georgia,serif; text-align:center;
+}
 
-  /* INNER LIGHT IMAGE — compact in header */
-  #inner-light-img {
-    display:block;
-    height:90px;
-    width:auto;
-    margin:4px auto 0;
-    object-fit:contain;
-    filter:drop-shadow(0 2px 8px rgba(255,107,53,.4));
-  }
-  #lad-bottom-wrap { flex-shrink:0; display:flex; align-items:flex-end; justify-content:center; height:110px; background:rgba(26,8,0,.4); border-top:1px solid rgba(255,107,53,.1); }
-  #lad-bottom-img { height:128px; width:auto; object-fit:contain; filter:drop-shadow(0 -4px 20px rgba(255,107,53,.4)); animation:peaceful-float 3s ease-in-out infinite alternate; margin-bottom:-8px; }
-  @keyframes peaceful-float { from{transform:translateY(0) rotate(-1deg)} to{transform:translateY(-8px) rotate(1deg)} }
-  #lad-bottom-img.speaking { filter:drop-shadow(0 0 22px rgba(255,107,53,.9)) drop-shadow(0 -4px 20px rgba(255,107,53,.4)); }
+/* FLAGS / OPTIONS */
+#flags-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 
-  #celebrate { position:absolute; inset:0; pointer-events:none; z-index:25; overflow:hidden; border-radius:40px; }
-  .cp { position:absolute; border-radius:2px; animation:cf 1.6s ease-out forwards; }
-  @keyframes cf { 0%{transform:translateY(-20px) rotate(0deg);opacity:1} 100%{transform:translateY(900px) rotate(720deg);opacity:0} }
-  #toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(80px); background:rgba(26,8,0,.95); border:1px solid #ff6b35; border-radius:20px; padding:8px 16px; font-size:11px; color:#fff; z-index:1000; transition:transform .3s,opacity .3s; opacity:0; white-space:nowrap; pointer-events:none; }
-  #toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+.flag-btn {
+  background:rgba(255,255,255,0.06); border:2px solid rgba(255,255,255,0.15);
+  border-radius:12px; padding:10px 8px; cursor:pointer; transition:all 0.2s;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+}
+.flag-btn:hover:not(:disabled) { border-color:var(--accent); transform:scale(1.03); }
+.flag-btn:disabled { cursor:default; }
+.flag-btn.correct { border-color:#4ade80; background:rgba(74,222,128,0.15); }
+.flag-btn.wrong   { border-color:#f87171; background:rgba(248,113,113,0.1); }
+
+.flag-emoji { font-size:36px; }
+.flag-label { font-size:11px; color:#ddd; font-weight:bold; }
+
+/* RESULT PANEL */
+#result-panel {
+  display:none; flex-direction:column; align-items:center;
+  background:rgba(0,0,0,0.8); border:2px solid var(--accent);
+  border-radius:16px; padding:14px; gap:8px; text-align:center;
+}
+#result-panel.show { display:flex; }
+#result-icon { font-size:36px; }
+#result-title { font-size:14px; font-weight:bold; color:#fff; }
+#result-fact { font-size:11px; color:rgba(255,255,255,0.7); line-height:1.5; font-style:italic; }
+#result-pts { font-size:14px; font-weight:bold; }
+#result-correct-img { display:none; width:80px; height:80px; object-fit:contain; margin:4px auto; }
+
+#bonus-area { display:none; margin-top:10px; text-align:center; width:100%; }
+#bonus-area .bonus-title { font-size:13px; font-weight:bold; color:#ffde59; margin-bottom:4px; }
+#bonus-countdown { font-size:11px; color:rgba(255,255,255,0.6); margin-bottom:8px; }
+#bonus-btn-wb {
+  background:linear-gradient(135deg,#c8a96e,#6677aa); border:none; border-radius:20px;
+  padding:10px 20px; color:#000; font-weight:bold; font-size:12px;
+  cursor:pointer; font-family:Georgia,serif; width:100%;
+}
+
+#start-btn, #next-btn {
+  background:var(--btn-grad); border:none; border-radius:20px;
+  padding:12px; color:#000; font-weight:bold; font-size:13px;
+  cursor:pointer; font-family:Georgia,serif; width:100%;
+  box-shadow:0 0 16px var(--glow);
+}
+#next-btn { display:none; background:linear-gradient(135deg,#4ade80,#16a34a); }
+
+/* CELEBRATE */
+#celebrate { position:absolute; inset:0; pointer-events:none; z-index:25; overflow:hidden; border-radius:40px; }
+.cp { position:absolute; width:8px; height:8px; border-radius:50%; animation:conffall 1.4s ease-in forwards; }
+@keyframes conffall { 0%{opacity:1;transform:translateY(-20px) rotate(0deg);} 100%{opacity:0;transform:translateY(900px) rotate(720deg);} }
+
+/* NAV */
+#nav-bar { flex-shrink:0; display:flex; align-items:center; justify-content:space-around; padding:10px 0 14px; border-top:1px solid rgba(255,255,255,.06); background:rgba(0,0,0,.4); position:relative; z-index:10; }
+.nav-btn { display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; color:rgba(255,255,255,.4); cursor:pointer; padding:4px 14px; font-size:9px; font-family:Georgia,serif; transition:color 0.2s; }
+.nav-btn:hover { color:var(--accent); }
+.nav-btn.nav-home { color:var(--accent); }
+.nav-icon { font-size:20px; }
+
+#toast { position:absolute; top:54px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.9); color:#fff; font-size:11px; padding:6px 16px; border-radius:20px; z-index:300; opacity:0; transition:opacity 0.3s; white-space:nowrap; border:1px solid var(--accent); pointer-events:none; }
+#toast.show { opacity:1; }
 </style>
 </head>
-<body class="theme-youngsters">
-<div id="device-bar">
-  <button onclick="setDevice(393,852,'iPhone 14 Pro')" class="active">iPhone 14 Pro</button>
-  <button onclick="setDevice(375,667,'iPhone SE')">iPhone SE</button>
-  <button onclick="setDevice(360,800,'Galaxy S23')">Galaxy S23</button>
-  <button onclick="setDevice(412,915,'Pixel 7')">Pixel 7</button>
-  <button onclick="setDevice(430,932,'iPhone 14 Max')">iPhone 14 Max</button>
-</div>
-<div id="phone-outer">
-  <div id="phone">
-    <div id="notch"></div>
-    <div id="india-bg"></div>
-    <div id="celebrate"></div>
-    <div id="scroll-area">
-      <div id="page-header">
-        <h1>🌿 The Inner Light</h1>
-        <p>The Quiet Lad's world of culture and nature!</p>
-        <img id="inner-light-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/inner_light_image.png" alt="The Inner Light"/>
+<body>
+<div id="phone" class="theme-youngsters">
+  <!-- PETALS -->
+  <div class="petal" style="left:8%;--pf:3.2s;animation-delay:0s">🌸</div>
+  <div class="petal" style="left:25%;--pf:4.1s;animation-delay:0.8s">🌺</div>
+  <div class="petal" style="left:55%;--pf:2.8s;animation-delay:1.5s">🌸</div>
+  <div class="petal" style="left:78%;--pf:3.7s;animation-delay:0.3s">🌼</div>
+  <div class="petal" style="left:42%;--pf:5s;animation-delay:2s">🌸</div>
+  <div id="celebrate"></div>
+
+  <div id="phone-scroll">
+    <div id="top-bar">
+      <div class="stat-card"><div class="stat-label">BeatCoins</div><div class="stat-val" id="bc-val">25,000</div></div>
+      <div class="stat-card"><div class="stat-label">Score</div><div class="stat-val" id="score-val">0</div></div>
+      <div class="stat-card"><div class="stat-label">Question</div><div class="stat-val" id="q-val" style="color:#7bc67e">0/8</div></div>
+    </div>
+
+    <div id="level-tabs">
+      <button onclick="setLevel('youngsters')" id="tab-y">🟣 Youngsters</button>
+      <button onclick="setLevel('grownups')" id="tab-g">🟡 Grown Ups</button>
+      <button onclick="setLevel('experts')" id="tab-e">⭐ Experts</button>
+    </div>
+
+    <div id="lad-rita-row">
+      <img id="lad-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/Quite_Peaceful_Lad.png" alt="Quiet Lad" onerror="this.style.display='none'">
+      <span id="rita-text">Hello love! Welcome to World Beats! The Quiet Lad will take you on a journey through world music. See the instrument and choose which country it comes from!</span>
+    </div>
+
+    <div id="progress-bar"><div id="progress-fill" style="width:0%"></div></div>
+    <div id="q-counter" style="margin:4px 14px;">Question 0 of 8</div>
+
+    <div id="game-area">
+      <!-- Sound button (Grown Ups / Experts) -->
+      <div id="sound-btn-wrap">
+        <button id="sound-btn" onclick="playInstrumentSound()">🔊</button>
       </div>
-      <div id="level-tabs">
-        <button onclick="setLevel('youngsters')" class="active">🟣 Youngsters</button>
-        <button onclick="setLevel('grownups')">🟡 Grown Ups</button>
-        <button onclick="setLevel('experts')">⭐ Experts</button>
+
+      <div id="instrument-card">
+        <img id="instrument-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/world_beats_question.png" alt="Instrument">
       </div>
-      <div id="rita-wrap">
-        <div id="rita-name">♪ Lovely Rita</div>
-        <div id="rita-text">Loading...</div>
-        <button id="rita-speak-btn" onclick="ritaSpeak()">🔊</button>
+
+      <!-- Expert: type instrument name -->
+      <div id="instrument-name-exp">
+        <input id="instrument-name-input" type="text" placeholder="Type the instrument name..." autocomplete="off">
       </div>
-      <div id="status-bar">
-        <div class="stat-card"><div class="stat-label">BeatCoins</div><div class="stat-val" id="bc-val">25,000</div></div>
-        <div class="stat-card"><div class="stat-label">Score</div><div class="stat-val" id="score-val">0</div></div>
-        <div class="stat-card"><div class="stat-label">Pairs</div><div class="stat-val" id="pairs-val">0/4</div></div>
-      </div>
-      <div id="timer-display"></div>
-      <div id="progress-row"></div>
-      <div id="cards-grid"></div>
-      <div id="act-btns">
-        <button class="act-btn" id="start-btn" onclick="startGame()">🌿 Begin Journey!</button>
-      </div>
+
+      <div id="flags-grid"></div>
+
       <div id="result-panel">
         <div id="result-icon">🪷</div>
         <div id="result-title"></div>
-        <div id="result-sub"></div>
+        <img id="result-correct-img" src="" alt="">
+        <div id="result-fact"></div>
         <div id="result-pts"></div>
-        <div id="bonus-area" style="display:none;margin-top:14px;text-align:center;">
-          <div id="bonus-title" style="font-size:14px;font-weight:bold;color:#ffde59;margin-bottom:6px;">🎮 BONUS GAME UNLOCKED!</div>
-          <div id="bonus-countdown" style="font-size:12px;color:rgba(255,255,255,0.7);margin-bottom:10px;"></div>
-          <button id="bonus-btn" onclick="goToBonusGame()" style="background:linear-gradient(135deg,#c8a96e,#6677aa);border:none;border-radius:20px;padding:12px 20px;color:#000;font-weight:bold;font-size:13px;cursor:pointer;font-family:Georgia,serif;width:100%;">🎵 Play The Turntable!</button>
+        <div id="bonus-area">
+          <div class="bonus-title">🎮 BONUS GAME UNLOCKED!</div>
+          <div id="bonus-countdown"></div>
+          <button id="bonus-btn-wb" onclick="goToBonusGame()">🎵 Play The Turntable!</button>
         </div>
       </div>
+
+      <button id="start-btn" onclick="startGame()">🪷 Begin World Beats!</button>
+      <button id="next-btn" onclick="nextQuestion()">▶ Next Instrument</button>
     </div>
-    <div id="lad-bottom-wrap">
-      <img id="lad-bottom-img"
-        src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/peaceful_lad_grownups.png" alt="Quiet Lad" onerror="this.style.display='none'"/>
-    </div>
-    <nav id="nav-bar">
-      <button class="nav-btn" onclick="goBack()"><span class="nav-icon">◀️</span><span>Back</span></button>
-      <button class="nav-btn nav-home" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
-      <button class="nav-btn" onclick="goForward()"><span class="nav-icon">▶️</span><span>Next</span></button>
-    </nav>
   </div>
+
+  <nav id="nav-bar">
+    <button class="nav-btn" onclick="goBack()"><span class="nav-icon">◀️</span><span>Back</span></button>
+    <button class="nav-btn nav-home" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
+    <button class="nav-btn" onclick="goForward()"><span class="nav-icon">▶️</span><span>Next</span></button>
+  </nav>
 </div>
 <div id="toast"></div>
+
 <script>
-const BASE='https://alexmonteiro65.github.io/ask-lovely-rita/src/';
-const RITA_INTRO={
-  youngsters:"Hello love! Welcome to The Inner Light! The Quiet Lad will show you wonders from around the world. Flip two cards at a time and try to find the matching pairs!",
-  grownups:"Hello there! Time to explore world cultures! Flip cards and match each image to its name or country. You have 12 pairs to find darling. How many moves will you need?",
-  experts:"Right then! Expert explorers only! Match all 16 pairs before the timer runs out. The Quiet Lad says wisdom comes to those who are swift and attentive!",
-};
-const RITA_MATCH=["Beautiful match darling! The Quiet Lad smiles with joy!","Wonderful! That is a perfect pair love!","Brilliant! Another connection made!","Spot on! The world is full of wonders!"];
-const RITA_COMPLETE=["Oh how magnificent! You matched them all! The Quiet Lad bows in respect darling!","Perfect harmony love! Every pair found! The inner light shines bright in you!"];
-const RITA_TIMEOUT=["Oh nearly darling! Time ran out but no points lost. Try again and find your rhythm!","Not quite this time love! The timer is strict but no penalty. Have another go!"];
+const BASE = 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/';
 
-// Pairs data: each pair has an image card and a label card
-const ALL_PAIRS=[
-  {id:'sitar',   img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/01_sitar.png',    label:'Sitar',      fact:'The sitar is a beautiful string instrument from India with a rich warm sound love!'},
-  {id:'lotus',   img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/02_lotus.png',    label:'India',       fact:'The lotus is the national flower of India and a symbol of purity and beauty!'},
-  {id:'panda',   img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/03_panda.png',    label:'China',       fact:'Giant pandas live only in China and spend 16 hours a day eating bamboo love!'},
-  {id:'tulip',   img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/04_tulip.png',    label:'Netherlands', fact:'The Netherlands is famous for its tulip fields that bloom spectacularly every spring!'},
-  {id:'kangaroo',img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/05_kangaroo.png', label:'Australia',   fact:'Kangaroos are found only in Australia and can jump over 3 metres high darling!'},
-  {id:'maple',   img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/06_maple_leaf.png',label:'Canada',     fact:'The red maple leaf on the Canadian flag represents unity and beautiful autumn forests!'},
-  {id:'cherry',  img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/07_cherry_blossom.png',label:'Japan',  fact:'Cherry blossoms bloom for only two weeks in Japan and millions celebrate their beauty!'},
-  {id:'elephant',img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/08_elephant.png', label:'Thailand',    fact:'Elephants are sacred in Thailand and appear on ancient temples and royal ceremonies!'},
-  {id:'drum',    img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/09_djembe.png',   label:'Africa',      fact:'The djembe drum from West Africa can be heard for miles and brings communities together!'},
-  {id:'cactus',  img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/10_cactus.png',   label:'Mexico',      fact:'Cacti in the Mexican desert can live for hundreds of years and store huge amounts of water!'},
-  {id:'windmill',img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/14_windmill.png', label:'Holland',     fact:'The Netherlands has over 1000 windmills used for centuries to pump water from the land!'},
-  {id:'koala',   img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/15_koala.png',    label:'Australia',   fact:'Koalas sleep up to 22 hours a day because their eucalyptus diet is very low in energy!'},
-  {id:'tea',     img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/02_lotus.png',    label:'China',       fact:'Tea was discovered in China over 4000 years ago and is now the most popular drink in the world!'},
-  {id:'dragon',  img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/12_dragon.png',   label:'Wales',       fact:'The red dragon has been a symbol of Wales for over a thousand years and represents courage!'},
-  {id:'bagpipe', img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/11_bagpipes.png', label:'Scotland',    fact:'Bagpipes have been played in Scotland for centuries and carry across the Highland hills!'},
-  {id:'camel',   img:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/13_camel_pyramids.png',label:'Egypt',  fact:'Camels have crossed the Egyptian desert for thousands of years beside the ancient pyramids!'},
-];
-const LEVEL_CFG={
-  youngsters:{pairs:4,timer:0,   bonusMatch:25,bonusAll:80, ladImg:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/peaceful_lad_grownups.png'},
-  grownups:  {pairs:6,timer:0,   bonusMatch:20,bonusAll:100,ladImg:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/peaceful_lad_grownups.png'},
-  experts:   {pairs:8,timer:60,  bonusMatch:15,bonusAll:150,ladImg:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/peaceful_lad_grownups.png'},
-};
-
-let S={level:'youngsters',beatcoins: 25000,score:0,pairs:4,cards:[],flipped:[],matched:[],moves:0,gameActive:false,timerInt:null,timeLeft:0};
-
-function loadStorage(){try{S.beatcoins=Number(localStorage.getItem('askLovelyRitaV4_bc')||25000); try{const lv=localStorage.getItem('askLovelyRitaV4_level');if(lv&&LEVEL_CFG[lv])S.level=lv;}catch(e){}}catch(e){}}
-function saveStorage(){try{localStorage.setItem('askLovelyRitaV4_bc',S.beatcoins);}catch(e){}}
-
-function init(){loadStorage();buildBg();applyLevel(S.level);highlightTab(S.level);setTimeout(()=>speak(RITA_INTRO[S.level]),900);}
-
-function setLevel(lvl){S.level=lvl;clearInterval(S.timerInt);window.speechSynthesis&&window.speechSynthesis.cancel();applyLevel(lvl);highlightTab(lvl);setTimeout(()=>speak(RITA_INTRO[lvl]),400);}
-function highlightTab(lvl){document.querySelectorAll('#level-tabs button').forEach(b=>b.classList.toggle('active',(lvl==='youngsters'&&b.textContent.includes('Young'))||(lvl==='grownups'&&b.textContent.includes('Grown'))||(lvl==='experts'&&b.textContent.includes('Expert'))));}
-
-function applyLevel(lvl){
-  document.body.className=`theme-${lvl}`;
-  document.getElementById('rita-text').textContent=RITA_INTRO[lvl];
-  document.getElementById('bc-val').textContent=S.beatcoins;
-  const ladEl=document.getElementById('lad-bottom-img');
-  ladEl.src=LEVEL_CFG[lvl].ladImg;
-  const cfg=LEVEL_CFG[lvl];
-  document.getElementById('pairs-val').textContent=`0/${cfg.pairs}`;
-  resetGame();
-}
-
-function buildBg(){
-  const bg=document.getElementById('india-bg');
-  const petals=['🌸','🌺','🌼','🌷'];
-  for(let i=0;i<8;i++){
-    const p=document.createElement('div');p.className='petal';
-    p.textContent=petals[Math.floor(Math.random()*petals.length)];
-    p.style.cssText=`left:${Math.random()*100}%;--ps:${12+Math.random()*10}px;--pd:${4+Math.random()*6}s;animation-delay:${Math.random()*6}s`;
-    bg.appendChild(p);
+// ── DATA ──────────────────────────────────────────────────
+const INSTRUMENTS = [
+  {
+    name:'Sitar', country:'India', flag:'🇮🇳',
+    img: BASE+'world_beats_question.png',
+    correctImg: BASE+'world_beats_correct.png',
+    opts:[{flag:'🇮🇳',label:'India'},{flag:'🇯🇵',label:'Japan'},{flag:'🇧🇷',label:'Brazil'},{flag:'🇪🇬',label:'Egypt'}],
+    ans:0,
+    fact:"The sitar is a plucked string instrument from India with a beautiful resonating sound. It became famous in Western music when the Quiet Lad learned to play it during his spiritual journey to India."
+  },
+  {
+    name:'Koto', country:'Japan', flag:'🇯🇵',
+    img: BASE+'world_beats_question.png',
+    correctImg: BASE+'world_beats_correct.png',
+    opts:[{flag:'🇨🇳',label:'China'},{flag:'🇯🇵',label:'Japan'},{flag:'🇰🇷',label:'Korea'},{flag:'🇻🇳',label:'Vietnam'}],
+    ans:1,
+    fact:"The koto is Japan's national instrument — a long zither with 13 strings played with picks on the fingers. Its delicate sound has been heard in Japanese music for over 1,300 years."
+  },
+  {
+    name:'Djembe', country:'West Africa', flag:'🥁',
+    img: BASE+'world_beats_question.png',
+    correctImg: BASE+'world_beats_correct.png',
+    opts:[{flag:'🇸🇳',label:'West Africa'},{flag:'🇧🇷',label:'Brazil'},{flag:'🇨🇺',label:'Cuba'},{flag:'🇯🇲',label:'Jamaica'}],
+    ans:0,
+    fact:"The djembe is a rope-tuned skin-covered drum from West Africa. Its name means 'everyone gather together in peace' and it has been played for centuries in ceremonies and celebrations."
+  },
+  {
+    name:'Bouzouki', country:'Greece', flag:'🇬🇷',
+    img: BASE+'world_beats_question.png',
+    correctImg: BASE+'world_beats_correct.png',
+    opts:[{flag:'🇹🇷',label:'Turkey'},{flag:'🇮🇹',label:'Italy'},{flag:'🇬🇷',label:'Greece'},{flag:'🇮🇪',label:'Ireland'}],
+    ans:2,
+    fact:"The bouzouki is a long-necked string instrument central to Greek music. Its bright, ringing sound defines traditional Greek folk music and was even adopted into Irish music in the 1960s!"
+  },
+  {
+    name:'Sitar', country:'India', flag:'🇮🇳',
+    img: BASE+'world_beats_question.png',
+    correctImg: BASE+'world_beats_correct.png',
+    opts:[{flag:'🇮🇳',label:'India'},{flag:'🇵🇰',label:'Pakistan'},{flag:'🇳🇵',label:'Nepal'},{flag:'🇧🇩',label:'Bangladesh'}],
+    ans:0,
+    fact:"The sitar has 18-21 strings and a gourd resonator. The Quiet Lad brought its mesmerising sound to millions of Western ears, blending Eastern spirituality with modern music forever."
+  },
+  {
+    name:'Charango', country:'Bolivia/Peru', flag:'🇧🇴',
+    img: BASE+'world_beats_question.png',
+    correctImg: BASE+'world_beats_correct.png',
+    opts:[{flag:'🇲🇽',label:'Mexico'},{flag:'🇦🇷',label:'Argentina'},{flag:'🇧🇴',label:'Bolivia'},{flag:'🇨🇴',label:'Colombia'}],
+    ans:2,
+    fact:"The charango is a small Andean lute from Bolivia and Peru, traditionally made from an armadillo shell. It has 10 strings arranged in 5 pairs and produces a bright, joyful sound."
+  },
+  {
+    name:'Oud', country:'Middle East', flag:'🎸',
+    img: BASE+'world_beats_question.png',
+    correctImg: BASE+'world_beats_correct.png',
+    opts:[{flag:'🇸🇦',label:'Middle East'},{flag:'🇮🇷',label:'Iran'},{flag:'🇬🇷',label:'Greece'},{flag:'🇮🇳',label:'India'}],
+    ans:0,
+    fact:"The oud is one of the oldest instruments in the world — ancestor of the European lute. It has no frets, allowing players to slide between notes and create the distinctive sound of Arabic music."
+  },
+  {
+    name:'Didgeridoo', country:'Australia', flag:'🇦🇺',
+    img: BASE+'world_beats_question.png',
+    correctImg: BASE+'world_beats_correct.png',
+    opts:[{flag:'🇳🇿',label:'New Zealand'},{flag:'🇦🇺',label:'Australia'},{flag:'🇵🇬',label:'Papua New Guinea'},{flag:'🇫🇯',label:'Fiji'}],
+    ans:1,
+    fact:"The didgeridoo is the world's oldest wind instrument, developed by Aboriginal Australians over 40,000 years ago. Players use circular breathing to produce its continuous, droning sound without stopping."
   }
-}
+];
 
-function resetGame(){
-  S.score=0;S.moves=0;S.matched=[];S.flipped=[];S.gameActive=false;
-  clearInterval(S.timerInt);
-  document.getElementById('score-val').textContent='0';
-  document.getElementById('result-panel').classList.remove('show');
-  document.getElementById('timer-display').textContent='';
-  document.getElementById('cards-grid').innerHTML='';
-  document.getElementById('progress-row').innerHTML='';
-  document.getElementById('start-btn').style.display='block';
-  document.getElementById('start-btn').textContent='🌿 Begin Journey!';
-  document.getElementById('start-btn').onclick=startGame;
+const RITA_INTRO = {
+  youngsters: "Hello love! Welcome to World Beats! The Quiet Lad will show you wonderful instruments from around the world. Look at the picture and choose which country it comes from. No worries if you get one wrong darling — I will teach you!",
+  grownups: "Hello there! World Beats for Grown Ups! Listen to the description and choose the correct country. Each instrument has a fascinating story darling!",
+  experts: "Right then! Expert musicologists only! You will need to name the instrument AND choose its country of origin. The Quiet Lad says only true music scholars will ace this love!"
+};
+const RITA_CORRECT=["Magnificent love! You know your world music!","The Quiet Lad is impressed darling!","Peaceful and correct love! Beautiful!","Brilliant knowledge darling!"];
+const RITA_WRONG=["Not quite love — but now you know!","Close darling! Here is the story behind this instrument...","Good try love! Let me share a musical fact..."];
+const RITA_COMPLETE=["Wonderful love! You travelled the world through music! The Quiet Lad bows to you!","Magnificent darling! Eight instruments from eight corners of the world! You are a true world music scholar!","Peaceful and brilliant love! The Inner Light shines through you!"];
+
+const LEVEL_CFG = {
+  youngsters:{ bonus:25, bonusAll:100 },
+  grownups:  { bonus:40, bonusAll:150 },
+  experts:   { bonus:70, bonusAll:250 },
+};
+
+let S={ level:'youngsters', beatcoins:25000, score:0, qIndex:0, order:[], gameActive:false, answered:false, fromWorld:null };
+
+window.addEventListener('load',()=>{
+  const params=new URLSearchParams(window.location.search);
+  if(params.get('level')&&['youngsters','grownups','experts'].includes(params.get('level'))) S.level=params.get('level');
+  if(params.get('from')) S.fromWorld=params.get('from');
+  S.beatcoins=Number(localStorage.getItem('askLovelyRitaV4_bc')||25000);
+  document.getElementById('bc-val').textContent=S.beatcoins.toLocaleString();
+  setLevel(S.level);
+  const doSpeak=()=>speak(RITA_INTRO[S.level]);
+  if(window.speechSynthesis.getVoices().length>0) setTimeout(doSpeak,800);
+  else window.speechSynthesis.onvoiceschanged=()=>setTimeout(doSpeak,800);
+});
+
+function setLevel(lvl){
+  S.level=lvl;
+  document.getElementById('phone').className='theme-'+lvl;
+  ['y','g','e'].forEach(t=>document.getElementById('tab-'+t).classList.remove('active'));
+  const m={youngsters:'y',grownups:'g',experts:'e'};
+  document.getElementById('tab-'+m[lvl]).classList.add('active');
+  // Show/hide sound button and name input
+  document.getElementById('sound-btn-wrap').style.display=lvl==='youngsters'?'none':'flex';
+  document.getElementById('instrument-name-exp').style.display=lvl==='experts'?'block':'none';
+  localStorage.setItem('askLovelyRitaV4_level',lvl);
+  if(S.gameActive) resetGame();
+  speak(RITA_INTRO[lvl]);
+  setRitaText(RITA_INTRO[lvl]);
 }
 
 function startGame(){
-  S.gameActive=true;S.moves=0;S.matched=[];S.flipped=[];
+  S.gameActive=true; S.qIndex=0; S.score=0;
+  S.order=[...Array(INSTRUMENTS.length).keys()].sort(()=>Math.random()-0.5);
   document.getElementById('start-btn').style.display='none';
   document.getElementById('result-panel').classList.remove('show');
-  const cfg=LEVEL_CFG[S.level];
-  const selectedPairs=shuffle([...ALL_PAIRS]).slice(0,cfg.pairs);
-
-  // Build cards: each pair creates 2 cards (image + label)
-  S.cards=[];
-  selectedPairs.forEach(pair=>{
-    S.cards.push({id:pair.id,type:'img',content:pair.img,label:pair.label,fact:pair.fact});
-    S.cards.push({id:pair.id,type:'label',content:pair.label,img:pair.img,fact:pair.fact});
-  });
-  S.cards=shuffle(S.cards);
-
-  // Progress dots
-  const pr=document.getElementById('progress-row');pr.innerHTML='';
-  for(let i=0;i<cfg.pairs;i++){
-    const d=document.createElement('div');d.className='prog-dot';d.id=`pdot-${i}`;
-    d.textContent='🪷';pr.appendChild(d);
-  }
-  document.getElementById('pairs-val').textContent=`0/${cfg.pairs}`;
-
-  // Grid columns
-  const cols=cfg.pairs<=4?4:cfg.pairs<=6?4:4;
-  const fs=cfg.pairs<=4?22:cfg.pairs<=6?18:16;
-  const grid=document.getElementById('cards-grid');
-  grid.style.gridTemplateColumns=`repeat(${cols},1fr)`;
-  grid.innerHTML='';
-  grid.style.setProperty('--card-fs',fs+'px');
-
-  S.cards.forEach((card,idx)=>{
-    const el=document.createElement('div');el.className='match-card';el.dataset.idx=idx;
-    const ce=cfg.pairs<=4?24:cfg.pairs<=6?20:16;
-    const cl=cfg.pairs<=4?10:9;
-    el.style.setProperty('--ce',ce+'px');
-    el.style.setProperty('--cl',cl+'px');
-    const backSrc = S.level==='youngsters' ? 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/card_back_youngsters.png' : S.level==='grownups' ? 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/card_back_grownups.png' : 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/innerlight/card_back_experts.png';
-    const frontHTML = card.type==='img'
-      ? `<img src="${card.content}" style="width:80%;max-width:90px;border-radius:8px;display:block;margin:0 auto" onerror="this.style.display='none'"/>`
-      : `<div class="card-label" style="font-size:var(--cl);font-weight:900;text-align:center;padding:4px;color:#fff">${card.content}</div>`;
-    el.innerHTML=`
-      <div class="card-back"><img src="${backSrc}" style="width:100%;height:100%;object-fit:cover;border-radius:8px" onerror="this.textContent='\u{1F300}'"/></div>
-      <div class="card-front">${frontHTML}</div>`;
-    el.onclick=()=>flipCard(idx);
-    grid.appendChild(el);
-  });
-
-  // Timer for experts
-  if(cfg.timer>0){
-    S.timeLeft=cfg.timer;
-    document.getElementById('timer-display').textContent=`⏱️ ${S.timeLeft}s remaining`;
-    S.timerInt=setInterval(()=>{
-      S.timeLeft--;
-      document.getElementById('timer-display').textContent=`⏱️ ${S.timeLeft}s remaining`;
-      if(S.timeLeft<=0){clearInterval(S.timerInt);timeOut();}
-    },1000);
-  }
+  document.getElementById('bonus-area').style.display='none';
+  loadQuestion();
 }
 
-function flipCard(idx){
-  if(!S.gameActive)return;
-  if(S.flipped.length>=2)return;
-  if(S.flipped.includes(idx))return;
-  if(S.matched.includes(S.cards[idx].id)&&S.cards.filter((c,i)=>c.id===S.cards[idx].id&&S.matched.includes(c.id)).length>=2)return;
+function loadQuestion(){
+  if(S.qIndex>=8){ finishGame(); return; }
+  S.answered=false;
+  const instr=INSTRUMENTS[S.order[S.qIndex]];
+  const lvl=S.level;
 
-  S.flipped.push(idx);
-  const el=document.querySelector(`.match-card[data-idx="${idx}"]`);
-  el.classList.add('flipped');
+  document.getElementById('result-panel').classList.remove('show');
+  document.getElementById('next-btn').style.display='none';
+  document.getElementById('q-counter').textContent=`Question ${S.qIndex+1} of 8`;
+  document.getElementById('q-val').textContent=`${S.qIndex}/8`;
+  document.getElementById('progress-fill').style.width=`${(S.qIndex/8)*100}%`;
 
-  if(S.flipped.length===2){
-    S.moves++;
-    setTimeout(()=>checkMatch(),500);
-  }
-}
-
-function checkMatch(){
-  const [a,b]=S.flipped;
-  const ca=S.cards[a],cb=S.cards[b];
-  if(ca.id===cb.id&&ca.type!==cb.type){
-    // MATCH
-    S.matched.push(ca.id);
-    document.querySelector(`.match-card[data-idx="${a}"]`).classList.add('matched');
-    document.querySelector(`.match-card[data-idx="${b}"]`).classList.add('matched');
-    const earned=LEVEL_CFG[S.level].bonusMatch;
-    S.score+=earned;S.beatcoins+=earned;
-    document.getElementById('score-val').textContent=S.score;
-    document.getElementById('bc-val').textContent=S.beatcoins;
-    saveStorage();
-    const pairsDone=S.matched.length;
-    document.getElementById('pairs-val').textContent=`${pairsDone}/${LEVEL_CFG[S.level].pairs}`;
-    document.getElementById(`pdot-${pairsDone-1}`)?.classList.add('found');
-    toast(`✅ ${ca.label || ca.content} matched! +${earned} BeatCoins`);
-    speak(pick(RITA_MATCH));
-    if(S.matched.length===LEVEL_CFG[S.level].pairs){setTimeout(()=>finishGame(true),600);}
+  // Show instrument image (always for youngsters, after answer for others)
+  const imgEl=document.getElementById('instrument-img');
+  if(lvl==='youngsters'){
+    imgEl.src=instr.img; imgEl.style.opacity='1';
   } else {
-    // NO MATCH — flip back, Rita teaches
-    document.querySelector(`.match-card[data-idx="${a}"]`).classList.add('wrong-flash');
-    document.querySelector(`.match-card[data-idx="${b}"]`).classList.add('wrong-flash');
-    setTimeout(()=>{
-      [a,b].forEach(i=>{document.querySelector(`.match-card[data-idx="${i}"]`).classList.remove('flipped','wrong-flash');});
-      const hintCard = ca.type==='img' ? ca : cb;
-      speak('That is ' + hintCard.label + ' love! ' + hintCard.fact);
-    },700);
+    imgEl.src=BASE+'world_beats_question.png'; imgEl.style.opacity='0.3';
   }
-  S.flipped=[];
+
+  // Sound btn
+  document.getElementById('sound-btn-wrap').style.display=lvl==='youngsters'?'none':'flex';
+
+  // Expert: show name input
+  const nameExp=document.getElementById('instrument-name-exp');
+  nameExp.style.display=lvl==='experts'?'block':'none';
+  if(lvl==='experts') document.getElementById('instrument-name-input').value='';
+
+  // Build flag grid
+  const grid=document.getElementById('flags-grid');
+  grid.innerHTML='';
+  instr.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='flag-btn';
+    btn.innerHTML=`<div class="flag-emoji">${opt.flag}</div><div class="flag-label">${opt.label}</div>`;
+    btn.onclick=()=>answer(i,instr);
+    grid.appendChild(btn);
+  });
+
+  // Rita speaks instrument hint for grown ups
+  if(lvl==='grownups'){
+    const hint=`This instrument comes from a country with a rich musical tradition. Listen to the name: ${instr.name}. Now choose the correct country love!`;
+    setTimeout(()=>speak(hint),400);
+    setRitaText(hint);
+  } else if(lvl==='youngsters'){
+    const hint=`Look at this beautiful instrument love! It is called a ${instr.name}. Can you guess which country it comes from?`;
+    setTimeout(()=>speak(hint),400);
+    setRitaText(hint);
+  } else {
+    const hint=`A challenge for experts! Name this instrument and choose its country of origin. Type your answer and then tap the flag!`;
+    setTimeout(()=>speak(hint),400);
+    setRitaText(hint);
+  }
 }
 
-function timeOut(){
-  S.gameActive=false;
-  document.getElementById('result-icon').textContent='⏱️';
-  document.getElementById('result-title').textContent='Time\'s Up!';
-  document.getElementById('result-sub').textContent=`You found ${S.matched.length} of ${LEVEL_CFG[S.level].pairs} pairs — no penalty!`;
-  document.getElementById('result-pts').textContent='+0 BeatCoins';
-  document.getElementById('result-pts').style.color='rgba(255,255,255,.4)';
-  document.getElementById('result-panel').classList.add('show');
-  document.getElementById('start-btn').textContent='🔄 Try Again!';
-  document.getElementById('start-btn').style.display='block';
-  document.getElementById('start-btn').onclick=()=>{resetGame();startGame();};
-  speak(pick(RITA_TIMEOUT));
+function playInstrumentSound(){
+  // Synthesise a simple tone to suggest the instrument
+  try {
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const o=ctx.createOscillator();
+    const g=ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type='triangle';
+    o.frequency.setValueAtTime(220,ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(440,ctx.currentTime+0.5);
+    g.gain.setValueAtTime(0.3,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+1.5);
+    o.start(ctx.currentTime); o.stop(ctx.currentTime+1.5);
+    document.getElementById('sound-btn').textContent='🎵';
+    setTimeout(()=>document.getElementById('sound-btn').textContent='🔊',1600);
+  } catch(e){}
 }
 
-function finishGame(success){
-  clearInterval(S.timerInt);S.gameActive=false;
-  const bonus=LEVEL_CFG[S.level].bonusAll;
-  S.beatcoins+=bonus;S.score+=bonus;
-  document.getElementById('bc-val').textContent=S.beatcoins;
+function answer(chosen,instr){
+  if(S.answered) return;
+  S.answered=true;
+  const correct=chosen===instr.ans;
+  const btns=document.querySelectorAll('.flag-btn');
+  btns.forEach((b,i)=>{
+    b.disabled=true;
+    if(i===instr.ans) b.classList.add('correct');
+    else if(i===chosen&&!correct) b.classList.add('wrong');
+  });
+
+  // Reveal instrument image for grown ups/experts
+  if(S.level!=='youngsters'){
+    document.getElementById('instrument-img').src=instr.img;
+    document.getElementById('instrument-img').style.opacity='1';
+    setTimeout(()=>{
+      document.getElementById('instrument-img').style.opacity='0.3';
+    },3500);
+  }
+
+  const earned=correct?LEVEL_CFG[S.level].bonus:0;
+  if(correct){ S.beatcoins+=earned; S.score+=earned; saveBC(); celebrate(); }
+
+  const rp=document.getElementById('result-panel');
+  document.getElementById('result-icon').textContent=correct?'✅':'🪷';
+  document.getElementById('result-title').textContent=correct?pick(RITA_CORRECT):pick(RITA_WRONG);
+  document.getElementById('result-fact').textContent=instr.fact;
+  document.getElementById('result-pts').textContent=correct?`+${earned} BeatCoins!`:'+0 BeatCoins';
+  document.getElementById('result-pts').style.color=correct?'#ffde59':'rgba(255,255,255,0.4)';
+
+  const ri=document.getElementById('result-correct-img');
+  if(correct){ ri.src=instr.correctImg; ri.style.display='block'; setTimeout(()=>ri.style.display='none',3000); }
+  else ri.style.display='none';
+
+  rp.classList.add('show');
+  speak((correct?pick(RITA_CORRECT)+' ':pick(RITA_WRONG)+' ')+instr.fact);
+  setRitaText(instr.fact);
+  document.getElementById('bc-val').textContent=S.beatcoins.toLocaleString();
   document.getElementById('score-val').textContent=S.score;
-  saveStorage();
+  S.qIndex++;
+  setTimeout(()=>{
+    if(S.qIndex>=8) setTimeout(finishGame,800);
+    else document.getElementById('next-btn').style.display='block';
+  },1200);
+}
+
+function nextQuestion(){ document.getElementById('next-btn').style.display='none'; loadQuestion(); }
+
+function finishGame(){
+  S.gameActive=false;
+  const bonus=LEVEL_CFG[S.level].bonusAll;
+  S.beatcoins+=bonus; S.score+=bonus; saveBC();
+  document.getElementById('bc-val').textContent=S.beatcoins.toLocaleString();
+  document.getElementById('score-val').textContent=S.score;
+  document.getElementById('progress-fill').style.width='100%';
+  document.getElementById('q-val').textContent='8/8';
+  const rp=document.getElementById('result-panel');
   document.getElementById('result-icon').textContent='🏆';
-  document.getElementById('result-title').textContent='All Pairs Found!';
-  document.getElementById('result-sub').textContent=`You matched everything in ${S.moves} moves!`;
+  document.getElementById('result-title').textContent='World Music Master!';
+  document.getElementById('result-fact').textContent='You discovered instruments from across the globe! The Quiet Lad bows in respect!';
   document.getElementById('result-pts').textContent=`+${bonus} Bonus BeatCoins!`;
   document.getElementById('result-pts').style.color='#ffde59';
-  document.getElementById('result-panel').classList.add('show');
-  document.getElementById('timer-display').textContent='';
+  document.getElementById('result-correct-img').style.display='none';
+  rp.classList.add('show');
+  document.getElementById('next-btn').style.display='none';
   document.getElementById('start-btn').textContent='🔄 Play Again!';
   document.getElementById('start-btn').style.display='block';
-  document.getElementById('start-btn').onclick=()=>{resetGame();startGame();};
-  celebrate();speak(pick(RITA_COMPLETE));
-  setTimeout(showBonusGame, 2000);
+  document.getElementById('start-btn').onclick=()=>{ resetGame(); startGame(); };
+  celebrate(); speak(pick(RITA_COMPLETE));
+  setTimeout(showBonusGame,2000);
 }
 
-function showBonusGame() {
-  const area = document.getElementById('bonus-area');
-  if (!area) return;
-  area.style.display = 'block';
-  const msgs = {
-    youngsters: "Wonderful love! You matched all the pairs! The Turntable bonus game is yours! Going there in 5 seconds!",
-    grownups: "Brilliant darling! All pairs found! The Turntable awaits you in 5 seconds!",
-    experts: "Outstanding love! Perfect memory! The Turntable bonus game is unlocked! Off we go in 5 seconds!"
+function showBonusGame(){
+  const area=document.getElementById('bonus-area');
+  if(!area) return;
+  area.style.display='block';
+  const msgs={
+    youngsters:"Wonderful love! The Turntable bonus game is yours! Going there in 5 seconds!",
+    grownups:"Magnificent darling! The Turntable awaits! Off we go in 5 seconds!",
+    experts:"Outstanding love! The Turntable bonus is unlocked! Going in 5 seconds!"
   };
-  speak(msgs[S.level] || msgs.youngsters);
-  let count = 5;
-  const cd = document.getElementById('bonus-countdown');
-  if (cd) cd.textContent = 'Going there in ' + count + ' seconds...';
-  const iv = setInterval(() => {
+  speak(msgs[S.level]);
+  let count=5;
+  const cd=document.getElementById('bonus-countdown');
+  if(cd) cd.textContent='Going there in '+count+' seconds...';
+  const iv=setInterval(()=>{
     count--;
-    if (cd) cd.textContent = count > 0 ? 'Going there in ' + count + ' seconds...' : 'Off we go!';
-    if (count <= 0) { clearInterval(iv); goToBonusGame(); }
-  }, 1000);
+    if(cd) cd.textContent=count>0?'Going there in '+count+' seconds...':'Off we go!';
+    if(count<=0){ clearInterval(iv); goToBonusGame(); }
+  },1000);
+}
+function goToBonusGame(){ window.location.href='page3_turntable.html?level='+S.level+'&from=india'; }
+
+function resetGame(){
+  S.gameActive=false; S.qIndex=0; S.score=0; S.answered=false;
+  document.getElementById('flags-grid').innerHTML='';
+  document.getElementById('result-panel').classList.remove('show');
+  document.getElementById('bonus-area').style.display='none';
+  document.getElementById('result-correct-img').style.display='none';
+  document.getElementById('instrument-img').src=BASE+'world_beats_question.png';
+  document.getElementById('instrument-img').style.opacity='1';
+  document.getElementById('q-counter').textContent='Question 0 of 8';
+  document.getElementById('q-val').textContent='0/8';
+  document.getElementById('score-val').textContent='0';
+  document.getElementById('progress-fill').style.width='0%';
+  document.getElementById('next-btn').style.display='none';
+  document.getElementById('start-btn').textContent='🪷 Begin World Beats!';
+  document.getElementById('start-btn').onclick=startGame;
+  document.getElementById('start-btn').style.display='block';
 }
 
-function goToBonusGame() {
-  window.location.href = 'page3_turntable.html?level=' + S.level + '&from=india';
-}
+function saveBC(){ localStorage.setItem('askLovelyRitaV4_bc',S.beatcoins); }
 
-function goBack(){window.location.href='page5_worlds.html';}
-function goHome(){window.location.href='page1_landing.html';}
-function goForward(){window.location.href='page9_city.html';}
+function celebrate(){
+  const layer=document.getElementById('celebrate'); layer.innerHTML='';
+  const cols=['#ff6b35','#c8a96e','#ffde59','#ff9ef9','#fff','#ffd700'];
+  for(let i=0;i<40;i++){
+    const el=document.createElement('div'); el.className='cp';
+    el.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*20}%;background:${cols[Math.floor(Math.random()*cols.length)]};animation-delay:${Math.random()*.7}s;animation-duration:${1.2+Math.random()*.9}s;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;border-radius:${Math.random()>.5?'50%':'2px'};`;
+    layer.appendChild(el);
+  }
+  setTimeout(()=>layer.innerHTML='',2500);
+}
 
 function speak(text){
   if(localStorage.getItem('askLovelyRitaV4_mute')==='1') return;
-  if(!window.speechSynthesis)return;
+  if(!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.9;u.pitch=1.1;
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='en-GB'; u.rate=0.9; u.pitch=1.1;
   const voices=window.speechSynthesis.getVoices();
-  const brit=voices.find(v=>v.lang==='en-GB'&&v.name.toLowerCase().includes('female'))||voices.find(v=>v.lang==='en-GB')||voices.find(v=>v.lang.startsWith('en'));
-  if(brit)u.voice=brit;
-  const lad=document.getElementById('lad-bottom-img');
-  if(lad){lad.classList.add('speaking');u.onend=()=>lad.classList.remove('speaking');}
+  const v=voices.find(v=>v.lang==='en-GB'&&/female|woman/i.test(v.name))||voices.find(v=>v.lang==='en-GB')||voices.find(v=>v.lang.startsWith('en'));
+  if(v) u.voice=v;
   window.speechSynthesis.speak(u);
 }
-function ritaSpeak(){speak(RITA_INTRO[S.level]);}
-if(window.speechSynthesis){window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();}
 
-function celebrate(){
-  const layer=document.getElementById('celebrate');layer.innerHTML='';
-  const cols=['#ff6b35','#ffde59','#7bc67e','#c8a96e','#fff','#f472b6'];
-  for(let i=0;i<45;i++){const el=document.createElement('div');el.className='cp';el.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*20}%;background:${cols[Math.floor(Math.random()*cols.length)]};animation-delay:${Math.random()*.7}s;animation-duration:${1.2+Math.random()*.9}s;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;border-radius:${Math.random()>.5?'50%':'2px'};`;layer.appendChild(el);}
-  setTimeout(()=>layer.innerHTML='',2800);
+function setRitaText(t){ document.getElementById('rita-text').textContent=t; }
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function toast(msg){ const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000); }
+
+function goBack(){
+  if(S.fromWorld==='india') { window.location.href='page8_india.html'; return; }
+  window.location.href='page5_worlds.html';
 }
-
-let toastT;
-function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),3000);}
-function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
-function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
-function setDevice(w,h,name){const p=document.getElementById('phone');p.style.width=w+'px';p.style.height=h+'px';document.querySelectorAll('#device-bar button').forEach(b=>b.classList.toggle('active',b.textContent===name));}
-
-init();
+function goHome()    { window.location.href='page1_landing.html'; }
+function goForward() { window.location.href='page9_city.html'; }
 </script>
-
 </body>
 </html>
