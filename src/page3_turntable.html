@@ -1031,6 +1031,18 @@ function toggleMute() {
 
 
 // Save BeatCoins per chosen Lad for global scoreboard
+
+function postGlobalScore(amount) {
+  try {
+    const lad = localStorage.getItem('askLovelyRitaV4_chosen_lad') || 'smart';
+    fetch('https://empty-leaf-6e4b.alexmonteironeto.workers.dev/score', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ lad: lad, amount: amount })
+    }).catch(()=>{});
+  } catch(e) {}
+}
+
 function saveLadBC(amount) {
   try {
     const lad = localStorage.getItem('askLovelyRitaV4_chosen_lad') || 'smart';
