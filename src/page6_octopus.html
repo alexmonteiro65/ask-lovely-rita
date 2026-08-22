@@ -477,7 +477,7 @@ const WORDS_BY_LEVEL = {
   youngsters: [
     { word:'CORAL',     emoji:'🪸', photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus/youngsters_coral.png', cat:'Ocean Life',    riddle:"I live underwater and come in many colours. Fish love to hide inside me. I look like a plant but I am actually made of tiny animals!" },
     { word:'FISH',      emoji:'🐟', photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus/youngsters_fish.png',   cat:'Ocean Life',    riddle:"I live in the water and breathe through gills. I have fins and scales. You might find me in an aquarium or on your dinner plate!" },
-    { word:'WAVE',      emoji:'<img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus/youngsters_wave.png" style="width:100%;max-width:260px;border-radius:12px" alt="Wave">', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Mavericks_Surf_Contest_2010b.jpg/320px-Mavericks_Surf_Contest_2010b.jpg', cat:'Ocean Science', riddle:"I rise and fall in the sea. Surfers love to ride me! The wind creates me and I travel far across the ocean." },
+    { word:'WAVE',      emoji:'🌊', photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus/youngsters_wave.png', cat:'Ocean Science', riddle:"I rise and fall in the sea. Surfers love to ride me! The wind creates me and I travel far across the ocean." },
     { word:'DOLPHIN',   emoji:'🐬', photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus/youngsters_dolphin.png',    cat:'Ocean Life',    riddle:"I am one of the smartest animals in the sea! I jump and play. I am not a fish. I breathe air just like you!" },
     { word:'SEAHORSE',  emoji:'🐠', photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus/youngsters_seahorse.png', cat:'Ocean Life', riddle:"I look like a tiny horse but I swim in the sea! The daddy in my family carries the babies." },
     { word:'SEAWEED',   emoji:'🌿', photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus/youngsters_seaweed.png', cat:'Ocean Plants', riddle:"I am a plant that grows in the sea. Humans use me in sushi and even in ice cream!" },
@@ -488,7 +488,7 @@ const WORDS_BY_LEVEL = {
     { word:'SUBMARINE',  emoji:'🚢', photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus/grownups_01_submarine.png', cat:'Ocean Vehicles', riddle:"I travel deep below the surface of the sea. Sailors live inside me for months at a time without seeing sunlight. What am I?" },
     { word:'PLANKTON',   emoji:'🦠', photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus/grownups_02_plankton.png',           cat:'Ocean Science',  riddle:"I am invisible to the naked eye but I am the foundation of all ocean life. Whales eat billions of me every day. What am I?" },
     { word:'BARNACLE',   emoji:'🐚', photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus/grownups_03_barnacles.png',   cat:'Ocean Life',     riddle:"I attach myself to rocks and ships and never move again. I am a crustacean that feeds by waving feathery legs through the water. What am I?" },
-    { word:'CURRENT',    emoji:'<img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus/grownups_04_current.png" style="width:100%;max-width:260px;border-radius:12px" alt="Current">', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Corrientes-oceanicas.gif/320px-Corrientes-oceanicas.gif',      cat:'Ocean Science',  riddle:"I am an invisible river flowing through the ocean. I move heat around the planet and guide ships across the seas. What am I?" },
+    { word:'CURRENT',    emoji:'🌊', photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Corrientes-oceanicas.gif/320px-Corrientes-oceanicas.gif',      cat:'Ocean Science',  riddle:"I am an invisible river flowing through the ocean. I move heat around the planet and guide ships across the seas. What am I?" },
     { word:'ANEMONE',    emoji:'🌺', photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus/grownups_05_anemone.png', cat:'Ocean Life',  riddle:"I look like a flower but I am an animal! Clownfish live inside my tentacles and I protect them from predators. What am I?" },
     { word:'NAUTILUS',   emoji:'🐚', photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus/grownups_06_nautilus.png', cat:'Ocean Life', riddle:"I am a living fossil that has barely changed in 500 million years. I live in a beautiful spiral shell with many chambers. What am I?" },
     { word:'SQUID',      emoji:'🦑', photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/octopus/grownups_07_squid.png',               cat:'Ocean Life',     riddle:"I have ten arms and can change colour in an instant. I shoot ink to escape predators and can swim backwards faster than most fish. What am I?" },
@@ -888,14 +888,12 @@ function checkWord() {
       const box = document.getElementById(`box-${i}`);
       if (box && !S.revealedPositions.includes(i)) box.className='letter-box wrong';
     }
+    // Always advance — show result and move on
     setTimeout(() => {
-      // Clear non-revealed inputs
-      S.currentInput = S.currentInput.map((l,i) => S.revealedPositions.includes(i)?l:'');
-      S.usedScrambleIndices = [];
-      document.querySelectorAll('.scramble-letter:not(.scr-del)').forEach(b=>b.classList.remove('used'));
-      updateBoxes();
-      toast('Not quite! Try again love!');
-    }, 500);
+      S.wordComplete = true;
+      showWordResult(false, wordObj, 0);
+      speak(pick(RITA_MISS));
+    }, 600);
   }
 }
 
@@ -942,13 +940,22 @@ function useHint() {
 
 // ── SHOW RESULT ───────────────────────────────────────────
 function showWordResult(correct, wordObj, pts) {
-  document.getElementById('result-icon').textContent = correct?'🎉':'😔';
-  document.getElementById('result-title').textContent = correct?'Correct!':'Not quite!';
+  document.getElementById('result-icon').textContent = correct?'🎉':'📖';
+  document.getElementById('result-title').textContent = correct?'Brilliant!':'Good try!';
   document.getElementById('result-word').textContent = wordObj.word;
-  document.getElementById('result-sub').textContent = correct ? wordObj.riddle.split('.')[0]+'.' : `The word was: ${wordObj.word}`;
+  document.getElementById('result-sub').textContent = wordObj.riddle.split('.')[0]+'.';
   const ptsEl = document.getElementById('result-pts');
   ptsEl.textContent = correct?`+${pts} BeatCoins!`:'+0 BeatCoins';
   ptsEl.style.color = correct?'#4ade80':'rgba(255,255,255,.4)';
+  // GROWN UPS + EXPERTS: reveal image after answer
+  if (S.level !== 'youngsters' && wordObj.photo) {
+    document.getElementById('creature-wrap').style.display = 'flex';
+    const img = document.getElementById('creature-img');
+    img.src = wordObj.photo;
+    img.style.display = 'block';
+    img.onerror = () => { img.style.display='none'; };
+    document.getElementById('riddle-wrap').style.display = 'none';
+  }
   document.getElementById('result-panel').classList.add('show');
 
   S.wordIndex++;
