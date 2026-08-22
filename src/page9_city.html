@@ -406,19 +406,26 @@ function finishGame(){
 }
 
 function showBonusGame() {
-  const panel = document.getElementById('bonus-panel');
-  if (!panel) return;
-  panel.classList.add('show');
+  const area = document.getElementById('bonus-area');
+  if (!area) return;
+  area.style.display = 'block';
   const msgs = {
-    youngsters: "Brilliant work love! You have unlocked Park in London as your bonus game! The Cute Lad will drive you around the city!",
-    grownups: "Magnificent darling! Your bonus reward is Park in London! A grown up challenge awaits you in the city streets!",
-    experts: "Outstanding love! Only experts get this far! Park in London is your bonus challenge! The Cute Lad says good luck!"
+    youngsters: "Brilliant work love! You have unlocked Park in London as your bonus game! Going there in 5 seconds!",
+    grownups: "Magnificent darling! Park in London is your bonus reward! Off we go in 5 seconds!",
+    experts: "Outstanding love! Park in London bonus unlocked! Going there in 5 seconds!"
   };
   speak(msgs[S.level] || msgs.youngsters);
+  let count = 5;
+  const cd = document.getElementById('bonus-countdown');
+  if (cd) cd.textContent = 'Going there in ' + count + ' seconds...';
+  const iv = setInterval(() => {
+    count--;
+    if (cd) cd.textContent = count > 0 ? 'Going there in ' + count + ' seconds...' : 'Off we go!';
+    if (count <= 0) { clearInterval(iv); goToBonusGame(); }
+  }, 1000);
 }
 
 function goToBonusGame() {
-  // Navigate to page4 (Park in London / Beetle Match) with current level
   window.location.href = 'page4_vw_game.html?level=' + S.level + '&from=city';
 }
 
