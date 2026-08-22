@@ -325,7 +325,7 @@ function loadCity(){
   });
 
   // Rita reads city name and instruction
-  setTimeout(()=>speak(`We are in ${city.name}! Listen carefully and find the fake fact!`),300);
+  setTimeout(()=>speak(`We are in ${city.name}! Read carefully and find the fake fact!`),300);
 }
 
 function checkFact(idx,city){
@@ -401,6 +401,25 @@ function finishGame(){
   document.getElementById('start-btn').style.display='block';
   document.getElementById('start-btn').onclick=()=>{resetGame();startGame();};
   celebrate();speak(pick(RITA_COMPLETE));
+  // Show bonus game after short delay
+  setTimeout(showBonusGame, 1500);
+}
+
+function showBonusGame() {
+  const panel = document.getElementById('bonus-panel');
+  if (!panel) return;
+  panel.classList.add('show');
+  const msgs = {
+    youngsters: "Brilliant work love! You have unlocked Park in London as your bonus game! The Cute Lad will drive you around the city!",
+    grownups: "Magnificent darling! Your bonus reward is Park in London! A grown up challenge awaits you in the city streets!",
+    experts: "Outstanding love! Only experts get this far! Park in London is your bonus challenge! The Cute Lad says good luck!"
+  };
+  speak(msgs[S.level] || msgs.youngsters);
+}
+
+function goToBonusGame() {
+  // Navigate to page4 (Park in London / Beetle Match) with current level
+  window.location.href = 'page4_vw_game.html?level=' + S.level + '&from=city';
 }
 
 function goBack(){window.location.href='page5_worlds.html';}
