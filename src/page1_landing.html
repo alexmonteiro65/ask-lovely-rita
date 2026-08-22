@@ -321,8 +321,6 @@ body {
         <button id="rita-btn" onclick="askRita()">ASK RITA ♪</button>
       </div>
 
-      <button id="htp-btn" onclick="goHowToPlay()">❓ How to Play — Ask Rita can also help you!</button>
-
       <div id="playlist-btn" onclick="togglePlaylist()">
         <span class="pl-title">🎵 PLAYLIST — Choose a Song</span>
         <span style="font-size:14px;color:var(--accent)" id="pl-arrow">▶</span>
@@ -444,6 +442,10 @@ body {
     <button class="nav-btn" onclick="toggleMute()">
       <span class="nav-icon" id="sound-icon">🔊</span>
       <span>Sound</span>
+    </button>
+    <button class="nav-btn" onclick="goHowToPlay()">
+      <span class="nav-icon">❓</span>
+      <span>Help</span>
     </button>
     <button class="nav-btn nav-home" onclick="goHome()">
       <span class="nav-icon">🏠</span>
