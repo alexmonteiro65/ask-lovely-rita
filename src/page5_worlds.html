@@ -110,6 +110,35 @@
     text-shadow: none;
     filter: drop-shadow(0 0 20px rgba(168,85,247,.5));
   }
+  #spin-world-btn {
+    background: var(--btn-grad, linear-gradient(135deg,#ff6ef7,#a855f7));
+    border: none; border-radius: 24px;
+    padding: 11px 24px; color: #000; font-weight: bold;
+    font-size: 13px; cursor: pointer; letter-spacing: 1px;
+    font-family: Georgia, serif;
+    box-shadow: 0 0 20px rgba(255,110,247,0.5);
+    transition: transform 0.15s;
+    width: 90%; margin-top: 10px;
+  }
+  #spin-world-btn:hover { transform: scale(1.02); }
+  #spin-world-btn:active { transform: scale(0.97); }
+
+  .world-card.spin-highlight {
+    box-shadow: 0 0 30px rgba(255,110,247,0.9), 0 0 60px rgba(255,110,247,0.5) !important;
+    border-color: #ff6ef7 !important;
+    transform: scale(1.03);
+    transition: all 0.1s;
+  }
+  .world-card.spin-chosen {
+    box-shadow: 0 0 40px rgba(255,222,89,0.9), 0 0 80px rgba(255,222,89,0.5) !important;
+    border-color: #ffde59 !important;
+    transform: scale(1.04);
+  }
+  .world-card.spin-locked {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
   #page-header p {
     font-size: 13px; color: #a0f0ff;
     margin-top: 3px; letter-spacing: .5px;
@@ -698,6 +727,7 @@
       <div id="page-header">
         <h1>🌍 Choose Your World</h1>
         <p>Each world holds amazing secrets to discover!</p>
+        <button id="spin-world-btn" onclick="spinWorlds()">🎲 Spin to Choose Your World!</button>
       </div>
 
 
@@ -1161,7 +1191,7 @@ function enterWorld() {
 //  NAVIGATION
 // ════════════════════════════════
 
-function goBack()    { window.location.href = 'page4_vw_game.html'; }
+function goBack()    { window.location.href = 'page1_landing.html'; }
 function goHome()    { window.location.href = 'page1_landing.html'; }
 function goForward() { window.location.href = 'page10_rita.html'; }
 
@@ -1209,6 +1239,103 @@ function setDevice(w,h,name) {
   p.style.width=w+'px'; p.style.height=h+'px';
   document.querySelectorAll('#device-bar button').forEach(b=>
     b.classList.toggle('active',b.textContent===name));
+}
+
+// ════════════════════════════════
+//  WORLD SPIN
+// ════════════════════════════════
+
+const WORLD_KEYS = ['ocean','space','india','city'];
+let isWorldSpinning = false;
+let chosenWorld = null;
+
+function spinWorlds() {
+  if (isWorldSpinning) return;
+  isWorldSpinning = true;
+  chosenWorld = null;
+
+  // Reset all cards
+  WORLD_KEYS.forEach(k => {
+    const c = document.querySelector('.world-card.'+k);
+    if(c) c.classList.remove('spin-highlight','spin-chosen','spin-locked');
+  });
+  // Also reset rita-world card
+  const rita = document.querySelector('.world-card.rita-world');
+  if(rita) rita.classList.remove('spin-highlight','spin-chosen','spin-locked');
+
+  // Play spin sound
+  playWorldSpinSound();
+
+  const allKeys = ['rita-world','ocean','space','india','city'];
+  let idx = 0;
+  const totalTicks = 20 + Math.floor(Math.random()*12);
+  let ticks = 0;
+
+  const iv = setInterval(()=>{
+    // Remove all highlights
+    allKeys.forEach(k => {
+      const sel = k === 'rita-world' ? '.world-card.rita-world' : '.world-card.'+k;
+      const c = document.querySelector(sel);
+      if(c) c.classList.remove('spin-highlight');
+    });
+    // Highlight current
+    const cur = allKeys[idx % allKeys.length];
+    const curSel = cur === 'rita-world' ? '.world-card.rita-world' : '.world-card.'+cur;
+    const curCard = document.querySelector(curSel);
+    if(curCard) curCard.classList.add('spin-highlight');
+
+    idx++; ticks++;
+
+    if(ticks >= totalTicks) {
+      clearInterval(iv);
+      isWorldSpinning = false;
+      const winner = allKeys[(idx-1) % allKeys.length];
+
+      // Remove highlights, apply chosen/locked
+      allKeys.forEach(k => {
+        const sel = k === 'rita-world' ? '.world-card.rita-world' : '.world-card.'+k;
+        const c = document.querySelector(sel);
+        if(!c) return;
+        c.classList.remove('spin-highlight');
+        if(k === winner) {
+          c.classList.add('spin-chosen');
+          // Make it clickable (restore pointer events)
+          c.style.pointerEvents = '';
+        } else {
+          c.classList.add('spin-locked');
+        }
+      });
+
+      chosenWorld = winner;
+
+      // Rita announces
+      const worldNames = {
+        'rita-world': "Rita's World",
+        ocean: "Octopus's Garden",
+        space: "Across the Universe",
+        india: "The Inner Light",
+        city: "Penny Lane"
+      };
+      const msg = "You landed on " + worldNames[winner] + " love! Click on it to enter or spin again for a different world!";
+      speak(msg);
+      toast('🌍 ' + worldNames[winner] + ' — click to enter!');
+    }
+  }, 100);
+}
+
+function playWorldSpinSound() {
+  try {
+    const ctx = new (window.AudioContext||window.webkitAudioContext)();
+    let t = ctx.currentTime;
+    for(let i=0;i<8;i++){
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = 300 + i*60;
+      g.gain.setValueAtTime(0.06, t+i*0.09);
+      g.gain.exponentialRampToValueAtTime(0.001, t+i*0.09+0.08);
+      o.start(t+i*0.09); o.stop(t+i*0.09+0.09);
+    }
+  } catch(e){}
 }
 
 // ════════════════════════════════

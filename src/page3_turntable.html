@@ -927,7 +927,13 @@ function spinWheel() {
     // Needle points to top (0deg). SVG slices start at -90deg offset.
     // Normalise finalDeg to 0-360, then find which slice centre is at the top.
     const normDeg = ((finalDeg % 360) + 360) % 360;
-    const actualIdx = Math.round((n - normDeg / step)) % n;
+    // Correct formula: find which slice is under the needle (top of wheel)
+    // Needle is at top = 270deg in SVG. After CW rotation of normDeg,
+    // the unrotated angle under needle = (270 - normDeg + 36000) % 360
+    // Slice i spans: (i*step - 90) to ((i+1)*step - 90)
+    // So idx = floor((needleAngle + 90) / step) % n
+    const needleAngle = (270 - normDeg + 36000) % 360;
+    const actualIdx = Math.floor((needleAngle + 90) / step) % n;
     showResult(((actualIdx % n) + n) % n);
   }, 4300);
   // Música continua por +10 segundos após o spin
