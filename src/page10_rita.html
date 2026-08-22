@@ -903,6 +903,9 @@ function resetGame() {
   document.getElementById('start-btn').textContent='🎤 Enter Rita\'s World!';
   document.getElementById('start-btn').onclick=startGame;
   document.getElementById('next-btn').style.display='none';
+  // Hide bonus area on reset
+  const ba = document.getElementById('bonus-area');
+  if (ba) ba.style.display = 'none';
 }
 
 function startGame() {
@@ -1143,7 +1146,8 @@ function showBonusGame() {
     grownups: "Brilliant darling! Rita is so proud! The Turntable awaits you in 5 seconds!",
     experts: "Outstanding love! A true music expert! The Turntable bonus is unlocked! Off we go in 5 seconds!"
   };
-  setTimeout(()=>speak(msgs[S.level]||msgs.youngsters), 500);
+  // Wait for celebrate speech to finish before speaking bonus msg
+  setTimeout(()=>speak(msgs[S.level]||msgs.youngsters), 1200);
   let count = 5;
   const cd = document.getElementById('bonus-countdown');
   if (cd) cd.textContent = 'Going there in ' + count + ' seconds...';
