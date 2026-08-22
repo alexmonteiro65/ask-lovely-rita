@@ -1192,6 +1192,17 @@ function toggleMic() {
 }
 
 // ── NAV
+
+// Save BeatCoins per chosen Lad for global scoreboard
+function saveLadBC(amount) {
+  try {
+    const lad = localStorage.getItem('askLovelyRitaV4_chosen_lad') || 'smart';
+    const key = 'askLovelyRitaV4_bc_' + lad;
+    const current = Number(localStorage.getItem(key) || 0);
+    localStorage.setItem(key, current + amount);
+  } catch(e) {}
+}
+
 function goBack()    { window.location.href=BASE+'page5_worlds.html'; }
 function goHome()    { window.location.href=BASE+'index.html'; }
 function goForward() { window.location.href=BASE+'page6_octopus.html'; }
