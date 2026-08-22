@@ -888,11 +888,27 @@ function checkWord() {
       const box = document.getElementById(`box-${i}`);
       if (box && !S.revealedPositions.includes(i)) box.className='letter-box wrong';
     }
-    // Always advance — show result and move on
+    // Always advance — educate and move on
     setTimeout(() => {
       S.wordComplete = true;
-      showWordResult(false, wordObj, 0);
-      speak(pick(RITA_MISS));
+      if (S.level === 'youngsters') {
+        // Fill in correct letters visually so child sees the right answer
+        S.currentInput = correct.split('');
+        updateBoxes();
+        document.querySelectorAll('.letter-box').forEach((b,i) => {
+          b.className = 'letter-box revealed';
+        });
+        // Rita reads the correct word aloud
+        setTimeout(() => {
+          speak(`The answer is ${correct}! ${wordObj.riddle.split('.')[0]}!`);
+        }, 400);
+      } else {
+        // Grown Ups / Experts — Rita reads the correct word aloud
+        speak(`The answer is ${correct} love! ${wordObj.riddle.split('.')[0]}!`);
+      }
+      setTimeout(() => {
+        showWordResult(false, wordObj, 0);
+      }, 800);
     }, 600);
   }
 }
