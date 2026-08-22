@@ -754,17 +754,27 @@ function goHowToPlay() {
 }
 
 function loadLadScores() {
-  // Each lad has their own BeatCoins tally stored as askLovelyRitaV4_bc_smart etc.
   const lads = ['smart','cute','quiet','funny'];
-  let total = 0;
+  // Local scores first (instant display)
   lads.forEach(l => {
     const val = Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0);
     document.getElementById('score-'+l).textContent = val.toLocaleString();
-    total += val;
   });
-  // Also add the general bc pool (from games that don't track per-lad yet)
-  const generalBc = Number(localStorage.getItem('askLovelyRitaV4_bc')||25000);
-  document.getElementById('bc-display').textContent = generalBc.toLocaleString();
+  const localBc = Number(localStorage.getItem('askLovelyRitaV4_bc')||25000);
+  document.getElementById('bc-display').textContent = localBc.toLocaleString();
+
+  // Then fetch global scores from GitHub (async)
+  fetch('https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/scores.json?t='+Date.now())
+    .then(r => r.json())
+    .then(global => {
+      lads.forEach(l => {
+        const localVal = Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0);
+        const globalVal = Number(global[l]||0);
+        const combined = localVal + globalVal;
+        document.getElementById('score-'+l).textContent = combined.toLocaleString();
+      });
+    })
+    .catch(() => {}); // silently fail - local scores already shown
 }
 
 // Refresh scores when tab becomes visible
