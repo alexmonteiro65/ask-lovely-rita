@@ -321,6 +321,8 @@ body {
         <button id="rita-btn" onclick="askRita()">ASK RITA ♪</button>
       </div>
 
+      <button id="htp-btn" onclick="goHowToPlay()">❓ How to Play — Ask Rita can also help you!</button>
+
       <div id="playlist-btn" onclick="togglePlaylist()">
         <span class="pl-title">🎵 PLAYLIST — Choose a Song</span>
         <span style="font-size:14px;color:var(--accent)" id="pl-arrow">▶</span>
@@ -742,6 +744,12 @@ function setDevice(w,h,name) {
   document.getElementById('size-label').textContent=name+' · '+w+' × '+h+' px';
   document.querySelectorAll('.dev-btn').forEach(b=>b.classList.remove('active'));
   event.target.classList.add('active');
+}
+
+function goHowToPlay() {
+  const msg = "Of course love! Let me show you how to play!";
+  ritaSpeak(msg); updateRitaDisplay("♪ " + msg);
+  setTimeout(()=>{ window.location.href='how_to_play.html'; }, 800);
 }
 
 function toast(msg) {
