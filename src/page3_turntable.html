@@ -1029,6 +1029,17 @@ function toggleMute() {
   if(S.muted) window.speechSynthesis && window.speechSynthesis.cancel();
 }
 
+
+// Save BeatCoins per chosen Lad for global scoreboard
+function saveLadBC(amount) {
+  try {
+    const lad = localStorage.getItem('askLovelyRitaV4_chosen_lad') || 'smart';
+    const key = 'askLovelyRitaV4_bc_' + lad;
+    const current = Number(localStorage.getItem(key) || 0);
+    localStorage.setItem(key, current + amount);
+  } catch(e) {}
+}
+
 function goBack() {
   if (S.fromWorld === 'space') { window.location.href = 'page7_space.html'; return; }
   if (S.fromWorld === 'india') { window.location.href = 'page8_india.html'; return; }

@@ -408,22 +408,22 @@ body {
           <div class="score-cell">
             <div class="score-lad-name">SMART</div>
             <div class="score-value" id="score-smart">0</div>
-            <div class="score-label">WINS</div>
+            <div class="score-label">BeatCoins</div>
           </div>
           <div class="score-cell">
             <div class="score-lad-name">CUTE</div>
             <div class="score-value" id="score-cute">0</div>
-            <div class="score-label">WINS</div>
+            <div class="score-label">BeatCoins</div>
           </div>
           <div class="score-cell">
             <div class="score-lad-name">QUIET</div>
             <div class="score-value" id="score-quiet">0</div>
-            <div class="score-label">WINS</div>
+            <div class="score-label">BeatCoins</div>
           </div>
           <div class="score-cell">
             <div class="score-lad-name">FUNNY</div>
             <div class="score-value" id="score-funny">0</div>
-            <div class="score-label">WINS</div>
+            <div class="score-label">BeatCoins</div>
           </div>
         </div>
 
@@ -559,6 +559,8 @@ function chooseLad(lad) {
     return;
   }
   localStorage.setItem('askLovelyRitaV4_lad', lad);
+  // Set chosen lad for score attribution across all games
+  localStorage.setItem('askLovelyRitaV4_chosen_lad', lad);
   const msg = "Brilliant choice love! Off we go with " + LAD_NAMES[lad] + "!";
   ritaSpeak(msg);
   updateRitaDisplay("♪ " + msg);
@@ -621,11 +623,8 @@ window.addEventListener('load', ()=>{
   const bc = Number(localStorage.getItem('askLovelyRitaV4_bc') || 25000);
   document.getElementById('bc-display').textContent = bc.toLocaleString();
 
-  // Lad scoreboard — separate from BeatCoins
-  const sc = JSON.parse(localStorage.getItem('askLovelyRitaV4_scores')||'{}');
-  LADS.forEach(l => {
-    document.getElementById('score-'+l).textContent = sc[l]||0;
-  });
+  // Lad scoreboard — BeatCoins earned per Lad
+  loadLadScores();
 
   // Rita default text on load
   clearRitaDisplay();
@@ -753,6 +752,25 @@ function goHowToPlay() {
   ritaSpeak(msg); updateRitaDisplay("♪ " + msg);
   setTimeout(()=>{ window.location.href='how_to_play.html'; }, 800);
 }
+
+function loadLadScores() {
+  // Each lad has their own BeatCoins tally stored as askLovelyRitaV4_bc_smart etc.
+  const lads = ['smart','cute','quiet','funny'];
+  let total = 0;
+  lads.forEach(l => {
+    const val = Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0);
+    document.getElementById('score-'+l).textContent = val.toLocaleString();
+    total += val;
+  });
+  // Also add the general bc pool (from games that don't track per-lad yet)
+  const generalBc = Number(localStorage.getItem('askLovelyRitaV4_bc')||25000);
+  document.getElementById('bc-display').textContent = generalBc.toLocaleString();
+}
+
+// Refresh scores when tab becomes visible
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) loadLadScores();
+});
 
 function toast(msg) {
   const t=document.getElementById('toast'); t.textContent=msg; t.style.opacity='1';

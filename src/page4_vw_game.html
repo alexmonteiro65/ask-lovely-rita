@@ -899,6 +899,17 @@ function stopFlag() {
 //  NAVIGATION
 // ════════════════════════════════
 
+
+// Save BeatCoins per chosen Lad for global scoreboard
+function saveLadBC(amount) {
+  try {
+    const lad = localStorage.getItem('askLovelyRitaV4_chosen_lad') || 'smart';
+    const key = 'askLovelyRitaV4_bc_' + lad;
+    const current = Number(localStorage.getItem(key) || 0);
+    localStorage.setItem(key, current + amount);
+  } catch(e) {}
+}
+
 function goBack() {
   if (S.fromWorld === 'city') { window.location.href = 'page9_city.html'; return; }
   window.location.href = 'page3_turntable.html';
