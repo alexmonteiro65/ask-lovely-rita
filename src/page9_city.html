@@ -434,6 +434,17 @@ function goToBonusGame() {
   window.location.href = 'page4_vw_game.html?level=' + S.level + '&from=city';
 }
 
+
+// Save BeatCoins per chosen Lad for global scoreboard
+function saveLadBC(amount) {
+  try {
+    const lad = localStorage.getItem('askLovelyRitaV4_chosen_lad') || 'smart';
+    const key = 'askLovelyRitaV4_bc_' + lad;
+    const current = Number(localStorage.getItem(key) || 0);
+    localStorage.setItem(key, current + amount);
+  } catch(e) {}
+}
+
 function goBack(){window.location.href='page5_worlds.html';}
 function goHome(){window.location.href='page1_landing.html';}
 function goForward(){window.location.href='page1_landing.html';}
