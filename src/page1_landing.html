@@ -631,7 +631,7 @@ window.addEventListener('load', ()=>{
   clearRitaDisplay();
 
   // Greeting — speak only, don't change display text (keeps "Fans Learning Worldwide")
-  const greeting = "Hello love! Welcome to Lovely Rita Adventures! Press the button to pick your Lad companion or just tap the one you fancy. Lets get started!";
+  const greeting = "Hello love! Welcome to Lovely Rita Adventures! Press the button to spin and pick your Lad companion. Lets get started!";
   const speak = () => { if(!muteState) ritaSpeak(greeting); };
   if(window.speechSynthesis.getVoices().length > 0) {
     setTimeout(speak, 800);
