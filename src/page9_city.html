@@ -135,7 +135,7 @@
         <button id="rita-speak-btn" onclick="ritaSpeak()">🔊</button>
       </div>
       <div id="status-bar">
-        <div class="stat-card"><div class="stat-label">BeatCoins</div><div class="stat-val" id="bc-val">80</div></div>
+        <div class="stat-card"><div class="stat-label">BeatCoins</div><div class="stat-val" id="bc-val">25,000</div></div>
         <div class="stat-card"><div class="stat-label">Score</div><div class="stat-val" id="score-val">0</div></div>
         <div class="stat-card"><div class="stat-label">City</div><div class="stat-val" id="q-num-val">0/8</div></div>
       </div>
@@ -224,10 +224,10 @@ const LEVEL_CFG={
   experts:   {bonus:60,bonusAll:200,ladImg:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/urban_lad_grownups.png'},
 };
 
-let S={level:'youngsters',beatcoins:80,score:0,qIndex:0,order:[],gameActive:false,answered:false};
+let S={level:'youngsters',beatcoins: 25000,score:0,qIndex:0,order:[],gameActive:false,answered:false};
 
-function loadStorage(){try{const d=JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');if(d.theme&&LEVEL_CFG[d.theme])S.level=d.theme;if(typeof d.beatcoins==='number')S.beatcoins=d.beatcoins;}catch(e){}}
-function saveStorage(){try{const d=JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');d.beatcoins=S.beatcoins;localStorage.setItem('askLovelyRitaV4',JSON.stringify(d));}catch(e){}}
+function loadStorage(){try{S.beatcoins=Number(localStorage.getItem('askLovelyRitaV4_bc')||25000); try{const lv=localStorage.getItem('askLovelyRitaV4_level');if(lv&&LEVEL_CFG[lv])S.level=lv;}catch(e){}}catch(e){}}
+function saveStorage(){try{localStorage.setItem('askLovelyRitaV4_bc',S.beatcoins);}catch(e){}}
 
 function init(){loadStorage();buildCityBg();applyLevel(S.level);highlightTab(S.level);setTimeout(()=>speak(RITA_INTRO[S.level]),900);}
 
