@@ -447,6 +447,11 @@
         <div id="result-word"></div>
         <div id="result-sub"></div>
         <div id="result-pts"></div>
+        <div id="bonus-area" style="display:none;margin-top:14px;text-align:center;">
+          <div id="bonus-title" style="font-size:14px;font-weight:bold;color:#ffde59;margin-bottom:6px;">🎮 BONUS GAME UNLOCKED!</div>
+          <div id="bonus-countdown" style="font-size:12px;color:rgba(255,255,255,0.7);margin-bottom:10px;"></div>
+          <button id="bonus-btn" onclick="goToBonusGame()" style="background:linear-gradient(135deg,#ff6ef7,#a855f7);border:none;border-radius:20px;padding:12px 20px;color:#000;font-weight:bold;font-size:13px;cursor:pointer;font-family:Georgia,serif;width:100%;">❌⭕ Play Tic-Tac-Toe Underwater!</button>
+        </div>
       </div>
 
     </div>
@@ -461,12 +466,6 @@
     </div>
 
       <!-- BONUS GAME PANEL -->
-      <div id="bonus-panel">
-        <div id="bonus-title">🎮 BONUS GAME UNLOCKED!</div>
-        <div id="bonus-sub">Brilliant work love! You earned Tic-Tac-Toe Underwater!</div>
-        <button id="bonus-btn" onclick="goToBonusGame()">❌⭕ Play Tic-Tac-Toe Underwater!</button>
-      </div>
-
     <nav id="nav-bar">
       <button class="nav-btn" onclick="goBack()"><span class="nav-icon">◀️</span><span>Back</span></button>
       <button class="nav-btn nav-home" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
@@ -1026,15 +1025,24 @@ function finishGame() {
 }
 
 function showBonusGame() {
-  const panel = document.getElementById('bonus-panel');
-  if (!panel) return;
-  panel.classList.add('show');
+  const area = document.getElementById('bonus-area');
+  if (!area) return;
+  area.style.display = 'block';
   const msgs = {
-    youngsters: "Amazing love! You have unlocked Tic-Tac-Toe Underwater as your bonus game! The Funny Lad challenges you!",
-    grownups: "Brilliant darling! Your bonus is Tic-Tac-Toe Underwater! Can you beat the Funny Lad at noughts and crosses under the sea?",
-    experts: "Outstanding love! Experts only get this challenge! Tic-Tac-Toe Underwater awaits you!"
+    youngsters: "Amazing love! You have unlocked Tic-Tac-Toe Underwater! Going there in 5 seconds!",
+    grownups: "Brilliant darling! Tic-Tac-Toe Underwater is your bonus! Off we go in 5 seconds!",
+    experts: "Outstanding love! Tic-Tac-Toe Underwater awaits! Going there in 5 seconds!"
   };
   speak(msgs[S.level] || msgs.youngsters);
+  // Countdown then auto-navigate
+  let count = 5;
+  const cd = document.getElementById('bonus-countdown');
+  if (cd) cd.textContent = 'Going there in ' + count + ' seconds...';
+  const iv = setInterval(() => {
+    count--;
+    if (cd) cd.textContent = count > 0 ? 'Going there in ' + count + ' seconds...' : 'Off we go!';
+    if (count <= 0) { clearInterval(iv); goToBonusGame(); }
+  }, 1000);
 }
 
 function goToBonusGame() {
