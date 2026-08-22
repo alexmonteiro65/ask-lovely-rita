@@ -182,34 +182,34 @@ const RITA_COMPLETE=["Magnificent! You have explored every city! The Cute Lad is
 
 const CITIES={
   youngsters:[
-    {emoji:'🗼',name:'Paris',facts:['The Eiffel Tower is in Paris','Paris is the capital of France','Paris is in the middle of the ocean'],fake:2,explain:'Paris is a beautiful city in France — not in the ocean! The Eiffel Tower was built in 1889.'},
-    {emoji:'🗽',name:'New York',facts:['New York has a famous park called Central Park','The Statue of Liberty is in New York','New York is the capital of the USA'],fake:2,explain:'Washington D.C. is the capital of the USA! New York is the largest city but not the capital.'},
-    {emoji:'🏰',name:'London',facts:['London has red double-decker buses','Big Ben is a famous clock in London','London is in Australia'],fake:2,explain:'London is in England! It is famous for its red buses Big Ben and the River Thames.'},
-    {emoji:'🏯',name:'Tokyo',facts:['Tokyo is in Japan','Tokyo is the most populated city in the world','It snows every day in Tokyo'],fake:2,explain:'Tokyo has mild seasons! It does not snow every day. Tokyo is indeed in Japan and is very large!'},
-    {emoji:'🎡',name:'Sydney',facts:['The Sydney Opera House is famous worldwide','Sydney is in Australia','Sydney is the capital of Australia'],fake:2,explain:'Canberra is the capital of Australia — not Sydney! Sydney is the largest city though.'},
-    {emoji:'⛩️',name:'Beijing',facts:['The Great Wall of China is near Beijing','Beijing is the capital of China','Beijing is in South America'],fake:2,explain:'Beijing is the capital of China in Asia — not South America! The Great Wall is one of the wonders of the world.'},
-    {emoji:'🏛️',name:'Rome',facts:['The Colosseum is in Rome','Rome is the capital of Italy','Pizza was invented in Tokyo'],fake:2,explain:'Pizza was invented in Naples Italy — not Tokyo! Rome is the eternal city and capital of Italy.'},
-    {emoji:'🌉',name:'San Francisco',facts:['The Golden Gate Bridge is in San Francisco','San Francisco is in California','San Francisco is the capital of the USA'],fake:2,explain:'Washington D.C. is the capital of the USA! San Francisco is in California and famous for its bridge.'},
+    {emoji:'🗼',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/youngsters_01_paris.png',name:'Paris',facts:['The Eiffel Tower is in Paris','Paris is the capital of France','Paris is in the middle of the ocean'],fake:2,explain:'Paris is a beautiful city in France — not in the ocean! The Eiffel Tower was built in 1889.'},
+    {emoji:'🗽',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/youngsters_02_new_york.png',name:'New York',facts:['New York has a famous park called Central Park','The Statue of Liberty is in New York','New York is the capital of the USA'],fake:2,explain:'Washington D.C. is the capital of the USA! New York is the largest city but not the capital.'},
+    {emoji:'🏰',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/youngsters_03_london.png',name:'London',facts:['London has red double-decker buses','Big Ben is a famous clock in London','London is in Australia'],fake:2,explain:'London is in England! It is famous for its red buses Big Ben and the River Thames.'},
+    {emoji:'🏯',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/youngsters_04_tokyo.png',name:'Tokyo',facts:['Tokyo is in Japan','Tokyo is the most populated city in the world','It snows every day in Tokyo'],fake:2,explain:'Tokyo has mild seasons! It does not snow every day. Tokyo is indeed in Japan and is very large!'},
+    {emoji:'🎡',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/youngsters_05_sydney.png',name:'Sydney',facts:['The Sydney Opera House is famous worldwide','Sydney is in Australia','Sydney is the capital of Australia'],fake:2,explain:'Canberra is the capital of Australia — not Sydney! Sydney is the largest city though.'},
+    {emoji:'⛩️',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/youngsters_06_china_wall.png',name:'Beijing',facts:['The Great Wall of China is near Beijing','Beijing is the capital of China','Beijing is in South America'],fake:2,explain:'Beijing is the capital of China in Asia — not South America! The Great Wall is one of the wonders of the world.'},
+    {emoji:'🏛️',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/youngsters_07_rome_colosseum.png',name:'Rome',facts:['The Colosseum is in Rome','Rome is the capital of Italy','Pizza was invented in Tokyo'],fake:2,explain:'Pizza was invented in Naples Italy — not Tokyo! Rome is the eternal city and capital of Italy.'},
+    {emoji:'🌉',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/youngsters_08_golden_gate.png',name:'San Francisco',facts:['The Golden Gate Bridge is in San Francisco','San Francisco is in California','San Francisco is the capital of the USA'],fake:2,explain:'Washington D.C. is the capital of the USA! San Francisco is in California and famous for its bridge.'},
   ],
   grownups:[
-    {emoji:'🗼',name:'Paris',facts:['The Louvre is the most visited museum in the world','Paris has more dogs than children','The Eiffel Tower grows taller in summer'],fake:1,explain:'Paris does not have more dogs than children — that is a myth! The Eiffel Tower does grow about 15cm in summer due to heat expansion.'},
-    {emoji:'🇯🇵',name:'Tokyo',facts:['Tokyo has the world\'s busiest pedestrian crossing','Tokyo has over 200 Michelin-starred restaurants','Tokyo was founded in the 13th century'],fake:2,explain:'Tokyo was founded in 1457 as Edo — the 15th century not the 13th! It became Tokyo in 1868.'},
-    {emoji:'🇦🇪',name:'Dubai',facts:['Dubai has the world\'s tallest building','Dubai receives more rain than London annually','Dubai has an indoor ski slope in the desert'],fake:1,explain:'London receives far more rain than Dubai! Dubai is one of the driest cities on Earth. The Burj Khalifa and the indoor ski slope are both real!'},
-    {emoji:'🇧🇷',name:'Rio de Janeiro',facts:['Christ the Redeemer statue stands 38 metres tall','Rio hosted the 2016 Olympics','Rio is the current capital of Brazil'],fake:2,explain:'Brasília has been the capital of Brazil since 1960 — not Rio! Rio hosted the 2016 Olympics and Christ the Redeemer is 38 metres tall.'},
-    {emoji:'🇮🇳',name:'Mumbai',facts:['Mumbai is the financial capital of India','Mumbai was formerly known as Bombay','Mumbai has the world\'s largest film industry'],fake:2,explain:'Hollywood in the USA produces the most films by revenue — Bollywood produces the most by number of films though! Mumbai was indeed called Bombay.'},
-    {emoji:'🇿🇦',name:'Cape Town',facts:['Table Mountain overlooks Cape Town','Cape Town is the capital of South Africa','Cape Town hosts the Cape of Good Hope'],fake:1,explain:'South Africa has three capitals — Pretoria is the executive capital! Cape Town is the legislative capital. Table Mountain and the Cape of Good Hope are both real.'},
-    {emoji:'🇸🇬',name:'Singapore',facts:['Singapore is both a city and a country','Chewing gum is banned in Singapore','Singapore has the world\'s oldest subway system'],fake:2,explain:'The London Underground opened in 1863 — the world\'s oldest! Singapore\'s MRT opened in 1987. Chewing gum is indeed banned and Singapore is indeed a city-state.'},
-    {emoji:'🇪🇬',name:'Cairo',facts:['Cairo is the largest city in Africa','The Great Pyramid of Giza is in Cairo','The Nile River flows through Cairo'],fake:0,explain:'Wait — all three facts are actually true! Cairo is Africa\'s largest city the pyramids are just outside Cairo and the Nile flows right through it! Trick question!'},
+    {emoji:'🗼',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/grownups_01_paris_louvre.png',name:'Paris',facts:['The Louvre is the most visited museum in the world','Paris has more dogs than children','The Eiffel Tower grows taller in summer'],fake:1,explain:'Paris does not have more dogs than children — that is a myth! The Eiffel Tower does grow about 15cm in summer due to heat expansion.'},
+    {emoji:'🇯🇵',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/grownups_02_tokyo_shibuya.png',name:'Tokyo',facts:['Tokyo has the world\'s busiest pedestrian crossing','Tokyo has over 200 Michelin-starred restaurants','Tokyo was founded in the 13th century'],fake:2,explain:'Tokyo was founded in 1457 as Edo — the 15th century not the 13th! It became Tokyo in 1868.'},
+    {emoji:'🇦🇪',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/grownups_03_dubai.png',name:'Dubai',facts:['Dubai has the world\'s tallest building','Dubai receives more rain than London annually','Dubai has an indoor ski slope in the desert'],fake:1,explain:'London receives far more rain than Dubai! Dubai is one of the driest cities on Earth. The Burj Khalifa and the indoor ski slope are both real!'},
+    {emoji:'🇧🇷',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/grownups_04_rio.png',name:'Rio de Janeiro',facts:['Christ the Redeemer statue stands 38 metres tall','Rio hosted the 2016 Olympics','Rio is the current capital of Brazil'],fake:2,explain:'Brasília has been the capital of Brazil since 1960 — not Rio! Rio hosted the 2016 Olympics and Christ the Redeemer is 38 metres tall.'},
+    {emoji:'🇮🇳',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/grownups_05_mumbai.png',name:'Mumbai',facts:['Mumbai is the financial capital of India','Mumbai was formerly known as Bombay','Mumbai has the world\'s largest film industry'],fake:2,explain:'Hollywood in the USA produces the most films by revenue — Bollywood produces the most by number of films though! Mumbai was indeed called Bombay.'},
+    {emoji:'🇿🇦',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/grownups_06_cape_town.png',name:'Cape Town',facts:['Table Mountain overlooks Cape Town','Cape Town is the capital of South Africa','Cape Town hosts the Cape of Good Hope'],fake:1,explain:'South Africa has three capitals — Pretoria is the executive capital! Cape Town is the legislative capital. Table Mountain and the Cape of Good Hope are both real.'},
+    {emoji:'🇸🇬',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/grownups_07_singapore.png', name:'Singapore',facts:['Singapore is both a city and a country','Chewing gum is banned in Singapore','Singapore has the world\'s oldest subway system'],fake:2,explain:'The London Underground opened in 1863 — the world\'s oldest! Singapore\'s MRT opened in 1987. Chewing gum is indeed banned and Singapore is indeed a city-state.'},
+    {emoji:'🇪🇬',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/grownups_08_cairo.png',name:'Cairo',facts:['Cairo is the largest city in Africa','The Great Pyramid of Giza is in Cairo','The Nile River flows through Cairo'],fake:0,explain:'Wait — all three facts are actually true! Cairo is Africa\'s largest city the pyramids are just outside Cairo and the Nile flows right through it! Trick question!'},
   ],
   experts:[
-    {emoji:'🇮🇸',name:'Reykjavik',facts:['Reykjavik is the northernmost capital city in the world','Iceland has no mosquitoes','Reykjavik runs entirely on geothermal and hydropower'],fake:0,explain:'All three facts are true! Reykjavik is the world\'s northernmost capital Iceland genuinely has no mosquitoes and it runs on 100% renewable energy! This was a trick!'},
-    {emoji:'🇳🇴',name:'Oslo',facts:['Oslo was called Christiania until 1925','Norway invented the cheese slicer','Oslo has the world\'s largest Viking museum'],fake:2,explain:'The Vikingskiphuset in Oslo is impressive but not the world\'s largest Viking museum. Oslo was indeed called Christiania and Norway did invent the cheese slicer in 1925!'},
-    {emoji:'🇨🇿',name:'Prague',facts:['Prague Castle is the largest ancient castle in the world','Prague has a famous astronomical clock from 1410','Prague is the capital of Slovakia'],fake:2,explain:'Prague is the capital of the Czech Republic not Slovakia! Prague Castle is the world\'s largest ancient castle and the Orloj astronomical clock dates from 1410.'},
-    {emoji:'🇧🇴',name:'La Paz',facts:['La Paz is the highest administrative capital in the world','La Paz has cable cars as public transport','La Paz is the largest city in Bolivia'],fake:2,explain:'Santa Cruz is the largest city in Bolivia — La Paz is the highest administrative capital at 3600m and does use cable cars as public transport!'},
-    {emoji:'🇵🇹',name:'Lisbon',facts:['Lisbon is one of the oldest cities in Europe','Lisbon is built on seven hills','Lisbon is located on the River Seine'],fake:2,explain:'The River Seine is in Paris! Lisbon is on the River Tagus. Lisbon is indeed one of Europe\'s oldest cities and is built on seven hills.'},
-    {emoji:'🇳🇿',name:'Wellington',facts:['Wellington is the world\'s southernmost capital city','Wellington is windier than Chicago on average','New Zealand was the first country to give women the vote'],fake:1,explain:'Wellington is actually one of the windiest cities but Chicago is actually windier on average! Wellington is the southernmost capital and New Zealand gave women the vote in 1893.'},
-    {emoji:'🇹🇷',name:'Istanbul',facts:['Istanbul spans two continents','Istanbul was once called Constantinople','Istanbul is the capital of Turkey'],fake:2,explain:'Ankara is the capital of Turkey — not Istanbul! Istanbul does span Europe and Asia and was indeed called Constantinople until 1930.'},
-    {emoji:'🇨🇦',name:'Ottawa',facts:['Ottawa is the capital of Canada','Ottawa is colder than Moscow on average in winter','Ottawa has the world\'s longest skating rink'],fake:0,explain:'All three facts are true! Ottawa is Canada\'s capital is colder than Moscow and the Rideau Canal is officially the world\'s largest naturally frozen skating rink. Another trick!'},
+    {emoji:'🇮🇸',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/experts_01_reykjavik.png',name:'Reykjavik',facts:['Reykjavik is the northernmost capital city in the world','Iceland has no mosquitoes','Reykjavik runs entirely on geothermal and hydropower'],fake:0,explain:'All three facts are true! Reykjavik is the world\'s northernmost capital Iceland genuinely has no mosquitoes and it runs on 100% renewable energy! This was a trick!'},
+    {emoji:'🇳🇴',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/experts_02_oslo.png',name:'Oslo',facts:['Oslo was called Christiania until 1925','Norway invented the cheese slicer','Oslo has the world\'s largest Viking museum'],fake:2,explain:'The Vikingskiphuset in Oslo is impressive but not the world\'s largest Viking museum. Oslo was indeed called Christiania and Norway did invent the cheese slicer in 1925!'},
+    {emoji:'🇨🇿',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/experts_03_prague.png',name:'Prague',facts:['Prague Castle is the largest ancient castle in the world','Prague has a famous astronomical clock from 1410','Prague is the capital of Slovakia'],fake:2,explain:'Prague is the capital of the Czech Republic not Slovakia! Prague Castle is the world\'s largest ancient castle and the Orloj astronomical clock dates from 1410.'},
+    {emoji:'🇧🇴',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/experts_04_istanbul_cable.png',name:'La Paz',facts:['La Paz is the highest administrative capital in the world','La Paz has cable cars as public transport','La Paz is the largest city in Bolivia'],fake:2,explain:'Santa Cruz is the largest city in Bolivia — La Paz is the highest administrative capital at 3600m and does use cable cars as public transport!'},
+    {emoji:'🇵🇹',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/experts_05_lisbon.png',name:'Lisbon',facts:['Lisbon is one of the oldest cities in Europe','Lisbon is built on seven hills','Lisbon is located on the River Seine'],fake:2,explain:'The River Seine is in Paris! Lisbon is on the River Tagus. Lisbon is indeed one of Europe\'s oldest cities and is built on seven hills.'},
+    {emoji:'🇳🇿',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/experts_06_wellington.png',name:'Wellington',facts:['Wellington is the world\'s southernmost capital city','Wellington is windier than Chicago on average','New Zealand was the first country to give women the vote'],fake:1,explain:'Wellington is actually one of the windiest cities but Chicago is actually windier on average! Wellington is the southernmost capital and New Zealand gave women the vote in 1893.'},
+    {emoji:'🇹🇷',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/experts_07_istanbul_bosphorus.png',name:'Istanbul',facts:['Istanbul spans two continents','Istanbul was once called Constantinople','Istanbul is the capital of Turkey'],fake:2,explain:'Ankara is the capital of Turkey — not Istanbul! Istanbul does span Europe and Asia and was indeed called Constantinople until 1930.'},
+    {emoji:'🇨🇦',photo:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/pennylane/experts_08_ottawa.png',name:'Ottawa',facts:['Ottawa is the capital of Canada','Ottawa is colder than Moscow on average in winter','Ottawa has the world\'s longest skating rink'],fake:0,explain:'All three facts are true! Ottawa is Canada\'s capital is colder than Moscow and the Rideau Canal is officially the world\'s largest naturally frozen skating rink. Another trick!'},
   ],
 };
 
@@ -296,7 +296,16 @@ function loadCity(){
   const cities=CITIES[S.level];
   const city=cities[S.order[S.qIndex%cities.length]];
   S.answered=false;
-  // city-emoji is now an image
+  // Show city image
+  const cityEmojiEl = document.getElementById('city-emoji');
+  if(cityEmojiEl) {
+    if(S.level==='youngsters' && city.photo){
+      cityEmojiEl.innerHTML='<img src="'+city.photo+'" style="width:100%;max-width:240px;border-radius:12px;display:block;margin:0 auto 6px" onerror="this.style.display=\'none\'"/>';
+      cityEmojiEl.style.display='block';
+    } else {
+      cityEmojiEl.style.display='none';
+    }
+  }
   document.getElementById('city-name').textContent=city.name;
   document.getElementById('result-panel').classList.remove('show');
   document.getElementById('next-btn').style.display='none';
@@ -333,7 +342,13 @@ function checkFact(idx,city){
     document.getElementById('result-pts').textContent=`+${earned} BeatCoins!`;
     document.getElementById('result-pts').style.color='#4ade80';
     celebrate();
-    speak(pick(RITA_CORRECT));
+    // Show image after answer for grown ups/experts
+    if(S.level!=='youngsters' && city.photo){
+      const ce=document.getElementById('city-emoji');
+      if(ce){ce.innerHTML='<img src="'+city.photo+'" style="width:100%;max-width:240px;border-radius:12px;display:block;margin:0 auto 6px"/>';ce.style.display='block';}
+      setTimeout(()=>{if(ce)ce.style.display='none';},3500);
+    }
+    setTimeout(()=>speak(pick(RITA_CORRECT)+' '+city.explain),300);
   } else {
     items[idx].classList.add('wrong-pick');
     if(city.fake<items.length)items[city.fake].classList.add('correct');
@@ -342,7 +357,13 @@ function checkFact(idx,city){
     document.getElementById('result-explain').textContent=city.explain;
     document.getElementById('result-pts').textContent='+0 BeatCoins';
     document.getElementById('result-pts').style.color='rgba(255,255,255,.4)';
-    speak(pick(RITA_WRONG));
+    // Show image after answer for grown ups/experts
+    if(S.level!=='youngsters' && city.photo){
+      const ce=document.getElementById('city-emoji');
+      if(ce){ce.innerHTML='<img src="'+city.photo+'" style="width:100%;max-width:240px;border-radius:12px;display:block;margin:0 auto 6px"/>';ce.style.display='block';}
+      setTimeout(()=>{if(ce)ce.style.display='none';},3500);
+    }
+    setTimeout(()=>speak('Not quite love! '+city.explain),300);
   }
 
   document.getElementById('result-panel').classList.add('show');
