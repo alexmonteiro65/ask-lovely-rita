@@ -460,6 +460,13 @@
       <div id="lad-bottom-fallback" style="display:none;font-size:64px;line-height:1">🤿</div>
     </div>
 
+      <!-- BONUS GAME PANEL -->
+      <div id="bonus-panel">
+        <div id="bonus-title">🎮 BONUS GAME UNLOCKED!</div>
+        <div id="bonus-sub">Brilliant work love! You earned Tic-Tac-Toe Underwater!</div>
+        <button id="bonus-btn" onclick="goToBonusGame()">❌⭕ Play Tic-Tac-Toe Underwater!</button>
+      </div>
+
     <nav id="nav-bar">
       <button class="nav-btn" onclick="goBack()"><span class="nav-icon">◀️</span><span>Back</span></button>
       <button class="nav-btn nav-home" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
@@ -1015,6 +1022,23 @@ function finishGame() {
   document.getElementById('start-btn').onclick = ()=>{ resetGame(); startGame(); };
   celebrate();
   speak(pick(RITA_COMPLETE));
+  setTimeout(showBonusGame, 1500);
+}
+
+function showBonusGame() {
+  const panel = document.getElementById('bonus-panel');
+  if (!panel) return;
+  panel.classList.add('show');
+  const msgs = {
+    youngsters: "Amazing love! You have unlocked Tic-Tac-Toe Underwater as your bonus game! The Funny Lad challenges you!",
+    grownups: "Brilliant darling! Your bonus is Tic-Tac-Toe Underwater! Can you beat the Funny Lad at noughts and crosses under the sea?",
+    experts: "Outstanding love! Experts only get this challenge! Tic-Tac-Toe Underwater awaits you!"
+  };
+  speak(msgs[S.level] || msgs.youngsters);
+}
+
+function goToBonusGame() {
+  window.location.href = 'page2_tictactoe.html?level=' + S.level + '&from=ocean';
 }
 
 // ── NAVIGATION ────────────────────────────────────────────
