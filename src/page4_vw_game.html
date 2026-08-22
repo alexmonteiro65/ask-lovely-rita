@@ -404,7 +404,7 @@
       <div id="status-bar">
         <div class="status-card">
           <div class="status-label">Educational BeatCoins</div>
-          <div class="status-value" id="bc-val">80</div>
+          <div class="status-value" id="bc-val">25,000</div>
         </div>
         <div class="status-card" id="timer-card">
           <div class="status-label">Time Left</div>
@@ -531,7 +531,7 @@ const RITA_GO = "Go! Drag the Beetles to their garages!";
 let S = {
   level: 'youngsters',
   fromWorld: null,
-  beatcoins: 80,
+  beatcoins: 25000,
   gameActive: false,
   placed: {},
   correct: 0,
@@ -554,9 +554,7 @@ function loadStorage() {
 }
 function saveStorage() {
   try {
-    const d = JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');
-    d.beatcoins = S.beatcoins;
-    localStorage.setItem('askLovelyRitaV4', JSON.stringify(d));
+    localStorage.setItem('askLovelyRitaV4_bc', S.beatcoins);
   } catch(e) {}
 }
 
