@@ -445,7 +445,7 @@ body.theme-experts    { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-grad
 
       <!-- STATUS -->
       <div id="status-bar">
-        <div class="stat-card"><div class="stat-label">BeatCoins</div><div class="stat-val" id="bc-val">80</div></div>
+        <div class="stat-card"><div class="stat-label">BeatCoins</div><div class="stat-val" id="bc-val">25,000</div></div>
         <div class="stat-card"><div class="stat-label">Score</div><div class="stat-val" id="score-val">0</div></div>
         <div class="stat-card"><div class="stat-label">Round</div><div class="stat-val" id="q-val">0/8</div></div>
       </div>
@@ -676,7 +676,7 @@ const LEVEL_CFG = {
 
 // ── STATE
 let S = {
-  level:'youngsters', beatcoins:80, score:0,
+  level:'youngsters', beatcoins: 25000, score:0,
   qIndex:0, order:[], gameActive:false, answered:false,
   grownupTries:0, currentQ:null,
   listening:false, recognition:null,
@@ -696,9 +696,7 @@ function loadStorage() {
 }
 function saveStorage() {
   try {
-    const d=JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');
-    d.beatcoins=S.beatcoins;
-    localStorage.setItem('askLovelyRitaV4',JSON.stringify(d));
+    localStorage.setItem('askLovelyRitaV4_bc', S.beatcoins);
   } catch(e){}
 }
 

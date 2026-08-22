@@ -402,7 +402,7 @@
       </div>
 
       <div id="status-bar">
-        <div class="stat-card"><div class="stat-label">BeatCoins</div><div class="stat-val" id="bc-val">80</div></div>
+        <div class="stat-card"><div class="stat-label">BeatCoins</div><div class="stat-val" id="bc-val">25,000</div></div>
         <div class="stat-card"><div class="stat-label">Score</div><div class="stat-val" id="score-val">0</div></div>
         <div class="stat-card"><div class="stat-label">Words</div><div class="stat-val" id="word-count-val">0/8</div></div>
       </div>
@@ -549,7 +549,7 @@ const KB_ROWS = [
 // ── STATE ──────────────────────────────────────────────────
 let S = {
   level: 'youngsters',
-  beatcoins: 80, score: 0,
+  beatcoins: 25000, score: 0,
   wordIndex: 0, wordsOrder: [],
   currentInput: [],
   gameActive: false, wordComplete: false,
@@ -567,9 +567,7 @@ function loadStorage() {
 }
 function saveStorage() {
   try {
-    const d = JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');
-    d.beatcoins = S.beatcoins;
-    localStorage.setItem('askLovelyRitaV4', JSON.stringify(d));
+    localStorage.setItem('askLovelyRitaV4_bc', S.beatcoins);
   } catch(e) {}
 }
 

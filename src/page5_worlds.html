@@ -1031,7 +1031,7 @@ const RITA_WORLDS = {
 //  STATE
 // ════════════════════════════════
 
-let S = { beatcoins: 80, selectedWorld: null, level: 'youngsters' };
+let S = { beatcoins: 25000, selectedWorld: null, level: 'youngsters' };
 
 // ════════════════════════════════
 //  INIT
@@ -1058,8 +1058,7 @@ function init() {
 
 function loadStorage() {
   try {
-    const d = JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');
-    if (typeof d.beatcoins==='number') S.beatcoins = d.beatcoins;
+    S.beatcoins = Number(localStorage.getItem('askLovelyRitaV4_bc') || 25000);
     if (d.theme && ['youngsters','grownups','experts'].includes(d.theme)) S.level = d.theme;
   } catch(e) {}
 }
