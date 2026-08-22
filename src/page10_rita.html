@@ -508,6 +508,11 @@ body.theme-experts    { --accent:#ffd700; --glow:#ffd700; --btn-grad:linear-grad
         <div id="result-title"></div>
         <div id="result-line"></div>
         <div id="result-pts"></div>
+        <div id="bonus-area" style="display:none;margin-top:14px;text-align:center;">
+          <div style="font-size:14px;font-weight:bold;color:#ffde59;margin-bottom:6px;">🎮 BONUS GAME UNLOCKED!</div>
+          <div id="bonus-countdown" style="font-size:12px;color:rgba(255,255,255,0.7);margin-bottom:10px;"></div>
+          <button onclick="goToBonusGame()" style="background:linear-gradient(135deg,#ff1493,#a855f7);border:none;border-radius:20px;padding:12px 20px;color:#fff;font-weight:bold;font-size:13px;cursor:pointer;font-family:Georgia,serif;width:100%;">🎵 Play The Turntable!</button>
+        </div>
       </div>
 
     </div>
@@ -1126,6 +1131,31 @@ function finishGame() {
   document.getElementById('start-btn').onclick=()=>{resetGame();startGame();};
   celebrate();
   setTimeout(()=>speak(pick(RITA_COMPLETE)),500);
+  setTimeout(showBonusGame, 2000);
+}
+
+function showBonusGame() {
+  const area = document.getElementById('bonus-area');
+  if (!area) return;
+  area.style.display = 'block';
+  const msgs = {
+    youngsters: "Magnificent love! You finished Rita's World! The Turntable bonus game is yours! Going there in 5 seconds!",
+    grownups: "Brilliant darling! Rita is so proud! The Turntable awaits you in 5 seconds!",
+    experts: "Outstanding love! A true music expert! The Turntable bonus is unlocked! Off we go in 5 seconds!"
+  };
+  setTimeout(()=>speak(msgs[S.level]||msgs.youngsters), 500);
+  let count = 5;
+  const cd = document.getElementById('bonus-countdown');
+  if (cd) cd.textContent = 'Going there in ' + count + ' seconds...';
+  const iv = setInterval(() => {
+    count--;
+    if (cd) cd.textContent = count > 0 ? 'Going there in ' + count + ' seconds...' : 'Off we go!';
+    if (count <= 0) { clearInterval(iv); goToBonusGame(); }
+  }, 1000);
+}
+
+function goToBonusGame() {
+  window.location.href = 'page3_turntable.html?level=' + S.level + '&from=rita';
 }
 
 // ── MIC
