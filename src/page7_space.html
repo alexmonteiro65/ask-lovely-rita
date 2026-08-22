@@ -185,24 +185,7 @@
   #result-fact { font-size:10px; color:rgba(255,255,255,.6); line-height:1.5; font-style:italic; }
   #result-pts { font-size:16px; font-weight:900; }
 
-  /* BONUS GAME PANEL */
-  #bonus-panel {
-    display:none; flex-direction:column; align-items:center;
-    background:rgba(168,85,247,0.08); border:2px solid #a855f7;
-    border-radius:16px; padding:16px 12px; margin:10px 0;
-    gap:10px; text-align:center;
-  }
-  #bonus-panel.show { display:flex; }
-  #bonus-title { font-size:15px; font-weight:bold; color:#a855f7; letter-spacing:1px; }
-  #bonus-sub { font-size:11px; color:rgba(255,255,255,0.7); line-height:1.4; }
-  #bonus-btn {
-    background:linear-gradient(135deg,#a855f7,#1a0040);
-    border:none; border-radius:20px; padding:12px 24px;
-    color:#fff; font-weight:bold; font-size:13px;
-    cursor:pointer; font-family:Georgia,serif; letter-spacing:0.5px;
-    box-shadow:0 0 20px rgba(168,85,247,0.5);
-  }
-  #bonus-btn:hover { transform:scale(1.03); }
+
 
   /* SMART LAD BOTTOM */
   #lad-bottom-wrap {
@@ -290,13 +273,6 @@
         src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/space_lad_grownups.png" alt="Smart Lad"
         onerror="this.style.display='none'"/>
     </div>
-      <!-- BONUS GAME PANEL -->
-      <div id="bonus-panel">
-        <div id="bonus-title">🎮 BONUS GAME UNLOCKED!</div>
-        <div id="bonus-sub">Cosmic work love! You earned The Turntable as your bonus game!</div>
-        <button id="bonus-btn" onclick="goToBonusGame()">🎵 Play The Turntable!</button>
-      </div>
-
     <nav id="nav-bar">
       <button class="nav-btn" onclick="goBack()"><span class="nav-icon">◀️</span><span>Back</span></button>
       <button class="nav-btn nav-home" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
@@ -574,15 +550,23 @@ function finishGame() {
 }
 
 function showBonusGame() {
-  const panel = document.getElementById('bonus-panel');
-  if (!panel) return;
-  panel.classList.add('show');
+  const area = document.getElementById('bonus-area');
+  if (!area) return;
+  area.style.display = 'block';
   const msgs = {
-    youngsters: "Stellar work love! You have unlocked The Turntable as your bonus game! Spin to find the Smart Lad's instrument!",
-    grownups: "Magnificent darling! The Turntable bonus game is yours! Can you spin your way to a perfect score?",
-    experts: "Outstanding love! Only cosmic explorers reach The Turntable bonus! Good luck spinning!"
+    youngsters: "Stellar work love! You have unlocked The Turntable as your bonus game! Going there in 5 seconds!",
+    grownups: "Magnificent darling! The Turntable bonus game is yours! Off we go in 5 seconds!",
+    experts: "Outstanding love! The Turntable bonus awaits! Going there in 5 seconds!"
   };
   speak(msgs[S.level] || msgs.youngsters);
+  let count = 5;
+  const cd = document.getElementById('bonus-countdown');
+  if (cd) cd.textContent = 'Going there in ' + count + ' seconds...';
+  const iv = setInterval(() => {
+    count--;
+    if (cd) cd.textContent = count > 0 ? 'Going there in ' + count + ' seconds...' : 'Off we go!';
+    if (count <= 0) { clearInterval(iv); goToBonusGame(); }
+  }, 1000);
 }
 
 function goToBonusGame() {
