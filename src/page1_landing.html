@@ -429,8 +429,8 @@ body {
 
         <!-- BEATCOINS — bottom, single line -->
         <div id="bc-wrap">
-          <span class="bc-label">Educational BeatCoins Total</span>
-          <span class="bc-count" id="bc-display">0</span>
+          <span class="bc-label">Educational BeatCoins</span>
+          <span class="bc-count" id="bc-display">25,000</span>
         </div>
 
       </div>
@@ -617,15 +617,15 @@ window.addEventListener('load', ()=>{
   muteState = localStorage.getItem('askLovelyRitaV4_mute') === '1';
   document.getElementById('sound-icon').textContent = muteState ? '🔇' : '🔊';
 
-  // Scores — bc-display = sum of all lad scores
+  // BeatCoins — read actual running total
+  const bc = Number(localStorage.getItem('askLovelyRitaV4_bc') || 25000);
+  document.getElementById('bc-display').textContent = bc.toLocaleString();
+
+  // Lad scoreboard — separate from BeatCoins
   const sc = JSON.parse(localStorage.getItem('askLovelyRitaV4_scores')||'{}');
-  let total = 0;
   LADS.forEach(l => {
-    const val = sc[l]||0;
-    document.getElementById('score-'+l).textContent = val;
-    total += Number(val);
+    document.getElementById('score-'+l).textContent = sc[l]||0;
   });
-  document.getElementById('bc-display').textContent = total.toLocaleString();
 
   // Rita default text on load
   clearRitaDisplay();
