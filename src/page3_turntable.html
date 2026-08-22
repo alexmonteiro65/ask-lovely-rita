@@ -523,7 +523,7 @@
       <!-- BEATCOINS -->
       <div id="bc-bar">
         <div id="bc-label">🎵 Educational BeatCoins</div>
-        <div id="bc-amount">80</div>
+        <div id="bc-amount">25,000</div>
       </div>
 
       <!-- ATTEMPTS -->
@@ -669,7 +669,7 @@ let S = {
   attemptsLeft: 3,
   spinning: false,
   currentDeg: 0,
-  beatcoins: 80,
+  beatcoins: 25000,
   roundOver: false,
   audio: null,
 };
@@ -689,9 +689,7 @@ function loadStorage() {
 
 function saveStorage() {
   try {
-    const d = JSON.parse(localStorage.getItem('askLovelyRitaV4') || '{}');
-    d.beatcoins = S.beatcoins;
-    localStorage.setItem('askLovelyRitaV4', JSON.stringify(d));
+    localStorage.setItem('askLovelyRitaV4_bc', S.beatcoins);
   } catch(e) {}
 }
 
