@@ -530,6 +530,7 @@ const RITA_GO = "Go! Drag the Beetles to their garages!";
 
 let S = {
   level: 'youngsters',
+  fromWorld: null,
   beatcoins: 80,
   gameActive: false,
   placed: {},
@@ -565,6 +566,12 @@ function saveStorage() {
 
 function init() {
   loadStorage();
+  // Read level and from-page from URL params
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('level') && ['youngsters','grownups','experts'].includes(params.get('level'))) {
+    S.level = params.get('level');
+  }
+  if (params.get('from')) { S.fromWorld = params.get('from'); }
   applyLevel(S.level);
   highlightTab(S.level);
   setTimeout(() => speak(RITA_INTRO[S.level]), 800);
@@ -894,7 +901,10 @@ function stopFlag() {
 //  NAVIGATION
 // ════════════════════════════════
 
-function goBack()    { window.location.href = 'page3_turntable.html'; }
+function goBack() {
+  if (S.fromWorld === 'city') { window.location.href = 'page9_city.html'; return; }
+  window.location.href = 'page3_turntable.html';
+}
 function goHome()    { window.location.href = 'page1_landing.html'; }
 function goForward() { window.location.href = 'page5_worlds.html'; }
 
