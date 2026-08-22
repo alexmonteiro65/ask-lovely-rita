@@ -558,6 +558,17 @@ function setRitaText(t){ document.getElementById('rita-text').textContent=t; }
 function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 function toast(msg){ const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000); }
 
+
+// Save BeatCoins per chosen Lad for global scoreboard
+function saveLadBC(amount) {
+  try {
+    const lad = localStorage.getItem('askLovelyRitaV4_chosen_lad') || 'smart';
+    const key = 'askLovelyRitaV4_bc_' + lad;
+    const current = Number(localStorage.getItem(key) || 0);
+    localStorage.setItem(key, current + amount);
+  } catch(e) {}
+}
+
 function goBack(){
   if(S.fromWorld==='india') { window.location.href='page8_india.html'; return; }
   window.location.href='page5_worlds.html';
