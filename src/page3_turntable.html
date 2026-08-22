@@ -663,6 +663,7 @@ const RITA_MISS = [
 let S = {
   lad: 'smart',
   level: 'youngsters',
+  fromWorld: null,
   slices: [],
   attempts: 3,
   attemptsLeft: 3,
@@ -736,9 +737,16 @@ function pick(arr) {
 
 function init() {
   loadStorage();
+  // Read level and from-page from URL params (set when coming from a world bonus)
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('level') && ['youngsters','grownups','experts'].includes(params.get('level'))) {
+    S.level = params.get('level');
+  }
+  if (params.get('from')) {
+    S.fromWorld = params.get('from');
+  }
   applyLevel(S.level, true);
   highlightLevelBtn(S.level);
-  // Rita fala automaticamente ao entrar
   setTimeout(() => speak(RITA_INTRO[S.level]), 800);
 }
 
@@ -1024,7 +1032,8 @@ function toggleMute() {
 }
 
 function goBack() {
-  window.location.href = 'page2_tictactoe.html';
+  if (S.fromWorld === 'space') { window.location.href = 'page7_space.html'; return; }
+  window.location.href = 'page5_worlds.html';
 }
 
 function goHome() {
