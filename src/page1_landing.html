@@ -88,270 +88,218 @@ body {
 }
 #phone-scroll::-webkit-scrollbar { width:0; }
 
-/* HEADER */
+/* HEADER — title only */
 #header {
-  padding:10px 16px 8px;
+  padding:16px 16px 10px;
   display:flex; flex-direction:column; align-items:center;
   background:var(--bg); transition:background 0.5s; flex-shrink:0;
 }
 
-/* LADS — no hover animation */
-#lads-row {
-  display:flex; justify-content:center; gap:6px;
-  margin-bottom:6px; width:100%;
-}
-.lad-wrap {
-  display:flex; flex-direction:column; align-items:center;
-}
-.lad-img {
-  width:62px; height:62px; object-fit:contain;
-  filter:drop-shadow(0 4px 12px rgba(0,0,0,0.4));
-}
-.lad-name {
-  font-size:6.5px; color:var(--accent2); margin-top:2px;
-  font-family:monospace; letter-spacing:0.5px; text-align:center;
-  font-weight:bold; text-shadow:0 0 6px var(--accent2);
-}
-
 /* TITLE */
-#title-wrap { text-align:center; margin-bottom:8px; width:100%; }
+#title-wrap { text-align:center; margin-bottom:10px; }
 #main-title {
-  font-size:1.9rem; color:#fff;
-  text-shadow:var(--title-glow); line-height:1.1; margin-bottom:2px;
-  transition:all 0.5s;
+  font-size:26px; font-weight:bold; letter-spacing:2px;
+  color:var(--accent); text-shadow:var(--title-glow);
+  font-family:Georgia,serif;
 }
 #subtitle {
-  font-size:0.55rem; color:var(--sub-color);
-  font-family:monospace; letter-spacing:2px; text-transform:uppercase; opacity:0.8;
+  font-size:10px; color:var(--accent2); letter-spacing:1.5px;
+  margin-top:4px; opacity:0.8;
 }
 
-/* RITA INPUT */
+/* ASK RITA BOX */
 #rita-box {
-  width:100%; background:rgba(255,255,255,0.07);
-  border:2px solid var(--iborder); border-radius:40px;
-  padding:8px 12px; display:flex; align-items:center; gap:8px;
-  margin-bottom:8px; transition:border-color 0.5s;
+  display:flex; align-items:center; gap:6px;
+  width:100%; margin-bottom:8px;
 }
 #mic-btn {
-  background:none; border:none; cursor:pointer;
-  padding:2px; display:flex; align-items:center; flex-shrink:0;
+  background:none; border:1px solid var(--accent); border-radius:50%;
+  width:36px; height:36px; cursor:pointer; display:flex;
+  align-items:center; justify-content:center; flex-shrink:0;
+  transition:all 0.2s;
 }
+#mic-btn:hover { background:var(--accent); }
 #rita-input {
-  flex:1; background:none; border:none; outline:none;
-  color:#fff; font-size:0.75rem; font-family:Georgia,serif;
+  flex:1; background:rgba(255,255,255,0.07); border:1px solid var(--iborder);
+  border-radius:20px; padding:8px 14px; color:#fff;
+  font-size:12px; outline:none; font-family:Georgia,serif;
 }
-#rita-input::placeholder { color:rgba(255,255,255,0.3); font-size:0.7rem; }
+#rita-input::placeholder { color:rgba(255,255,255,0.3); }
 #rita-btn {
-  background:var(--btn-grad); border:none; color:#fff;
-  padding:6px 12px; border-radius:22px; cursor:pointer;
-  font-size:0.6rem; font-weight:bold; font-family:monospace;
-  letter-spacing:0.5px; white-space:nowrap; flex-shrink:0;
-  animation:pulse 2s infinite;
+  background:var(--btn-grad); border:none; border-radius:20px;
+  padding:8px 14px; color:#000; font-weight:bold;
+  font-size:11px; cursor:pointer; white-space:nowrap;
+  font-family:Georgia,serif; letter-spacing:0.5px;
 }
-@keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,0.2)} 50%{box-shadow:0 0 0 5px rgba(255,255,255,0)} }
 
 /* PLAYLIST */
 #playlist-btn {
-  width:100%; background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.12); border-radius:10px;
-  padding:7px 12px; display:flex; align-items:center; gap:8px;
-  cursor:pointer; margin-bottom:0; transition:all 0.3s;
-  border-bottom-left-radius:0; border-bottom-right-radius:0;
+  display:flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+  border-radius:10px; padding:8px 12px; cursor:pointer;
+  width:100%; margin-bottom:6px;
 }
-#playlist-btn:hover { border-color:var(--accent); }
-
-/* PLAYLIST DROPDOWN */
+.pl-text { flex:1; }
+.pl-title { font-size:11px; color:var(--accent); font-weight:bold; }
+.pl-sub { font-size:9px; color:rgba(255,255,255,0.4); margin-top:2px; }
 #playlist-dropdown {
-  display:none; width:100%;
-  background:rgba(20,10,40,0.97);
-  border:1px solid rgba(255,255,255,0.12);
-  border-top:none; border-radius:0 0 10px 10px;
-  margin-bottom:8px; overflow:hidden;
+  display:none; flex-direction:column; gap:2px;
+  background:rgba(0,0,0,0.4); border-radius:8px;
+  padding:6px; margin-bottom:6px; width:100%;
 }
-#playlist-dropdown.open { display:block; }
+#playlist-dropdown.open { display:flex; }
 .pl-track {
-  display:flex; align-items:center; gap:10px;
-  padding:8px 12px; cursor:pointer;
-  border-bottom:1px solid rgba(255,255,255,0.06);
+  display:flex; align-items:center; gap:8px;
+  padding:7px 10px; border-radius:6px; cursor:pointer;
   transition:background 0.2s;
 }
-.pl-track:last-child { border-bottom:none; }
-.pl-track:hover { background:rgba(255,255,255,0.08); }
-.pl-track.playing { background:rgba(255,255,255,0.12); }
-.pl-track-num { font-size:9px; color:rgba(255,255,255,0.3); font-family:monospace; width:14px; }
-.pl-track-name { flex:1; font-size:10px; color:#fff; font-family:Georgia,serif; }
-.pl-track-icon { font-size:12px; }
-.pl-text { flex:1; text-align:left; }
-.pl-title { font-size:8px; color:#fff; font-weight:bold; letter-spacing:0.5px; }
-.pl-sub { font-size:6px; color:rgba(255,255,255,0.4); margin-top:1px; }
-
-/* LEVEL TABS — rectangular icons */
-#level-wrap { width:100%; margin-bottom:0; }
-.level-section-label {
-  text-align:center; font-size:8px; color:rgba(255,255,255,0.9);
-  letter-spacing:3px; text-transform:uppercase; font-family:monospace; margin-bottom:5px; font-weight:bold;
-}
-#level-tabs { display:flex; gap:5px; justify-content:center; width:100%; }
-.level-tab {
-  flex:1; border:2px solid rgba(255,255,255,0.1); border-radius:9px;
-  background:rgba(255,255,255,0.04); cursor:pointer; overflow:hidden;
-  transition:all 0.3s; position:relative;
-}
-/* RECTANGULAR: aspect-ratio 16/9 instead of 1/1 */
-.level-tab img {
-  width:100%; aspect-ratio:16/9; object-fit:cover;
-  filter:saturate(0.6) brightness(0.45); transition:filter 0.3s;
-}
-.level-tab:hover img,.level-tab.active img { filter:saturate(1.2) brightness(0.85); }
-.lt-label {
-  position:absolute; bottom:0; left:0; right:0;
-  background:linear-gradient(transparent,rgba(0,0,0,0.92));
-  padding:8px 3px 3px; text-align:center;
-  font-family:monospace; font-size:9px; font-weight:bold;
-  color:#fff; text-transform:uppercase;
-}
-.lt-sub { font-size:7px; opacity:0.85; display:block; margin-top:1px; }
-.level-tab.active { border-color:var(--accent); box-shadow:0 0 12px var(--glow); }
+.pl-track:hover, .pl-track.playing { background:rgba(255,255,255,0.08); }
+.pl-track-num { color:rgba(255,255,255,0.3); font-size:10px; width:14px; }
+.pl-track-name { flex:1; color:#ddd; font-size:11px; }
+.pl-track-icon { color:var(--accent); font-size:12px; }
 
 /* SCROLL BODY */
-#scroll-body {
-  flex:1; overflow-y:auto; padding:8px 16px 10px;
-  background:var(--bg); transition:background 0.5s;
-  display:flex; flex-direction:column;
-}
-#scroll-body::-webkit-scrollbar { width:0; }
+#scroll-body { flex:1; padding:0 12px 12px; display:flex; flex-direction:column; gap:10px; }
 
 /* BEATCOINS */
 #bc-wrap {
-  display:flex; flex-direction:column;
-  background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
-  border-radius:22px; padding:8px 12px;
-  font-family:monospace; color:var(--accent2);
-  margin-bottom:6px; width:100%;
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+  border-radius:10px; padding:8px 12px;
 }
 .bc-top { display:flex; align-items:center; gap:8px; }
-.bc-label { font-size:11px; flex:1; color:var(--accent2); font-weight:bold; }
-.bc-count { font-weight:bold; font-size:15px; color:var(--accent2); }
-.bc-fans { font-size:8px; color:var(--accent); letter-spacing:2px; text-transform:uppercase; font-family:monospace; margin-top:3px; font-weight:bold; text-align:center; }
-
-/* COUNTER */
-#counter-wrap {
-  text-align:center; font-family:monospace; font-size:7px;
-  color:var(--accent); letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; font-weight:bold;
-}
-
-/* BOTTOM AREA — albums + Rita side by side */
-#bottom-area {
-  display:flex; gap:8px; align-items:flex-end; width:100%;
-  margin-top:auto;
-}
-
-/* DYNAMIC ALBUMS */
-#dynamic-albums { flex:1; }
-.dyn-label {
-  font-size:14px; color:rgba(255,255,255,0.9); letter-spacing:3px;
-  text-transform:uppercase; font-family:monospace; margin-bottom:5px; font-weight:bold;
-}
+.bc-label { flex:1; font-size:11px; color:rgba(255,255,255,0.5); letter-spacing:0.5px; }
+.bc-count { font-size:16px; font-weight:bold; color:var(--accent); letter-spacing:1px; }
+.bc-fans { font-size:9px; color:rgba(255,255,255,0.25); margin-top:4px; letter-spacing:0.5px; }
 
 /* RITA RESPONSE BOX */
 #rita-response-box {
-  width:100%; background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.12); border-radius:14px;
-  padding:10px 14px; margin-bottom:8px; min-height:60px;
-  display:flex; align-items:center; gap:10px;
+  display:flex; align-items:flex-start; gap:10px;
+  background:rgba(255,255,255,0.04); border:1px solid var(--iborder);
+  border-radius:10px; padding:10px 12px;
 }
 #rita-response-text {
-  font-size:11px; color:rgba(255,255,255,0.85); font-family:Georgia,serif;
-  line-height:1.5; flex:1; font-style:italic;
+  font-size:12px; color:#ddd; line-height:1.5; font-style:italic;
 }
-.album-panel { display:none; animation:fadein 0.4s ease; }
-.album-panel.active { display:block; }
-@keyframes fadein { from{opacity:0;transform:scale(0.97)} to{opacity:1;transform:scale(1)} }
-.album-pair { display:flex; gap:6px; }
-.album-card {
-  flex:1; border-radius:9px; overflow:hidden; cursor:pointer;
-  border:2px solid rgba(255,255,255,0.06); transition:all 0.35s; position:relative;
-}
-/* Albums same size as rectangular icons */
-.album-card img { width:100%; aspect-ratio:1/1; object-fit:cover; filter:saturate(0.8) brightness(0.6); transition:filter 0.35s; }
-.album-card:hover img { filter:saturate(1.3) brightness(0.9); }
-.album-card.shake { border-color:var(--accent); box-shadow:0 0 16px var(--glow); animation:shake 0.5s ease; }
-@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-4px) rotate(-1deg)} 40%{transform:translateX(4px) rotate(1deg)} 60%{transform:translateX(-3px)} 80%{transform:translateX(3px)} }
-.ac-label { display:none; }
 
-/* RITA — bottom right */
-#rita-figure {
-  flex-shrink:0; width:90px;
-  display:flex; align-items:flex-end; justify-content:center;
+/* ===== LAD SELECTION SECTION ===== */
+#lad-section {
+  display:flex; flex-direction:column; align-items:center;
+  gap:10px; padding-bottom:8px;
 }
-#rita-figure img {
-  width:90px; object-fit:contain;
-  filter:drop-shadow(0 0 12px var(--glow));
-  animation:ritafloat 3s ease-in-out infinite;
+
+#pick-lad-btn {
+  background:var(--btn-grad); border:none; border-radius:24px;
+  padding:12px 28px; color:#000; font-weight:bold;
+  font-size:13px; cursor:pointer; letter-spacing:1px;
+  font-family:Georgia,serif;
+  box-shadow:0 0 20px var(--glow);
+  transition:transform 0.15s, box-shadow 0.2s;
+  width:100%;
 }
-@keyframes ritafloat {
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-6px)}
+#pick-lad-btn:hover { transform:scale(1.02); }
+#pick-lad-btn:active { transform:scale(0.97); }
+
+/* LAD CARDS GRID */
+#lad-cards {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:8px; width:100%;
 }
+
+.lad-card {
+  background:rgba(255,255,255,0.05);
+  border:2px solid rgba(255,255,255,0.1);
+  border-radius:12px; padding:10px 8px;
+  display:flex; flex-direction:column; align-items:center;
+  gap:6px; cursor:pointer; transition:all 0.2s;
+  position:relative; overflow:hidden;
+}
+.lad-card:hover { border-color:var(--accent); background:rgba(255,255,255,0.08); }
+.lad-card.spinning { animation:none; }
+.lad-card.highlighted {
+  border-color:var(--accent) !important;
+  box-shadow:0 0 20px var(--glow), 0 0 40px var(--glow);
+  background:rgba(255,255,255,0.12) !important;
+}
+.lad-card.chosen {
+  border-color:var(--accent2) !important;
+  box-shadow:0 0 30px var(--accent2);
+}
+
+.lad-card img {
+  width:70px; height:70px; object-fit:contain;
+}
+.lad-card-name {
+  font-size:10px; font-weight:bold; color:#fff !important;
+  letter-spacing:1px; text-align:center;
+}
+.lad-card-desc {
+  font-size:9px; color:rgba(255,255,255,0.5) !important;
+  text-align:center; font-style:italic; line-height:1.3;
+}
+
+/* PICK ME BUBBLE */
+.pick-me-bubble {
+  font-size:9px; color:#fff !important;
+  background:var(--btn-grad); border-radius:8px;
+  padding:3px 8px; text-align:center;
+}
+
+/* SCOREBOARD */
+#scoreboard {
+  display:grid; grid-template-columns:1fr 1fr 1fr 1fr;
+  gap:4px; width:100%;
+}
+.score-cell {
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:8px; padding:6px 4px;
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+}
+.score-lad-name { font-size:8px; color:rgba(255,255,255,0.4); letter-spacing:0.5px; }
+.score-value { font-size:14px; font-weight:bold; color:var(--accent); }
+.score-label { font-size:7px; color:rgba(255,255,255,0.25); letter-spacing:0.5px; }
 
 /* NAV BAR */
 #nav-bar {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  padding: 10px 20px 14px;
-  border-top: 1px solid rgba(255,255,255,.08);
-  background: rgba(0,0,0,.35);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  display:flex; justify-content:space-around; align-items:center;
+  padding:10px 0 14px;
+  background:rgba(0,0,0,0.4); border-top:1px solid rgba(255,255,255,0.06);
+  flex-shrink:0;
 }
 .nav-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  background: none;
-  border: none;
-  color: rgba(255,255,255,.5);
-  cursor: pointer;
-  padding: 6px 14px;
-  border-radius: 12px;
-  transition: all .2s;
-  font-size: 10px;
-  letter-spacing: .3px;
+  background:none; border:none; color:rgba(255,255,255,0.4);
+  font-size:9px; cursor:pointer; display:flex; flex-direction:column;
+  align-items:center; gap:3px; padding:4px 16px;
+  transition:color 0.2s; font-family:Georgia,serif;
 }
-.nav-btn:hover { background: rgba(255,255,255,.08); color: #fff; }
-.nav-btn .nav-icon { font-size: 20px; line-height: 1; }
-.nav-btn.nav-home .nav-icon { color: var(--accent); }
-.nav-btn.nav-home { color: var(--accent); }
+.nav-btn:hover { color:var(--accent); }
+.nav-btn.nav-home { color:var(--accent); }
+.nav-icon { font-size:18px; }
 
 /* TOAST */
 #toast {
-  position:fixed; bottom:60px; left:50%; transform:translateX(-50%);
-  background:rgba(0,0,0,0.9); color:#fff; padding:7px 16px;
-  border-radius:20px; font-family:monospace; font-size:9px; z-index:9999;
-  border:1px solid rgba(255,255,255,0.15); max-width:300px; text-align:center;
-  transition:opacity 0.3s; pointer-events:none; opacity:0;
+  position:fixed; bottom:30px; left:50%; transform:translateX(-50%);
+  background:rgba(0,0,0,0.85); color:#fff; padding:10px 20px;
+  border-radius:20px; font-size:13px; opacity:0;
+  transition:opacity 0.3s; pointer-events:none; z-index:999;
+  font-family:Georgia,serif;
 }
 
-/* SIZE LABEL */
 #size-label {
-  font-family:monospace; font-size:9px; color:#444;
-  margin-top:10px; letter-spacing:1px;
+  color:#333; font-size:10px; font-family:monospace;
+  margin-top:8px; letter-spacing:1px;
 }
 </style>
 </head>
 <body>
 
-<!-- DEVICE BAR -->
 <div id="device-bar">
-  <span>📱 DEVICE:</span>
-  <button class="dev-btn" onclick="setDevice(390,844,'iPhone 14')" id="d-iphone14">iPhone 14 · 390×844</button>
-  <button class="dev-btn active" onclick="setDevice(393,852,'iPhone 14 Pro')" id="d-iphone14pro">iPhone 14 Pro · 393×852</button>
-  <button class="dev-btn" onclick="setDevice(430,932,'iPhone 14 Plus')" id="d-iphone14plus">iPhone 14 Plus · 430×932</button>
-  <button class="dev-btn" onclick="setDevice(360,800,'Android M')" id="d-android">Android Mid · 360×800</button>
-  <button class="dev-btn" onclick="setDevice(412,915,'Android L')" id="d-androidl">Android Large · 412×915</button>
+  <span>PREVIEW:</span>
+  <button class="dev-btn active" onclick="setDevice(393,852,'iPhone 14 Pro')" id="d-iphone14">iPhone 14 Pro · 393×852</button>
+  <button class="dev-btn" onclick="setDevice(390,844,'iPhone 14')" id="d-iphone14std">iPhone 14 · 390×844</button>
+  <button class="dev-btn" onclick="setDevice(375,812,'iPhone 12')" id="d-iphone12">iPhone 12 · 375×812</button>
+  <button class="dev-btn" onclick="setDevice(414,896,'iPhone 11')" id="d-iphone11">iPhone 11 · 414×896</button>
+  <button class="dev-btn" onclick="setDevice(360,800,'Android')" id="d-android">Android · 360×800</button>
   <button class="dev-btn" onclick="setDevice(320,568,'iPhone SE')" id="d-iphonese">iPhone SE · 320×568</button>
 </div>
 
@@ -359,27 +307,8 @@ body {
 <div id="phone" class="theme-youngsters">
   <div id="phone-scroll">
 
-    <!-- HEADER -->
+    <!-- HEADER: title + ask rita + playlist -->
     <div id="header">
-      <div id="lads-row">
-        <div class="lad-wrap">
-          <img class="lad-img" id="lad-smart" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-smart-regular.png" alt="Smart">
-          <span class="lad-name">THE SMART ONE</span>
-        </div>
-        <div class="lad-wrap">
-          <img class="lad-img" id="lad-cute" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-cute-regular.png" alt="Cute">
-          <span class="lad-name">THE CUTE ONE</span>
-        </div>
-        <div class="lad-wrap">
-          <img class="lad-img" id="lad-quiet" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-quiet-regular.png" alt="Quiet">
-          <span class="lad-name">THE QUIET ONE</span>
-        </div>
-        <div class="lad-wrap">
-          <img class="lad-img" id="lad-funny" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-funny-regular.png" alt="Funny">
-          <span class="lad-name">THE FUNNY ONE</span>
-        </div>
-      </div>
-
       <div id="title-wrap">
         <div id="main-title">Ask Lovely Rita</div>
         <div id="subtitle">Learning with the Lads for Generations</div>
@@ -413,7 +342,6 @@ body {
         <span style="font-size:14px;color:var(--accent)" id="pl-arrow">▶</span>
       </div>
 
-      <!-- PLAYLIST DROPDOWN -->
       <div id="playlist-dropdown">
         <div class="pl-track" onclick="playTrack(0)">
           <span class="pl-track-num">1</span>
@@ -438,34 +366,7 @@ body {
         <div class="pl-track" onclick="playTrack(4)">
           <span class="pl-track-num">5</span>
           <span class="pl-track-name">Lads Rap 1 x Part B Mashup</span>
-          <span class="pl-track-icon" id="icon-5">▶</span>
-        </div>
-      </div>
-
-      <div id="level-wrap">
-        <div class="level-section-label">Choose your level</div>
-        <div id="level-tabs">
-          <div class="level-tab active" id="tab-youngsters"
-            onclick="setTheme('youngsters',this)"
-            onmouseenter="previewAlbums('youngsters')"
-            onmouseleave="restoreAlbums()">
-            <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/ICON%201.png" alt="Youngsters">
-            <div class="lt-label">YOUNGSTERS<span class="lt-sub">Kinder · Middle</span></div>
-          </div>
-          <div class="level-tab" id="tab-grownups"
-            onclick="setTheme('grownups',this)"
-            onmouseenter="previewAlbums('grownups')"
-            onmouseleave="restoreAlbums()">
-            <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/ICON%202.png" alt="Grown Ups">
-            <div class="lt-label">GROWN UPS<span class="lt-sub">High · College</span></div>
-          </div>
-          <div class="level-tab" id="tab-experts"
-            onclick="setTheme('experts',this)"
-            onmouseenter="previewAlbums('experts')"
-            onmouseleave="restoreAlbums()">
-            <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/ICON%203.png" alt="Experts">
-            <div class="lt-label">EXPERTS<span class="lt-sub">The Fifth Beatle</span></div>
-          </div>
+          <span class="pl-track-icon" id="icon-4">▶</span>
         </div>
       </div>
     </div>
@@ -496,43 +397,69 @@ body {
           <circle cx="20" cy="20" r="7" fill="var(--vinil-label)"/>
           <circle cx="20" cy="20" r="4" fill="#111"/>
         </svg>
-        <span id="rita-response-text">Hello love! Welcome to Ask Lovely Rita! Ask me anything, listen to a song, or pick a level and let's play!</span>
+        <span id="rita-response-text">Hello love! Welcome to Ask Lovely Rita! Pick your Lad companion and let the adventure begin!</span>
       </div>
 
-      <!-- BOTTOM AREA: albums + Rita -->
-      <div id="bottom-area">
-        <div id="dynamic-albums">
-          <div class="dyn-label" id="dyn-label">For Youngsters</div>
-          <div class="album-panel active" id="panel-youngsters">
-            <div class="album-pair">
-              <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/YELLOW%20SUBMARINE%20ALBUM%20COVER.png" alt="Yellow Submarine"></div>
-              <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/MAGIC%20MISTERY%20TOUR%20ALBUM%20COVER.png" alt="MMT"></div>
-            </div>
+      <!-- LAD SELECTION -->
+      <div id="lad-section">
+        <button id="pick-lad-btn" onclick="spinLads()">🎲 Pick your Lad companion to play!</button>
+
+        <div id="lad-cards">
+          <div class="lad-card" id="card-smart" onclick="chooseLad('smart')">
+            <img id="lad-smart" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-smart-regular.png" alt="Smart Lad">
+            <div class="lad-card-name">THE SMART ONE</div>
+            <div class="pick-me-bubble">Pick me love!</div>
+            <div class="lad-card-desc">Together we shall be brilliant!</div>
           </div>
-          <div class="album-panel" id="panel-grownups">
-            <div class="album-pair">
-              <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/A%20HARD%20DAY%27S%20NIGHT%20ALBUM%20COVER.png" alt="HDN"></div>
-              <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/RUBBER%20SOUL%20ALBUM%20COVER.png" alt="Rubber Soul"></div>
-            </div>
+          <div class="lad-card" id="card-cute" onclick="chooseLad('cute')">
+            <img id="lad-cute" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-cute-regular.png" alt="Cute Lad">
+            <div class="lad-card-name">THE CUTE ONE</div>
+            <div class="pick-me-bubble">Pick me love!</div>
+            <div class="lad-card-desc">We'll charm our way to the top!</div>
           </div>
-          <div class="album-panel" id="panel-experts">
-            <div class="album-pair">
-              <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/ABBEY%20ROAD%20BEETLES%20COVER.png" alt="Abbey Road"></div>
-              <div class="album-card"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/REVOLVER%20ALBUM%20COVER.png" alt="Revolver"></div>
-            </div>
+          <div class="lad-card" id="card-quiet" onclick="chooseLad('quiet')">
+            <img id="lad-quiet" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-quiet-regular.png" alt="Quiet Lad">
+            <div class="lad-card-name">THE QUIET ONE</div>
+            <div class="pick-me-bubble">Pick me love!</div>
+            <div class="lad-card-desc">Silence speaks volumes!</div>
+          </div>
+          <div class="lad-card" id="card-funny" onclick="chooseLad('funny')">
+            <img id="lad-funny" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-funny-regular.png" alt="Funny Lad">
+            <div class="lad-card-name">THE FUNNY ONE</div>
+            <div class="pick-me-bubble">Pick me love!</div>
+            <div class="lad-card-desc">Laughter is the best lesson!</div>
           </div>
         </div>
 
-        <!-- RITA figure bottom right -->
-        <div id="rita-figure">
-          <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/rita_beatcorps_clean.png" alt="Lovely Rita">
+        <!-- SCOREBOARD -->
+        <div id="scoreboard">
+          <div class="score-cell">
+            <div class="score-lad-name">SMART</div>
+            <div class="score-value" id="score-smart">0</div>
+            <div class="score-label">WINS</div>
+          </div>
+          <div class="score-cell">
+            <div class="score-lad-name">CUTE</div>
+            <div class="score-value" id="score-cute">0</div>
+            <div class="score-label">WINS</div>
+          </div>
+          <div class="score-cell">
+            <div class="score-lad-name">QUIET</div>
+            <div class="score-value" id="score-quiet">0</div>
+            <div class="score-label">WINS</div>
+          </div>
+          <div class="score-cell">
+            <div class="score-lad-name">FUNNY</div>
+            <div class="score-value" id="score-funny">0</div>
+            <div class="score-label">WINS</div>
+          </div>
         </div>
       </div>
 
     </div><!-- end scroll-body -->
   </div><!-- end phone-scroll -->
 
-  <!-- NAV BAR — 3 buttons -->
+  <!-- NAV BAR -->
   <nav id="nav-bar">
     <button class="nav-btn" onclick="toggleMute()">
       <span class="nav-icon" id="sound-icon">🔊</span>
@@ -557,17 +484,98 @@ body {
 <script>
 const BASE = 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/';
 
-const LADS = {
+const LADS_IMG = {
   regular:{ smart:BASE+'lad-smart-regular.png', cute:BASE+'lad-cute-regular.png', quiet:BASE+'lad-quiet-regular.png', funny:BASE+'lad-funny-regular.png' },
   pepper:{  smart:BASE+'lad-smart-pepper.png',  cute:BASE+'lad-cute-abbey.png',   quiet:BASE+'lad-quiet-pepper.png',  funny:BASE+'lad-funny-abbey.png' },
   abbey:{   smart:BASE+'lad-smart-abbey.png',   cute:BASE+'lad-cute-abbey.png',   quiet:BASE+'lad-quiet-abbey.png',   funny:BASE+'lad-funny-abbey.png' }
 };
-const OUTFIT_MAP = { youngsters:'regular', grownups:'pepper', experts:'abbey' };
-const DYN_LABELS = { youngsters:'For Youngsters', grownups:'For Grown Ups', experts:'For Experts' };
+
+const LAD_QUOTES = {
+  smart: "Together we shall be brilliant!",
+  cute:  "We will charm our way to the top!",
+  quiet: "Silence speaks volumes!",
+  funny: "Laughter is the best lesson!"
+};
 
 let listening=false, recognition=null, playlistOpen=false, muteState=false;
+let activeLevel='youngsters', chosenLad=null, spinInterval=null, isSpinning=false;
 
-// Rita speech
+// ===== SPIN LADS =====
+function spinLads() {
+  if(isSpinning) return;
+  isSpinning = true;
+  const lads = ['smart','cute','quiet','funny'];
+  let idx = 0;
+  let speed = 80;
+  let ticks = 0;
+  const totalTicks = 18 + Math.floor(Math.random()*10);
+
+  // Clear previous highlights
+  lads.forEach(l => {
+    document.getElementById('card-'+l).classList.remove('highlighted','chosen');
+  });
+
+  // Play a little beep sequence
+  playSpinSound();
+
+  spinInterval = setInterval(()=>{
+    lads.forEach(l => document.getElementById('card-'+l).classList.remove('highlighted'));
+    document.getElementById('card-'+lads[idx%4]).classList.add('highlighted');
+    idx++;
+    ticks++;
+
+    if(ticks >= totalTicks) {
+      clearInterval(spinInterval);
+      isSpinning = false;
+      const winner = lads[(idx-1)%4];
+      landOnLad(winner);
+    }
+  }, speed);
+}
+
+function landOnLad(lad) {
+  const lads = ['smart','cute','quiet','funny'];
+  lads.forEach(l => document.getElementById('card-'+l).classList.remove('highlighted'));
+  document.getElementById('card-'+lad).classList.add('chosen');
+  chosenLad = lad;
+
+  const names = { smart:"Smart Lad", cute:"Cute Lad", quiet:"Quiet Lad", funny:"Funny Lad" };
+  const msg = "You got " + names[lad] + " love! " + LAD_QUOTES[lad] + " Click on them to play or spin again!";
+  ritaSpeak(msg);
+  updateRitaDisplay("♪ " + msg);
+  toast('🎵 ' + names[lad] + ' is ready!');
+}
+
+function chooseLad(lad) {
+  chosenLad = lad;
+  localStorage.setItem('askLovelyRitaV4_lad', lad);
+  const names = { smart:"Smart Lad", cute:"Cute Lad", quiet:"Quiet Lad", funny:"Funny Lad" };
+  const msg = "Brilliant choice love! Off we go with " + names[lad] + "!";
+  ritaSpeak(msg);
+  updateRitaDisplay("♪ " + msg);
+  toast('🎵 Going with ' + names[lad] + '!');
+  setTimeout(()=>{
+    window.location.href = 'https://alexmonteiro65.github.io/ask-lovely-rita/src/page5_worlds.html?level='+activeLevel+'&lad='+lad;
+  }, 1200);
+}
+
+function playSpinSound() {
+  try {
+    const ctx = new (window.AudioContext||window.webkitAudioContext)();
+    let t = ctx.currentTime;
+    for(let i=0;i<6;i++){
+      const o=ctx.createOscillator();
+      const g=ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = 400 + i*80;
+      g.gain.setValueAtTime(0.08, t+i*0.07);
+      g.gain.exponentialRampToValueAtTime(0.001, t+i*0.07+0.06);
+      o.start(t+i*0.07); o.stop(t+i*0.07+0.07);
+    }
+  } catch(e){}
+}
+
+// ===== RITA SPEECH =====
 function ritaSpeak(text) {
   if(muteState || !window.speechSynthesis) return;
   window.speechSynthesis.cancel();
@@ -581,17 +589,28 @@ function ritaSpeak(text) {
   window.speechSynthesis.speak(u);
 }
 
-// Greeting on page load
+function updateRitaDisplay(text) {
+  document.getElementById('rita-response-text').textContent = text;
+}
+
+// ===== LOAD =====
 window.addEventListener('load', ()=>{
-  // Init BeatCoins
+  // BeatCoins
   const bc = localStorage.getItem('askLovelyRitaV4_bc') || 25000;
   document.getElementById('bc-display').textContent = Number(bc).toLocaleString();
-  // Set level from localStorage
-  const savedLevel = localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
-  setTheme(savedLevel, null);
-  // Rita greets
-  const greeting = "Hello love! Welcome to Ask Lovely Rita! Ask me anything, listen to a song, or pick a level and lets play! What shall we do today?";
-  const speak = () => { ritaSpeak(greeting); updateRitaDisplay(greeting); };
+  // Mute
+  muteState = localStorage.getItem('askLovelyRitaV4_mute') === '1';
+  document.getElementById('sound-icon').textContent = muteState ? '🔇' : '🔊';
+  // Level
+  activeLevel = localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
+  // Scores
+  const sc = JSON.parse(localStorage.getItem('askLovelyRitaV4_scores')||'{}');
+  ['smart','cute','quiet','funny'].forEach(l=>{
+    document.getElementById('score-'+l).textContent = sc[l]||0;
+  });
+  // Greeting
+  const greeting = "Hello love! Welcome to Ask Lovely Rita! Press the button to pick your Lad companion or just tap the one you fancy. Lets get started!";
+  const speak = () => { if(!muteState){ ritaSpeak(greeting); } updateRitaDisplay("♪ " + greeting); };
   if(window.speechSynthesis.getVoices().length > 0) {
     setTimeout(speak, 800);
   } else {
@@ -599,45 +618,7 @@ window.addEventListener('load', ()=>{
   }
 });
 
-function setTheme(t, tabEl) {
-  const phone = document.getElementById('phone');
-  phone.className = 'theme-'+t;
-  document.querySelectorAll('.level-tab').forEach(e=>e.classList.remove('active'));
-  if(tabEl) {
-    activeLevel = t;
-    tabEl.classList.add('active');
-    const responses = {
-      youngsters: "Wonderful! Youngsters level it is! Lets have some fun love!",
-      grownups:   "Lovely choice! Ready to level up love? Lets go!",
-      experts:    "Ooh a brave one! Expert level love! I like your style!"
-    };
-    const msg = responses[t];
-    ritaSpeak(msg);
-    updateRitaDisplay(msg);
-    localStorage.setItem('askLovelyRitaV4_level', t);
-    toast('🎵 Loading games...');
-    setTimeout(()=>{ window.location.href='https://alexmonteiro65.github.io/ask-lovely-rita/src/page2_tictactoe.html?level='+t; }, 1200);
-  } else {
-    // init — set active tab
-    activeLevel = t;
-    const m={youngsters:0,grownups:1,experts:2};
-    document.querySelectorAll('.level-tab')[m[t]]?.classList.add('active');
-  }
-  // Outfit
-  const outfit = OUTFIT_MAP[t];
-  ['smart','cute','quiet','funny'].forEach(lad=>document.getElementById('lad-'+lad).src=LADS[outfit][lad]);
-  // Albums
-  document.querySelectorAll('.album-panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('panel-'+t)?.classList.add('active');
-  document.getElementById('dyn-label').textContent = DYN_LABELS[t];
-  setTimeout(()=>{
-    document.querySelectorAll('#panel-'+t+' .album-card').forEach(c=>{
-      c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake');
-      setTimeout(()=>c.classList.remove('shake'),600);
-    });
-  },50);
-}
-
+// ===== MIC =====
 function toggleMic() {
   if(listening){ stopListening(); return; }
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -648,7 +629,7 @@ function toggleMic() {
   recognition.onend=()=>{ if(listening) stopListening(); };
   recognition.start(); listening=true;
   document.getElementById('mic-btn').style.opacity='0.5';
-  ritaSpeak("Brilliant! Ask away love! I'm all ears!");
+  ritaSpeak("Brilliant! Ask away love! Im all ears!");
   toast('🎤 Listening... speak now');
 }
 function stopListening() {
@@ -657,10 +638,7 @@ function stopListening() {
   document.getElementById('mic-btn').style.opacity='1';
 }
 
-function updateRitaDisplay(text) {
-  document.getElementById('rita-response-text').textContent = text;
-}
-
+// ===== ASK RITA =====
 async function askRita() {
   const q = document.getElementById('rita-input').value.trim();
   if(!q) return;
@@ -669,9 +647,9 @@ async function askRita() {
   toast('\u266a Rita is thinking...');
   try {
     const resp = await fetch("https://empty-leaf-6e4b.alexmonteironeto.workers.dev/", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ question: q })
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({ question: q })
     });
     const data = await resp.json();
     const answer = data.answer;
@@ -687,16 +665,17 @@ async function askRita() {
   }
 }
 
-
+// ===== NAV =====
 function goHome() {
   document.getElementById('phone-scroll').scrollTop=0;
   toast('🏠 Home!');
 }
 
 function goNext() {
-  const msg = "Off we go love! Let the games begin!";
-  ritaSpeak(msg); updateRitaDisplay(msg);
-  setTimeout(()=>{ window.location.href='https://alexmonteiro65.github.io/ask-lovely-rita/src/page2_tictactoe.html?level='+activeLevel; }, 800);
+  const lad = chosenLad || localStorage.getItem('askLovelyRitaV4_lad') || 'smart';
+  const msg = "Off we go love! Let the adventure begin!";
+  ritaSpeak(msg); updateRitaDisplay("♪ " + msg);
+  setTimeout(()=>{ window.location.href='https://alexmonteiro65.github.io/ask-lovely-rita/src/page5_worlds.html?level='+activeLevel+'&lad='+lad; }, 800);
 }
 
 function toggleMute() {
@@ -705,17 +684,18 @@ function toggleMute() {
   document.getElementById('sound-icon').textContent=muteState?'🔇':'🔊';
   if(muteState) {
     const msg = "Going quietly love! I will be here when you are ready!";
-    updateRitaDisplay(msg);
+    updateRitaDisplay("♪ " + msg);
     ritaSpeak(msg);
     setTimeout(()=>window.speechSynthesis&&window.speechSynthesis.cancel(), 3000);
     toast('🔇 Going quietly...');
   } else {
     const msg = "Hello love! I am back! Let us make some music magic!";
-    setTimeout(()=>{ ritaSpeak(msg); updateRitaDisplay(msg); }, 200);
+    setTimeout(()=>{ ritaSpeak(msg); updateRitaDisplay("♪ " + msg); }, 200);
     toast('🔊 Sound on!');
   }
 }
 
+// ===== PLAYLIST =====
 const PLAYLIST = [
   BASE+'Beatles%20Rap%20-%20Part%201.mp3',
   BASE+'Beatles%20Rap%20-%20Part%202.mp3',
@@ -723,8 +703,7 @@ const PLAYLIST = [
   BASE+'Beatles%20Rap%201%20part%20B.mp3',
   BASE+'Beatles%20Rap%201%20x%20Beatles%20Rap%201%20part%20B%20(Mashup).mp3'
 ];
-let audio = null;
-let currentTrack = -1;
+let audio=null, currentTrack=-1;
 
 function togglePlaylist() {
   playlistOpen=!playlistOpen;
@@ -733,48 +712,39 @@ function togglePlaylist() {
 }
 
 function playTrack(i) {
-  // Stop current if playing
-  if(audio) { audio.pause(); audio.currentTime=0; }
-  // Reset all icons
-  for(let j=0;j<6;j++) { const el=document.getElementById('icon-'+j); if(el) el.textContent='▶'; document.querySelectorAll('.pl-track')[j]?.classList.remove('playing'); }
-  // If same track clicked, toggle off
-  if(currentTrack===i) { currentTrack=-1; audio=null; return; }
+  if(audio){ audio.pause(); audio.currentTime=0; }
+  for(let j=0;j<5;j++){
+    const el=document.getElementById('icon-'+j);
+    if(el) el.textContent='▶';
+    document.querySelectorAll('.pl-track')[j]?.classList.remove('playing');
+  }
+  if(currentTrack===i){ currentTrack=-1; audio=null; return; }
   currentTrack=i;
   audio=new Audio(PLAYLIST[i]);
   audio.volume=0.7;
-  audio.onended=()=>{ document.getElementById('icon-'+i).textContent='▶'; document.querySelectorAll('.pl-track')[i]?.classList.remove('playing'); currentTrack=-1; };
+  audio.onended=()=>{
+    document.getElementById('icon-'+i).textContent='▶';
+    document.querySelectorAll('.pl-track')[i]?.classList.remove('playing');
+    currentTrack=-1;
+  };
   audio.play().catch(()=>toast('⚠️ Tap again to play'));
   document.getElementById('icon-'+i).textContent='⏸';
   document.querySelectorAll('.pl-track')[i]?.classList.add('playing');
-  toast('🎵 Playing: '+['Part 1','Part 2','Mashup 1','Rap 1','Part B','Mashup 2'][i]);
 }
 
-let activeLevel = 'youngsters';
-
-function previewAlbums(t) {
-  document.querySelectorAll('.album-panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('panel-'+t)?.classList.add('active');
-  document.getElementById('dyn-label').textContent = DYN_LABELS[t];
-}
-
-function restoreAlbums() {
-  document.querySelectorAll('.album-panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('panel-'+activeLevel)?.classList.add('active');
-  document.getElementById('dyn-label').textContent = DYN_LABELS[activeLevel];
-}
-
-function toast(msg) {
-  if(!msg) return;
-  const t=document.getElementById('toast'); t.textContent=msg; t.style.opacity='1';
-  clearTimeout(t._t); t._t=setTimeout(()=>t.style.opacity='0',3000);
-}
-
+// ===== DEVICE PREVIEW =====
 function setDevice(w,h,name) {
   const phone=document.getElementById('phone');
   phone.style.width=w+'px'; phone.style.height=h+'px';
   document.getElementById('size-label').textContent=name+' · '+w+' × '+h+' px';
   document.querySelectorAll('.dev-btn').forEach(b=>b.classList.remove('active'));
   event.target.classList.add('active');
+}
+
+function toast(msg) {
+  if(!msg) return;
+  const t=document.getElementById('toast'); t.textContent=msg; t.style.opacity='1';
+  clearTimeout(t._t); t._t=setTimeout(()=>t.style.opacity='0',3000);
 }
 </script>
 </body>
