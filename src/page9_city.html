@@ -140,7 +140,7 @@
         <div class="stat-card"><div class="stat-label">City</div><div class="stat-val" id="q-num-val">0/8</div></div>
       </div>
       <div id="city-card">
-        <img id="city-emoji" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/penny_lane_image.png" alt="Penny Lane" style="width:100%;max-width:260px;border-radius:12px;display:block;margin:0 auto 6px;"/>
+        <div id="city-emoji" style="text-align:center;margin-bottom:6px;display:none;"></div>
         <div id="city-name">Press Start!</div>
         <div id="facts-label">Which fact is FALSE?</div>
         <div id="facts-list"></div>
@@ -280,14 +280,18 @@ function resetGame(){
   if($('facts-list')) $('facts-list').innerHTML='';
   if($('result-panel')) $('result-panel').classList.remove('show');
   if($('start-btn')){ $('start-btn').style.display='block'; $('start-btn').textContent='🚌 Explore Cities!'; $('start-btn').onclick=startGame; }
-  const ce=$('city-emoji'); if(ce) ce.style.display='block';
+  const ce=$('city-emoji');
+  if(ce){
+    ce.innerHTML='<img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/penny_lane_image.png" style="width:100%;max-width:260px;border-radius:12px;display:block;margin:0 auto"/>';
+    ce.style.display='block';
+  }
   if($('next-btn')) $('next-btn').style.display='none';
 }
 
 function startGame(){
   S.gameActive=true;
   document.getElementById('start-btn').style.display='none';
-  document.getElementById('city-emoji').style.display='none';
+  const ceStart=document.getElementById('city-emoji'); if(ceStart){ceStart.innerHTML='';ceStart.style.display='none';}
   loadCity();
 }
 
@@ -298,11 +302,12 @@ function loadCity(){
   S.answered=false;
   // Show city image
   const cityEmojiEl = document.getElementById('city-emoji');
-  if(cityEmojiEl) {
+  if(cityEmojiEl){
     if(S.level==='youngsters' && city.photo){
-      cityEmojiEl.innerHTML='<img src="'+city.photo+'" style="width:100%;max-width:240px;border-radius:12px;display:block;margin:0 auto 6px" onerror="this.style.display=\'none\'"/>';
+      cityEmojiEl.innerHTML='<img src="'+city.photo+'" style="width:100%;max-width:200px;border-radius:12px;display:block;margin:0 auto"/>';
       cityEmojiEl.style.display='block';
     } else {
+      cityEmojiEl.innerHTML='';
       cityEmojiEl.style.display='none';
     }
   }
@@ -345,8 +350,8 @@ function checkFact(idx,city){
     // Show image after answer for grown ups/experts
     if(S.level!=='youngsters' && city.photo){
       const ce=document.getElementById('city-emoji');
-      if(ce){ce.innerHTML='<img src="'+city.photo+'" style="width:100%;max-width:240px;border-radius:12px;display:block;margin:0 auto 6px"/>';ce.style.display='block';}
-      setTimeout(()=>{if(ce)ce.style.display='none';},3500);
+      if(ce){ce.innerHTML='<img src="'+city.photo+'" style="width:100%;max-width:200px;border-radius:12px;display:block;margin:0 auto"/>';ce.style.display='block';
+      setTimeout(()=>{ce.innerHTML='';ce.style.display='none';},3500);}
     }
     setTimeout(()=>speak(pick(RITA_CORRECT)+' '+city.explain),300);
   } else {
@@ -360,8 +365,8 @@ function checkFact(idx,city){
     // Show image after answer for grown ups/experts
     if(S.level!=='youngsters' && city.photo){
       const ce=document.getElementById('city-emoji');
-      if(ce){ce.innerHTML='<img src="'+city.photo+'" style="width:100%;max-width:240px;border-radius:12px;display:block;margin:0 auto 6px"/>';ce.style.display='block';}
-      setTimeout(()=>{if(ce)ce.style.display='none';},3500);
+      if(ce){ce.innerHTML='<img src="'+city.photo+'" style="width:100%;max-width:200px;border-radius:12px;display:block;margin:0 auto"/>';ce.style.display='block';
+      setTimeout(()=>{ce.innerHTML='';ce.style.display='none';},3500);}
     }
     setTimeout(()=>speak('Not quite love! '+city.explain),300);
   }
