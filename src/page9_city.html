@@ -343,6 +343,7 @@ function checkFact(idx,city){
     items[idx].classList.add('correct');
     const earned=LEVEL_CFG[S.level].bonus;
     S.score+=earned;S.beatcoins+=earned;
+  saveLadBC(earned); postGlobalScore(earned);saveLadBC(earned);postGlobalScore(earned);
     document.getElementById('score-val').textContent=S.score;
     document.getElementById('bc-val').textContent=S.beatcoins;
     saveStorage();
@@ -391,7 +392,8 @@ function nextCity(){
 function finishGame(){
   S.gameActive=false;
   const bonus=LEVEL_CFG[S.level].bonusAll;
-  S.beatcoins+=bonus;S.score+=bonus;
+  S.beatcoins+=bonus;S.score+=bonus;saveLadBC(bonus);postGlobalScore(bonus);
+  saveLadBC(bonus); postGlobalScore(bonus);
   document.getElementById('bc-val').textContent=S.beatcoins;
   document.getElementById('score-val').textContent=S.score;
   saveStorage();
