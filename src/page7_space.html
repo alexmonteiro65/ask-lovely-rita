@@ -494,7 +494,8 @@ function answerQuestion(idx,q) {
   if(!isCorrect) btns[q.correct].classList.add('correct');
 
   const earned=isCorrect?LEVEL_CFG[S.level].bonus:0;
-  if(isCorrect){S.score+=earned;S.beatcoins+=earned;}
+  if(isCorrect){S.score+=earned;S.beatcoins+=earned;
+  saveLadBC(earned); postGlobalScore(earned);saveLadBC(earned);postGlobalScore(earned);}
   document.getElementById('score-val').textContent=S.score;
   document.getElementById('bc-val').textContent=S.beatcoins;
   if(isCorrect)saveStorage();
