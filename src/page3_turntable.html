@@ -1064,6 +1064,8 @@ function goHome() {
 }
 
 function goForward() {
+  // If came from a world bonus, go to next game in that world
+  if (S.fromWorld === 'india') { window.location.href = 'page8_worldbeats.html?level=' + S.level + '&from=turntable'; return; }
   window.location.href = 'page4_vw_game.html';
 }
 
