@@ -858,6 +858,7 @@ function checkWord() {
     S.wordComplete = true;
     const earned = LEVEL_CFG[S.level].bonusCorrect;
     S.score += earned; S.beatcoins += earned;
+  saveLadBC(earned); postGlobalScore(earned);
     document.getElementById('score-val').textContent = S.score;
     document.getElementById('bc-val').textContent = S.beatcoins;
     saveStorage();
@@ -1001,6 +1002,7 @@ function finishGame() {
   S.gameActive = false;
   const bonus = LEVEL_CFG[S.level].bonusAll;
   S.beatcoins+=bonus; S.score+=bonus;
+  saveLadBC(bonus); postGlobalScore(bonus);
   document.getElementById('bc-val').textContent = S.beatcoins;
   document.getElementById('score-val').textContent = S.score;
   saveStorage();
