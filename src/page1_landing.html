@@ -777,10 +777,12 @@ function loadLadScores() {
     .catch(() => {}); // silently fail - local scores already shown
 }
 
-// Refresh scores when tab becomes visible
+// Refresh scores when page becomes visible or focused
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) loadLadScores();
 });
+window.addEventListener('pageshow', () => loadLadScores());
+window.addEventListener('focus', () => loadLadScores());
 
 function toast(msg) {
   const t=document.getElementById('toast'); t.textContent=msg; t.style.opacity='1';
