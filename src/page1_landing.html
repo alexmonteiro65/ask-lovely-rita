@@ -178,7 +178,7 @@ body {
 /* OUTER NEON OVAL */
 #lad-section::before {
   content:''; position:absolute; z-index:-1;
-  width:100%; height:295px;
+  width:100%; height:330px;
   top:0; left:0;
   border-radius:50%;
   border:2.5px solid var(--ring-color);
@@ -188,7 +188,7 @@ body {
 /* INNER ACCENT OVAL */
 #lad-section::after {
   content:''; position:absolute; z-index:-1;
-  width:78%; height:262px;
+  width:78%; height:290px;
   top:16px; left:11%;
   border-radius:50%;
   border:1.5px solid var(--ring-color2);
@@ -202,7 +202,7 @@ body {
 #lad-cards {
   display:grid;
   grid-template-columns:1fr 1.15fr 1fr;
-  grid-template-rows:140px 140px;
+  grid-template-rows:155px 155px;
   gap:8px; width:100%;
   position:relative; z-index:1;
 }
@@ -214,29 +214,30 @@ body {
 
 /* LAD CORNER CARDS */
 .lad-card {
-  background:var(--card-bg);
-  border:2.5px solid var(--card-border);
+  background:transparent;
+  border:none;
   border-radius:14px; padding:9px 5px 7px;
   display:flex; flex-direction:column; align-items:center;
   gap:4px; position:relative;
-  box-shadow:0 0 12px rgba(184,134,11,.22),inset 0 0 14px rgba(0,0,0,.55);
-  transition:all 0.2s; overflow:visible; cursor:default;
+  box-shadow:none;
+  transition:transform .35s ease, box-shadow .3s, opacity .35s;
+  overflow:visible; cursor:default;
 }
 .lad-card.clickable { cursor:pointer; }
-.lad-card.clickable:hover { border-color:var(--accent); box-shadow:0 0 20px var(--glow); background:rgba(255,255,255,.08); }
+.lad-card.clickable:hover { box-shadow:0 0 18px var(--glow); background:rgba(255,255,255,.07); }
 .lad-card.highlighted {
-  border-color:var(--accent) !important;
   box-shadow:0 0 24px var(--glow),0 0 48px var(--glow) !important;
-  background:rgba(255,255,255,.14) !important;
+  background:rgba(255,255,255,.12) !important;
 }
 .lad-card.chosen {
-  border-color:var(--accent2) !important;
-  box-shadow:0 0 30px var(--accent2),0 0 60px rgba(255,222,89,.25) !important;
+  transform:scale(1.12);
+  box-shadow:0 0 38px var(--glow),0 0 75px var(--glow) !important;
+  background:rgba(255,255,255,.16) !important;
   cursor:pointer;
 }
-.lad-card.locked { opacity:0.34; cursor:not-allowed; }
-.lad-card img { width:52px; height:52px; object-fit:contain; flex-shrink:0; }
-.lad-card-name { font-size:8px; font-weight:bold; color:#fff !important; letter-spacing:.8px; text-align:center; line-height:1.2; }
+.lad-card.locked { opacity:0.18; cursor:not-allowed; }
+.lad-card img { width:63px; height:63px; object-fit:contain; flex-shrink:0; }
+.lad-card-name { font-size:10px; font-weight:bold; color:#fff !important; letter-spacing:.8px; text-align:center; line-height:1.2; }
 
 /* Score bar — number only, no BC suffix */
 .lad-score-bar {
@@ -244,17 +245,17 @@ body {
   background:rgba(0,0,0,.38); border:1px solid rgba(255,255,255,.1);
   border-radius:6px; padding:3px 5px; width:calc(100% - 4px);
 }
-.lad-score-val { font-size:13px; font-weight:bold; color:var(--accent); letter-spacing:.5px; line-height:1; }
+.lad-score-val { font-size:16px; font-weight:bold; color:var(--accent); letter-spacing:.5px; line-height:1; }
 
 /* "BeatCoins" badge (replaces old "Pick me!") */
 .pick-me-bubble {
-  font-size:7.5px; color:#fff !important;
+  font-size:9px; color:#fff !important;
   background:var(--btn-grad); border-radius:6px;
-  padding:2px 6px; text-align:center; letter-spacing:.3px;
+  padding:2px 8px; text-align:center; letter-spacing:.3px;
 }
 
 /* Diamond gems at card corners */
-.gem { position:absolute; width:9px; height:9px; background:var(--gem-bg); clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%); box-shadow:0 0 8px var(--gem-glow); z-index:2; }
+.gem { display:none; }
 .gem-tl { top:3px; left:3px; } .gem-tr { top:3px; right:3px; }
 .gem-bl { bottom:3px; left:3px; } .gem-br { bottom:3px; right:3px; }
 
@@ -271,7 +272,7 @@ body {
 }
 #rita-center::before { display:none; }
 #rita-center::after  { display:none; }
-#rita-avatar { width:auto; height:155px; object-fit:contain; filter:drop-shadow(0 0 10px rgba(255,255,255,.25)) drop-shadow(0 4px 14px rgba(0,0,0,.55)); position:relative; z-index:1; }
+#rita-avatar { width:auto; height:175px; object-fit:contain; filter:drop-shadow(0 0 10px rgba(255,255,255,.25)) drop-shadow(0 4px 14px rgba(0,0,0,.55)); position:relative; z-index:1; }
 .rita-center-name { font-size:11px; font-weight:bold; color:#ffd700; letter-spacing:1.3px; text-align:center; text-shadow:0 0 10px rgba(255,215,0,.7); }
 .rita-center-role { font-size:7.5px; color:rgba(255,255,255,.38); letter-spacing:.8px; text-align:center; }
 
@@ -388,7 +389,6 @@ body {
         <div class="pl-track" onclick="playTrack(1)"><span class="pl-track-num">2</span><span class="pl-track-name">Lads Rap — Part 2</span><span class="pl-track-icon" id="icon-1">▶</span></div>
         <div class="pl-track" onclick="playTrack(2)"><span class="pl-track-num">3</span><span class="pl-track-name">Lads Rap 1</span><span class="pl-track-icon" id="icon-2">▶</span></div>
         <div class="pl-track" onclick="playTrack(3)"><span class="pl-track-num">4</span><span class="pl-track-name">Lads Rap 1 — Part B</span><span class="pl-track-icon" id="icon-3">▶</span></div>
-        <div class="pl-track" onclick="playTrack(4)"><span class="pl-track-num">5</span><span class="pl-track-name">Lads Rap 1 × Part B Mashup</span><span class="pl-track-icon" id="icon-4">▶</span></div>
       </div>
     </div>
 
@@ -493,7 +493,7 @@ const BASE = 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/m
 
 const LADS_IMG = {
   regular:{ smart:'lad-smart-regular.png', cute:'lad-cute-regular.png', quiet:'lad-quiet-regular.png', funny:'lad-funny-regular.png' },
-  pepper:{  smart:'lad-smart-pepper.png',  cute:'lad-cute-abbey.png',   quiet:'lad-quiet-pepper.png',  funny:'lad-funny-abbey.png' },
+  pepper:{  smart:'lad-smart-pepper.png',  cute:'lad-cute-pepper.png',  quiet:'lad-quiet-pepper.png',  funny:'lad-funny-pepper.png' },
   abbey:{   smart:'lad-smart-abbey.png',   cute:'lad-cute-abbey.png',   quiet:'lad-quiet-abbey.png',   funny:'lad-funny-abbey.png' }
 };
 const OUTFIT_MAP = { youngsters:'regular', grownups:'pepper', experts:'abbey' };
@@ -558,7 +558,6 @@ function spinLads() {
       updateRitaDisplay("♪ " + msg);
       ritaSpeak(msg);
       toast('🎵 ' + LAD_NAMES[winner] + ' is your companion!');
-      setTimeout(clearRitaDisplay, 7000);
     }
   }, 80);
 }
@@ -665,13 +664,11 @@ async function askRita() {
     updateRitaDisplay("♪ " + data.answer);
     ritaSpeak(data.answer);
     document.getElementById('rita-input').value = '';
-    setTimeout(clearRitaDisplay, 8000);
   } catch(err) {
     const ans = "I am having a little trouble connecting love! Please try again in a moment.";
     updateRitaDisplay("♪ " + ans);
     document.getElementById('rita-input').value = '';
     setTimeout(()=>ritaSpeak(ans), 400);
-    setTimeout(clearRitaDisplay, 8000);
   }
 }
 
@@ -704,8 +701,7 @@ const PLAYLIST = [
   BASE+'Beatles%20Rap%20-%20Part%201.mp3',
   BASE+'Beatles%20Rap%20-%20Part%202.mp3',
   BASE+'Beatles%20Rap%201.mp3',
-  BASE+'Beatles%20Rap%201%20part%20B.mp3',
-  BASE+'Beatles%20Rap%201%20x%20Beatles%20Rap%201%20part%20B%20(Mashup).mp3'
+  BASE+'Beatles%20Rap%201%20part%20B.mp3'
 ];
 let audio=null, currentTrack=-1;
 
@@ -716,7 +712,7 @@ function togglePlaylist() {
 }
 function playTrack(i) {
   if(audio){ audio.pause(); audio.currentTime=0; }
-  for(let j=0;j<5;j++){
+  for(let j=0;j<4;j++){
     const el=document.getElementById('icon-'+j);
     if(el) el.textContent='▶';
     document.querySelectorAll('.pl-track')[j]?.classList.remove('playing');
