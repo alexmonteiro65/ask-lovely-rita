@@ -199,9 +199,9 @@
         src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/peaceful_lad_grownups.png" alt="Quiet Lad" onerror="this.style.display='none'"/>
     </div>
     <nav id="nav-bar">
-      <button class="nav-btn" onclick="goBack()"><span class="nav-icon">◀️</span><span>Back</span></button>
       <button class="nav-btn nav-home" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
-      <button class="nav-btn" onclick="goForward()"><span class="nav-icon">▶️</span><span>Next</span></button>
+      <button class="nav-btn" onclick="goChooseWorld()"><span class="nav-icon">🌍</span><span>Choose World</span></button>
+      <button class="nav-btn" onclick="goNextPage()"><span class="nav-icon">▶️</span><span>Next Page</span></button>
     </nav>
   </div>
 </div>
@@ -477,6 +477,8 @@ function goToBonusGame() {
 }
 
 function goBack(){window.location.href='https://alexmonteiro65.github.io/ask-lovely-rita/src/page7_space.html';}
+function goChooseWorld(){ window.location.href='page5_worlds.html'; }
+function goNextPage(){ var lv=localStorage.getItem('askLovelyRitaV4_level')||'youngsters'; window.location.href='page8_worldbeats.html?level='+lv; }
 function goHome(){window.location.href='page1_landing.html';}
 function goForward(){window.location.href='page9_city.html';}
 
