@@ -277,9 +277,9 @@
         onerror="this.style.display='none'"/>
     </div>
     <nav id="nav-bar">
-      <button class="nav-btn" onclick="goBack()"><span class="nav-icon">◀️</span><span>Back</span></button>
       <button class="nav-btn nav-home" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
-      <button class="nav-btn" onclick="goForward()"><span class="nav-icon">▶️</span><span>Next</span></button>
+      <button class="nav-btn" onclick="goChooseWorld()"><span class="nav-icon">🌍</span><span>Choose World</span></button>
+      <button class="nav-btn" onclick="goNextPage()"><span class="nav-icon">▶️</span><span>Next Page</span></button>
     </nav>
   </div>
 </div>
@@ -600,6 +600,8 @@ function goToBonusGame() {
 }
 
 function goBack(){window.location.href='page5_worlds.html';}
+function goChooseWorld(){ window.location.href='page5_worlds.html'; }
+function goNextPage(){ var lv=localStorage.getItem('askLovelyRitaV4_level')||'youngsters'; window.location.href='page3b_cosmicflash.html?level='+lv+'&from=space'; }
 function goHome(){window.location.href='page1_landing.html';}
 function goForward(){window.location.href='page8_india.html';}
 

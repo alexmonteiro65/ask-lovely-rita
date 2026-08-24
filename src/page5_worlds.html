@@ -932,13 +932,10 @@
         <span class="nav-icon">🏠</span><span>Home</span>
       </button>
       <button class="nav-btn" onclick="goStore()">
-        <span class="nav-icon">🛒</span><span>Store</span>
+        <span class="nav-icon">🛒</span><span>Shop</span>
       </button>
       <button class="nav-btn" onclick="goScore()">
-        <span class="nav-icon">🏆</span><span>Score</span>
-      </button>
-      <button class="nav-btn" onclick="goForward()">
-        <span class="nav-icon">▶️</span><span>Next</span>
+        <span class="nav-icon">👤</span><span>Profile</span>
       </button>
     </nav>
 
@@ -1197,6 +1194,14 @@ function enterWorld() {
 // ════════════════════════════════
 
 function goBack()    { window.location.href = 'page1_landing.html'; }
+
+// Lock all worlds on load — spin required every visit
+window.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.world-card').forEach(function(card) {
+    card.classList.add('spin-locked');
+    card.classList.remove('spin-chosen');
+  });
+});
 function goHome()    { window.location.href = 'page1_landing.html'; }
 function goStore()   { window.location.href='page_shop.html'; }
 function goScore()   { window.location.href='page_adventures.html'; }

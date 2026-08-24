@@ -478,8 +478,8 @@ body {
     <button class="nav-btn nav-home" onclick="goHome()">
       <span class="nav-icon">🏠</span><span>Home</span>
     </button>
-    <button class="nav-btn" onclick="goNext()">
-      <span class="nav-icon">▶️</span><span>Next</span>
+    <button class="nav-btn" onclick="goVideo()">
+      <span class="nav-icon">🎬</span><span>Video</span>
     </button>
   </nav>
 </div>
@@ -672,6 +672,8 @@ async function askRita() {
   }
 }
 
+function goVideo() { toast('🎬 Video content coming soon love!'); }
+function goVideo(){ toast('🎬 Video content coming soon love!'); }
 function goHome() {
   document.getElementById('phone-scroll').scrollTop=0;
   toast('🏠 Home!');
