@@ -86,7 +86,7 @@
     display: flex; flex-direction: column; align-items: center;
     gap: 3px; background: none; border: none;
     color: rgba(255,255,255,.5); cursor: pointer;
-    padding: 5px 14px; border-radius: 12px;
+    padding: 5px 9px; border-radius: 12px;
     transition: all .2s; font-size: 10px;
   }
   .nav-btn:hover { background: rgba(255,255,255,.08); color:#fff; }
@@ -931,6 +931,12 @@
       <button class="nav-btn nav-home" onclick="goHome()">
         <span class="nav-icon">🏠</span><span>Home</span>
       </button>
+      <button class="nav-btn" onclick="goStore()">
+        <span class="nav-icon">🛒</span><span>Store</span>
+      </button>
+      <button class="nav-btn" onclick="goScore()">
+        <span class="nav-icon">🏆</span><span>Score</span>
+      </button>
       <button class="nav-btn" onclick="goForward()">
         <span class="nav-icon">▶️</span><span>Next</span>
       </button>
@@ -1192,6 +1198,8 @@ function enterWorld() {
 
 function goBack()    { window.location.href = 'page1_landing.html'; }
 function goHome()    { window.location.href = 'page1_landing.html'; }
+function goStore()   { toast('🛒 Store — coming soon love!'); }
+function goScore()   { toast('🏆 Score Board — coming soon love!'); }
 function goForward() { window.location.href = 'page10_rita.html'; }
 
 // ════════════════════════════════
