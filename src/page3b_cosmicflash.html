@@ -88,9 +88,8 @@ body{background:#0a0a0a;display:flex;flex-direction:column;align-items:center;mi
 </div>
 </div>
 <nav id="nav-bar">
-  <button class="nav-btn" onclick="goBack()"><span class="nav-icon">◀️</span><span>Back</span></button>
-  <button class="nav-btn" onclick="goBack()"><span class="nav-icon">🏠</span><span>Home</span></button>
-  <button class="nav-btn" onclick="goChooseWorld()"><span class="nav-icon">▶️</span><span>Next</span></button>
+  <button class="nav-btn nav-home" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
+  <button class="nav-btn" onclick="goChooseWorld()"><span class="nav-icon">🌍</span><span>Choose World</span></button>
 </nav>
 </div>
 </div>
@@ -213,6 +212,7 @@ function speak(text){
 function saveLadBC(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';const k='askLovelyRitaV4_bc_'+lad;localStorage.setItem(k,Number(localStorage.getItem(k)||0)+amount);const t=Number(localStorage.getItem('askLovelyRitaV4_bc')||25000);localStorage.setItem('askLovelyRitaV4_bc',t+amount);}
 function postGlobalScore(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';fetch('https://empty-leaf-6e4b.alexmonteironeto.workers.dev/score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lad,amount})}).catch(()=>{});}
 function goBack(){window.location.href='page7_space.html';}
+function goHome(){window.location.href='page1_landing.html';}
 function goChooseWorld(){window.location.href='page5_worlds.html';}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',3000);}
 
