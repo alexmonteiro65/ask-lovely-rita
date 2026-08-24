@@ -267,7 +267,7 @@
         <div id="bonus-area" style="display:none;margin-top:14px;text-align:center;">
           <div style="font-size:14px;font-weight:bold;color:#ffde59;margin-bottom:6px;">🎮 BONUS GAME UNLOCKED!</div>
           <div id="bonus-countdown" style="font-size:12px;color:rgba(255,255,255,0.7);margin-bottom:10px;"></div>
-          <button onclick="goToBonusGame()" style="background:linear-gradient(135deg,#a855f7,#1a0040);border:none;border-radius:20px;padding:12px 20px;color:#fff;font-weight:bold;font-size:13px;cursor:pointer;font-family:Georgia,serif;width:100%;">🎵 Play The Turntable!</button>
+          <button onclick="goToBonusGame()" style="background:linear-gradient(135deg,#a855f7,#1a0040);border:none;border-radius:20px;padding:12px 20px;color:#fff;font-weight:bold;font-size:13px;cursor:pointer;font-family:Georgia,serif;width:100%;">⚡ Play Cosmic Flash!</button>
         </div>
       </div>
     </div>
@@ -495,7 +495,7 @@ function answerQuestion(idx,q) {
 
   const earned=isCorrect?LEVEL_CFG[S.level].bonus:0;
   if(isCorrect){S.score+=earned;S.beatcoins+=earned;
-  saveLadBC(earned); postGlobalScore(earned);saveLadBC(earned);postGlobalScore(earned);}
+  saveLadBC(earned); postGlobalScore(earned);}
   document.getElementById('score-val').textContent=S.score;
   document.getElementById('bc-val').textContent=S.beatcoins;
   if(isCorrect)saveStorage();
@@ -581,7 +581,7 @@ function showBonusGame() {
   area.style.display = 'block';
   const msgs = {
     youngsters: "Stellar work love! The Turntable bonus game is yours! Going there in 5 seconds!",
-    grownups: "Magnificent darling! The Turntable bonus awaits! Off we go in 5 seconds!",
+    grownups: "Magnificent darling! Cosmic Flash bonus awaits! Off we go in 5 seconds!",
     experts: "Outstanding love! The Turntable is unlocked! Going there in 5 seconds!"
   };
   speak(msgs[S.level] || msgs.youngsters);
@@ -596,7 +596,7 @@ function showBonusGame() {
 }
 
 function goToBonusGame() {
-  window.location.href = 'page3_turntable.html?level=' + S.level + '&from=space';
+  window.location.href = 'page3b_cosmicflash.html?level=' + S.level + '&from=space';
 }
 
 function goBack(){window.location.href='page5_worlds.html';}
