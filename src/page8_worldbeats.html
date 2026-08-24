@@ -490,7 +490,7 @@ function finishGame(){
     const area = document.getElementById('bonus-area');
     if(area) {
       area.style.display='block';
-      area.innerHTML='<div style="font-size:14px;font-weight:bold;color:#ffde59;margin-bottom:8px;">🌍 Adventure Complete!</div><button onclick="window.location.href='page5_worlds.html'" style="background:linear-gradient(135deg,#ff6b35,#c8a96e);border:none;border-radius:20px;padding:12px 20px;color:#000;font-weight:bold;font-size:13px;cursor:pointer;font-family:Georgia,serif;width:100%;">🌍 Choose Another World!</button>';
+      area.innerHTML=`<div style="font-size:14px;font-weight:bold;color:#ffde59;margin-bottom:8px;">🌍 Adventure Complete!</div><button onclick="window.location.href='page5_worlds.html'" style="background:linear-gradient(135deg,#ff6b35,#c8a96e);border:none;border-radius:20px;padding:12px 20px;color:#000;font-weight:bold;font-size:13px;cursor:pointer;font-family:Georgia,serif;width:100%;">🌍 Choose Another World!</button>`;
     }
   }, 2000);
   celebrate(); speak(pick(RITA_COMPLETE));
