@@ -566,10 +566,10 @@ function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 function toast(msg){ const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000); }
 
 function goBack(){
-function goChooseWorld(){ window.location.href='page5_worlds.html'; }
   if(S.fromWorld==='india') { window.location.href='page8_india.html'; return; }
   window.location.href='page5_worlds.html';
 }
+function goChooseWorld(){ window.location.href='page5_worlds.html'; }
 function goHome()    { window.location.href='page1_landing.html'; }
 function goForward() { window.location.href='page5_worlds.html'; }
 </script>
