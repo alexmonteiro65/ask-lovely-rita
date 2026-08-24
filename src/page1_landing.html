@@ -262,24 +262,16 @@ body {
    RITA CENTRE CARD — spans both grid rows (288px tall)
    ═══════════════════════════════════════════════════════════════ */
 #rita-center {
-  background:linear-gradient(180deg,rgba(100,5,160,.52) 0%,rgba(40,0,90,.82) 100%);
+  background:transparent;
   border:none; border-radius:18px;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   gap:6px; padding:12px 6px; position:relative;
-  box-shadow:0 0 30px var(--rita-glow),0 0 65px rgba(255,60,200,.28),0 0 110px rgba(255,60,200,.10),inset 0 0 20px rgba(0,0,0,.45);
-  overflow:visible; transition:box-shadow .5s;
+  box-shadow:none;
+  overflow:visible;
 }
-#rita-center::before {
-  content:''; position:absolute; width:160%; height:115%;
-  border-radius:50%; border:1.5px solid rgba(255,80,220,.3);
-  top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none; z-index:-1;
-}
-#rita-center::after {
-  content:''; position:absolute; width:130%; height:95%;
-  border-radius:50%; border:1px solid rgba(255,160,50,.22);
-  top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none; z-index:-1;
-}
-#rita-avatar { width:90px; height:130px; object-fit:contain; filter:drop-shadow(0 0 14px rgba(255,100,240,.9)) drop-shadow(0 0 6px rgba(255,255,200,.35)); position:relative; z-index:1; }
+#rita-center::before { display:none; }
+#rita-center::after  { display:none; }
+#rita-avatar { width:auto; height:155px; object-fit:contain; filter:drop-shadow(0 0 10px rgba(255,255,255,.25)) drop-shadow(0 4px 14px rgba(0,0,0,.55)); position:relative; z-index:1; }
 .rita-center-name { font-size:11px; font-weight:bold; color:#ffd700; letter-spacing:1.3px; text-align:center; text-shadow:0 0 10px rgba(255,215,0,.7); }
 .rita-center-role { font-size:7.5px; color:rgba(255,255,255,.38); letter-spacing:.8px; text-align:center; }
 
@@ -317,13 +309,12 @@ body {
    ID rita-response-text preserved so JS works unchanged
    ═══════════════════════════════════════════════════════════════ */
 #rita-text-box {
-  background:var(--bg); border:1px solid var(--iborder);
-  border-radius:10px; padding:10px 14px; width:100%;
-  min-height:44px; display:flex; align-items:center;
-  transition:background .5s, border-color .5s;
+  background:transparent; border:none;
+  border-radius:0; padding:6px 4px; width:100%;
+  min-height:36px; display:flex; align-items:center;
 }
 #rita-response-text {
-  font-size:11px; color:#ddd; line-height:1.5; font-style:italic;
+  font-size:11px; color:rgba(255,255,255,.65); line-height:1.5; font-style:italic;
   width:100%; text-align:center;
 }
 
@@ -433,7 +424,7 @@ body {
 
           <div id="rita-center">
             <img id="rita-avatar"
-              src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/rita_beatcorps_clean.png"
+              src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/rita_apresentadora_clean.png"
               alt="Lovely Rita">
             <div class="rita-center-name">♪ LOVELY RITA</div>
             <div class="rita-center-role">YOUR HOSTESS</div>
@@ -527,10 +518,9 @@ function switchTheme(t) {
   const outfit = OUTFIT_MAP[t];
   LADS.forEach(l => { document.getElementById('lad-'+l).src = BASE + LADS_IMG[outfit][l]; });
   localStorage.setItem('askLovelyRitaV4_level', t);
-  // Explicitly sync rita-text-box background to theme (bypasses stacking context CSS var issue)
-  const bgMap = { youngsters:'#1a0040', grownups:'#1a1200', experts:'#0d0d1e' };
+  // Rita text box free-flows with page background — keep transparent
   const rtb = document.getElementById('rita-text-box');
-  if(rtb) rtb.style.background = bgMap[t] || '#1a0040';
+  if(rtb) rtb.style.background = 'transparent';
 }
 
 function spinLads() {
@@ -635,10 +625,9 @@ window.addEventListener('load', ()=>{
   document.getElementById('bc-display').textContent = bc.toLocaleString();
   loadLadScores();
   clearRitaDisplay();
-  // Sync rita-text-box background on first load
-  const bgMap0 = { youngsters:'#1a0040', grownups:'#1a1200', experts:'#0d0d1e' };
+  // Rita text box transparent on load
   const rtb0 = document.getElementById('rita-text-box');
-  if(rtb0) rtb0.style.background = bgMap0['youngsters'];
+  if(rtb0) rtb0.style.background = 'transparent';
   const greeting = "Hello love! Welcome to Lovely Rita Adventures! Press the button to spin and pick your Lad companion. Lets get started!";
   const speak = () => { if(!muteState) ritaSpeak(greeting); };
   if(window.speechSynthesis.getVoices().length > 0) {
