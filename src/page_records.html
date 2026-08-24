@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>My Records — Lovely Rita Adventures</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0a0a0a;display:flex;flex-direction:column;align-items:center;min-height:100vh;font-family:Georgia,serif;}
+#phone-outer{display:flex;justify-content:center;padding:20px 0 40px;width:100%;}
+#phone{background:#050510;overflow:hidden;position:relative;display:flex;flex-direction:column;width:393px;height:852px;border-radius:48px;box-shadow:0 0 0 10px #1a1a1a,0 0 0 12px #333,0 30px 80px rgba(0,0,0,.8);}
+#phone::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#0a0a0a;border-radius:0 0 20px 20px;z-index:100;}
+
+/* Stadium spotlights BG */
+#phone::after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at 20% 0%,rgba(255,100,0,.08) 0%,transparent 50%),radial-gradient(ellipse at 80% 0%,rgba(0,150,255,.08) 0%,transparent 50%);pointer-events:none;z-index:0;}
+
+/* HEADER */
+#rec-header{padding:40px 16px 12px;display:flex;flex-direction:column;align-items:center;flex-shrink:0;position:relative;z-index:2;}
+.header-row{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:10px;}
+.back-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:50%;width:34px;height:34px;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.bc-pill{display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.5);border:1px solid #ffd700;border-radius:20px;padding:5px 12px;}
+.bc-pill-val{font-size:14px;font-weight:bold;color:#ffd700;}
+
+/* Neon sign title */
+#rec-title-wrap{background:rgba(0,0,0,.6);border:3px solid #ff6ef7;border-radius:16px;padding:10px 20px;text-align:center;box-shadow:0 0 20px rgba(255,110,247,.6),0 0 40px rgba(255,110,247,.2),inset 0 0 20px rgba(0,0,0,.4);}
+.rec-stars{color:#ffd700;font-size:16px;letter-spacing:4px;margin-bottom:4px;}
+#rec-title{font-size:30px;font-weight:900;letter-spacing:3px;color:#ffd700;text-shadow:0 0 10px #ffd700,0 0 20px #ffd700,0 0 40px #c8860a;font-family:Georgia,serif;}
+
+/* SCROLL */
+#rec-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:10px 12px 6px;position:relative;z-index:1;}
+#rec-scroll::-webkit-scrollbar{width:0;}
+
+/* SCOREBOARD */
+#scoreboard{background:rgba(0,0,0,.5);border:2px solid rgba(255,110,247,.3);border-radius:16px;overflow:hidden;margin-bottom:12px;box-shadow:0 0 20px rgba(0,0,0,.6);}
+.sb-header{display:grid;grid-template-columns:44px 1fr 100px;padding:8px 12px;background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,110,247,.2);}
+.sb-col-label{font-size:9px;color:rgba(255,255,255,.4);letter-spacing:1.5px;text-transform:uppercase;font-weight:bold;}
+.sb-col-label:last-child{text-align:right;}
+
+.sb-row{display:grid;grid-template-columns:44px 1fr 100px;padding:10px 12px;align-items:center;border-bottom:1px solid rgba(255,255,255,.05);transition:background .2s;}
+.sb-row:hover{background:rgba(255,255,255,.03);}
+.sb-row:last-child{border-bottom:none;}
+
+/* Rank number */
+.sb-rank{font-size:22px;font-weight:900;text-align:center;font-family:Georgia,serif;}
+.rank-1{color:#ffd700;text-shadow:0 0 8px #ffd700;}
+.rank-2{color:#c0c0c0;text-shadow:0 0 6px #c0c0c0;}
+.rank-3{color:#cd7f32;text-shadow:0 0 6px #cd7f32;}
+.rank-4{color:#9b59b6;}
+
+/* Explorer info */
+.sb-explorer{display:flex;align-items:center;gap:8px;}
+.sb-lad-img{width:42px;height:42px;object-fit:contain;border-radius:8px;background:rgba(255,255,255,.06);padding:2px;}
+.sb-info{display:flex;flex-direction:column;gap:1px;}
+.sb-name{font-size:13px;font-weight:bold;font-family:Georgia,serif;}
+.sb-name.rank-1{color:#ffd700;}
+.sb-name.rank-2{color:#e0e0e0;}
+.sb-name.rank-3{color:#cd7f32;}
+.sb-name.rank-4{color:#c8a96e;}
+.sb-badge{font-size:8px;color:rgba(255,255,255,.35);letter-spacing:.5px;}
+
+/* Score */
+.sb-score-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:2px;}
+.sb-score{font-size:18px;font-weight:bold;font-family:'Courier New',monospace;text-shadow:0 0 8px currentColor;}
+.sb-score.rank-1{color:#ffd700;}
+.sb-score.rank-2{color:#00e5ff;}
+.sb-score.rank-3{color:#76ff03;}
+.sb-score.rank-4{color:#ce93d8;}
+.sb-trophy{font-size:16px;}
+
+/* WORLDS EXPLORED */
+#worlds-section{margin-bottom:12px;}
+.worlds-header{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:2px;text-align:center;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.worlds-header::before,.worlds-header::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.1);}
+
+#worlds-row{display:flex;justify-content:space-between;gap:4px;}
+.world-circle{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
+.world-icon-ring{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;border:3px solid;position:relative;}
+.world-icon-ring.done{box-shadow:0 0 12px currentColor;}
+.world-icon-ring.incomplete{filter:grayscale(.4);opacity:.7;}
+.world-icon-ring.locked{filter:grayscale(.9);opacity:.4;}
+.world-name-s{font-size:7.5px;color:rgba(255,255,255,.5);letter-spacing:.3px;text-align:center;}
+.world-progress{font-size:9px;font-weight:bold;}
+
+/* MOTIVATIONAL */
+#motivate{background:rgba(255,110,247,.08);border:1px solid rgba(255,110,247,.2);border-radius:12px;padding:12px;text-align:center;}
+.motivate-text{font-size:13px;font-weight:bold;color:#ffde59;letter-spacing:1px;line-height:1.5;}
+.motivate-icons{font-size:16px;color:rgba(255,110,247,.7);margin-top:4px;}
+
+/* NAV */
+#nav-bar{display:flex;justify-content:space-around;align-items:center;padding:8px 0 16px;background:rgba(5,5,16,.95);border-top:1px solid rgba(255,110,247,.15);flex-shrink:0;}
+.nav-btn{background:none;border:none;color:rgba(255,255,255,.4);font-size:8.5px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 10px;transition:color .2s;font-family:Georgia,serif;}
+.nav-btn:hover,.nav-btn.active{color:#ffd700;}
+.nav-icon{font-size:20px;line-height:1;}
+#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;}
+</style>
+</head>
+<body>
+<div id="phone-outer">
+<div id="phone">
+
+  <div id="rec-header">
+    <div class="header-row">
+      <button class="back-btn" onclick="goHome()">◀</button>
+      <div class="bc-pill"><span style="font-size:16px">🪙</span><span class="bc-pill-val" id="bc-header">25,000</span></div>
+    </div>
+    <div id="rec-title-wrap">
+      <div class="rec-stars">★ ★ ★</div>
+      <div id="rec-title">MY RECORDS</div>
+    </div>
+  </div>
+
+  <div id="rec-scroll">
+
+    <!-- SCOREBOARD -->
+    <div id="scoreboard">
+      <div class="sb-header">
+        <div class="sb-col-label" style="text-align:center">Rank</div>
+        <div class="sb-col-label">Explorer</div>
+        <div class="sb-col-label">🪙 BeatCoins</div>
+      </div>
+      <div id="sb-rows"><!-- filled by JS --></div>
+    </div>
+
+    <!-- WORLDS EXPLORED -->
+    <div id="worlds-section">
+      <div class="worlds-header">☆ Worlds Explored ☆</div>
+      <div id="worlds-row">
+        <div class="world-circle">
+          <div class="world-icon-ring" id="wr-ocean" style="border-color:#0077c2;color:#0077c2;">🌊</div>
+          <div class="world-name-s">OCEAN</div>
+          <div class="world-progress" id="wp-ocean" style="color:#0077c2;"></div>
+        </div>
+        <div class="world-circle">
+          <div class="world-icon-ring" id="wr-space" style="border-color:#6600cc;color:#6600cc;">🌌</div>
+          <div class="world-name-s">SPACE</div>
+          <div class="world-progress" id="wp-space" style="color:#6600cc;"></div>
+        </div>
+        <div class="world-circle">
+          <div class="world-icon-ring" id="wr-inner" style="border-color:#c8860a;color:#c8860a;">🪷</div>
+          <div class="world-name-s">INNER</div>
+          <div class="world-progress" id="wp-inner" style="color:#c8860a;"></div>
+        </div>
+        <div class="world-circle">
+          <div class="world-icon-ring" id="wr-penny" style="border-color:#e8a020;color:#e8a020;">🏙️</div>
+          <div class="world-name-s">PENNY LN</div>
+          <div class="world-progress" id="wp-penny" style="color:#e8a020;"></div>
+        </div>
+        <div class="world-circle">
+          <div class="world-icon-ring" id="wr-rita" style="border-color:#cc0088;color:#cc0088;">🎵</div>
+          <div class="world-name-s">RITA'S</div>
+          <div class="world-progress" id="wp-rita" style="color:#cc0088;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MOTIVATIONAL -->
+    <div id="motivate">
+      <div class="motivate-icons">🎵 ☆ 🎶</div>
+      <div class="motivate-text" id="motivate-text">KEEP EXPLORING!<br>BEAT THE WORLD!</div>
+    </div>
+
+  </div><!-- /rec-scroll -->
+
+  <nav id="nav-bar">
+    <button class="nav-btn" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
+    <button class="nav-btn" onclick="goMusic()"><span class="nav-icon">🎵</span><span>Music</span></button>
+    <button class="nav-btn" onclick="goShop()"><span class="nav-icon">🛒</span><span>Shop</span></button>
+    <button class="nav-btn" onclick="goAdventures()"><span class="nav-icon">🌍</span><span>Adventures</span></button>
+    <button class="nav-btn active"><span class="nav-icon">👤</span><span>Profile</span></button>
+  </nav>
+
+</div>
+</div>
+<div id="toast"></div>
+
+<script>
+const RAW = 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/';
+
+const LADS = [
+  { id:'smart', name:'Smart Lad', img:RAW+'lad-smart-regular.png' },
+  { id:'cute',  name:'Cute Lad',  img:RAW+'lad-cute-regular.png' },
+  { id:'quiet', name:'Quiet Lad', img:RAW+'lad-quiet-regular.png' },
+  { id:'funny', name:'Funny Lad', img:RAW+'lad-funny-regular.png' },
+];
+const RANKS  = ['rank-1','rank-2','rank-3','rank-4'];
+const TROPHIES = ['🏆','🥈','🥉','🎖️'];
+
+function loadPage(){
+  const bc = Number(localStorage.getItem('askLovelyRitaV4_bc')||25000);
+  document.getElementById('bc-header').textContent = bc.toLocaleString();
+
+  // Per-lad scores sorted
+  const scored = LADS.map(l=>({ ...l, score: Number(localStorage.getItem('askLovelyRitaV4_bc_'+l.id)||0) }));
+  scored.sort((a,b)=>b.score-a.score);
+
+  const nick = localStorage.getItem('lovelyRita_nickname') || 'Beat Explorer';
+
+  // Build scoreboard
+  const container = document.getElementById('sb-rows');
+  container.innerHTML = scored.map((lad, i)=>{
+    const rk = RANKS[i];
+    return `<div class="sb-row">
+      <div class="sb-rank ${rk}">${i+1}</div>
+      <div class="sb-explorer">
+        <img class="sb-lad-img" src="${lad.img}" alt="${lad.name}">
+        <div class="sb-info">
+          <div class="sb-name ${rk}">${nick}</div>
+          <div class="sb-badge">w/ ${lad.name}</div>
+        </div>
+      </div>
+      <div class="sb-score-wrap">
+        <div class="sb-score ${rk}">${lad.score.toLocaleString()}</div>
+        <div class="sb-trophy">${TROPHIES[i]}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Worlds
+  const worldMap = {ocean:'page6',space:'page7',inner:'page8',penny:'page9',rita:'page10'};
+  let completed=0;
+  Object.entries(worldMap).forEach(([w,p])=>{
+    const visited = localStorage.getItem('visited_'+p)==='1';
+    const ring = document.getElementById('wr-'+w);
+    const prog = document.getElementById('wp-'+w);
+    if(visited){ ring.classList.add('done'); prog.textContent='✓'; completed++; }
+    else { ring.classList.add('incomplete'); prog.textContent=''; }
+  });
+
+  // Motivational message
+  const msgs = [
+    "KEEP EXPLORING!\nBEAT THE WORLD!",
+    "GREAT START LOVE!\nKEEP GOING!",
+    "HALFWAY THERE!\nDON'T STOP NOW!",
+    "ALMOST THERE LOVE!\nONE MORE WORLD!",
+    "ALL WORLDS DONE!\nYOU'RE A LEGEND!"
+  ];
+  document.getElementById('motivate-text').innerHTML = msgs[Math.min(completed,4)].replace('\n','<br>');
+
+  // Try to fetch global scores
+  fetch('https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/scores.json?t='+Date.now())
+    .then(r=>r.json())
+    .then(g=>{
+      scored.forEach((lad,i)=>{
+        const combined = lad.score + Number(g[lad.id]||0);
+        const scoreEl = container.querySelectorAll('.sb-score')[i];
+        if(scoreEl) scoreEl.textContent = combined.toLocaleString();
+      });
+    }).catch(()=>{});
+}
+
+function goHome(){window.location.href='page1_landing.html';}
+function goMusic(){toast('🎵 Music coming soon love!');}
+function goShop(){window.location.href='page_shop.html';}
+function goAdventures(){window.location.href='page_adventures.html';}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',3000);}
+
+window.addEventListener('load', loadPage);
+</script>
+</body>
+</html>
