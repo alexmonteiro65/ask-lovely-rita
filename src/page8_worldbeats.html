@@ -214,9 +214,8 @@ body { background:#3d1a00; display:flex; flex-direction:column; align-items:cent
   </div>
 
   <nav id="nav-bar">
-    <button class="nav-btn" onclick="goBack()"><span class="nav-icon">◀️</span><span>Back</span></button>
     <button class="nav-btn nav-home" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
-    <button class="nav-btn" onclick="goForward()"><span class="nav-icon">▶️</span><span>Next</span></button>
+    <button class="nav-btn" onclick="goChooseWorld()"><span class="nav-icon">🌍</span><span>Choose World</span></button>
   </nav>
 </div>
 <div id="toast"></div>
@@ -567,6 +566,7 @@ function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 function toast(msg){ const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000); }
 
 function goBack(){
+function goChooseWorld(){ window.location.href='page5_worlds.html'; }
   if(S.fromWorld==='india') { window.location.href='page8_india.html'; return; }
   window.location.href='page5_worlds.html';
 }
