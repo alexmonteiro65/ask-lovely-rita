@@ -120,7 +120,7 @@
   }
   .nav-btn:hover { background: rgba(255,255,255,.08); color:#fff; }
   .nav-btn .nav-icon { font-size: 20px; line-height: 1; }
-  .nav-btn.nav-home { color: #4dc8ff; }
+  .nav-btn.nav-home { color: var(--lvl-accent, #4dc8ff); }
 
   /* HEADER */
   #page-header { text-align: center; margin-bottom: 8px; position: relative; z-index: 2; }
@@ -144,9 +144,14 @@
     font-size: 9px; font-weight: 700; cursor: pointer; transition: all .2s; text-transform: uppercase;
   }
   #level-tabs button.active {
-    background: linear-gradient(135deg,#4dc8ff,#00e5cc);
+    background: var(--lvl-grad, linear-gradient(135deg,#4dc8ff,#00e5cc));
     border-color: transparent; color: #000; font-weight: 900;
   }
+
+  /* ── LEVEL THEMES — buttons only, ocean background unchanged ── */
+  .theme-youngsters { --lvl-grad:linear-gradient(135deg,#ff6ef7,#a855f7); --lvl-accent:#ff6ef7; }
+  .theme-grownups   { --lvl-grad:linear-gradient(135deg,#ffde59,#c8860a); --lvl-accent:#ffde59; }
+  .theme-experts    { --lvl-grad:linear-gradient(135deg,#c8a96e,#6677aa); --lvl-accent:#c8a96e; }
 
   /* RITA WRAP */
   #rita-wrap {
@@ -574,6 +579,7 @@ function saveStorage() {
 // ── INIT ───────────────────────────────────────────────────
 function init() {
   loadStorage();
+  document.getElementById('phone').className = 'theme-' + (S.level || 'youngsters');
   buildOceanBg();
   buildKeyboard();
   applyLevel(S.level);
@@ -583,6 +589,7 @@ function init() {
 
 function setLevel(lvl) {
   S.level = lvl;
+  document.getElementById('phone').className = 'theme-' + lvl;
   window.speechSynthesis && window.speechSynthesis.cancel();
   applyLevel(lvl);
   highlightTab(lvl);
