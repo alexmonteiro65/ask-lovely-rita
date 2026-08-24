@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cosmic Flash — Lovely Rita Adventures</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0a0a0a;display:flex;flex-direction:column;align-items:center;min-height:100vh;font-family:Georgia,serif;}
+#phone-outer{display:flex;justify-content:center;padding:20px 0 40px;width:100%;}
+#phone{background:var(--bg,#1a0040);overflow:hidden;position:relative;display:flex;flex-direction:column;width:393px;height:852px;border-radius:48px;box-shadow:0 0 0 10px #1a1a1a,0 0 0 12px #333,0 30px 80px rgba(0,0,0,.8);}
+#phone::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#0a0a0a;border-radius:0 0 20px 20px;z-index:100;}
+.theme-youngsters{--bg:#1a0040;--accent:#ff6ef7;--accent2:#ffde59;--glow:#ff6ef7;--btn-grad:linear-gradient(135deg,#ff6ef7,#a855f7);--title-glow:0 0 24px #ff6ef7,0 0 48px #a855f7;}
+.theme-grownups{--bg:#1a1200;--accent:#ffde59;--accent2:#fff3a0;--glow:#ffde59;--btn-grad:linear-gradient(135deg,#ffde59,#c8860a);--title-glow:0 0 24px #ffde59,0 0 50px #c8860a;}
+.theme-experts{--bg:#0d0d1e;--accent:#c8a96e;--accent2:#e8d5b0;--glow:#c8a96e;--btn-grad:linear-gradient(135deg,#c8a96e,#6677aa);--title-glow:0 0 20px #c8a96e,0 0 40px #6677aa;}
+#phone-scroll{flex:1;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;padding-top:34px;}
+#phone-scroll::-webkit-scrollbar{width:0;}
+#header{padding:16px 16px 10px;display:flex;flex-direction:column;align-items:center;background:var(--bg);}
+#main-title{font-size:20px;font-weight:bold;letter-spacing:2px;color:var(--accent);text-shadow:var(--title-glow);text-align:center;}
+#subtitle{font-size:9px;color:var(--accent2);letter-spacing:1.5px;margin-top:4px;opacity:.8;text-align:center;}
+#content{flex:1;padding:12px 16px;display:flex;flex-direction:column;gap:10px;}
+/* Timer bar */
+#timer-wrap{background:rgba(255,255,255,.06);border-radius:8px;height:10px;overflow:hidden;width:100%;}
+#timer-bar{height:100%;background:var(--btn-grad);border-radius:8px;transition:width linear;width:100%;}
+#q-counter{font-size:10px;color:rgba(255,255,255,.5);text-align:right;letter-spacing:1px;}
+/* Question */
+#question-panel{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:18px 14px;text-align:center;}
+#question-emoji{font-size:36px;margin-bottom:8px;}
+#question-text{font-size:14px;color:#fff;line-height:1.5;font-weight:bold;}
+#topic-badge{font-size:8px;color:var(--accent);letter-spacing:1px;margin-bottom:6px;text-transform:uppercase;}
+/* Options — 3 buttons */
+#options{display:flex;flex-direction:column;gap:8px;}
+.opt-btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:12px 14px;color:#ddd;font-size:12px;cursor:pointer;font-family:Georgia,serif;transition:all .2s;text-align:left;}
+.opt-btn:hover{border-color:var(--accent);color:#fff;background:rgba(255,255,255,.12);}
+.opt-btn.correct{background:rgba(50,200,80,.25);border-color:#4ade80;color:#4ade80;font-weight:bold;}
+.opt-btn.wrong{background:rgba(220,50,50,.2);border-color:#f87171;color:#f87171;}
+/* Result panel */
+#result-panel{display:none;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:20px;text-align:center;}
+#result-title{font-size:22px;font-weight:bold;color:var(--accent);text-shadow:var(--title-glow);margin-bottom:6px;}
+#result-score{font-size:28px;font-weight:bold;color:var(--accent2);margin:10px 0;}
+#result-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:1px;}
+#result-msg{font-size:12px;color:#ddd;font-style:italic;margin-top:8px;line-height:1.5;}
+#bc-display-wrap{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:8px 14px;display:flex;align-items:center;justify-content:space-between;}
+.bc-label{font-size:10px;color:#fff;} .bc-count{font-size:15px;font-weight:bold;color:var(--accent);}
+#nav-bar{display:flex;justify-content:space-around;align-items:center;padding:10px 0 14px;background:rgba(0,0,0,.4);border-top:1px solid rgba(255,255,255,.06);flex-shrink:0;}
+.nav-btn{background:none;border:none;color:rgba(255,255,255,.4);font-size:9px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 16px;transition:color .2s;font-family:Georgia,serif;}
+.nav-btn:hover{color:var(--accent);}
+.nav-icon{font-size:18px;}
+#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.85);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;font-family:Georgia,serif;}
+</style>
+</head>
+<body>
+<div id="phone-outer">
+<div id="phone" class="theme-youngsters">
+<div id="phone-scroll">
+<div id="header">
+  <div id="main-title">⚡ COSMIC FLASH</div>
+  <div id="subtitle">SPEED QUIZ — BONUS ROUND</div>
+</div>
+<div id="content">
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <div id="timer-wrap" style="flex:1;margin-right:10px;"><div id="timer-bar"></div></div>
+    <div id="q-counter">1 / 5</div>
+  </div>
+  <div id="question-panel">
+    <div id="question-emoji">🌌</div>
+    <div id="topic-badge">Topic</div>
+    <div id="question-text">Loading...</div>
+  </div>
+  <div id="options">
+    <button class="opt-btn" id="opt0" onclick="answer(0)">A</button>
+    <button class="opt-btn" id="opt1" onclick="answer(1)">B</button>
+    <button class="opt-btn" id="opt2" onclick="answer(2)">C</button>
+  </div>
+  <div id="result-panel">
+    <div id="result-title">🚀 Mission Complete!</div>
+    <div id="result-score">+0</div>
+    <div id="result-label">EDUCATIONAL BEATCOINS EARNED</div>
+    <div id="result-msg">Well done!</div>
+    <div style="margin-top:14px;">
+      <button onclick="goChooseWorld()" style="background:var(--btn-grad);border:none;border-radius:20px;padding:12px 20px;color:#000;font-weight:bold;font-size:13px;cursor:pointer;font-family:Georgia,serif;width:100%;">🌍 Choose Another World!</button>
+    </div>
+  </div>
+  <div id="bc-display-wrap">
+    <span class="bc-label">Educational BeatCoins Total</span>
+    <span class="bc-count" id="bc-display">25,000</span>
+  </div>
+</div>
+</div>
+<nav id="nav-bar">
+  <button class="nav-btn" onclick="goBack()"><span class="nav-icon">◀️</span><span>Back</span></button>
+  <button class="nav-btn" onclick="goBack()"><span class="nav-icon">🏠</span><span>Home</span></button>
+  <button class="nav-btn" onclick="goChooseWorld()"><span class="nav-icon">▶️</span><span>Next</span></button>
+</nav>
+</div>
+</div>
+<div id="toast"></div>
+<script>
+const params=new URLSearchParams(window.location.search);
+const level=params.get('level')||localStorage.getItem('askLovelyRitaV4_level')||'youngsters';
+document.getElementById('phone').className='theme-'+level;
+
+const QUESTIONS={
+  youngsters:[
+    {emoji:'🪐',topic:'Solar System',q:'What is the largest planet in our solar system?',opts:['Saturn','Jupiter','Uranus'],correct:1,fact:'Jupiter is so large that all other planets could fit inside it!'},
+    {emoji:'🔴',topic:'Mars',q:'What colour is the sky on Mars?',opts:['Blue like Earth','Orange and pink','Purple'],correct:1,fact:'Mars sky looks orange-pink because of iron oxide dust floating in the thin atmosphere!'},
+    {emoji:'🌕',topic:'Earth\'s Moon',q:'How many moons does the Earth have?',opts:['One','Two','Three'],correct:0,fact:'Earth has just one Moon but other planets have many more — Jupiter has over 90 moons!'},
+    {emoji:'☀️',topic:'The Sun',q:'What is the Sun made of?',opts:['Rock and metal','Hot gas','Ice and water'],correct:1,fact:'The Sun is made of hot plasma — mainly hydrogen and helium swirling at millions of degrees!'},
+    {emoji:'✨',topic:'Stars',q:'What do we call a group of stars that form a picture in the sky?',opts:['A galaxy','A meteor shower','A constellation'],correct:2,fact:'Ancient people named 88 official constellations — you can still spot them on a clear night!'}
+  ],
+  grownups:[
+    {emoji:'🌡️',topic:'Planets',q:'Which is the hottest planet in our solar system?',opts:['Mercury','Venus','Earth'],correct:1,fact:'Venus reaches 465°C — hotter than Mercury despite being further from the Sun, due to its greenhouse effect!'},
+    {emoji:'⚗️',topic:'The Sun',q:'What is the most abundant element in the Sun?',opts:['Helium','Oxygen','Hydrogen'],correct:2,fact:'Hydrogen makes up about 73% of the Sun\'s mass and is constantly fusing into helium in its core!'},
+    {emoji:'⏱️',topic:'Light Speed',q:'How long does sunlight take to reach Earth?',opts:['About 8 minutes','About 8 hours','About 8 seconds'],correct:0,fact:'Light travels at 300,000 km per second — so the 150 million km journey takes roughly 8 minutes 20 seconds!'},
+    {emoji:'🛰️',topic:'Space History',q:'What was the first artificial satellite sent into orbit?',opts:['Voyager 1','Apollo 11','Sputnik 1'],correct:2,fact:'Sputnik 1 was launched by the Soviet Union on 4 October 1957 — marking the start of the Space Age!'},
+    {emoji:'💨',topic:'Nebulae',q:'What is a nebula?',opts:['A dead galaxy','A cloud of gas and dust in space','A type of black hole'],correct:1,fact:'Nebulae are the birthplaces of stars — our own Sun formed from a nebula around 4.6 billion years ago!'}
+  ],
+  experts:[
+    {emoji:'🌀',topic:'Cosmology',q:'What does Olbers\' Paradox question?',opts:['Why stars move','Why the night sky is dark despite infinite stars','Why planets orbit'],correct:1,fact:'Olbers\' Paradox is resolved by the finite age of the universe — we can only see light that has had time to reach us!'},
+    {emoji:'⚛️',topic:'Physics',q:'What is baryonic matter?',opts:['Dark matter','Antimatter','Ordinary visible matter made of protons and neutrons'],correct:2,fact:'Baryonic matter makes up only about 5% of the universe — the rest is dark matter and dark energy!'},
+    {emoji:'🌊',topic:'Astrophysics',q:'What do gravitational waves detect?',opts:['Radio emissions','Ripples in spacetime from massive events','Cosmic rays from supernovae'],correct:1,fact:'LIGO first detected gravitational waves in 2015 from two merging black holes 1.3 billion light years away!'},
+    {emoji:'🧲',topic:'Neutron Stars',q:'What is the Tolman-Oppenheimer-Volkoff limit?',opts:['Maximum mass of a neutron star','Speed of light in a medium','Energy released by a supernova'],correct:0,fact:'Above roughly 3 solar masses a neutron star\'s degeneracy pressure fails and it collapses into a black hole!'},
+    {emoji:'📡',topic:'Early Universe',q:'What does cosmic inflation theory describe?',opts:['Current expansion of galaxies','Rapid exponential expansion just after the Big Bang','Formation of first stars'],correct:1,fact:'Cosmic inflation occurred in the first 10⁻³² seconds after the Big Bang expanding the universe by a factor of 10²⁶!'}
+  ]
+};
+
+const TIME={youngsters:8,grownups:6,experts:5};
+const REWARD={youngsters:40,grownups:60,experts:80};
+
+let S={qIndex:0,earned:0,timer:null,answered:false};
+const qs=QUESTIONS[level];
+const timePerQ=TIME[level];
+const reward=REWARD[level];
+
+function startQ(){
+  if(S.qIndex>=5){showResult();return;}
+  S.answered=false;
+  const q=qs[S.qIndex];
+  document.getElementById('q-counter').textContent=(S.qIndex+1)+' / 5';
+  document.getElementById('question-emoji').textContent=q.emoji;
+  document.getElementById('topic-badge').textContent=q.topic;
+  document.getElementById('question-text').textContent=q.q;
+  for(let i=0;i<3;i++){
+    const b=document.getElementById('opt'+i);
+    b.textContent=q.opts[i]; b.className='opt-btn'; b.disabled=false;
+  }
+  document.getElementById('options').style.display='flex';
+  // Timer bar
+  const bar=document.getElementById('timer-bar');
+  bar.style.transition='none'; bar.style.width='100%';
+  setTimeout(()=>{
+    bar.style.transition=`width ${timePerQ}s linear`;
+    bar.style.width='0%';
+  },50);
+  clearTimeout(S.timer);
+  S.timer=setTimeout(()=>{if(!S.answered)timeOut();},timePerQ*1000);
+}
+
+function answer(idx){
+  if(S.answered)return;
+  S.answered=true;
+  clearTimeout(S.timer);
+  document.getElementById('timer-bar').style.transition='none';
+  const q=qs[S.qIndex];
+  for(let i=0;i<3;i++) document.getElementById('opt'+i).disabled=true;
+  if(idx===q.correct){
+    document.getElementById('opt'+idx).className='opt-btn correct';
+    S.earned+=reward;
+    saveLadBC(reward); postGlobalScore(reward);
+    speak("Brilliant love!");
+    toast('✅ Correct! +'+reward+' BeatCoins!');
+  }else{
+    document.getElementById('opt'+idx).className='opt-btn wrong';
+    document.getElementById('opt'+q.correct).className='opt-btn correct';
+    speak("Not quite love! "+q.fact);
+    toast('❌ '+q.fact.slice(0,60)+'...');
+  }
+  document.getElementById('bc-display').textContent=Number(localStorage.getItem('askLovelyRitaV4_bc')||25000).toLocaleString();
+  S.qIndex++;
+  setTimeout(startQ,2000);
+}
+
+function timeOut(){
+  S.answered=true;
+  const q=qs[S.qIndex];
+  for(let i=0;i<3;i++) document.getElementById('opt'+i).disabled=true;
+  document.getElementById('opt'+q.correct).className='opt-btn correct';
+  speak("Time's up love! The answer was "+q.opts[q.correct]);
+  toast('⏱️ Time\'s up!');
+  S.qIndex++;
+  setTimeout(startQ,2000);
+}
+
+function showResult(){
+  document.getElementById('options').style.display='none';
+  document.getElementById('question-panel').style.display='none';
+  const r=document.getElementById('result-panel');
+  r.style.display='block';
+  document.getElementById('result-score').textContent='+'+S.earned;
+  const msgs={youngsters:"Superstar speed! You are a cosmic genius love!",grownups:"Outstanding darling! Lightning fast and razor sharp!",experts:"Extraordinary! A true astrophysics legend love!"};
+  document.getElementById('result-msg').textContent=msgs[level];
+  speak(msgs[level]);
+}
+
+function speak(text){
+  if(localStorage.getItem('askLovelyRitaV4_mute')==='1'||!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.92;u.pitch=1.1;
+  const v=window.speechSynthesis.getVoices();
+  const voice=v.find(x=>x.lang==='en-GB'&&/female|woman/i.test(x.name))||v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));
+  if(voice)u.voice=voice;window.speechSynthesis.speak(u);
+}
+function saveLadBC(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';const k='askLovelyRitaV4_bc_'+lad;localStorage.setItem(k,Number(localStorage.getItem(k)||0)+amount);const t=Number(localStorage.getItem('askLovelyRitaV4_bc')||25000);localStorage.setItem('askLovelyRitaV4_bc',t+amount);}
+function postGlobalScore(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';fetch('https://empty-leaf-6e4b.alexmonteironeto.workers.dev/score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lad,amount})}).catch(()=>{});}
+function goBack(){window.location.href='page7_space.html';}
+function goChooseWorld(){window.location.href='page5_worlds.html';}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',3000);}
+
+window.addEventListener('load',()=>{
+  document.getElementById('bc-display').textContent=Number(localStorage.getItem('askLovelyRitaV4_bc')||25000).toLocaleString();
+  const go=()=>{speak("Welcome to Cosmic Flash love! Five rapid fire space questions — beat the clock!");setTimeout(startQ,2000);};
+  if(window.speechSynthesis.getVoices().length>0)go();
+  else window.speechSynthesis.onvoiceschanged=go;
+});
+</script>
+</body>
+</html>
