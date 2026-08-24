@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>My Adventures — Lovely Rita Adventures</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0a0a0a;display:flex;flex-direction:column;align-items:center;min-height:100vh;font-family:Georgia,serif;}
+#phone-outer{display:flex;justify-content:center;padding:20px 0 40px;width:100%;}
+#phone{background:#2a1a00;overflow:hidden;position:relative;display:flex;flex-direction:column;width:393px;height:852px;border-radius:48px;box-shadow:0 0 0 10px #1a1a1a,0 0 0 12px #333,0 30px 80px rgba(0,0,0,.8);}
+#phone::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#0a0a0a;border-radius:0 0 20px 20px;z-index:100;}
+
+/* HEADER — leather journal cover feel */
+#adv-header{padding:40px 16px 12px;display:flex;flex-direction:column;align-items:center;flex-shrink:0;background:linear-gradient(180deg,#1a0a00,#2a1400);border-bottom:3px solid #8b5e00;position:relative;}
+.header-row{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:8px;}
+.back-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,180,0,.3);border-radius:50%;width:34px;height:34px;color:#ffd700;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.bc-pill{display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.4);border:1px solid #ffd700;border-radius:20px;padding:5px 12px;}
+.bc-pill-val{font-size:14px;font-weight:bold;color:#ffd700;}
+
+#adv-title{font-size:26px;font-weight:900;color:#ffd700;letter-spacing:3px;text-align:center;text-shadow:0 2px 8px rgba(139,94,0,.8),0 0 20px rgba(255,215,0,.4);font-family:Georgia,serif;}
+.title-stars{color:#c8860a;font-size:14px;letter-spacing:6px;}
+
+/* SCROLL */
+#adv-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:10px 10px 6px;}
+#adv-scroll::-webkit-scrollbar{width:0;}
+
+/* JOURNAL BOOK */
+#journal{background:linear-gradient(135deg,#f4e4c0,#e8d4a8);border-radius:12px;overflow:hidden;display:flex;min-height:380px;box-shadow:0 6px 24px rgba(0,0,0,.6),inset 0 0 0 2px rgba(139,94,0,.3);}
+
+/* Spine */
+#journal::before{content:'';width:8px;background:linear-gradient(180deg,#8b5e00,#6b4400,#8b5e00);flex-shrink:0;}
+
+/* LEFT PAGE */
+#page-left{flex:0 0 44%;background:linear-gradient(135deg,#f4e4c0,#ecdabf);padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;border-right:2px solid rgba(139,94,0,.2);}
+
+/* Rita photo on left page */
+#rita-photo-frame{background:#fff;border:3px solid #c8a050;border-radius:4px;padding:4px;box-shadow:2px 2px 8px rgba(0,0,0,.3),0 0 0 1px rgba(200,160,80,.3);position:relative;}
+#rita-photo-frame img{width:90px;height:90px;object-fit:cover;object-position:top;display:block;border-radius:2px;}
+.paper-clip{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:20px;height:28px;border:2.5px solid #8b8b60;border-radius:4px 4px 2px 2px;background:none;border-bottom:none;}
+
+#rita-name-tag{background:#6b2d82;border-radius:4px;padding:4px 10px;font-size:12px;font-weight:bold;color:#ffd700;letter-spacing:1px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.3);}
+
+/* Nickname area */
+#nickname-section{width:100%;text-align:center;}
+#nickname-display{font-size:14px;font-weight:bold;color:#4a2800;letter-spacing:1px;}
+#nickname-input-wrap{display:flex;flex-direction:column;gap:4px;align-items:center;}
+#nickname-input{background:rgba(255,255,255,.7);border:1px solid #c8a050;border-radius:6px;padding:4px 8px;font-size:11px;font-family:Georgia,serif;text-align:center;width:100%;outline:none;color:#2a1400;}
+#nickname-save-btn{background:linear-gradient(135deg,#c8860a,#8b5e00);border:none;border-radius:6px;padding:4px 12px;font-size:10px;color:#fff;cursor:pointer;font-family:Georgia,serif;font-weight:bold;}
+
+.left-divider{width:80%;height:1px;background:rgba(139,94,0,.2);}
+
+/* BeatCoins on left page */
+#bc-box{background:rgba(255,255,255,.5);border:1px solid #c8a050;border-radius:8px;padding:6px 10px;text-align:center;width:100%;}
+.bc-label-j{font-size:7px;color:#8b5e00;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;}
+.bc-total{font-size:18px;font-weight:bold;color:#4a2800;display:flex;align-items:center;justify-content:center;gap:4px;}
+
+/* Lad companions row */
+#lad-row{display:flex;gap:5px;justify-content:center;}
+.lad-mini{display:flex;flex-direction:column;align-items:center;gap:1px;}
+.lad-mini img{width:26px;height:26px;object-fit:contain;}
+.lad-mini-score{font-size:7px;color:#6b4400;font-weight:bold;}
+
+/* Sticker at bottom left */
+.sticker-row{display:flex;gap:6px;justify-content:center;margin-top:2px;}
+.sticker{font-size:18px;}
+
+/* RIGHT PAGE */
+#page-right{flex:1;background:linear-gradient(135deg,#ecdabf,#e0cfa8);padding:12px 10px;}
+.explore-title{font-size:9px;color:#8b5e00;letter-spacing:2px;text-transform:uppercase;text-align:center;margin-bottom:10px;border-bottom:1px solid rgba(139,94,0,.2);padding-bottom:6px;}
+
+/* World map nodes */
+#world-map{position:relative;height:220px;}
+.world-node{position:absolute;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;}
+.world-pin{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 3px 10px rgba(0,0,0,.3);border:3px solid rgba(255,255,255,.4);transition:transform .2s;}
+.world-pin.visited{box-shadow:0 3px 10px rgba(0,0,0,.3),0 0 15px rgba(255,215,0,.5);border-color:#ffd700;}
+.world-pin.locked{filter:grayscale(.8);opacity:.6;}
+.world-pin:hover{transform:scale(1.1);}
+.world-name{font-size:8px;font-weight:bold;color:#4a2800;letter-spacing:.5px;text-align:center;}
+.world-stars{font-size:9px;color:#c8860a;}
+
+/* Dotted map path */
+.map-path{position:absolute;border:1.5px dashed rgba(139,94,0,.3);border-radius:50%;}
+
+/* Journal quote */
+.journal-quote{background:rgba(255,255,255,.4);border-left:3px solid #c8a050;padding:6px 8px;margin-top:8px;border-radius:0 6px 6px 0;font-size:9px;color:#6b4400;font-style:italic;line-height:1.4;}
+
+/* COLLECTION SECTION */
+#collection-section{margin-top:10px;}
+.section-label{font-size:9px;color:rgba(255,200,100,.5);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.section-label::before,.section-label::after{content:'';flex:1;height:1px;background:rgba(255,200,100,.15);}
+#collection-grid{display:flex;flex-wrap:wrap;gap:6px;}
+.collection-item{background:rgba(255,255,255,.06);border:1px solid rgba(255,200,100,.15);border-radius:8px;width:70px;height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:4px;}
+.collection-item img{max-height:46px;max-width:60px;object-fit:contain;}
+.collection-item-name{font-size:7px;color:rgba(255,255,255,.5);text-align:center;line-height:1.2;}
+.collection-empty{font-size:10px;color:rgba(255,255,255,.25);font-style:italic;padding:10px 0;}
+
+/* NAV */
+#nav-bar{display:flex;justify-content:space-around;align-items:center;padding:8px 0 16px;background:rgba(10,5,0,.95);border-top:1px solid rgba(200,160,80,.2);flex-shrink:0;}
+.nav-btn{background:none;border:none;color:rgba(255,255,255,.4);font-size:8.5px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 10px;transition:color .2s;font-family:Georgia,serif;}
+.nav-btn:hover,.nav-btn.active{color:#ffd700;}
+.nav-icon{font-size:20px;line-height:1;}
+
+#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;font-family:Georgia,serif;}
+</style>
+</head>
+<body>
+<div id="phone-outer">
+<div id="phone">
+
+  <div id="adv-header">
+    <div class="header-row">
+      <button class="back-btn" onclick="goHome()">◀</button>
+      <div class="bc-pill"><span style="font-size:16px">🪙</span><span class="bc-pill-val" id="bc-header">25,000</span></div>
+    </div>
+    <div class="title-stars">★ ★</div>
+    <div id="adv-title">MY ADVENTURES</div>
+    <div class="title-stars">★ ★</div>
+  </div>
+
+  <div id="adv-scroll">
+
+    <!-- JOURNAL BOOK -->
+    <div id="journal">
+      <!-- LEFT PAGE -->
+      <div id="page-left">
+        <div id="rita-photo-frame">
+          <div class="paper-clip"></div>
+          <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/rita_apresentadora_clean.png" alt="Lovely Rita">
+        </div>
+
+        <div id="rita-name-tag">♪ LOVELY RITA</div>
+
+        <div id="nickname-section">
+          <div id="nickname-display"></div>
+          <div id="nickname-input-wrap" style="display:none;">
+            <input id="nickname-input" type="text" placeholder="Your nickname..." maxlength="16">
+            <button id="nickname-save-btn" onclick="saveNickname()">Save ✓</button>
+          </div>
+        </div>
+
+        <div class="left-divider"></div>
+
+        <div id="bc-box">
+          <div class="bc-label-j">Total BeatCoins</div>
+          <div class="bc-total"><span>🪙</span><span id="bc-display">25,000</span></div>
+        </div>
+
+        <div id="lad-row">
+          <div class="lad-mini"><img id="lad-s" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-smart-regular.png"><div class="lad-mini-score" id="ls-score">0</div></div>
+          <div class="lad-mini"><img id="lad-c" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-cute-regular.png"><div class="lad-mini-score" id="lc-score">0</div></div>
+          <div class="lad-mini"><img id="lad-q" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-quiet-regular.png"><div class="lad-mini-score" id="lq-score">0</div></div>
+          <div class="lad-mini"><img id="lad-f" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-funny-regular.png"><div class="lad-mini-score" id="lf-score">0</div></div>
+        </div>
+
+        <div class="sticker-row"><span class="sticker">🎵</span><span class="sticker">⭐</span><span class="sticker">🎶</span></div>
+      </div>
+
+      <!-- RIGHT PAGE — World Map -->
+      <div id="page-right">
+        <div class="explore-title">✦ Explore the Worlds ✦</div>
+        <div id="world-map">
+          <!-- Ocean -->
+          <div class="world-node" id="wn-ocean" style="left:5%;top:4%;" onclick="goWorld('ocean')">
+            <div class="world-pin" id="wp-ocean" style="background:linear-gradient(135deg,#0077c2,#00bcd4);">🌊</div>
+            <div class="world-name">OCEAN</div>
+            <div class="world-stars" id="ws-ocean">☆☆☆</div>
+          </div>
+          <!-- Space -->
+          <div class="world-node" id="wn-space" style="right:5%;top:4%;" onclick="goWorld('space')">
+            <div class="world-pin" id="wp-space" style="background:linear-gradient(135deg,#1a0064,#6600cc);">🌌</div>
+            <div class="world-name">SPACE</div>
+            <div class="world-stars" id="ws-space">☆☆☆</div>
+          </div>
+          <!-- Inner Light (center) -->
+          <div class="world-node" id="wn-inner" style="left:50%;top:30%;transform:translateX(-50%);" onclick="goWorld('inner')">
+            <div class="world-pin" id="wp-inner" style="background:linear-gradient(135deg,#c8860a,#8b4513);">🪷</div>
+            <div class="world-name">INNER LIGHT</div>
+            <div class="world-stars" id="ws-inner">☆☆☆</div>
+          </div>
+          <!-- Penny Lane -->
+          <div class="world-node" id="wn-penny" style="left:5%;bottom:20%;" onclick="goWorld('penny')">
+            <div class="world-pin" id="wp-penny" style="background:linear-gradient(135deg,#c8860a,#e8a020);">🏙️</div>
+            <div class="world-name">PENNY LANE</div>
+            <div class="world-stars" id="ws-penny">☆☆☆</div>
+          </div>
+          <!-- Rita's World -->
+          <div class="world-node" id="wn-rita" style="right:5%;bottom:20%;" onclick="goWorld('rita')">
+            <div class="world-pin" id="wp-rita" style="background:linear-gradient(135deg,#8b0057,#cc0088);">🎵</div>
+            <div class="world-name">RITA'S WORLD</div>
+            <div class="world-stars" id="ws-rita">☆☆☆</div>
+          </div>
+        </div>
+        <div class="journal-quote">Every world is a new beat! 🎶</div>
+      </div>
+    </div>
+
+    <!-- MY COLLECTION -->
+    <div id="collection-section">
+      <div class="section-label">My Collection</div>
+      <div id="collection-grid"></div>
+    </div>
+
+  </div><!-- /adv-scroll -->
+
+  <nav id="nav-bar">
+    <button class="nav-btn" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
+    <button class="nav-btn" onclick="goMusic()"><span class="nav-icon">🎵</span><span>Music</span></button>
+    <button class="nav-btn" onclick="goShop()"><span class="nav-icon">🛒</span><span>Shop</span></button>
+    <button class="nav-btn active"><span class="nav-icon">🌍</span><span>Adventures</span></button>
+    <button class="nav-btn" onclick="goProfile()"><span class="nav-icon">👤</span><span>Profile</span></button>
+  </nav>
+
+</div>
+</div>
+<div id="toast"></div>
+
+<script>
+const RAW = 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/';
+const SHOP_ITEMS = {
+  rita_poster_1: { name:'Rita Beat Corps', img:RAW+'rita_apresentadora_clean.png' },
+  rita_poster_2: { name:'Rita Warden',     img:RAW+'shop/rita_poster_warden.png' },
+  vw_red:        { name:'VW Red',          img:RAW+'shop/vw_beetle_red.png' },
+  vw_yellow:     { name:'VW Yellow',       img:RAW+'shop/vw_beetle_yellow.png' },
+  badge_octopus: { name:'Octopus Badge',   img:RAW+'shop/badge_octopus.png' },
+  badge_space:   { name:'Space Badge',     img:RAW+'shop/badge_space.png' },
+};
+
+function loadPage(){
+  // BeatCoins
+  const bc = Number(localStorage.getItem('askLovelyRitaV4_bc')||25000);
+  document.getElementById('bc-display').textContent = bc.toLocaleString();
+  document.getElementById('bc-header').textContent = bc.toLocaleString();
+
+  // Per-lad scores
+  const keys = {s:'smart',c:'cute',q:'quiet',f:'funny'};
+  Object.entries(keys).forEach(([k,lad])=>{
+    document.getElementById('l'+k+'-score').textContent = Number(localStorage.getItem('askLovelyRitaV4_bc_'+lad)||0).toLocaleString();
+  });
+
+  // Nickname
+  const nick = localStorage.getItem('lovelyRita_nickname');
+  const dispEl = document.getElementById('nickname-display');
+  const inputWrap = document.getElementById('nickname-input-wrap');
+  if(nick){
+    dispEl.textContent = nick;
+    dispEl.style.cssText = 'font-size:14px;font-weight:bold;color:#4a2800;letter-spacing:1px;cursor:pointer;';
+    dispEl.onclick = ()=>{ inputWrap.style.display='flex'; dispEl.style.display='none'; document.getElementById('nickname-input').value=nick; };
+  } else {
+    dispEl.style.display='none';
+    inputWrap.style.display='flex';
+    setTimeout(()=>ritaSpeak("Hello love! Welcome to your adventures! What shall I call you? Pop in your name!"),800);
+  }
+
+  // World stars (placeholder — track completion per world in future)
+  const worldKeys = { ocean:'page6', space:'page7', inner:'page8', penny:'page9', rita:'page10' };
+  Object.entries(worldKeys).forEach(([w, p])=>{
+    const visited = localStorage.getItem('visited_'+p) === '1';
+    const pin = document.getElementById('wp-'+w);
+    const stars = document.getElementById('ws-'+w);
+    if(visited){ pin.classList.add('visited'); stars.textContent='★★★'; }
+  });
+
+  // Collection
+  const grid = document.getElementById('collection-grid');
+  const owned = Object.entries(SHOP_ITEMS).filter(([id])=>localStorage.getItem('beatshop_owned_'+id)==='1');
+  if(owned.length === 0){
+    grid.innerHTML = '<div class="collection-empty">Visit the Beat Shop to start your collection love! 🛒</div>';
+  } else {
+    grid.innerHTML = owned.map(([id,item])=>`
+      <div class="collection-item">
+        <img src="${item.img}" alt="${item.name}">
+        <div class="collection-item-name">${item.name}</div>
+      </div>`).join('');
+  }
+}
+
+function saveNickname(){
+  const val = document.getElementById('nickname-input').value.trim();
+  if(!val){ toast('Pop in your name love!'); return; }
+  localStorage.setItem('lovelyRita_nickname', val);
+  document.getElementById('nickname-input-wrap').style.display='none';
+  const d = document.getElementById('nickname-display');
+  d.style.display=''; d.textContent=val;
+  d.style.cssText='font-size:14px;font-weight:bold;color:#4a2800;letter-spacing:1px;cursor:pointer;';
+  d.onclick=()=>{ document.getElementById('nickname-input-wrap').style.display='flex'; d.style.display='none'; document.getElementById('nickname-input').value=val; };
+  toast('✅ Lovely to meet you '+val+'!');
+  ritaSpeak("Lovely to meet you "+val+" love! Let the adventures begin!");
+}
+
+function goWorld(w){ const map={ocean:'page6_octopus.html',space:'page7_space.html',inner:'page8_india.html',penny:'page9_city.html',rita:'page10_rita.html'}; window.location.href=map[w]||'page5_worlds.html'; }
+function ritaSpeak(text){ if(!window.speechSynthesis)return; window.speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text); u.lang='en-GB';u.rate=.92;u.pitch=1.1; const v=window.speechSynthesis.getVoices(); const voice=v.find(x=>x.lang==='en-GB'&&/female|woman/i.test(x.name))||v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en')); if(voice)u.voice=voice; window.speechSynthesis.speak(u); }
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',3500);}
+function goHome(){window.location.href='page1_landing.html';}
+function goMusic(){toast('🎵 Music coming soon love!');}
+function goShop(){window.location.href='page_shop.html';}
+function goProfile(){window.location.href='page_records.html';}
+
+window.addEventListener('load', loadPage);
+</script>
+</body>
+</html>
