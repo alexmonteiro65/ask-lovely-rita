@@ -8,205 +8,136 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,serif;}
 #phone-outer{display:flex;justify-content:center;padding:20px 0 40px;width:100%;}
-#phone{
-  width:393px;min-height:852px;background:#150020;
-  overflow:hidden;display:flex;flex-direction:column;
-  border-radius:48px;
-  box-shadow:0 0 0 10px #1a1a1a,0 0 0 12px #333,0 30px 80px rgba(0,0,0,.8);
-  position:relative;
-}
+#phone{width:393px;min-height:852px;background:#1a0040;overflow:hidden;display:flex;flex-direction:column;border-radius:48px;box-shadow:0 0 0 10px #1a1a1a,0 0 0 12px #333,0 30px 80px rgba(0,0,0,.8);position:relative;}
 #phone::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#0a0a0a;border-radius:0 0 20px 20px;z-index:100;}
 
-/* HEADER */
-#shop-header{
-  padding:44px 16px 12px;
-  background:linear-gradient(180deg,#1a0028 0%,#150020 100%);
-  display:flex;align-items:center;justify-content:space-between;
-  flex-shrink:0;
-}
-#back-btn{
-  width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.15);cursor:pointer;
-  display:flex;align-items:center;justify-content:center;font-size:16px;
-  color:rgba(255,255,255,.7);
-}
-#shop-title-wrap{flex:1;text-align:center;}
-#shop-title{
-  font-size:22px;font-weight:bold;letter-spacing:2px;
-  background:linear-gradient(135deg,#ff6ef7,#ffd700);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  text-shadow:none;
-  filter:drop-shadow(0 0 12px rgba(255,110,247,.5));
-}
-#shop-subtitle{font-size:9px;color:rgba(255,255,255,.4);letter-spacing:2px;margin-top:2px;}
-#bc-badge{
-  display:flex;align-items:center;gap:5px;
-  background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.3);
-  border-radius:20px;padding:6px 10px;
-}
-#bc-badge-icon{font-size:16px;}
-#bc-badge-val{font-size:13px;font-weight:bold;color:#ffd700;}
+/* ── HEADER ── */
+#shop-header{padding:44px 16px 14px;background:linear-gradient(180deg,#12003a 0%,#1a0040 100%);flex-shrink:0;text-align:center;}
+#back-btn{position:absolute;top:48px;left:16px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:rgba(255,255,255,.7);}
+#shop-title{font-size:26px;font-weight:bold;letter-spacing:2px;white-space:nowrap;background:linear-gradient(135deg,#ff6ef7,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 12px rgba(255,110,247,.4));}
+#shop-subtitle{font-size:11px;color:rgba(255,255,255,.4);letter-spacing:2px;margin-top:4px;}
 
-/* SCROLLABLE CONTENT */
-#shop-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 12px 16px;}
+/* BeatCoins box — below subtitle */
+#bc-box{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:20px;padding:8px 18px;margin:10px auto 0;width:fit-content;}
+#bc-icon{font-size:18px;}
+#bc-val{font-size:18px;font-weight:bold;color:#ffd700;min-width:80px;text-align:center;}
+#bc-sublabel{font-size:10px;color:rgba(255,255,255,.35);}
+
+/* ── SCROLL ── */
+#shop-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:14px 12px 16px;}
 #shop-scroll::-webkit-scrollbar{width:0;}
 
-/* SHELF SECTION */
-.shelf-section{margin-bottom:20px;}
-.shelf-label{
-  font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.35);
-  text-transform:uppercase;margin-bottom:10px;padding-left:2px;
-  border-left:2px solid #ff6ef7;padding-left:8px;
-}
+/* ── SHELF SECTION ── */
+.shelf-section{margin-bottom:22px;}
+.shelf-label{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.38);text-transform:uppercase;margin-bottom:10px;padding-left:8px;border-left:2.5px solid #ff6ef7;}
 
-/* SHELF (wooden plank background) */
-.shelf{
-  background:linear-gradient(180deg,#2a1a0a 0%,#1a0e04 100%);
-  border:1px solid #3d2510;border-radius:12px;
-  padding:12px;position:relative;
-  box-shadow:0 4px 16px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.05);
-  margin-bottom:8px;
-}
-.shelf::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,transparent,rgba(255,150,50,.2),transparent);
-  border-radius:12px 12px 0 0;
-}
+/* ── CAROUSEL ── */
+.carousel-wrap{background:linear-gradient(180deg,#2a1a0a,#1a0e04);border:1px solid #3d2510;border-radius:12px;padding:12px 6px;box-shadow:0 4px 16px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.04);}
+.carousel-row{display:flex;align-items:center;gap:6px;}
+.carousel-arrow{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:50%;width:28px;height:28px;flex-shrink:0;cursor:pointer;color:rgba(255,255,255,.6);font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.carousel-arrow:hover{background:rgba(255,110,247,.2);border-color:#ff6ef7;color:#ff6ef7;}
+.carousel-viewport{flex:1;overflow:hidden;border-radius:8px;}
+.carousel-track{display:flex;gap:8px;transition:transform .35s ease;}
 
-/* ITEM GRID */
-.item-grid{display:grid;gap:10px;}
-.item-grid.cols-2{grid-template-columns:1fr 1fr;}
-.item-grid.cols-3{grid-template-columns:1fr 1fr 1fr;}
-
-/* ITEM CARD */
-.item-card{
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
-  border-radius:10px;padding:10px 8px;
-  display:flex;flex-direction:column;align-items:center;gap:6px;
-  position:relative;transition:all .2s;
-}
-.item-card:hover{background:rgba(255,255,255,.07);border-color:rgba(255,110,247,.3);}
-.item-card.owned{border-color:rgba(100,255,150,.3);}
-
-.item-img-wrap{
-  position:relative;width:100%;
-  display:flex;align-items:center;justify-content:center;
-  min-height:80px;
-}
-.item-img{max-width:100%;max-height:90px;object-fit:contain;}
-.item-img.portrait{max-height:100px;}
-.item-img.landscape{max-height:70px;max-width:100%;}
-.item-img.circular{max-height:80px;width:80px;}
-
-/* SOLD OUT overlay */
-.sold-out-overlay{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);
-  background:rgba(200,20,20,.9);color:#fff;font-weight:bold;
-  font-size:11px;letter-spacing:2px;padding:4px 10px;border-radius:4px;
-  border:2px solid #fff;white-space:nowrap;z-index:2;
-  box-shadow:0 2px 8px rgba(0,0,0,.5);
-}
-.owned-badge{
-  position:absolute;top:4px;right:4px;
-  background:rgba(50,200,100,.85);color:#fff;
-  font-size:7px;letter-spacing:.5px;padding:2px 6px;
-  border-radius:10px;font-weight:bold;
-}
-
-.item-name{font-size:9px;color:rgba(255,255,255,.75);text-align:center;line-height:1.3;}
-.stock-count{font-size:8px;color:rgba(255,255,255,.3);text-align:center;}
+/* ── ITEM CARD ── */
+.item-card{flex:0 0 calc(50% - 4px);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 7px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:all .2s;position:relative;}
+.item-card:hover{background:rgba(255,110,247,.08);border-color:rgba(255,110,247,.35);}
+.item-card.owned-card{border-color:rgba(100,255,150,.25);}
+.item-img-wrap{width:100%;display:flex;align-items:center;justify-content:center;min-height:80px;position:relative;}
+.item-img{max-width:100%;max-height:88px;object-fit:contain;}
+.sold-out-stamp{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);background:rgba(180,10,10,.92);color:#fff;font-weight:bold;font-size:10px;letter-spacing:2px;padding:4px 10px;border-radius:4px;border:2px solid #fff;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.6);}
+.item-name{font-size:11px;color:rgba(255,255,255,.8);text-align:center;line-height:1.3;}
+.stock-count{font-size:10px;color:rgba(255,255,255,.32);text-align:center;}
 .stock-count span{color:#ff9966;}
-
-/* PRICE + BUY */
 .item-footer{display:flex;align-items:center;justify-content:space-between;width:100%;gap:4px;}
-.item-price{
-  display:flex;align-items:center;gap:3px;
-  background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.2);
-  border-radius:12px;padding:3px 7px;
-}
-.price-icon{font-size:10px;}
-.price-val{font-size:11px;font-weight:bold;color:#ffd700;}
-
-.buy-btn{
-  background:linear-gradient(135deg,#ff6ef7,#a855f7);
-  border:none;border-radius:12px;padding:4px 10px;
-  color:#000;font-weight:bold;font-size:9px;cursor:pointer;
-  transition:all .2s;letter-spacing:.5px;font-family:Georgia,serif;
-  white-space:nowrap;
-}
+.item-price{display:flex;align-items:center;gap:3px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.2);border-radius:12px;padding:3px 7px;}
+.price-icon{font-size:11px;}
+.price-val{font-size:13px;font-weight:bold;color:#ffd700;}
+.buy-btn{background:linear-gradient(135deg,#ff6ef7,#a855f7);border:none;border-radius:12px;padding:5px 10px;color:#000;font-weight:bold;font-size:11px;cursor:pointer;transition:all .2s;font-family:Georgia,serif;white-space:nowrap;}
 .buy-btn:hover{transform:scale(1.05);box-shadow:0 0 12px rgba(255,110,247,.5);}
 .buy-btn:disabled{background:rgba(255,255,255,.1);color:rgba(255,255,255,.3);cursor:not-allowed;transform:none;box-shadow:none;}
-.buy-btn.owned-btn{background:linear-gradient(135deg,#32c864,#1a8040);cursor:default;}
+.buy-btn.owned-btn{background:linear-gradient(135deg,#32c864,#1a8040);color:#fff;cursor:default;}
 .buy-btn.owned-btn:hover{transform:none;box-shadow:none;}
 
-/* NAV */
-#nav-bar{
-  display:flex;justify-content:space-around;align-items:center;
-  padding:8px 0 14px;
-  background:rgba(10,0,20,.95);border-top:1px solid rgba(255,255,255,.06);
-  flex-shrink:0;
-}
-.nav-btn{
-  background:none;border:none;color:rgba(255,255,255,.4);
-  font-size:9px;cursor:pointer;display:flex;flex-direction:column;
-  align-items:center;gap:3px;padding:4px 12px;
-  transition:color .2s;font-family:Georgia,serif;
-}
-.nav-btn:hover{color:#ff6ef7;}
-.nav-btn.active{color:#ff6ef7;}
+/* ── ITEM POPUP ── */
+#item-popup{display:none;position:absolute;inset:0;z-index:200;align-items:center;justify-content:center;}
+#item-popup.open{display:flex;}
+#popup-overlay{position:absolute;inset:0;background:rgba(0,0,0,.75);}
+#popup-box{position:relative;background:linear-gradient(180deg,#1e0050,#2a0060);border:2px solid #ff6ef7;border-radius:20px;padding:24px 20px;width:320px;max-width:90%;text-align:center;box-shadow:0 0 40px rgba(255,110,247,.4);z-index:1;}
+#popup-close{position:absolute;top:12px;right:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:50%;width:30px;height:30px;cursor:pointer;color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center;}
+#popup-img-wrap{margin-bottom:12px;}
+#popup-img{max-height:160px;max-width:200px;object-fit:contain;filter:drop-shadow(0 0 14px rgba(255,110,247,.5));}
+#popup-name{font-size:16px;font-weight:bold;color:#fff;margin-bottom:6px;}
+#popup-stock-line{font-size:12px;color:rgba(255,255,255,.45);margin-bottom:14px;}
+#popup-price-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:16px;}
+#popup-price-icon{font-size:18px;}
+#popup-price-val{font-size:22px;font-weight:bold;color:#ffd700;}
+#popup-price-label{font-size:11px;color:rgba(255,255,255,.4);}
+#popup-buy-btn{background:linear-gradient(135deg,#ff6ef7,#a855f7);border:none;border-radius:20px;padding:12px 32px;color:#000;font-weight:bold;font-size:14px;cursor:pointer;font-family:Georgia,serif;width:100%;margin-bottom:10px;transition:all .2s;}
+#popup-buy-btn:hover{box-shadow:0 0 20px rgba(255,110,247,.6);}
+#popup-buy-btn:disabled{background:rgba(255,255,255,.1);color:rgba(255,255,255,.3);cursor:not-allowed;}
+#popup-msg{font-size:12px;color:#4ade80;font-style:italic;min-height:18px;}
+
+/* ── NAV ── */
+#nav-bar{display:flex;justify-content:space-around;align-items:center;padding:8px 0 14px;background:rgba(10,0,20,.95);border-top:1px solid rgba(255,255,255,.06);flex-shrink:0;}
+.nav-btn{background:none;border:none;color:rgba(255,255,255,.4);font-size:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 14px;transition:color .2s;font-family:Georgia,serif;}
+.nav-btn:hover,.nav-btn.active{color:#ff6ef7;}
 .nav-icon{font-size:20px;line-height:1;}
-.nav-btn.active .nav-icon{filter:drop-shadow(0 0 6px #ff6ef7);}
 
 #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;font-family:Georgia,serif;white-space:nowrap;}
 </style>
 </head>
 <body>
-<div id="phone-outer">
-<div id="phone">
+<div id="phone-outer"><div id="phone">
 
   <!-- HEADER -->
   <div id="shop-header">
     <button id="back-btn" onclick="goHome()">◀</button>
-    <div id="shop-title-wrap">
-      <div id="shop-title">🛒 THE BEAT SHOP</div>
-      <div id="shop-subtitle">COLLECT · TRADE · INVEST</div>
-    </div>
-    <div id="bc-badge">
-      <span id="bc-badge-icon">🪙</span>
-      <span id="bc-badge-val">0</span>
+    <div id="shop-title">THE BEAT SHOP</div>
+    <div id="shop-subtitle">COLLECT · TRADE · INVEST</div>
+    <div id="bc-box">
+      <span id="bc-icon">🪙</span>
+      <span id="bc-val">0</span>
+      <span id="bc-sublabel">BeatCoins Available</span>
     </div>
   </div>
 
-  <!-- SCROLLABLE SHOP CONTENT -->
+  <!-- SCROLL -->
   <div id="shop-scroll">
 
     <!-- SHELF 1: RITA POSTERS -->
     <div class="shelf-section">
       <div class="shelf-label">♪ Lovely Rita Posters</div>
-      <div class="shelf">
-        <div class="item-grid cols-2">
-          <div class="item-card" id="card-rita_p1">
-            <div class="item-img-wrap">
-              <img class="item-img portrait" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/rita_apresentadora_clean.png" alt="Rita Presenter">
-            </div>
-            <div class="item-name">Rita Poster<br>Presenter</div>
-            <div class="stock-count">Only <span id="stock-rita_p1">6</span> left!</div>
-            <div class="item-footer">
-              <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">500</span></div>
-              <button class="buy-btn" id="btn-rita_p1" onclick="buyItem('rita_p1')">BUY</button>
+      <div class="carousel-wrap">
+        <div class="carousel-row">
+          <button class="carousel-arrow" onclick="navCarousel('posters',-1)">◀</button>
+          <div class="carousel-viewport" id="viewport-posters">
+            <div class="carousel-track" id="track-posters">
+              <div class="item-card" id="card-rita_p1" onclick="openPopup('rita_p1')">
+                <div class="item-img-wrap" id="imgwrap-rita_p1">
+                  <img class="item-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/rita_apresentadora_clean.png" alt="Rita Presenter">
+                </div>
+                <div class="item-name">Rita Poster — Presenter</div>
+                <div class="stock-count">Only <span id="stock-rita_p1">6</span> left!</div>
+                <div class="item-footer">
+                  <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">500</span></div>
+                  <button class="buy-btn" id="btn-rita_p1" onclick="event.stopPropagation();buyItem('rita_p1')">BUY</button>
+                </div>
+              </div>
+              <div class="item-card" id="card-rita_p2" onclick="openPopup('rita_p2')">
+                <div class="item-img-wrap" id="imgwrap-rita_p2">
+                  <img class="item-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/rita_poster_warden.png" alt="Rita Warden">
+                </div>
+                <div class="item-name">Rita Poster — Traffic Warden</div>
+                <div class="stock-count">Only <span id="stock-rita_p2">6</span> left!</div>
+                <div class="item-footer">
+                  <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">450</span></div>
+                  <button class="buy-btn" id="btn-rita_p2" onclick="event.stopPropagation();buyItem('rita_p2')">BUY</button>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="item-card" id="card-rita_p2">
-            <div class="item-img-wrap">
-              <img class="item-img portrait" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/rita_poster_warden.png" alt="Rita Warden">
-            </div>
-            <div class="item-name">Rita Poster<br>Traffic Warden</div>
-            <div class="stock-count">Only <span id="stock-rita_p2">6</span> left!</div>
-            <div class="item-footer">
-              <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">450</span></div>
-              <button class="buy-btn" id="btn-rita_p2" onclick="buyItem('rita_p2')">BUY</button>
-            </div>
-          </div>
+          <button class="carousel-arrow" onclick="navCarousel('posters',1)">▶</button>
         </div>
       </div>
     </div>
@@ -214,30 +145,36 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
     <!-- SHELF 2: VW BEETLES -->
     <div class="shelf-section">
       <div class="shelf-label">🚗 VW Beetle Collection</div>
-      <div class="shelf">
-        <div class="item-grid cols-2">
-          <div class="item-card" id="card-vw_red">
-            <div class="item-img-wrap">
-              <img class="item-img landscape" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/vw_red.png" alt="Red VW Beetle">
-            </div>
-            <div class="item-name">VW Beetle<br>Classic Red</div>
-            <div class="stock-count">Only <span id="stock-vw_red">5</span> left!</div>
-            <div class="item-footer">
-              <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">800</span></div>
-              <button class="buy-btn" id="btn-vw_red" onclick="buyItem('vw_red')">BUY</button>
+      <div class="carousel-wrap">
+        <div class="carousel-row">
+          <button class="carousel-arrow" onclick="navCarousel('beetles',-1)">◀</button>
+          <div class="carousel-viewport" id="viewport-beetles">
+            <div class="carousel-track" id="track-beetles">
+              <div class="item-card" id="card-vw_red" onclick="openPopup('vw_red')">
+                <div class="item-img-wrap" id="imgwrap-vw_red">
+                  <img class="item-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/vw_red.png" alt="Red VW">
+                </div>
+                <div class="item-name">VW Beetle — Classic Red</div>
+                <div class="stock-count">Only <span id="stock-vw_red">5</span> left!</div>
+                <div class="item-footer">
+                  <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">800</span></div>
+                  <button class="buy-btn" id="btn-vw_red" onclick="event.stopPropagation();buyItem('vw_red')">BUY</button>
+                </div>
+              </div>
+              <div class="item-card" id="card-vw_yellow" onclick="openPopup('vw_yellow')">
+                <div class="item-img-wrap" id="imgwrap-vw_yellow">
+                  <img class="item-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/vw_yellow.png" alt="Yellow VW">
+                </div>
+                <div class="item-name">VW Beetle — Yellow Flowers</div>
+                <div class="stock-count">Only <span id="stock-vw_yellow">5</span> left!</div>
+                <div class="item-footer">
+                  <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">750</span></div>
+                  <button class="buy-btn" id="btn-vw_yellow" onclick="event.stopPropagation();buyItem('vw_yellow')">BUY</button>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="item-card" id="card-vw_yellow">
-            <div class="item-img-wrap">
-              <img class="item-img landscape" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/vw_yellow.png" alt="Yellow VW Beetle">
-            </div>
-            <div class="item-name">VW Beetle<br>Yellow Flowers</div>
-            <div class="stock-count">Only <span id="stock-vw_yellow">5</span> left!</div>
-            <div class="item-footer">
-              <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">750</span></div>
-              <button class="buy-btn" id="btn-vw_yellow" onclick="buyItem('vw_yellow')">BUY</button>
-            </div>
-          </div>
+          <button class="carousel-arrow" onclick="navCarousel('beetles',1)">▶</button>
         </div>
       </div>
     </div>
@@ -245,180 +182,286 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
     <!-- SHELF 3: WORLD BADGES -->
     <div class="shelf-section">
       <div class="shelf-label">🏅 World Badges</div>
-      <div class="shelf">
-        <div class="item-grid cols-2">
-          <div class="item-card" id="card-badge_oct">
-            <div class="item-img-wrap">
-              <img class="item-img circular" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/badge_octopus.png" alt="Octopus Badge">
-            </div>
-            <div class="item-name">Ocean World<br>Badge</div>
-            <div class="stock-count"><span id="stock-badge_oct">10</span> available</div>
-            <div class="item-footer">
-              <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">350</span></div>
-              <button class="buy-btn" id="btn-badge_oct" onclick="buyItem('badge_oct')">BUY</button>
+      <div class="carousel-wrap">
+        <div class="carousel-row">
+          <button class="carousel-arrow" onclick="navCarousel('badges',-1)">◀</button>
+          <div class="carousel-viewport" id="viewport-badges">
+            <div class="carousel-track" id="track-badges">
+              <div class="item-card" id="card-badge_oct" onclick="openPopup('badge_oct')">
+                <div class="item-img-wrap" id="imgwrap-badge_oct">
+                  <img class="item-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/badge_octopus.png" alt="Octopus Badge">
+                </div>
+                <div class="item-name">Ocean World Badge</div>
+                <div class="stock-count"><span id="stock-badge_oct">10</span> available</div>
+                <div class="item-footer">
+                  <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">350</span></div>
+                  <button class="buy-btn" id="btn-badge_oct" onclick="event.stopPropagation();buyItem('badge_oct')">BUY</button>
+                </div>
+              </div>
+              <div class="item-card" id="card-badge_spc" onclick="openPopup('badge_spc')">
+                <div class="item-img-wrap" id="imgwrap-badge_spc">
+                  <img class="item-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/badge_space.png" alt="Space Badge">
+                </div>
+                <div class="item-name">Space World Badge</div>
+                <div class="stock-count"><span id="stock-badge_spc">10</span> available</div>
+                <div class="item-footer">
+                  <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">350</span></div>
+                  <button class="buy-btn" id="btn-badge_spc" onclick="event.stopPropagation();buyItem('badge_spc')">BUY</button>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="item-card" id="card-badge_spc">
-            <div class="item-img-wrap">
-              <img class="item-img circular" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/badge_space.png" alt="Space Badge">
-            </div>
-            <div class="item-name">Space World<br>Badge</div>
-            <div class="stock-count"><span id="stock-badge_spc">10</span> available</div>
-            <div class="item-footer">
-              <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">350</span></div>
-              <button class="buy-btn" id="btn-badge_spc" onclick="buyItem('badge_spc')">BUY</button>
-            </div>
-          </div>
+          <button class="carousel-arrow" onclick="navCarousel('badges',1)">▶</button>
         </div>
       </div>
     </div>
 
-    <!-- SHELF 4: MUSIC NOTES (collectibles) -->
+    <!-- SHELF 4: MUSIC COLLECTIBLES (placeholder — Lad posters coming soon) -->
     <div class="shelf-section">
       <div class="shelf-label">🎵 Music Collectibles</div>
-      <div class="shelf">
-        <div class="item-grid cols-2">
-          <div class="item-card" id="card-note_gold">
-            <div class="item-img-wrap">
-              <img class="item-img" style="max-height:75px" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/note_gold.png" alt="Gold Note">
-            </div>
-            <div class="item-name">Gold Musical<br>Note</div>
-            <div class="stock-count"><span id="stock-note_gold">8</span> available</div>
-            <div class="item-footer">
-              <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">250</span></div>
-              <button class="buy-btn" id="btn-note_gold" onclick="buyItem('note_gold')">BUY</button>
+      <div class="carousel-wrap">
+        <div class="carousel-row">
+          <button class="carousel-arrow" onclick="navCarousel('music',-1)">◀</button>
+          <div class="carousel-viewport" id="viewport-music">
+            <div class="carousel-track" id="track-music">
+              <div class="item-card" id="card-note_gold" onclick="openPopup('note_gold')">
+                <div class="item-img-wrap" id="imgwrap-note_gold">
+                  <img class="item-img" style="max-height:80px" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/note_gold.png" alt="Gold Note">
+                </div>
+                <div class="item-name">Gold Musical Note</div>
+                <div class="stock-count"><span id="stock-note_gold">8</span> available</div>
+                <div class="item-footer">
+                  <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">250</span></div>
+                  <button class="buy-btn" id="btn-note_gold" onclick="event.stopPropagation();buyItem('note_gold')">BUY</button>
+                </div>
+              </div>
+              <div class="item-card" id="card-note_red" onclick="openPopup('note_red')">
+                <div class="item-img-wrap" id="imgwrap-note_red">
+                  <img class="item-img" style="max-height:80px" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/note_red.png" alt="Red Note">
+                </div>
+                <div class="item-name">Red Wrong Note</div>
+                <div class="stock-count"><span id="stock-note_red">8</span> available</div>
+                <div class="item-footer">
+                  <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">200</span></div>
+                  <button class="buy-btn" id="btn-note_red" onclick="event.stopPropagation();buyItem('note_red')">BUY</button>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="item-card" id="card-note_red">
-            <div class="item-img-wrap">
-              <img class="item-img" style="max-height:75px" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/note_red.png" alt="Red Note">
-            </div>
-            <div class="item-name">Red Wrong<br>Note</div>
-            <div class="stock-count"><span id="stock-note_red">8</span> available</div>
-            <div class="item-footer">
-              <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">200</span></div>
-              <button class="buy-btn" id="btn-note_red" onclick="buyItem('note_red')">BUY</button>
-            </div>
-          </div>
+          <button class="carousel-arrow" onclick="navCarousel('music',1)">▶</button>
         </div>
       </div>
     </div>
 
   </div><!-- /shop-scroll -->
 
-  <!-- NAV BAR -->
+  <!-- ITEM POPUP -->
+  <div id="item-popup">
+    <div id="popup-overlay" onclick="closePopup()"></div>
+    <div id="popup-box">
+      <button id="popup-close" onclick="closePopup()">✕</button>
+      <div id="popup-img-wrap"><img id="popup-img" src="" alt=""></div>
+      <div id="popup-name">Item Name</div>
+      <div id="popup-stock-line">Stock: 0</div>
+      <div id="popup-price-row">
+        <span id="popup-price-icon">🪙</span>
+        <span id="popup-price-val">0</span>
+        <span id="popup-price-label">BeatCoins</span>
+      </div>
+      <button id="popup-buy-btn" onclick="buyFromPopup()">BUY NOW</button>
+      <div id="popup-msg"></div>
+    </div>
+  </div>
+
+  <!-- NAV: 4 buttons — no Music -->
   <nav id="nav-bar">
     <button class="nav-btn" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
-    <button class="nav-btn" onclick="goMusic()"><span class="nav-icon">🎵</span><span>Music</span></button>
     <button class="nav-btn active"><span class="nav-icon">🛒</span><span>Shop</span></button>
-    <button class="nav-btn" onclick="goAdventures()"><span class="nav-icon">🌍</span><span>Adventures</span></button>
-    <button class="nav-btn" onclick="goProfile()"><span class="nav-icon">👤</span><span>Profile</span></button>
+    <button class="nav-btn" onclick="window.location.href='page_adventures.html'"><span class="nav-icon">🌍</span><span>Adventures</span></button>
+    <button class="nav-btn" onclick="window.location.href='page_adventures.html'"><span class="nav-icon">👤</span><span>Profile</span></button>
   </nav>
 
-</div>
-</div>
+</div></div>
 <div id="toast"></div>
 
 <script>
-const BASE_RAW = 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/';
+const RAW = 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/';
 const BC_KEY = 'askLovelyRitaV4_bc';
 
-// Item catalogue
 const ITEMS = {
-  rita_p1:   { name:'Rita Poster — Presenter',    price:500, stock:6  },
-  rita_p2:   { name:'Rita Poster — Traffic Warden', price:450, stock:6 },
-  vw_red:    { name:'VW Beetle Classic Red',       price:800, stock:5  },
-  vw_yellow: { name:'VW Beetle Yellow Flowers',    price:750, stock:5  },
-  badge_oct: { name:'Ocean World Badge',            price:350, stock:10 },
-  badge_spc: { name:'Space World Badge',            price:350, stock:10 },
-  note_gold: { name:'Gold Musical Note',            price:250, stock:8  },
-  note_red:  { name:'Red Wrong Note',               price:200, stock:8  },
+  rita_p1:   {name:'Rita Poster — Presenter',       price:500, stock:6,  img:RAW+'rita_apresentadora_clean.png'},
+  rita_p2:   {name:'Rita Poster — Traffic Warden',  price:450, stock:6,  img:RAW+'shop/rita_poster_warden.png'},
+  vw_red:    {name:'VW Beetle — Classic Red',        price:800, stock:5,  img:RAW+'shop/vw_red.png'},
+  vw_yellow: {name:'VW Beetle — Yellow Flowers',     price:750, stock:5,  img:RAW+'shop/vw_yellow.png'},
+  badge_oct: {name:'Ocean World Badge',              price:350, stock:10, img:RAW+'shop/badge_octopus.png'},
+  badge_spc: {name:'Space World Badge',              price:350, stock:10, img:RAW+'shop/badge_space.png'},
+  note_gold: {name:'Gold Musical Note',              price:250, stock:8,  img:RAW+'shop/note_gold.png'},
+  note_red:  {name:'Red Wrong Note',                 price:200, stock:8,  img:RAW+'shop/note_red.png'},
 };
 
+// Carousels state
+const carousels = {};
+function initCarousel(id, count) {
+  carousels[id] = {page:0, total:Math.ceil(count/2)};
+}
+function navCarousel(id, dir) {
+  const c = carousels[id];
+  if(!c) return;
+  c.page = (c.page + dir + c.total) % c.total;
+  const vp = document.getElementById('viewport-'+id);
+  const track = document.getElementById('track-'+id);
+  const vw = vp.offsetWidth;
+  const gap = 8;
+  const cardW = (vw - gap) / 2;
+  const offset = c.page * (2 * cardW + gap);
+  track.style.transform = `translateX(-${offset}px)`;
+}
+
+// BC functions
 function getBC(){ return Number(localStorage.getItem(BC_KEY)||25000); }
 function setBC(v){ localStorage.setItem(BC_KEY,v); }
-function getStock(id){ 
-  const k='lra_stock_'+id;
-  if(localStorage.getItem(k)===null) localStorage.setItem(k,ITEMS[id].stock);
-  return Number(localStorage.getItem(k));
-}
+function getStock(id){ if(localStorage.getItem('lra_stock_'+id)===null) localStorage.setItem('lra_stock_'+id,ITEMS[id].stock); return Number(localStorage.getItem('lra_stock_'+id)); }
 function setStock(id,v){ localStorage.setItem('lra_stock_'+id,v); }
 function isOwned(id){ return localStorage.getItem('lra_owned_'+id)==='1'; }
 function setOwned(id){ localStorage.setItem('lra_owned_'+id,'1'); }
 
-function renderItem(id){
-  const item = ITEMS[id];
+// Cashier sound
+function cashierSound() {
+  try {
+    const ctx = new(window.AudioContext||window.webkitAudioContext)();
+    const t = ctx.currentTime;
+    // Ding
+    [0,0.08,0.16].forEach((delay,i)=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.frequency.value = 880 - i*100;
+      g.gain.setValueAtTime(0.15,t+delay);
+      g.gain.exponentialRampToValueAtTime(0.001,t+delay+0.25);
+      o.start(t+delay);o.stop(t+delay+0.25);
+    });
+  } catch(e){}
+}
+
+// Rolling counter
+function rollCounter(from, to, duration, el) {
+  const start = Date.now();
+  function step() {
+    const p = Math.min((Date.now()-start)/duration, 1);
+    const ease = 1-Math.pow(1-p,3);
+    el.textContent = Math.round(from + (to-from)*ease).toLocaleString();
+    if(p<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function updateBCDisplay(newVal, animate=false) {
+  const el = document.getElementById('bc-val');
+  if(animate) {
+    const oldVal = Number(el.textContent.replace(/,/g,''));
+    cashierSound();
+    rollCounter(oldVal, newVal, 800, el);
+  } else {
+    el.textContent = newVal.toLocaleString();
+  }
+}
+
+// Render item state
+function renderItem(id) {
   const stock = getStock(id);
   const owned = isOwned(id);
-  const card  = document.getElementById('card-'+id);
-  const btn   = document.getElementById('btn-'+id);
+  const imgWrap = document.getElementById('imgwrap-'+id);
+  const btn = document.getElementById('btn-'+id);
   const stockEl = document.getElementById('stock-'+id);
-  if(!card) return;
+  const card = document.getElementById('card-'+id);
+  if(!imgWrap) return;
 
-  // Remove old overlays
-  card.querySelectorAll('.sold-out-overlay,.owned-badge').forEach(e=>e.remove());
+  imgWrap.querySelectorAll('.sold-out-stamp').forEach(e=>e.remove());
 
-  if(owned){
-    card.classList.add('owned');
-    const badge = document.createElement('div');
-    badge.className='owned-badge'; badge.textContent='✓ OWNED';
-    card.querySelector('.item-img-wrap').appendChild(badge);
+  if(owned) {
     btn.textContent='OWNED'; btn.className='buy-btn owned-btn'; btn.disabled=true;
-  } else if(stock<=0){
-    const overlay = document.createElement('div');
-    overlay.className='sold-out-overlay'; overlay.textContent='SOLD OUT';
-    card.querySelector('.item-img-wrap').appendChild(overlay);
+    card.classList.add('owned-card');
+  } else if(stock<=0) {
+    const stamp=document.createElement('div');
+    stamp.className='sold-out-stamp'; stamp.textContent='SOLD OUT';
+    imgWrap.appendChild(stamp);
     btn.textContent='SOLD OUT'; btn.className='buy-btn'; btn.disabled=true;
     if(stockEl) stockEl.textContent='0';
   } else {
     btn.textContent='BUY'; btn.className='buy-btn'; btn.disabled=false;
     if(stockEl) stockEl.textContent=stock;
+    card.classList.remove('owned-card');
   }
 }
 
-function buyItem(id){
+function buyItem(id) {
   const item = ITEMS[id];
   const bc = getBC();
-  const stock = getStock(id);
-  const owned = isOwned(id);
-  if(owned){ toast('✅ You already own this love!'); return; }
-  if(stock<=0){ toast('😢 Sold out! Trade with another player!'); return; }
-  if(bc < item.price){ toast(`🪙 Not enough BeatCoins! Need ${item.price}, you have ${bc.toLocaleString()}`); return; }
-  // Confirm purchase
-  if(!confirm(`Invest ${item.price} BeatCoins for "${item.name}"?`)) return;
-  // Deduct BeatCoins
-  setBC(bc - item.price);
-  // Reduce stock
-  setStock(id, stock-1);
-  // Mark owned
+  if(isOwned(id)){ toast('✅ Already in your collection love!'); return; }
+  if(getStock(id)<=0){ toast('😢 Sold out! Trade with another player!'); return; }
+  if(bc < item.price){ toast(`🪙 You need ${item.price.toLocaleString()} BeatCoins love! You have ${bc.toLocaleString()}`); return; }
+  if(!confirm(`Invest ${item.price.toLocaleString()} BeatCoins for "${item.name}"?`)) return;
+  const newBC = bc - item.price;
+  setBC(newBC);
+  setStock(id, getStock(id)-1);
   setOwned(id);
-  // Update UI
-  document.getElementById('bc-badge-val').textContent = (bc-item.price).toLocaleString();
+  updateBCDisplay(newBC, true);
   renderItem(id);
-  toast(`🎉 You invested in ${item.name}! It's yours love!`);
-  speak(`Wonderful choice love! You invested in ${item.name}! It is now in your collection!`);
+  updatePopupState(id);
+  toast(`🎉 ${item.name} is now in your collection love!`);
+  speak(`Wonderful choice love! ${item.name} is yours!`);
+}
+
+// Popup
+let currentPopupId = null;
+function openPopup(id) {
+  currentPopupId = id;
+  const item = ITEMS[id];
+  document.getElementById('popup-img').src = item.img;
+  document.getElementById('popup-name').textContent = item.name;
+  document.getElementById('popup-price-val').textContent = item.price.toLocaleString();
+  updatePopupState(id);
+  document.getElementById('item-popup').classList.add('open');
+}
+function updatePopupState(id) {
+  if(!id||currentPopupId!==id) return;
+  const owned = isOwned(id);
+  const stock = getStock(id);
+  const btn = document.getElementById('popup-buy-btn');
+  const msg = document.getElementById('popup-msg');
+  document.getElementById('popup-stock-line').textContent =
+    owned ? 'In your collection ✓' :
+    stock<=0 ? 'Sold out!' :
+    `${stock} remaining`;
+  if(owned){ btn.textContent='OWNED ✓'; btn.disabled=true; msg.textContent=''; }
+  else if(stock<=0){ btn.textContent='SOLD OUT'; btn.disabled=true; msg.textContent=''; }
+  else { btn.textContent='BUY NOW 🛒'; btn.disabled=false; msg.textContent=''; }
+}
+function buyFromPopup() {
+  if(currentPopupId) buyItem(currentPopupId);
+}
+function closePopup() {
+  document.getElementById('item-popup').classList.remove('open');
+  currentPopupId = null;
 }
 
 function speak(text){
-  if(!window.speechSynthesis) return;
+  if(!window.speechSynthesis)return;
   window.speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text); u.lang='en-GB'; u.rate=0.92; u.pitch=1.1;
+  const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.92;u.pitch=1.1;
   const v=window.speechSynthesis.getVoices();
   const voice=v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));
-  if(voice)u.voice=voice; window.speechSynthesis.speak(u);
+  if(voice)u.voice=voice;window.speechSynthesis.speak(u);
 }
-
 function goHome(){ window.location.href='page1_landing.html'; }
-function goMusic(){ window.location.href='page1_landing.html'; }
-function goAdventures(){ window.location.href='page_adventures.html'; }
-function goProfile(){ window.location.href='page_adventures.html'; }
-
-function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.style.opacity='1'; clearTimeout(t._t); t._t=setTimeout(()=>t.style.opacity='0',3500); }
+function toast(msg){ const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',3500); }
 
 window.addEventListener('load',()=>{
-  document.getElementById('bc-badge-val').textContent = getBC().toLocaleString();
+  updateBCDisplay(getBC());
   Object.keys(ITEMS).forEach(id=>renderItem(id));
-  speak("Welcome to The Beat Shop love! Invest your Educational BeatCoins in exclusive collectibles!");
+  // Init carousels
+  initCarousel('posters',2); initCarousel('beetles',2);
+  initCarousel('badges',2);  initCarousel('music',2);
+  speak("Welcome to The Beat Shop love! Explore and invest your BeatCoins in exclusive collectibles!");
 });
 </script>
 </body>
