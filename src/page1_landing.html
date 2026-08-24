@@ -263,7 +263,7 @@ body {
    ═══════════════════════════════════════════════════════════════ */
 #rita-center {
   background:linear-gradient(180deg,rgba(100,5,160,.52) 0%,rgba(40,0,90,.82) 100%);
-  border:3px solid #ffd700; border-radius:18px;
+  border:none; border-radius:18px;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   gap:6px; padding:12px 6px; position:relative;
   box-shadow:0 0 30px var(--rita-glow),0 0 65px rgba(255,60,200,.28),0 0 110px rgba(255,60,200,.10),inset 0 0 20px rgba(0,0,0,.45);
@@ -527,6 +527,10 @@ function switchTheme(t) {
   const outfit = OUTFIT_MAP[t];
   LADS.forEach(l => { document.getElementById('lad-'+l).src = BASE + LADS_IMG[outfit][l]; });
   localStorage.setItem('askLovelyRitaV4_level', t);
+  // Explicitly sync rita-text-box background to theme (bypasses stacking context CSS var issue)
+  const bgMap = { youngsters:'#1a0040', grownups:'#1a1200', experts:'#0d0d1e' };
+  const rtb = document.getElementById('rita-text-box');
+  if(rtb) rtb.style.background = bgMap[t] || '#1a0040';
 }
 
 function spinLads() {
@@ -631,6 +635,10 @@ window.addEventListener('load', ()=>{
   document.getElementById('bc-display').textContent = bc.toLocaleString();
   loadLadScores();
   clearRitaDisplay();
+  // Sync rita-text-box background on first load
+  const bgMap0 = { youngsters:'#1a0040', grownups:'#1a1200', experts:'#0d0d1e' };
+  const rtb0 = document.getElementById('rita-text-box');
+  if(rtb0) rtb0.style.background = bgMap0['youngsters'];
   const greeting = "Hello love! Welcome to Lovely Rita Adventures! Press the button to spin and pick your Lad companion. Lets get started!";
   const speak = () => { if(!muteState) ritaSpeak(greeting); };
   if(window.speechSynthesis.getVoices().length > 0) {
