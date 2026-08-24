@@ -2,181 +2,311 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Beat Shop — Lovely Rita Adventures</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:#0a0a0a;display:flex;flex-direction:column;align-items:center;min-height:100vh;font-family:Georgia,serif;}
+body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,serif;}
 #phone-outer{display:flex;justify-content:center;padding:20px 0 40px;width:100%;}
-#phone{background:#1a0040;overflow:hidden;position:relative;display:flex;flex-direction:column;width:393px;height:852px;border-radius:48px;box-shadow:0 0 0 10px #1a1a1a,0 0 0 12px #333,0 30px 80px rgba(0,0,0,.8);}
+#phone{
+  width:393px;min-height:852px;background:#150020;
+  overflow:hidden;display:flex;flex-direction:column;
+  border-radius:48px;
+  box-shadow:0 0 0 10px #1a1a1a,0 0 0 12px #333,0 30px 80px rgba(0,0,0,.8);
+  position:relative;
+}
 #phone::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#0a0a0a;border-radius:0 0 20px 20px;z-index:100;}
 
 /* HEADER */
-#shop-header{padding:42px 16px 12px;display:flex;flex-direction:column;align-items:center;flex-shrink:0;background:linear-gradient(180deg,#1a0040 60%,rgba(26,0,64,.85));position:relative;z-index:2;}
-.header-row{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:10px;}
-.back-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:50%;width:34px;height:34px;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.bc-pill{display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.4);border:1px solid #ffd700;border-radius:20px;padding:5px 12px;}
-.bc-pill-icon{font-size:16px;}
-.bc-pill-val{font-size:14px;font-weight:bold;color:#ffd700;font-family:Georgia,serif;}
-
-/* Neon shop title */
-#shop-title{
-  font-size:28px;font-weight:900;letter-spacing:2px;text-align:center;
-  color:#ff6ef7;
-  text-shadow:0 0 10px #ff6ef7,0 0 20px #ff6ef7,0 0 40px #a855f7,0 0 80px #a855f7;
-  font-family:Georgia,serif;
-  line-height:1.1;
+#shop-header{
+  padding:44px 16px 12px;
+  background:linear-gradient(180deg,#1a0028 0%,#150020 100%);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
 }
-#shop-title span{color:#ffde59;text-shadow:0 0 10px #ffde59,0 0 20px #ffde59,0 0 40px #c8860a;}
+#back-btn{
+  width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.15);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+  color:rgba(255,255,255,.7);
+}
+#shop-title-wrap{flex:1;text-align:center;}
+#shop-title{
+  font-size:22px;font-weight:bold;letter-spacing:2px;
+  background:linear-gradient(135deg,#ff6ef7,#ffd700);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  text-shadow:none;
+  filter:drop-shadow(0 0 12px rgba(255,110,247,.5));
+}
+#shop-subtitle{font-size:9px;color:rgba(255,255,255,.4);letter-spacing:2px;margin-top:2px;}
+#bc-badge{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.3);
+  border-radius:20px;padding:6px 10px;
+}
+#bc-badge-icon{font-size:16px;}
+#bc-badge-val{font-size:13px;font-weight:bold;color:#ffd700;}
 
-/* SCROLL AREA */
-#shop-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:10px 12px 10px;}
+/* SCROLLABLE CONTENT */
+#shop-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 12px 16px;}
 #shop-scroll::-webkit-scrollbar{width:0;}
 
-/* CATEGORY ROW */
-.cat-label{font-size:9px;font-weight:bold;color:rgba(255,255,255,.4);letter-spacing:2px;text-transform:uppercase;margin:14px 0 8px;display:flex;align-items:center;gap:6px;}
-.cat-label::before,.cat-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.1);}
+/* SHELF SECTION */
+.shelf-section{margin-bottom:20px;}
+.shelf-label{
+  font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.35);
+  text-transform:uppercase;margin-bottom:10px;padding-left:2px;
+  border-left:2px solid #ff6ef7;padding-left:8px;
+}
 
-/* SHELF (wooden plank look) */
-.shelf{background:linear-gradient(180deg,#2d1a00 0%,#3d2200 40%,#2a1800 100%);border-radius:8px;padding:12px 10px 14px;margin-bottom:4px;border-top:3px solid #6b3d00;box-shadow:0 4px 12px rgba(0,0,0,.6);}
+/* SHELF (wooden plank background) */
+.shelf{
+  background:linear-gradient(180deg,#2a1a0a 0%,#1a0e04 100%);
+  border:1px solid #3d2510;border-radius:12px;
+  padding:12px;position:relative;
+  box-shadow:0 4px 16px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.05);
+  margin-bottom:8px;
+}
+.shelf::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,rgba(255,150,50,.2),transparent);
+  border-radius:12px 12px 0 0;
+}
 
-/* ITEMS GRID on shelf */
-.items-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.items-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+/* ITEM GRID */
+.item-grid{display:grid;gap:10px;}
+.item-grid.cols-2{grid-template-columns:1fr 1fr;}
+.item-grid.cols-3{grid-template-columns:1fr 1fr 1fr;}
 
 /* ITEM CARD */
-.item-card{background:rgba(0,0,0,.35);border-radius:10px;padding:8px 6px 10px;display:flex;flex-direction:column;align-items:center;gap:5px;position:relative;border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:transform .2s,box-shadow .2s;}
-.item-card:hover{transform:scale(1.03);box-shadow:0 0 15px rgba(255,110,247,.4);}
-.item-card.owned{border-color:#4ade80;box-shadow:0 0 10px rgba(74,222,128,.3);}
-.item-card.sold-out{opacity:.7;cursor:default;}
+.item-card{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;padding:10px 8px;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  position:relative;transition:all .2s;
+}
+.item-card:hover{background:rgba(255,255,255,.07);border-color:rgba(255,110,247,.3);}
+.item-card.owned{border-color:rgba(100,255,150,.3);}
 
-.item-img{height:80px;display:flex;align-items:center;justify-content:center;}
-.item-img img{max-height:80px;max-width:100%;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6));}
+.item-img-wrap{
+  position:relative;width:100%;
+  display:flex;align-items:center;justify-content:center;
+  min-height:80px;
+}
+.item-img{max-width:100%;max-height:90px;object-fit:contain;}
+.item-img.portrait{max-height:100px;}
+.item-img.landscape{max-height:70px;max-width:100%;}
+.item-img.circular{max-height:80px;width:80px;}
 
-.item-name{font-size:9px;font-weight:bold;color:#fff;text-align:center;line-height:1.3;letter-spacing:.3px;}
-.item-stock{font-size:8px;color:rgba(255,255,255,.4);letter-spacing:.5px;}
-.item-stock.low{color:#ff6b35;}
+/* SOLD OUT overlay */
+.sold-out-overlay{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);
+  background:rgba(200,20,20,.9);color:#fff;font-weight:bold;
+  font-size:11px;letter-spacing:2px;padding:4px 10px;border-radius:4px;
+  border:2px solid #fff;white-space:nowrap;z-index:2;
+  box-shadow:0 2px 8px rgba(0,0,0,.5);
+}
+.owned-badge{
+  position:absolute;top:4px;right:4px;
+  background:rgba(50,200,100,.85);color:#fff;
+  font-size:7px;letter-spacing:.5px;padding:2px 6px;
+  border-radius:10px;font-weight:bold;
+}
 
-.buy-row{display:flex;align-items:center;justify-content:space-between;width:100%;margin-top:2px;gap:4px;}
-.item-price{display:flex;align-items:center;gap:3px;font-size:11px;font-weight:bold;color:#ffd700;}
-.item-price-icon{font-size:12px;}
-.buy-btn{background:linear-gradient(135deg,#ff6ef7,#a855f7);border:none;border-radius:8px;padding:3px 8px;font-size:8px;font-weight:bold;color:#000;cursor:pointer;font-family:Georgia,serif;white-space:nowrap;transition:transform .15s;}
-.buy-btn:hover{transform:scale(1.05);}
-.buy-btn:active{transform:scale(.95);}
-.owned-badge{font-size:8px;color:#4ade80;font-weight:bold;letter-spacing:.5px;}
+.item-name{font-size:9px;color:rgba(255,255,255,.75);text-align:center;line-height:1.3;}
+.stock-count{font-size:8px;color:rgba(255,255,255,.3);text-align:center;}
+.stock-count span{color:#ff9966;}
 
-/* SOLD OUT STAMP */
-.sold-stamp{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);background:#c00;color:#fff;font-size:11px;font-weight:900;padding:4px 8px;border-radius:4px;border:2px solid #ff4444;letter-spacing:1px;white-space:nowrap;z-index:3;box-shadow:0 2px 8px rgba(0,0,0,.5);}
+/* PRICE + BUY */
+.item-footer{display:flex;align-items:center;justify-content:space-between;width:100%;gap:4px;}
+.item-price{
+  display:flex;align-items:center;gap:3px;
+  background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.2);
+  border-radius:12px;padding:3px 7px;
+}
+.price-icon{font-size:10px;}
+.price-val{font-size:11px;font-weight:bold;color:#ffd700;}
 
-/* COMING SOON */
-.coming-soon{text-align:center;padding:20px 10px;font-size:10px;color:rgba(255,255,255,.25);letter-spacing:1px;font-style:italic;}
+.buy-btn{
+  background:linear-gradient(135deg,#ff6ef7,#a855f7);
+  border:none;border-radius:12px;padding:4px 10px;
+  color:#000;font-weight:bold;font-size:9px;cursor:pointer;
+  transition:all .2s;letter-spacing:.5px;font-family:Georgia,serif;
+  white-space:nowrap;
+}
+.buy-btn:hover{transform:scale(1.05);box-shadow:0 0 12px rgba(255,110,247,.5);}
+.buy-btn:disabled{background:rgba(255,255,255,.1);color:rgba(255,255,255,.3);cursor:not-allowed;transform:none;box-shadow:none;}
+.buy-btn.owned-btn{background:linear-gradient(135deg,#32c864,#1a8040);cursor:default;}
+.buy-btn.owned-btn:hover{transform:none;box-shadow:none;}
 
 /* NAV */
-#nav-bar{display:flex;justify-content:space-around;align-items:center;padding:8px 0 16px;background:rgba(10,0,30,.95);border-top:1px solid rgba(255,110,247,.2);flex-shrink:0;}
-.nav-btn{background:none;border:none;color:rgba(255,255,255,.4);font-size:8.5px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 10px;transition:color .2s;font-family:Georgia,serif;}
-.nav-btn:hover,.nav-btn.active{color:#ff6ef7;}
-.nav-btn.active .nav-icon{filter:drop-shadow(0 0 6px #ff6ef7);}
+#nav-bar{
+  display:flex;justify-content:space-around;align-items:center;
+  padding:8px 0 14px;
+  background:rgba(10,0,20,.95);border-top:1px solid rgba(255,255,255,.06);
+  flex-shrink:0;
+}
+.nav-btn{
+  background:none;border:none;color:rgba(255,255,255,.4);
+  font-size:9px;cursor:pointer;display:flex;flex-direction:column;
+  align-items:center;gap:3px;padding:4px 12px;
+  transition:color .2s;font-family:Georgia,serif;
+}
+.nav-btn:hover{color:#ff6ef7;}
+.nav-btn.active{color:#ff6ef7;}
 .nav-icon{font-size:20px;line-height:1;}
+.nav-btn.active .nav-icon{filter:drop-shadow(0 0 6px #ff6ef7);}
 
-#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;font-family:Georgia,serif;white-space:nowrap;}
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;font-family:Georgia,serif;white-space:nowrap;}
 </style>
 </head>
 <body>
 <div id="phone-outer">
 <div id="phone">
 
+  <!-- HEADER -->
   <div id="shop-header">
-    <div class="header-row">
-      <button class="back-btn" onclick="goHome()">◀</button>
-      <div class="bc-pill">
-        <span class="bc-pill-icon">🪙</span>
-        <span class="bc-pill-val" id="bc-display">25,000</span>
-      </div>
+    <button id="back-btn" onclick="goHome()">◀</button>
+    <div id="shop-title-wrap">
+      <div id="shop-title">🛒 THE BEAT SHOP</div>
+      <div id="shop-subtitle">COLLECT · TRADE · INVEST</div>
     </div>
-    <div id="shop-title">THE <span>BEAT</span> SHOP</div>
+    <div id="bc-badge">
+      <span id="bc-badge-icon">🪙</span>
+      <span id="bc-badge-val">0</span>
+    </div>
   </div>
 
+  <!-- SCROLLABLE SHOP CONTENT -->
   <div id="shop-scroll">
 
-    <!-- POSTERS -->
-    <div class="cat-label">🎭 Posters</div>
-    <div class="shelf">
-      <div class="items-row">
-        <div class="item-card" id="card-rita_poster_1" onclick="buyItem('rita_poster_1')">
-          <div class="item-img"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/rita_apresentadora_clean.png" alt="Rita Poster"></div>
-          <div class="item-name">Rita — Beat Corps</div>
-          <div class="item-stock" id="stock-rita_poster_1">6 available</div>
-          <div class="buy-row">
-            <div class="item-price"><span class="item-price-icon">🪙</span>500</div>
-            <button class="buy-btn" id="btn-rita_poster_1">BUY</button>
+    <!-- SHELF 1: RITA POSTERS -->
+    <div class="shelf-section">
+      <div class="shelf-label">♪ Lovely Rita Posters</div>
+      <div class="shelf">
+        <div class="item-grid cols-2">
+          <div class="item-card" id="card-rita_p1">
+            <div class="item-img-wrap">
+              <img class="item-img portrait" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/rita_apresentadora_clean.png" alt="Rita Presenter">
+            </div>
+            <div class="item-name">Rita Poster<br>Presenter</div>
+            <div class="stock-count">Only <span id="stock-rita_p1">6</span> left!</div>
+            <div class="item-footer">
+              <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">500</span></div>
+              <button class="buy-btn" id="btn-rita_p1" onclick="buyItem('rita_p1')">BUY</button>
+            </div>
           </div>
-        </div>
-        <div class="item-card" id="card-rita_poster_2" onclick="buyItem('rita_poster_2')">
-          <div class="item-img"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/rita_poster_warden.png" alt="Rita Warden"></div>
-          <div class="item-name">Rita — Traffic Warden</div>
-          <div class="item-stock" id="stock-rita_poster_2">6 available</div>
-          <div class="buy-row">
-            <div class="item-price"><span class="item-price-icon">🪙</span>450</div>
-            <button class="buy-btn" id="btn-rita_poster_2">BUY</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- VW BEETLES -->
-    <div class="cat-label">🚗 VW Beetles</div>
-    <div class="shelf">
-      <div class="items-row">
-        <div class="item-card" id="card-vw_red" onclick="buyItem('vw_red')">
-          <div class="item-img"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/vw_beetle_red.png" alt="Red VW"></div>
-          <div class="item-name">VW Beetle — Classic Red</div>
-          <div class="item-stock" id="stock-vw_red">4 available</div>
-          <div class="buy-row">
-            <div class="item-price"><span class="item-price-icon">🪙</span>800</div>
-            <button class="buy-btn" id="btn-vw_red">BUY</button>
-          </div>
-        </div>
-        <div class="item-card" id="card-vw_yellow" onclick="buyItem('vw_yellow')">
-          <div class="item-img"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/vw_beetle_yellow.png" alt="Yellow VW"></div>
-          <div class="item-name">VW Beetle — Yellow Flowers</div>
-          <div class="item-stock" id="stock-vw_yellow">4 available</div>
-          <div class="buy-row">
-            <div class="item-price"><span class="item-price-icon">🪙</span>750</div>
-            <button class="buy-btn" id="btn-vw_yellow">BUY</button>
+          <div class="item-card" id="card-rita_p2">
+            <div class="item-img-wrap">
+              <img class="item-img portrait" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/rita_poster_warden.png" alt="Rita Warden">
+            </div>
+            <div class="item-name">Rita Poster<br>Traffic Warden</div>
+            <div class="stock-count">Only <span id="stock-rita_p2">6</span> left!</div>
+            <div class="item-footer">
+              <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">450</span></div>
+              <button class="buy-btn" id="btn-rita_p2" onclick="buyItem('rita_p2')">BUY</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- WORLD BADGES -->
-    <div class="cat-label">🏅 World Badges</div>
-    <div class="shelf">
-      <div class="items-row">
-        <div class="item-card" id="card-badge_octopus" onclick="buyItem('badge_octopus')">
-          <div class="item-img"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/badge_octopus.png" alt="Octopus Badge"></div>
-          <div class="item-name">Octopus World Badge</div>
-          <div class="item-stock" id="stock-badge_octopus">10 available</div>
-          <div class="buy-row">
-            <div class="item-price"><span class="item-price-icon">🪙</span>300</div>
-            <button class="buy-btn" id="btn-badge_octopus">BUY</button>
+    <!-- SHELF 2: VW BEETLES -->
+    <div class="shelf-section">
+      <div class="shelf-label">🚗 VW Beetle Collection</div>
+      <div class="shelf">
+        <div class="item-grid cols-2">
+          <div class="item-card" id="card-vw_red">
+            <div class="item-img-wrap">
+              <img class="item-img landscape" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/vw_red.png" alt="Red VW Beetle">
+            </div>
+            <div class="item-name">VW Beetle<br>Classic Red</div>
+            <div class="stock-count">Only <span id="stock-vw_red">5</span> left!</div>
+            <div class="item-footer">
+              <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">800</span></div>
+              <button class="buy-btn" id="btn-vw_red" onclick="buyItem('vw_red')">BUY</button>
+            </div>
           </div>
-        </div>
-        <div class="item-card" id="card-badge_space" onclick="buyItem('badge_space')">
-          <div class="item-img"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/badge_space.png" alt="Space Badge"></div>
-          <div class="item-name">Space World Badge</div>
-          <div class="item-stock" id="stock-badge_space">10 available</div>
-          <div class="buy-row">
-            <div class="item-price"><span class="item-price-icon">🪙</span>350</div>
-            <button class="buy-btn" id="btn-badge_space">BUY</button>
+          <div class="item-card" id="card-vw_yellow">
+            <div class="item-img-wrap">
+              <img class="item-img landscape" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/vw_yellow.png" alt="Yellow VW Beetle">
+            </div>
+            <div class="item-name">VW Beetle<br>Yellow Flowers</div>
+            <div class="stock-count">Only <span id="stock-vw_yellow">5</span> left!</div>
+            <div class="item-footer">
+              <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">750</span></div>
+              <button class="buy-btn" id="btn-vw_yellow" onclick="buyItem('vw_yellow')">BUY</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="coming-soon">✨ More items coming soon love! Keep earning BeatCoins! ✨</div>
+    <!-- SHELF 3: WORLD BADGES -->
+    <div class="shelf-section">
+      <div class="shelf-label">🏅 World Badges</div>
+      <div class="shelf">
+        <div class="item-grid cols-2">
+          <div class="item-card" id="card-badge_oct">
+            <div class="item-img-wrap">
+              <img class="item-img circular" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/badge_octopus.png" alt="Octopus Badge">
+            </div>
+            <div class="item-name">Ocean World<br>Badge</div>
+            <div class="stock-count"><span id="stock-badge_oct">10</span> available</div>
+            <div class="item-footer">
+              <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">350</span></div>
+              <button class="buy-btn" id="btn-badge_oct" onclick="buyItem('badge_oct')">BUY</button>
+            </div>
+          </div>
+          <div class="item-card" id="card-badge_spc">
+            <div class="item-img-wrap">
+              <img class="item-img circular" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/badge_space.png" alt="Space Badge">
+            </div>
+            <div class="item-name">Space World<br>Badge</div>
+            <div class="stock-count"><span id="stock-badge_spc">10</span> available</div>
+            <div class="item-footer">
+              <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">350</span></div>
+              <button class="buy-btn" id="btn-badge_spc" onclick="buyItem('badge_spc')">BUY</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SHELF 4: MUSIC NOTES (collectibles) -->
+    <div class="shelf-section">
+      <div class="shelf-label">🎵 Music Collectibles</div>
+      <div class="shelf">
+        <div class="item-grid cols-2">
+          <div class="item-card" id="card-note_gold">
+            <div class="item-img-wrap">
+              <img class="item-img" style="max-height:75px" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/note_gold.png" alt="Gold Note">
+            </div>
+            <div class="item-name">Gold Musical<br>Note</div>
+            <div class="stock-count"><span id="stock-note_gold">8</span> available</div>
+            <div class="item-footer">
+              <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">250</span></div>
+              <button class="buy-btn" id="btn-note_gold" onclick="buyItem('note_gold')">BUY</button>
+            </div>
+          </div>
+          <div class="item-card" id="card-note_red">
+            <div class="item-img-wrap">
+              <img class="item-img" style="max-height:75px" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/note_red.png" alt="Red Note">
+            </div>
+            <div class="item-name">Red Wrong<br>Note</div>
+            <div class="stock-count"><span id="stock-note_red">8</span> available</div>
+            <div class="item-footer">
+              <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">200</span></div>
+              <button class="buy-btn" id="btn-note_red" onclick="buyItem('note_red')">BUY</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </div><!-- /shop-scroll -->
 
+  <!-- NAV BAR -->
   <nav id="nav-bar">
     <button class="nav-btn" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
     <button class="nav-btn" onclick="goMusic()"><span class="nav-icon">🎵</span><span>Music</span></button>
@@ -190,130 +320,105 @@ body{background:#0a0a0a;display:flex;flex-direction:column;align-items:center;mi
 <div id="toast"></div>
 
 <script>
-const RAW = 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/';
+const BASE_RAW = 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/';
+const BC_KEY = 'askLovelyRitaV4_bc';
 
+// Item catalogue
 const ITEMS = {
-  rita_poster_1: { price:500, totalStock:6, name:'Rita Beat Corps Poster' },
-  rita_poster_2: { price:450, totalStock:6, name:'Rita Traffic Warden Poster' },
-  vw_red:        { price:800, totalStock:4, name:'VW Beetle Classic Red' },
-  vw_yellow:     { price:750, totalStock:4, name:'VW Beetle Yellow Flowers' },
-  badge_octopus: { price:300, totalStock:10, name:'Octopus World Badge' },
-  badge_space:   { price:350, totalStock:10, name:'Space World Badge' },
+  rita_p1:   { name:'Rita Poster — Presenter',    price:500, stock:6  },
+  rita_p2:   { name:'Rita Poster — Traffic Warden', price:450, stock:6 },
+  vw_red:    { name:'VW Beetle Classic Red',       price:800, stock:5  },
+  vw_yellow: { name:'VW Beetle Yellow Flowers',    price:750, stock:5  },
+  badge_oct: { name:'Ocean World Badge',            price:350, stock:10 },
+  badge_spc: { name:'Space World Badge',            price:350, stock:10 },
+  note_gold: { name:'Gold Musical Note',            price:250, stock:8  },
+  note_red:  { name:'Red Wrong Note',               price:200, stock:8  },
 };
 
-function getBC(){ return Number(localStorage.getItem('askLovelyRitaV4_bc')||25000); }
-function setBC(v){ localStorage.setItem('askLovelyRitaV4_bc',v); }
-function getOwned(id){ return Number(localStorage.getItem('beatshop_owned_'+id)||0); }
-function getGlobalBought(id){ return Number(localStorage.getItem('beatshop_global_'+id)||0); }
-function stockLeft(id){ return ITEMS[id].totalStock - getGlobalBought(id); }
-function isOwned(id){ return getOwned(id) > 0; }
+function getBC(){ return Number(localStorage.getItem(BC_KEY)||25000); }
+function setBC(v){ localStorage.setItem(BC_KEY,v); }
+function getStock(id){ 
+  const k='lra_stock_'+id;
+  if(localStorage.getItem(k)===null) localStorage.setItem(k,ITEMS[id].stock);
+  return Number(localStorage.getItem(k));
+}
+function setStock(id,v){ localStorage.setItem('lra_stock_'+id,v); }
+function isOwned(id){ return localStorage.getItem('lra_owned_'+id)==='1'; }
+function setOwned(id){ localStorage.setItem('lra_owned_'+id,'1'); }
 
-function renderAllItems(){
-  document.getElementById('bc-display').textContent = getBC().toLocaleString();
-  Object.keys(ITEMS).forEach(id => {
-    const card = document.getElementById('card-'+id);
-    const btn  = document.getElementById('btn-'+id);
-    const stockEl = document.getElementById('stock-'+id);
-    if(!card) return;
-    const left = stockLeft(id);
-    const owned = isOwned(id);
+function renderItem(id){
+  const item = ITEMS[id];
+  const stock = getStock(id);
+  const owned = isOwned(id);
+  const card  = document.getElementById('card-'+id);
+  const btn   = document.getElementById('btn-'+id);
+  const stockEl = document.getElementById('stock-'+id);
+  if(!card) return;
 
-    // Remove old stamp
-    card.querySelectorAll('.sold-stamp').forEach(e=>e.remove());
+  // Remove old overlays
+  card.querySelectorAll('.sold-out-overlay,.owned-badge').forEach(e=>e.remove());
 
-    if(owned){
-      card.classList.add('owned');
-      btn.textContent = 'OWNED';
-      btn.style.background = 'linear-gradient(135deg,#4ade80,#16a34a)';
-      btn.disabled = true;
-      stockEl.textContent = 'In your collection!';
-      stockEl.className = 'item-stock';
-    } else if(left <= 0){
-      card.classList.add('sold-out');
-      const stamp = document.createElement('div');
-      stamp.className = 'sold-stamp'; stamp.textContent = 'SOLD OUT';
-      card.appendChild(stamp);
-      btn.disabled = true; btn.textContent = 'SOLD OUT';
-      btn.style.background = '#555'; btn.style.color = '#999';
-      stockEl.textContent = 'All gone love!';
-    } else {
-      card.classList.remove('sold-out','owned');
-      btn.disabled = false; btn.textContent = 'BUY';
-      btn.style.background = '';
-      stockEl.textContent = left + ' available';
-      stockEl.className = 'item-stock' + (left <= 2 ? ' low' : '');
-    }
-  });
+  if(owned){
+    card.classList.add('owned');
+    const badge = document.createElement('div');
+    badge.className='owned-badge'; badge.textContent='✓ OWNED';
+    card.querySelector('.item-img-wrap').appendChild(badge);
+    btn.textContent='OWNED'; btn.className='buy-btn owned-btn'; btn.disabled=true;
+  } else if(stock<=0){
+    const overlay = document.createElement('div');
+    overlay.className='sold-out-overlay'; overlay.textContent='SOLD OUT';
+    card.querySelector('.item-img-wrap').appendChild(overlay);
+    btn.textContent='SOLD OUT'; btn.className='buy-btn'; btn.disabled=true;
+    if(stockEl) stockEl.textContent='0';
+  } else {
+    btn.textContent='BUY'; btn.className='buy-btn'; btn.disabled=false;
+    if(stockEl) stockEl.textContent=stock;
+  }
 }
 
 function buyItem(id){
-  if(isOwned(id)){ toast('✅ You already own this love!'); return; }
-  if(stockLeft(id) <= 0){ toast('😢 Sold out love! None left.'); return; }
   const item = ITEMS[id];
   const bc = getBC();
-  if(bc < item.price){
-    toast('🪙 Not enough BeatCoins love! Keep playing to earn more!');
-    ritaSpeak("Oh not enough BeatCoins love! Keep playing and you will earn more!");
-    return;
-  }
+  const stock = getStock(id);
+  const owned = isOwned(id);
+  if(owned){ toast('✅ You already own this love!'); return; }
+  if(stock<=0){ toast('😢 Sold out! Trade with another player!'); return; }
+  if(bc < item.price){ toast(`🪙 Not enough BeatCoins! Need ${item.price}, you have ${bc.toLocaleString()}`); return; }
   // Confirm purchase
-  showConfirm(id, item);
-}
-
-function showConfirm(id, item){
-  const existing = document.getElementById('confirm-overlay');
-  if(existing) existing.remove();
-  const overlay = document.createElement('div');
-  overlay.id = 'confirm-overlay';
-  overlay.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:200;display:flex;align-items:center;justify-content:center;';
-  overlay.innerHTML = `
-    <div style="background:#1a0040;border:2px solid #ff6ef7;border-radius:20px;padding:24px 20px;width:85%;text-align:center;box-shadow:0 0 30px rgba(255,110,247,.5);">
-      <div style="font-size:13px;color:#ff6ef7;font-weight:bold;margin-bottom:8px;">CONFIRM PURCHASE</div>
-      <div style="font-size:11px;color:#ddd;margin-bottom:16px;line-height:1.5;">${item.name}<br><span style="color:#ffd700;font-size:14px;font-weight:bold;">🪙 ${item.price} BeatCoins</span></div>
-      <div style="display:flex;gap:10px;justify-content:center;">
-        <button onclick="document.getElementById('confirm-overlay').remove()" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:8px 20px;color:#fff;cursor:pointer;font-family:Georgia,serif;font-size:12px;">Cancel</button>
-        <button onclick="confirmBuy('${id}')" style="background:linear-gradient(135deg,#ff6ef7,#a855f7);border:none;border-radius:10px;padding:8px 20px;color:#000;font-weight:bold;cursor:pointer;font-family:Georgia,serif;font-size:12px;">Buy Now!</button>
-      </div>
-    </div>`;
-  document.getElementById('phone').appendChild(overlay);
-}
-
-function confirmBuy(id){
-  document.getElementById('confirm-overlay')?.remove();
-  const item = ITEMS[id];
-  const bc = getBC();
+  if(!confirm(`Invest ${item.price} BeatCoins for "${item.name}"?`)) return;
+  // Deduct BeatCoins
   setBC(bc - item.price);
-  localStorage.setItem('beatshop_owned_'+id, '1');
-  // Increment global bought counter (device-local for now)
-  const g = getGlobalBought(id);
-  localStorage.setItem('beatshop_global_'+id, g+1);
-  renderAllItems();
-  toast('🎉 Brilliant choice love! Added to your collection!');
-  ritaSpeak("Fabulous choice love! Enjoy your new item!");
+  // Reduce stock
+  setStock(id, stock-1);
+  // Mark owned
+  setOwned(id);
+  // Update UI
+  document.getElementById('bc-badge-val').textContent = (bc-item.price).toLocaleString();
+  renderItem(id);
+  toast(`🎉 You invested in ${item.name}! It's yours love!`);
+  speak(`Wonderful choice love! You invested in ${item.name}! It is now in your collection!`);
 }
 
-function ritaSpeak(text){
+function speak(text){
   if(!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang='en-GB'; u.rate=0.92; u.pitch=1.1;
-  const v = window.speechSynthesis.getVoices();
-  const voice = v.find(x=>x.lang==='en-GB'&&/female|woman/i.test(x.name))||v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));
-  if(voice) u.voice=voice;
-  window.speechSynthesis.speak(u);
+  const u=new SpeechSynthesisUtterance(text); u.lang='en-GB'; u.rate=0.92; u.pitch=1.1;
+  const v=window.speechSynthesis.getVoices();
+  const voice=v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));
+  if(voice)u.voice=voice; window.speechSynthesis.speak(u);
 }
 
-function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.style.opacity='1'; clearTimeout(t._t); t._t=setTimeout(()=>t.style.opacity='0',3500); }
-function goHome()       { window.location.href='page1_landing.html'; }
-function goMusic()      { toast('🎵 Music playlist — coming soon love!'); }
-function goAdventures() { window.location.href='page_adventures.html'; }
-function goProfile()    { window.location.href='page_records.html'; }
+function goHome(){ window.location.href='page1_landing.html'; }
+function goMusic(){ window.location.href='page1_landing.html'; }
+function goAdventures(){ window.location.href='page_adventures.html'; }
+function goProfile(){ window.location.href='page_adventures.html'; }
 
-window.addEventListener('load', ()=>{
-  renderAllItems();
-  const go=()=>ritaSpeak("Welcome to the Beat Shop love! Spend your Educational BeatCoins on exclusive items!");
-  if(window.speechSynthesis.getVoices().length>0) setTimeout(go,600);
-  else window.speechSynthesis.onvoiceschanged=()=>setTimeout(go,600);
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.style.opacity='1'; clearTimeout(t._t); t._t=setTimeout(()=>t.style.opacity='0',3500); }
+
+window.addEventListener('load',()=>{
+  document.getElementById('bc-badge-val').textContent = getBC().toLocaleString();
+  Object.keys(ITEMS).forEach(id=>renderItem(id));
+  speak("Welcome to The Beat Shop love! Invest your Educational BeatCoins in exclusive collectibles!");
 });
 </script>
 </body>
