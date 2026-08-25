@@ -3,343 +3,274 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lovely Rita Adventures — How to Play</title>
+<title>How to Play — Lovely Rita Adventures</title>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body {
-  background:#0a0a0a; display:flex; flex-direction:column;
-  align-items:center; min-height:100vh; font-family:Georgia,serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0a0a0a;display:flex;flex-direction:column;align-items:center;min-height:100vh;font-family:Georgia,serif;}
+#phone-outer{display:flex;justify-content:center;padding:20px 0 40px;width:100%;}
+#phone{background:#1a0040;width:393px;min-height:852px;border-radius:48px;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 0 10px #1a1a1a,0 0 0 12px #333,0 30px 80px rgba(0,0,0,0.8);}
+#phone::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#0a0a0a;border-radius:0 0 20px 20px;z-index:100;}
 
-#phone-outer { display:flex; justify-content:center; padding:20px 0 40px; width:100%; }
-#phone {
-  background:#1a0040; width:393px; min-height:852px;
-  border-radius:48px; position:relative; overflow:hidden;
-  display:flex; flex-direction:column;
-  box-shadow:0 0 0 10px #1a1a1a,0 0 0 12px #333,0 30px 80px rgba(0,0,0,0.8);
-}
-#phone::before {
-  content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
-  width:120px; height:34px; background:#0a0a0a;
-  border-radius:0 0 20px 20px; z-index:100;
-}
-
-/* SCROLL */
-#phone-scroll { flex:1; overflow-y:auto; overflow-x:hidden; scrollbar-width:none; padding-top:44px; padding-bottom:70px; }
-#phone-scroll::-webkit-scrollbar { display:none; }
+#phone-scroll{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;padding-top:44px;padding-bottom:10px;}
+#phone-scroll::-webkit-scrollbar{display:none;}
 
 /* HEADER */
-#htp-header {
-  text-align:center; padding:16px 20px 12px;
-  border-bottom:1px solid rgba(255,255,255,0.08);
-}
-#htp-title {
-  font-size:22px; font-weight:bold; color:#ff6ef7;
-  text-shadow:0 0 24px #ff6ef7, 0 0 48px #a855f7;
-  letter-spacing:2px;
-}
-#htp-sub {
-  font-size:10px; color:#ffde59; letter-spacing:1.5px; margin-top:4px; opacity:0.8;
-}
+#htp-header{text-align:center;padding:16px 20px 12px;border-bottom:1px solid rgba(255,255,255,0.08);}
+#htp-title{font-size:22px;font-weight:bold;color:#ff6ef7;text-shadow:0 0 24px #ff6ef7,0 0 48px #a855f7;letter-spacing:2px;}
+#htp-sub{font-size:10px;color:#ffde59;letter-spacing:1.5px;margin-top:4px;opacity:0.8;}
+#rita-htp-row{display:flex;align-items:center;gap:10px;padding:10px 16px 0;}
+#rita-htp-img{width:48px;height:48px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,110,247,.6));flex-shrink:0;}
+#rita-htp-say{font-size:10px;color:rgba(255,255,255,.7);font-style:italic;line-height:1.5;}
 
 /* STEP CARDS */
-#steps-container { padding:14px 16px; display:flex; flex-direction:column; gap:14px; }
-
-.step-card {
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(255,110,247,0.3);
-  border-radius:16px; overflow:hidden;
-  transition:border-color 0.3s;
-}
-.step-card.active { border-color:#ff6ef7; box-shadow:0 0 20px rgba(255,110,247,0.3); }
-
-.step-header {
-  display:flex; align-items:center; gap:10px;
-  padding:12px 14px; cursor:pointer;
-  background:rgba(255,255,255,0.03);
-}
-.step-num {
-  width:32px; height:32px; border-radius:50%;
-  background:linear-gradient(135deg,#ff6ef7,#a855f7);
-  display:flex; align-items:center; justify-content:center;
-  font-size:14px; font-weight:bold; color:#000; flex-shrink:0;
-}
-.step-title { flex:1; font-size:13px; font-weight:bold; color:#fff; letter-spacing:0.5px; }
-.step-arrow { color:rgba(255,255,255,0.4); font-size:12px; transition:transform 0.3s; }
-.step-arrow.open { transform:rotate(180deg); }
-
-.step-body {
-  display:none; padding:12px 14px 14px;
-  border-top:1px solid rgba(255,255,255,0.06);
-}
-.step-body.show { display:block; }
-
-.step-desc {
-  font-size:12px; color:rgba(255,255,255,0.75); line-height:1.6;
-  margin-bottom:10px;
-}
-.step-tip {
-  background:rgba(255,222,89,0.08); border-left:3px solid #ffde59;
-  border-radius:0 8px 8px 0; padding:8px 10px;
-  font-size:11px; color:#ffde59; line-height:1.5;
-}
-
-/* VISUAL IMAGE */
-.step-visual {
-  width:100%; border-radius:10px; margin-bottom:10px;
-  object-fit:cover; max-height:160px;
-}
-
-/* RITA BOX */
-#rita-box {
-  margin:0 16px 14px;
-  background:rgba(255,255,255,0.04); border:1px solid #ff6ef7;
-  border-radius:12px; padding:10px 12px;
-  display:flex; align-items:flex-start; gap:10px;
-}
-#rita-avatar-htp {
-  width:44px; height:44px; object-fit:contain; flex-shrink:0;
-}
-#rita-htp-text {
-  font-size:11px; color:#ddd; line-height:1.5; font-style:italic;
-}
+#steps-container{padding:14px 16px;display:flex;flex-direction:column;gap:14px;}
+.step-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,110,247,0.3);border-radius:16px;overflow:hidden;transition:border-color 0.3s;}
+.step-card.active{border-color:#ff6ef7;box-shadow:0 0 20px rgba(255,110,247,0.3);}
+.step-header{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;background:rgba(255,255,255,0.03);}
+.step-num{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#ff6ef7,#a855f7);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:bold;color:#000;flex-shrink:0;}
+.step-title{flex:1;font-size:13px;font-weight:bold;color:#fff;letter-spacing:0.5px;}
+.step-arrow{font-size:12px;color:rgba(255,110,247,0.7);transition:transform 0.3s;}
+.step-arrow.open{transform:rotate(180deg);}
+.step-body{display:none;padding:12px 14px;border-top:1px solid rgba(255,255,255,0.06);}
+.step-body.show{display:block;}
+.step-desc{font-size:11px;color:rgba(255,255,255,0.75);line-height:1.7;margin-bottom:8px;}
+.step-tip{font-size:10px;color:#ffde59;background:rgba(255,222,89,0.08);border-radius:8px;padding:8px 10px;margin-top:8px;line-height:1.5;}
+.step-highlight{font-size:11px;font-weight:bold;color:#ff6ef7;}
+.world-row{font-size:11px;color:#ddd;margin:3px 0;line-height:1.5;}
 
 /* START BTN */
-#start-btn {
-  display:block; margin:0 16px 16px;
-  background:linear-gradient(135deg,#ff6ef7,#a855f7);
-  border:none; border-radius:24px; padding:14px;
-  color:#000; font-weight:bold; font-size:14px;
-  cursor:pointer; font-family:Georgia,serif; letter-spacing:1px;
-  width:calc(100% - 32px);
-  box-shadow:0 0 20px rgba(255,110,247,0.5);
-}
-#start-btn:hover { transform:scale(1.02); }
+#start-btn{display:block;width:calc(100% - 32px);margin:0 16px 16px;padding:14px;background:linear-gradient(135deg,#ff6ef7,#a855f7);border:none;border-radius:28px;color:#000;font-size:14px;font-weight:bold;letter-spacing:1px;cursor:pointer;font-family:Georgia,serif;box-shadow:0 4px 20px rgba(255,110,247,0.4);}
+#start-btn:hover{transform:scale(1.02);}
 
-/* NAV */
-#nav-bar {
-  flex-shrink:0; display:flex; align-items:center; justify-content:space-around;
-  padding:10px 0 14px; border-top:1px solid rgba(255,255,255,.06);
-  background:rgba(0,0,0,.35); position:sticky; bottom:0; z-index:50;
-}
-.nav-btn {
-  display:flex; flex-direction:column; align-items:center; gap:3px;
-  background:none; border:none; color:rgba(255,255,255,.4);
-  cursor:pointer; padding:4px 16px; font-size:9px; font-family:Georgia,serif;
-  transition:color 0.2s;
-}
-.nav-btn:hover { color:#ff6ef7; }
-.nav-btn.nav-home { color:#ff6ef7; }
-.nav-icon { font-size:20px; line-height:1; }
+/* NAV — Home only */
+#nav-bar{display:flex;justify-content:center;align-items:center;padding:10px 0 14px;border-top:1px solid rgba(255,255,255,0.06);background:rgba(0,0,0,0.3);flex-shrink:0;}
+.nav-btn{background:none;border:none;color:rgba(255,255,255,0.4);font-size:9px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 24px;transition:color 0.2s;font-family:Georgia,serif;}
+.nav-btn.nav-home{color:#ff6ef7;}
+.nav-btn:hover{color:#ff6ef7;}
+.nav-icon{font-size:22px;line-height:1;}
 
-#toast {
-  position:fixed; bottom:30px; left:50%; transform:translateX(-50%);
-  background:rgba(0,0,0,0.85); color:#fff; padding:10px 20px;
-  border-radius:20px; font-size:12px; opacity:0;
-  transition:opacity 0.3s; pointer-events:none; z-index:999;
-}
-#toast.show { opacity:1; }
+#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.85);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;}
 </style>
 </head>
 <body>
 <div id="phone-outer">
 <div id="phone">
-  <div id="phone-scroll">
+<div id="phone-scroll">
 
-    <div id="htp-header">
-      <div id="htp-title">How to Play</div>
-      <div id="htp-sub">Lovely Rita Adventures · 5 Easy Steps</div>
-    </div>
-
-    <!-- RITA WELCOME -->
-    <div id="rita-box" style="margin-top:14px;">
-      <img id="rita-avatar-htp"
-        src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/rita_beatcorps_clean.png"
-        alt="Rita">
-      <span id="rita-htp-text">Hello love! Let me walk you through the adventure. Tap each step to learn more. And remember — you can ask me anything on the first page!</span>
-    </div>
-
-    <div id="steps-container">
-
-      <!-- STEP 1 -->
-      <div class="step-card" id="card-1">
-        <div class="step-header" onclick="toggleStep(1)">
-          <div class="step-num">1</div>
-          <div class="step-title">🎲 Pick Your Lad Companion</div>
-          <div class="step-arrow" id="arrow-1">▼</div>
-        </div>
-        <div class="step-body show" id="body-1">
-          <div class="step-desc">On the first page, press the big button and watch the neon highlight spin across the four Lads. It lands on one randomly — that is your companion for the adventure! If you are not happy with who you got, just spin again as many times as you like.</div>
-          <div class="step-tip">💡 Tip: You can also tap any Lad directly to choose them without spinning. Each Lad has their own personality and quote!</div>
-          <div class="step-desc" style="margin-top:10px;">And remember — on this same page you can <strong style="color:#ff6ef7;">Ask Rita</strong> anything! Type or speak a question about music, history, the Lads, or the app itself. Rita knows everything love!</div>
-        </div>
-      </div>
-
-      <!-- STEP 2 -->
-      <div class="step-card" id="card-2">
-        <div class="step-header" onclick="toggleStep(2)">
-          <div class="step-num">2</div>
-          <div class="step-title">🌍 Choose Your World</div>
-          <div class="step-arrow" id="arrow-2">▼</div>
-        </div>
-        <div class="step-body" id="body-2">
-          <div class="step-desc">After picking your Lad, you arrive at the Choose Your World page. Press the spin button and the worlds light up one by one until one is chosen. There are 5 magical worlds — each inspired by a famous song:</div>
-          <div style="display:flex;flex-direction:column;gap:6px;margin:10px 0;">
-            <div style="font-size:11px;color:#ddd;">🐙 <strong style="color:#4dc8ff;">Octopus's Garden</strong> — Ocean life & nature</div>
-            <div style="font-size:11px;color:#ddd;">🚀 <strong style="color:#a855f7;">Across the Universe</strong> — Space & science</div>
-            <div style="font-size:11px;color:#ddd;">🪷 <strong style="color:#c8a96e;">The Inner Light</strong> — World cultures</div>
-            <div style="font-size:11px;color:#ddd;">🌆 <strong style="color:#ffde59;">Penny Lane</strong> — Cities & geography</div>
-            <div style="font-size:11px;color:#ddd;">🎤 <strong style="color:#ff1493;">Rita's World</strong> — Music & the Lads</div>
-          </div>
-          <div class="step-tip">💡 Tip: Not happy with the world you got? Spin again — no limits!</div>
-        </div>
-      </div>
-
-      <!-- STEP 3 -->
-      <div class="step-card" id="card-3">
-        <div class="step-header" onclick="toggleStep(3)">
-          <div class="step-num">3</div>
-          <div class="step-title">⭐ Choose Your Level</div>
-          <div class="step-arrow" id="arrow-3">▼</div>
-        </div>
-        <div class="step-body" id="body-3">
-          <div class="step-desc">Inside each world, pick your level from the three tabs at the top:</div>
-          <div style="display:flex;flex-direction:column;gap:8px;margin:10px 0;">
-            <div style="background:rgba(255,110,247,0.1);border-radius:10px;padding:8px 10px;">
-              <div style="font-size:12px;font-weight:bold;color:#ff6ef7;">🟣 Youngsters</div>
-              <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-top:3px;">Ages 6–12. Images shown before questions. Scrambled letters to help you spell.</div>
-            </div>
-            <div style="background:rgba(200,169,110,0.1);border-radius:10px;padding:8px 10px;">
-              <div style="font-size:12px;font-weight:bold;color:#c8a96e;">🟡 Grown Ups</div>
-              <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-top:3px;">Ages 13–17. Images shown after you answer. Type or speak your answers.</div>
-            </div>
-            <div style="background:rgba(255,215,0,0.1);border-radius:10px;padding:8px 10px;">
-              <div style="font-size:12px;font-weight:bold;color:#ffd700;">⭐ Experts</div>
-              <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-top:3px;">Ages 18+. The real Fab Four fans. No hints, harder questions, bigger BeatCoins!</div>
-            </div>
-          </div>
-          <div class="step-tip">💡 No penalties ever! Wrong answers = 0 points. You never lose BeatCoins.</div>
-        </div>
-      </div>
-
-      <!-- STEP 4 -->
-      <div class="step-card" id="card-4">
-        <div class="step-header" onclick="toggleStep(4)">
-          <div class="step-num">4</div>
-          <div class="step-title">🎓 Play & Learn</div>
-          <div class="step-arrow" id="arrow-4">▼</div>
-        </div>
-        <div class="step-body" id="body-4">
-          <div class="step-desc">Each world has 8 questions or challenges. Answer correctly to earn Educational BeatCoins. Every question teaches you something real — about science, music, geography, or world culture.</div>
-          <div class="step-tip">💡 When you get something wrong, Rita always explains the correct answer with an educational fact. Learning is the real prize love!</div>
-          <div class="step-desc" style="margin-top:10px;">Your BeatCoins total is always visible. They accumulate across all your games and all four Lads.</div>
-        </div>
-      </div>
-
-      <!-- STEP 5 -->
-      <div class="step-card" id="card-5">
-        <div class="step-header" onclick="toggleStep(5)">
-          <div class="step-num">5</div>
-          <div class="step-title">🎮 Unlock Your Bonus Game!</div>
-          <div class="step-arrow" id="arrow-5">▼</div>
-        </div>
-        <div class="step-body" id="body-5">
-          <div class="step-desc">Finish all 8 questions in any world and Rita unlocks a special bonus game just for you! Each world has its own bonus:</div>
-          <div style="display:flex;flex-direction:column;gap:6px;margin:10px 0;">
-            <div style="font-size:11px;color:#ddd;">🐙 Octopus's Garden → <strong style="color:#4dc8ff;">❌⭕ Tic-Tac-Toe Underwater</strong></div>
-            <div style="font-size:11px;color:#ddd;">🚀 Across the Universe → <strong style="color:#a855f7;">🎵 The Turntable</strong></div>
-            <div style="font-size:11px;color:#ddd;">🪷 The Inner Light → <strong style="color:#c8a96e;">🎵 The Turntable</strong></div>
-            <div style="font-size:11px;color:#ddd;">🌆 Penny Lane → <strong style="color:#ffde59;">🚗 Park in London</strong></div>
-            <div style="font-size:11px;color:#ddd;">🎤 Rita's World → <strong style="color:#ff1493;">🎵 The Turntable</strong></div>
-          </div>
-          <div class="step-tip">💡 Rita counts down 5 seconds and takes you there automatically. Or press the button to go straight away!</div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- START BTN -->
-    <button id="start-btn" onclick="goPlay()">🎵 Let's Go!</button>
-
+<div id="htp-header">
+  <div id="htp-title">HOW TO PLAY</div>
+  <div id="htp-sub">LOVELY RITA ADVENTURES</div>
+  <div id="rita-htp-row">
+    <img id="rita-htp-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/rita_apresentadora_clean.png" alt="Rita">
+    <div id="rita-htp-say">Welcome love! Let me show you how to play. It is easy and lots of fun — I promise!</div>
   </div>
-
-  <!-- NAV BAR -->
-  <nav id="nav-bar">
-    <button class="nav-btn" onclick="goBack()"><span class="nav-icon">◀️</span><span>Back</span></button>
-    <button class="nav-btn nav-home" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
-    <button class="nav-btn" onclick="goPlay()"><span class="nav-icon">▶️</span><span>Let's Go!</span></button>
-  </nav>
-</div>
 </div>
 
+<div id="steps-container">
+
+<!-- STEP 1 -->
+<div class="step-card active" id="card-1">
+  <div class="step-header" onclick="toggleStep(1)">
+    <div class="step-num">1</div>
+    <div class="step-title">🎲 Choose Your Lad</div>
+    <div class="step-arrow open" id="arrow-1">▼</div>
+  </div>
+  <div class="step-body show" id="body-1">
+    <div class="step-desc">On Page 1 — press the <span class="step-highlight">PLAY</span> button and watch the neon spotlight spin across the four Lads. It stops on one randomly. That is your companion for this adventure!</div>
+    <div class="step-desc">The four Lads are: <span class="step-highlight">The Smart One · The Cute One · The Quiet One · The Funny One.</span> Each has their own score which builds up every time you play.</div>
+    <div class="step-tip">💡 Not happy with who you got? Press PLAY again and spin as many times as you like!</div>
+  </div>
+</div>
+
+<!-- STEP 2 -->
+<div class="step-card" id="card-2">
+  <div class="step-header" onclick="toggleStep(2)">
+    <div class="step-num">2</div>
+    <div class="step-title">🌍 Spin to Choose Your World</div>
+    <div class="step-arrow" id="arrow-2">▼</div>
+  </div>
+  <div class="step-body" id="body-2">
+    <div class="step-desc">On the <span class="step-highlight">Choose Your World</span> page, press the spin button to land on a world. Every visit you must spin — you cannot tap a world directly without spinning first.</div>
+    <div style="display:flex;flex-direction:column;gap:5px;margin:10px 0;">
+      <div class="world-row">🐙 <strong style="color:#4dc8ff;">Octopus's Garden</strong> — Ocean life and nature</div>
+      <div class="world-row">🚀 <strong style="color:#a855f7;">Across the Universe</strong> — Space and science</div>
+      <div class="world-row">✨ <strong style="color:#ff6b35;">The Inner Light</strong> — World music and culture</div>
+      <div class="world-row">🎠 <strong style="color:#ffde59;">Penny Lane</strong> — Cities and geography</div>
+      <div class="world-row">🎤 <strong style="color:#ff1493;">Rita's World</strong> — Music and the Lads</div>
+    </div>
+    <div class="step-tip">💡 Spin as many times as you want until you land on the world you love!</div>
+  </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="step-card" id="card-3">
+  <div class="step-header" onclick="toggleStep(3)">
+    <div class="step-num">3</div>
+    <div class="step-title">⭐ Pick Your Level</div>
+    <div class="step-arrow" id="arrow-3">▼</div>
+  </div>
+  <div class="step-body" id="body-3">
+    <div class="step-desc">Inside each world, choose your level from the three tabs at the top of the page:</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin:10px 0;">
+      <div style="background:rgba(255,110,247,0.1);border-radius:10px;padding:8px 10px;">
+        <div style="font-size:12px;font-weight:bold;color:#ff6ef7;">🟣 Youngsters — Ages 6–12</div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-top:3px;">Images shown to help you guess. Simpler questions. Go at your own pace!</div>
+      </div>
+      <div style="background:rgba(255,222,89,0.1);border-radius:10px;padding:8px 10px;">
+        <div style="font-size:12px;font-weight:bold;color:#ffde59;">🟡 Grown Ups — Ages 13–17</div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-top:3px;">Answer first, then the image is revealed. More detailed questions.</div>
+      </div>
+      <div style="background:rgba(200,169,110,0.1);border-radius:10px;padding:8px 10px;">
+        <div style="font-size:12px;font-weight:bold;color:#c8a96e;">⭐ Experts — Ages 18+</div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-top:3px;">No hints. No images. True knowledge required. The ultimate challenge!</div>
+      </div>
+    </div>
+    <div class="step-tip">💡 No penalties ever! A wrong answer earns 0 points — you never lose BeatCoins.</div>
+  </div>
+</div>
+
+<!-- STEP 4 -->
+<div class="step-card" id="card-4">
+  <div class="step-header" onclick="toggleStep(4)">
+    <div class="step-num">4</div>
+    <div class="step-title">🎓 Play and Earn BeatCoins</div>
+    <div class="step-arrow" id="arrow-4">▼</div>
+  </div>
+  <div class="step-body" id="body-4">
+    <div class="step-desc">Each world has challenges to complete — answer questions, match cards, or solve puzzles. Every correct answer earns you <span class="step-highlight">Educational BeatCoins</span>!</div>
+    <div class="step-desc">Your BeatCoins total is always visible on screen and builds up across all your sessions — day after day, month after month. They never expire!</div>
+    <div class="step-desc">When Rita speaks, listen carefully love — she gives you hints and tells you the answer if you get it wrong, always with an educational explanation!</div>
+    <div class="step-tip">💡 Inside each world, use the <strong>Choose World</strong> button to go back and spin again. The <strong>Next Page</strong> button takes you to the bonus game!</div>
+  </div>
+</div>
+
+<!-- STEP 5 -->
+<div class="step-card" id="card-5">
+  <div class="step-header" onclick="toggleStep(5)">
+    <div class="step-num">5</div>
+    <div class="step-title">🎮 Bonus Games</div>
+    <div class="step-arrow" id="arrow-5">▼</div>
+  </div>
+  <div class="step-body" id="body-5">
+    <div class="step-desc">Finish the main challenge in any world and Rita unlocks a special bonus game — just for fun and extra BeatCoins!</div>
+    <div style="display:flex;flex-direction:column;gap:5px;margin:10px 0;">
+      <div class="world-row">🐙 Octopus's Garden → <strong style="color:#4dc8ff;">🎵 The Turntable</strong></div>
+      <div class="world-row">🚀 Across the Universe → <strong style="color:#a855f7;">⚡ Cosmic Flash</strong></div>
+      <div class="world-row">✨ The Inner Light → <strong style="color:#ff6b35;">🪷 World Beats</strong></div>
+      <div class="world-row">🎠 Penny Lane → <strong style="color:#ffde59;">🚗 Park in London</strong></div>
+      <div class="world-row">🎤 Rita's World → <strong style="color:#ff1493;">🎵 Tap the Beat</strong></div>
+    </div>
+    <div class="step-tip">💡 Press <strong>Next Page</strong> inside any world to go directly to the bonus game!</div>
+  </div>
+</div>
+
+<!-- STEP 6 -->
+<div class="step-card" id="card-6">
+  <div class="step-header" onclick="toggleStep(6)">
+    <div class="step-num">6</div>
+    <div class="step-title">🛍️ The Beat Shop</div>
+    <div class="step-arrow" id="arrow-6">▼</div>
+  </div>
+  <div class="step-body" id="body-6">
+    <div class="step-desc">Use your BeatCoins to invest in exclusive collectibles from <span class="step-highlight">The Beat Shop</span> — tap the 💎 Collectibles button in the navigation bar.</div>
+    <div class="step-desc">You will find Rita posters, VW Beetles, world badges, Lad posters and more — each item is limited edition. Once they are sold out, they can only be traded between players!</div>
+    <div class="step-tip">💡 We say <strong>invest</strong> not <strong>spend</strong> — because collecting is always a good investment love!</div>
+  </div>
+</div>
+
+<!-- STEP 7 -->
+<div class="step-card" id="card-7">
+  <div class="step-header" onclick="toggleStep(7)">
+    <div class="step-num">7</div>
+    <div class="step-title">🎬 Videos and 🎵 Music</div>
+    <div class="step-arrow" id="arrow-7">▼</div>
+  </div>
+  <div class="step-body" id="body-7">
+    <div class="step-desc">Tap the <span class="step-highlight">🎬 Videos</span> button to visit <strong>Lovely Rita Videos</strong> — educational videos linked to each world. Watch a full video and earn 50 BeatCoins! Maximum 200 BeatCoins per day from videos.</div>
+    <div class="step-desc">Tap the <span class="step-highlight">🎵 Music</span> button to open <strong>The Beat Jukebox</strong> — tap Choose Your Song and enjoy the Lads Rap collection while you explore!</div>
+    <div class="step-tip">💡 Videos unlock progressively — watch the first one to unlock the next love!</div>
+  </div>
+</div>
+
+<!-- STEP 8 -->
+<div class="step-card" id="card-8">
+  <div class="step-header" onclick="toggleStep(8)">
+    <div class="step-num">8</div>
+    <div class="step-title">👤 My Adventures</div>
+    <div class="step-arrow" id="arrow-8">▼</div>
+  </div>
+  <div class="step-body" id="body-8">
+    <div class="step-desc">Tap the <span class="step-highlight">👤 Profile</span> button on Page 1 to visit <strong>My Adventures</strong> — your personal space in the app.</div>
+    <div class="step-desc">On the <strong>My Journey</strong> tab: see your nickname, total BeatCoins, each Lad's score, the worlds you have explored, and your collectibles collection.</div>
+    <div class="step-desc">On the <strong>My Records</strong> tab: see your personal leaderboard — which Lad earned the most BeatCoins and how far you have explored each world.</div>
+    <div class="step-tip">💡 Tap the ✏️ Change Name button to set your nickname. It is the only thing you need to type!</div>
+  </div>
+</div>
+
+</div><!-- /steps-container -->
+
+<button id="start-btn" onclick="goPlay()">🎵 Let's Play!</button>
+
+</div><!-- /phone-scroll -->
+
+<!-- NAV: Home only -->
+<nav id="nav-bar">
+  <button class="nav-btn nav-home" onclick="goHome()">
+    <span class="nav-icon">🏠</span><span>Home</span>
+  </button>
+</nav>
+
+</div>
+</div>
 <div id="toast"></div>
 
 <script>
 const BASE = 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/';
 
 const STEP_RITA = {
-  1: "Step one love! Press the spin button and let fate choose your Lad companion! You can spin as many times as you like. And do not forget — you can ask me anything right there on the first page!",
-  2: "Step two darling! Choose your world by spinning the world selector. Five magical worlds inspired by real songs. Each one is a different adventure!",
-  3: "Step three love! Pick your level. Youngsters for the young ones, Grown Ups for the teenagers, and Experts for the true fans. No penalties ever — you can always change levels!",
-  4: "Step four darling! Answer eight questions in your world. Every correct answer earns Educational BeatCoins. And even when you get one wrong, Rita teaches you the answer with a real fact!",
-  5: "Step five love! Finish all eight questions and you unlock a bonus game! Rita will take you there automatically with a five second countdown. How exciting darling!"
+  1: "Pick your Lad companion love! Press PLAY and see who the universe chooses for you!",
+  2: "Every visit you must spin to choose your world love! It keeps things exciting!",
+  3: "Choose your level wisely love! Youngsters start easy but Experts have no hints at all!",
+  4: "Every correct answer earns you BeatCoins love! They never expire and always add up!",
+  5: "Bonus games are my favourite part love! They are pure fun after all that learning!",
+  6: "The Beat Shop has the most exclusive collectibles love! Limited editions only!",
+  7: "Watch a video and earn BeatCoins love! Education never felt so rewarding!",
+  8: "My Adventures is your personal trophy room love! Watch your BeatCoins grow!"
 };
 
-let openStep = 1;
-
 function toggleStep(n) {
-  if (openStep === n) {
-    document.getElementById('body-'+n).classList.remove('show');
-    document.getElementById('arrow-'+n).classList.remove('open');
-    document.getElementById('card-'+n).classList.remove('active');
-    openStep = null;
-    return;
-  }
-  if (openStep) {
-    document.getElementById('body-'+openStep).classList.remove('show');
-    document.getElementById('arrow-'+openStep).classList.remove('open');
-    document.getElementById('card-'+openStep).classList.remove('active');
-  }
-  openStep = n;
-  document.getElementById('body-'+n).classList.add('show');
-  document.getElementById('arrow-'+n).classList.add('open');
-  document.getElementById('card-'+n).classList.add('active');
-  speak(STEP_RITA[n]);
-  document.getElementById('rita-htp-text').textContent = STEP_RITA[n];
+  const body = document.getElementById('body-' + n);
+  const arrow = document.getElementById('arrow-' + n);
+  const card = document.getElementById('card-' + n);
+  const isOpen = body.classList.contains('show');
+  body.classList.toggle('show', !isOpen);
+  arrow.classList.toggle('open', !isOpen);
+  card.classList.toggle('active', !isOpen);
+  if (!isOpen && STEP_RITA[n]) speak(STEP_RITA[n]);
 }
 
 function speak(text) {
-  if (localStorage.getItem('askLovelyRitaV4_mute')==='1') return;
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.lang='en-GB'; u.rate=0.92; u.pitch=1.1;
-  const voices = window.speechSynthesis.getVoices();
-  const v = voices.find(v=>v.lang==='en-GB'&&/female|woman/i.test(v.name))
-         || voices.find(v=>v.lang==='en-GB')
-         || voices.find(v=>v.lang.startsWith('en'));
-  if (v) u.voice = v;
+  u.lang = 'en-GB'; u.rate = 0.92; u.pitch = 1.1;
+  const v = window.speechSynthesis.getVoices();
+  const voice = v.find(x => x.lang === 'en-GB') || v.find(x => x.lang.startsWith('en'));
+  if (voice) u.voice = voice;
   window.speechSynthesis.speak(u);
 }
 
-function goBack()  { window.location.href = 'page1_landing.html'; }
-function goHome()  { window.location.href = 'page1_landing.html'; }
-function goPlay()  { window.location.href = 'page1_landing.html'; }
+function goHome() { window.location.href = 'page1_landing.html'; }
+function goPlay() { window.location.href = 'page1_landing.html'; }
 
 function toast(msg) {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3000);
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.opacity = '1';
+  clearTimeout(t._t); t._t = setTimeout(() => t.style.opacity = '0', 3000);
 }
 
-// Greet on load
-window.addEventListener('load', ()=>{
-  const greet = "Hello love! Welcome to How to Play! Tap each step to learn more. When you are ready just press the big button at the bottom and off we go!";
-  document.getElementById('card-1').classList.add('active');
-  document.getElementById('arrow-1').classList.add('open');
-  const doSpeak = () => speak(greet);
-  if (window.speechSynthesis.getVoices().length > 0) setTimeout(doSpeak, 800);
-  else window.speechSynthesis.onvoiceschanged = () => setTimeout(doSpeak, 800);
+window.addEventListener('load', () => {
+  setTimeout(() => speak("Welcome love! Let me show you how to play. Tap each step to learn more!"), 800);
 });
 </script>
 </body>
