@@ -20,13 +20,13 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 #bc-row-label{font-size:10px;color:rgba(255,255,255,.4);}
 
 /* ── WORLD TABS ── */
-#world-tabs{display:flex;gap:6px;overflow-x:auto;padding:0 2px 8px;scrollbar-width:none;}
-#world-tabs::-webkit-scrollbar{display:none;}
-.world-tab{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 9px;border-radius:12px;cursor:pointer;transition:all .2s;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);min-width:58px;}
+#world-tabs{display:flex;gap:4px;padding:0 0 8px;overflow:visible;}
+
+.world-tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 3px;border-radius:10px;cursor:pointer;transition:all .2s;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);}
 .world-tab:hover{background:rgba(255,110,247,.1);border-color:rgba(255,110,247,.3);}
 .world-tab.active{background:rgba(255,110,247,.18);border-color:#ff6ef7;box-shadow:0 0 12px rgba(255,110,247,.3);}
-.world-tab-icon{font-size:20px;line-height:1;}
-.world-tab-name{font-size:7px;color:rgba(255,255,255,.6);text-align:center;letter-spacing:.3px;line-height:1.2;}
+.world-tab-icon{font-size:18px;line-height:1;}
+.world-tab-name{font-size:6.5px;color:rgba(255,255,255,.6);text-align:center;letter-spacing:0px;line-height:1.3;white-space:normal;}
 .world-tab.active .world-tab-name{color:#ff6ef7;}
 
 /* ── SCROLL ── */
@@ -125,11 +125,11 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
       <span id="bc-row-label">BeatCoins</span>
     </div>
     <div id="world-tabs">
-      <div class="world-tab active" onclick="switchWorld('ocean')" id="tab-ocean"><span class="world-tab-icon">🐙</span><span class="world-tab-name">Octopus's Garden</span></div>
-      <div class="world-tab" onclick="switchWorld('space')" id="tab-space"><span class="world-tab-icon">🚀</span><span class="world-tab-name">Across the Universe</span></div>
-      <div class="world-tab" onclick="switchWorld('india')" id="tab-india"><span class="world-tab-icon">✨</span><span class="world-tab-name">The Inner Light</span></div>
-      <div class="world-tab" onclick="switchWorld('city')" id="tab-city"><span class="world-tab-icon">🎠</span><span class="world-tab-name">Penny Lane</span></div>
-      <div class="world-tab" onclick="switchWorld('rita')" id="tab-rita"><span class="world-tab-icon">🎤</span><span class="world-tab-name">Rita's World</span></div>
+      <div class="world-tab active" onclick="switchWorld('ocean')" id="tab-ocean"><span class="world-tab-icon">🐙</span><span class="world-tab-name">Octopus's<br>Garden</span></div>
+      <div class="world-tab" onclick="switchWorld('space')" id="tab-space"><span class="world-tab-icon">🚀</span><span class="world-tab-name">Across the<br>Universe</span></div>
+      <div class="world-tab" onclick="switchWorld('india')" id="tab-india"><span class="world-tab-icon">✨</span><span class="world-tab-name">The Inner<br>Light</span></div>
+      <div class="world-tab" onclick="switchWorld('city')" id="tab-city"><span class="world-tab-icon">🎠</span><span class="world-tab-name">Penny<br>Lane</span></div>
+      <div class="world-tab" onclick="switchWorld('rita')" id="tab-rita"><span class="world-tab-icon">🎤</span><span class="world-tab-name">Rita's<br>World</span></div>
     </div>
   </div>
 
