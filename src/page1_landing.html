@@ -343,6 +343,56 @@ body {
   font-family:Georgia,serif;
 }
 #size-label { color:#333; font-size:10px; font-family:monospace; margin-top:8px; letter-spacing:1px; }
+
+/* ── TAP TO START OVERLAY ── */
+#tap-overlay{
+  position:absolute;inset:0;z-index:999;
+  background:linear-gradient(180deg,#0d0028 0%,#1a0040 60%,#0d0028 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:0;border-radius:48px;
+  animation:fadeInOverlay .5s ease;
+}
+@keyframes fadeInOverlay{from{opacity:0}to{opacity:1}}
+#tap-overlay.hiding{animation:fadeOutOverlay .6s ease forwards;}
+@keyframes fadeOutOverlay{from{opacity:1}to{opacity:0;pointer-events:none;}}
+
+#tap-stars{font-size:11px;color:#ffd700;letter-spacing:6px;margin-bottom:8px;opacity:.7;}
+#tap-app-title{
+  font-size:24px;font-weight:bold;letter-spacing:2px;text-align:center;
+  background:linear-gradient(135deg,#ff6ef7,#ffd700);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  filter:drop-shadow(0 0 16px rgba(255,110,247,.5));
+  margin-bottom:4px;
+}
+#tap-app-sub{font-size:10px;color:rgba(255,255,255,.45);letter-spacing:2px;margin-bottom:20px;}
+#tap-rita{
+  width:140px;height:140px;object-fit:contain;
+  filter:drop-shadow(0 0 20px rgba(255,110,247,.6));
+  margin-bottom:20px;
+}
+#tap-bubble{
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,110,247,.4);
+  border-radius:16px;padding:12px 18px;max-width:240px;text-align:center;
+  font-size:11px;color:rgba(255,255,255,.8);font-style:italic;line-height:1.6;
+  margin-bottom:24px;
+}
+#tap-btn{
+  background:linear-gradient(135deg,#ff6ef7,#a855f7);
+  border:none;border-radius:28px;
+  padding:16px 40px;
+  color:#000;font-weight:bold;font-size:15px;
+  cursor:pointer;font-family:Georgia,serif;
+  box-shadow:0 0 30px rgba(255,110,247,.7),0 4px 20px rgba(0,0,0,.4);
+  letter-spacing:1px;
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 30px rgba(255,110,247,.7),0 4px 20px rgba(0,0,0,.4);}
+  50%{box-shadow:0 0 50px rgba(255,110,247,.95),0 4px 30px rgba(0,0,0,.5);}
+}
+#tap-btn:hover{transform:scale(1.05);}
+#tap-version{font-size:8px;color:rgba(255,255,255,.2);margin-top:20px;letter-spacing:1px;}
 </style>
 </head>
 <body>
@@ -769,6 +819,26 @@ function toast(msg) {
   const t=document.getElementById('toast'); t.textContent=msg; t.style.opacity='1';
   clearTimeout(t._t); t._t=setTimeout(()=>t.style.opacity='0',3000);
 }
+
+// ── TAP TO START — unlocks audio on mobile ──────────────────
+function tapToStart(){
+  const overlay = document.getElementById('tap-overlay');
+  // Unlock audio with a silent sound (required gesture)
+  try {
+    const ctx = new(window.AudioContext||window.webkitAudioContext)();
+    const buf = ctx.createBuffer(1,1,22050);
+    const src = ctx.createBufferSource();
+    src.buffer = buf; src.connect(ctx.destination); src.start(0);
+  } catch(e){}
+  // Rita speaks welcome
+  setTimeout(()=>{
+    ritaSpeak("Hello love! Welcome to Lovely Rita Adventures! Spin the wheel and choose your Lad companion to begin!");
+  }, 200);
+  // Fade out overlay
+  overlay.classList.add('hiding');
+  setTimeout(()=>{ overlay.style.display='none'; }, 600);
+}
+
 </script>
 </body>
 </html>
