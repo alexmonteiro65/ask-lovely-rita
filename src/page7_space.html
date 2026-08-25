@@ -504,7 +504,7 @@ function answerQuestion(idx,q) {
   document.getElementById('result-title').textContent=isCorrect?'Correct!':'Not quite!';
   document.getElementById('result-fact').textContent=q.fact;
   const pts=document.getElementById('result-pts');
-  pts.textContent=isCorrect?`+${earned} BeatCoins!`:'+0 BeatCoins';
+  pts.textContent=isCorrect?`+${earned} EBCs!`:'+0 BeatCoins';
   pts.style.color=isCorrect?'#4ade80':'rgba(255,255,255,.4)';
   document.getElementById('result-panel').classList.add('show');
 
