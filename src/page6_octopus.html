@@ -973,7 +973,7 @@ function showWordResult(correct, wordObj, pts) {
   document.getElementById('result-word').textContent = wordObj.word;
   document.getElementById('result-sub').textContent = wordObj.riddle.split('.')[0]+'.';
   const ptsEl = document.getElementById('result-pts');
-  ptsEl.textContent = correct?`+${pts} BeatCoins!`:'+0 BeatCoins';
+  ptsEl.textContent = correct?`+${pts} EBCs!`:'+0 BeatCoins';
   ptsEl.style.color = correct?'#4ade80':'rgba(255,255,255,.4)';
   // GROWN UPS + EXPERTS: reveal image after answer
   if (S.level !== 'youngsters' && wordObj.photo) {
