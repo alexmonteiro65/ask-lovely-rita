@@ -85,6 +85,16 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 .nav-icon{font-size:20px;line-height:1;}
 
 #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;font-family:Georgia,serif;white-space:nowrap;}
+
+  /* ── STICKER SHEETS ── */
+  .sticker-img { max-width:100%; max-height:110px; object-fit:contain; }
+  .sticker-rita-img { max-width:100%; max-height:150px; object-fit:contain; }
+  .premium-badge {
+    position:absolute; top:4px; right:4px;
+    background:linear-gradient(135deg,#ffd700,#ff6ef7);
+    color:#000; font-size:8px; font-weight:900;
+    padding:2px 5px; border-radius:6px; letter-spacing:.5px;
+  }
 </style>
 </head>
 <body>
@@ -274,6 +284,85 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
       </div>
     </div>
 
+
+    <!-- SHELF 5: STICKER SHEETS -->
+    <div class="shelf-section">
+      <div class="shelf-label">🎨 Sticker Sheets — Print at Home!</div>
+      <div class="carousel-wrap">
+        <div class="carousel-row">
+          <button class="carousel-arrow" onclick="navCarousel('stickers',-1)">◀</button>
+          <div class="carousel-viewport" id="viewport-stickers">
+            <div class="carousel-track" id="track-stickers">
+
+              <div class="item-card" id="card-stk_lads" onclick="openPopup('stk_lads')">
+                <div class="item-img-wrap" id="imgwrap-stk_lads">
+                  <img class="sticker-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/stickers/sticker_lads.png" alt="The Lads Stickers">
+                </div>
+                <div class="item-name">The Lads<br>Sticker Sheet</div>
+                <div class="stock-count">Only <span id="stock-stk_lads">99</span> left!</div>
+                <div class="item-footer">
+                  <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">800</span></div>
+                  <button class="buy-btn" id="btn-stk_lads" onclick="event.stopPropagation();buyItem('stk_lads')">INVEST</button>
+                </div>
+              </div>
+
+              <div class="item-card" id="card-stk_vw" onclick="openPopup('stk_vw')">
+                <div class="item-img-wrap" id="imgwrap-stk_vw">
+                  <img class="sticker-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/stickers/sticker_vw.png" alt="VW Beetles Stickers">
+                </div>
+                <div class="item-name">VW Beetles<br>Sticker Sheet</div>
+                <div class="stock-count">Only <span id="stock-stk_vw">99</span> left!</div>
+                <div class="item-footer">
+                  <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">800</span></div>
+                  <button class="buy-btn" id="btn-stk_vw" onclick="event.stopPropagation();buyItem('stk_vw')">INVEST</button>
+                </div>
+              </div>
+
+              <div class="item-card" id="card-stk_instruments" onclick="openPopup('stk_instruments')">
+                <div class="item-img-wrap" id="imgwrap-stk_instruments">
+                  <img class="sticker-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/stickers/sticker_instruments.png" alt="Instruments Stickers">
+                </div>
+                <div class="item-name">Instruments<br>Sticker Sheet</div>
+                <div class="stock-count">Only <span id="stock-stk_instruments">99</span> left!</div>
+                <div class="item-footer">
+                  <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">800</span></div>
+                  <button class="buy-btn" id="btn-stk_instruments" onclick="event.stopPropagation();buyItem('stk_instruments')">INVEST</button>
+                </div>
+              </div>
+
+              <div class="item-card" id="card-stk_albums" onclick="openPopup('stk_albums')">
+                <div class="item-img-wrap" id="imgwrap-stk_albums">
+                  <img class="sticker-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/stickers/sticker_albums.png" alt="Music Icons Stickers">
+                </div>
+                <div class="item-name">Music Icons<br>Sticker Sheet</div>
+                <div class="stock-count">Only <span id="stock-stk_albums">99</span> left!</div>
+                <div class="item-footer">
+                  <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">800</span></div>
+                  <button class="buy-btn" id="btn-stk_albums" onclick="event.stopPropagation();buyItem('stk_albums')">INVEST</button>
+                </div>
+              </div>
+
+              <!-- RITA PREMIUM — larger card -->
+              <div class="item-card" id="card-stk_rita" onclick="openPopup('stk_rita')" style="border-color:rgba(255,215,0,.4);background:rgba(255,215,0,.05);">
+                <div class="item-img-wrap" id="imgwrap-stk_rita" style="min-height:120px;">
+                  <span class="premium-badge">⭐ PREMIUM</span>
+                  <img class="sticker-rita-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/stickers/sticker_rita.png" alt="Rita Special Edition">
+                </div>
+                <div class="item-name" style="color:#ffd700;">Lovely Rita<br>Special Edition ✨</div>
+                <div class="stock-count">Only <span id="stock-stk_rita">50</span> left!</div>
+                <div class="item-footer">
+                  <div class="item-price" style="border-color:rgba(255,215,0,.5);"><span class="price-icon">🪙</span><span class="price-val" style="color:#ffd700;">1,600</span></div>
+                  <button class="buy-btn" id="btn-stk_rita" onclick="event.stopPropagation();buyItem('stk_rita')" style="background:linear-gradient(135deg,#ffd700,#c8a96e);color:#000;">INVEST</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <button class="carousel-arrow" onclick="navCarousel('stickers',1)">▶</button>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /shop-scroll -->
 
   <!-- ITEM POPUP -->
@@ -320,6 +409,11 @@ const ITEMS = {
   lad_cute:  {name:'The Cute One Poster',             price:400, stock:6,  img:RAW+'shop/lad_poster_cute.png'},
   lad_quiet: {name:'The Quiet One Poster',            price:400, stock:6,  img:RAW+'shop/lad_poster_quiet.png'},
   lad_funny: {name:'The Funny One Poster',            price:400, stock:6,  img:RAW+'shop/lad_poster_funny.png'},
+  stk_lads:        {name:'The Lads Sticker Sheet',          price:800,  stock:99, img:RAW+'shop/stickers/sticker_lads.png',        desc:'4 round stickers — Smart, Cute, Quiet and Funny Lads. Print at home on Avery A4 sticker paper!'},
+  stk_vw:          {name:'VW Beetles Sticker Sheet',         price:800,  stock:99, img:RAW+'shop/stickers/sticker_vw.png',          desc:'4 round stickers — Red, Yellow, Blue and Green VW Beetles. Print at home on Avery A4 sticker paper!'},
+  stk_instruments: {name:'Instruments Sticker Sheet',        price:800,  stock:99, img:RAW+'shop/stickers/sticker_instruments.png', desc:'4 round stickers — Acoustic guitar, Electric guitar, Sitar and Drum kit. Print at home on Avery A4 sticker paper!'},
+  stk_albums:      {name:'Music Icons Sticker Sheet',        price:800,  stock:99, img:RAW+'shop/stickers/sticker_albums.png',      desc:'4 round stickers — Vinyl record, BeatCoin, Headphones and Musical note. Print at home on Avery A4 sticker paper!'},
+  stk_rita:        {name:'Lovely Rita Special Edition',      price:1600, stock:50, img:RAW+'shop/stickers/sticker_rita.png',        desc:'4 OVERSIZED premium stickers — Rita as Traffic Warden, Pepper, Abbey Road and Host. Larger format for extra impact!'},
 };
 
 // Carousels state
@@ -484,6 +578,7 @@ window.addEventListener('load',()=>{
   // Init carousels
   initCarousel('posters',2); initCarousel('beetles',2);
   initCarousel('badges',2);  initCarousel('lads',4);
+  initCarousel('stickers',5);
   speak("Welcome to The Beat Shop love! Explore and invest your BeatCoins in exclusive collectibles!");
 });
 </script>
