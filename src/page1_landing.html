@@ -328,7 +328,7 @@ body {
 .nav-btn {
   background:none; border:none; color:rgba(255,255,255,0.4);
   font-size:9px; cursor:pointer; display:flex; flex-direction:column;
-  align-items:center; gap:3px; padding:4px 16px;
+  align-items:center; gap:3px; padding:4px 8px;
   transition:color 0.2s; font-family:Georgia,serif;
 }
 .nav-btn:hover { color:var(--accent); }
@@ -472,14 +472,20 @@ body {
     <button class="nav-btn" onclick="toggleMute()">
       <span class="nav-icon" id="sound-icon">🔊</span><span>Sound</span>
     </button>
-    <button class="nav-btn" onclick="goHowToPlay()">
-      <span class="nav-icon">❓</span><span>Help</span>
+    <button class="nav-btn" onclick="window.location.href='page_adventures.html'">
+      <span class="nav-icon">👤</span><span>Profile</span>
     </button>
-    <button class="nav-btn nav-home" onclick="goHome()">
-      <span class="nav-icon">🏠</span><span>Home</span>
+    <button class="nav-btn" onclick="goMusic()">
+      <span class="nav-icon">🎵</span><span>Music</span>
     </button>
     <button class="nav-btn" onclick="goVideo()">
-      <span class="nav-icon">🎬</span><span>Video</span>
+      <span class="nav-icon">🎬</span><span>Videos</span>
+    </button>
+    <button class="nav-btn" onclick="window.location.href='page_shop.html'">
+      <span class="nav-icon">💎</span><span>Collectibles</span>
+    </button>
+    <button class="nav-btn" onclick="goHowToPlay()">
+      <span class="nav-icon">❓</span><span>Help</span>
     </button>
   </nav>
 </div>
@@ -673,6 +679,7 @@ async function askRita() {
 }
 
 function goVideo() { toast('🎬 Video content coming soon love!'); }
+function goMusic(){ toast('🎵 Music Jukebox coming soon love!'); }
 function goVideo(){ window.location.href='page_videos.html'; }
 function goHome() {
   document.getElementById('phone-scroll').scrollTop=0;
