@@ -703,7 +703,7 @@ window.addEventListener('load', ()=>{
   // Rita text box transparent on load
   const rtb0 = document.getElementById('rita-text-box');
   if(rtb0) rtb0.style.background = 'transparent';
-  const greeting = "Hello love! Welcome to Lovely Rita Adventures! Press the button to spin and pick your Lad companion. Lets get started!";
+  const greeting = "Welcome to the adventure darling! Here is what you can do — choose your level, spin to pick your Lad companion, ask me any question you like, or tap Music and Videos to explore. This is the only platform in the world that combines games collectibles videos and a real economy. Let us begin!";
   const speak = () => { if(!muteState) ritaSpeak(greeting); };
   if(window.speechSynthesis.getVoices().length > 0) {
     setTimeout(speak, 800);
@@ -862,7 +862,7 @@ function tapToStart(){
   } catch(e){}
   // Rita speaks welcome
   setTimeout(()=>{
-    ritaSpeak("Hello love! I have been waiting for you! Welcome to Lovely Rita Adventures — the world's first interactive music-powered learning platform! Tap the play button and spin to choose your Lad companion. Your adventure begins now!");
+    ritaSpeak("Hello love! I have been waiting for you! Welcome to the world's first interactive music-powered learning platform. Your adventure is about to begin!");
   }, 200);
   // Fade out overlay
   overlay.classList.add('hiding');
