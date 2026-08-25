@@ -418,7 +418,7 @@ body {
     <img id="tap-rita"
       src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/rita_apresentadora_clean.png"
       alt="Lovely Rita">
-    <div id="tap-bubble">Hello love! I am Lovely Rita your musical guide. Tap below to start your adventure!</div>
+    <div id="tap-bubble">Hello love! I have been waiting for you! Welcome to the world's first interactive music-powered learning platform. Your adventure is about to begin!</div>
     <button id="tap-btn" onclick="tapToStart()">&#9654; TAP TO START</button>
     <div id="tap-version">LOVELY RITA ADVENTURES · BETA</div>
   </div>
@@ -862,7 +862,7 @@ function tapToStart(){
   } catch(e){}
   // Rita speaks welcome
   setTimeout(()=>{
-    ritaSpeak("Hello love! Welcome to Lovely Rita Adventures! Spin the wheel and choose your Lad companion to begin!");
+    ritaSpeak("Hello love! I have been waiting for you! Welcome to Lovely Rita Adventures — the world's first interactive music-powered learning platform! Tap the play button and spin to choose your Lad companion. Your adventure begins now!");
   }, 200);
   // Fade out overlay
   overlay.classList.add('hiding');
