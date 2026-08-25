@@ -155,7 +155,7 @@ body { background:#3d1a00; display:flex; flex-direction:column; align-items:cent
     pointer-events: none;
   }
   #floating-lad-bottom img {
-    width: 90px;
+    width: 120px;
     height: auto;
     object-fit: contain;
     filter: drop-shadow(0 0 12px var(--glow));
@@ -205,7 +205,7 @@ body { background:#3d1a00; display:flex; flex-direction:column; align-items:cent
       </div>
 
       <div id="instrument-card">
-        <img id="instrument-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-quiet-regular.png" alt="Instrument">
+        <img id="instrument-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/peaceful_lad_sitar.png" alt="Instrument">
       </div>
 
       <!-- Expert: type instrument name -->
@@ -486,7 +486,7 @@ function answer(chosen,instr){
   S.qIndex++;
   setTimeout(()=>{
     if(S.qIndex>=8) setTimeout(finishGame,800);
-    else document.getElementById('next-btn').style.display='block';
+    else { const nb=document.getElementById('next-btn'); nb.style.display='block'; setTimeout(()=>nb.scrollIntoView({behavior:'smooth',block:'center'}),200); }
   },1200);
 }
 
@@ -521,7 +521,7 @@ function finishGame(){
     }
   }, 2000);
   celebrate(); speak(pick(RITA_COMPLETE));
-  setTimeout(showBonusGame,2000);
+  setTimeout(showBonusGame, 4500);
 }
 
 function showBonusGame(){
