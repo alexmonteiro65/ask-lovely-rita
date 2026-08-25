@@ -240,8 +240,8 @@ const WORLDS = {
         source:"Lovely Rita Adventures",
         vimeoId:"1221108833", type:'vimeo',
         emoji:'🌊', bc:50 },
-      { id:'v-oc2', title:"Deep Ocean Wonders", sub:"Coming soon love — stay tuned!", source:"", emoji:'🐟', comingSoon:true },
-      { id:'v-oc3', title:"Coral Reef Secrets", sub:"Coming soon love — stay tuned!", source:"", emoji:'💧', comingSoon:true }
+      { id:'v-oc2', title:"Deep Ocean Wonders", sub:"Coming soon love — stay tuned!", source:"", emoji:'🐟', comingSoon:true, cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_ocean_2.jpg" },
+      { id:'v-oc3', title:"Coral Reef Secrets", sub:"Coming soon love — stay tuned!", source:"", emoji:'💧', comingSoon:true, cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_ocean_3.jpg" }
     ]},
   space: {
     name:"Across the Universe", emoji:'🚀',
@@ -254,8 +254,8 @@ const WORLDS = {
         source:"Lovely Rita Adventures",
         vimeoId:"1221112309", type:'vimeo',
         emoji:'🌌', bc:50 },
-      { id:'v-sp2', title:"Our Solar System", sub:"Coming soon love — stay tuned!", source:"", emoji:'🪐', comingSoon:true },
-      { id:'v-sp3', title:"What is a Black Hole?", sub:"Coming soon love — stay tuned!", source:"", emoji:'⚫', comingSoon:true }
+      { id:'v-sp2', title:"Our Solar System", sub:"Coming soon love — stay tuned!", source:"", emoji:'🪐', comingSoon:true, cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_space_2.jpg" },
+      { id:'v-sp3', title:"What is a Black Hole?", sub:"Coming soon love — stay tuned!", source:"", emoji:'⚫', comingSoon:true, cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_space_3.jpg" }
     ]},
   india: {
     name:"The Inner Light", emoji:'✨',
@@ -268,8 +268,8 @@ const WORLDS = {
         source:"Lovely Rita Adventures",
         vimeoId:"1221108831", type:'vimeo',
         emoji:'🎵', bc:50 },
-      { id:'v-in2', title:"Instruments of the World", sub:"Coming soon love — stay tuned!", source:"", emoji:'🌏', comingSoon:true },
-      { id:'v-in3', title:"The Power of Music", sub:"Coming soon love — stay tuned!", source:"", emoji:'🧘', comingSoon:true }
+      { id:'v-in2', title:"Instruments of the World", sub:"Coming soon love — stay tuned!", source:"", emoji:'🌏', comingSoon:true, cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_india_2.jpg" },
+      { id:'v-in3', title:"The Power of Music", sub:"Coming soon love — stay tuned!", source:"", emoji:'🧘', comingSoon:true, cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_india_3.jpg" }
     ]},
   city: {
     name:"Penny Lane", emoji:'🎠',
@@ -287,7 +287,7 @@ const WORLDS = {
         source:"Lovely Rita Adventures",
         vimeoId:"1221112310", type:'vimeo',
         emoji:'🔧', bc:50 },
-      { id:'v-ct3', title:"Maps and Geography for Kids", sub:"Coming soon love — stay tuned!", source:"", emoji:'🗺️', comingSoon:true }
+      { id:'v-ct3', title:"Maps and Geography for Kids", sub:"Coming soon love — stay tuned!", source:"", emoji:'🗺️', comingSoon:true, cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_city_3.jpg" }
     ]},
   rita: {
     name:"Rita's World", emoji:'🎤',
@@ -300,8 +300,8 @@ const WORLDS = {
         source:"Lovely Rita Adventures",
         vimeoId:"1221108835", type:'vimeo',
         emoji:'🎙️', bc:50 },
-      { id:'v-rt2', title:"What Makes a Song Catchy?", sub:"Coming soon love — stay tuned!", source:"", emoji:'🎶', comingSoon:true },
-      { id:'v-rt3', title:"The Power of Music", sub:"Coming soon love — stay tuned!", source:"", emoji:'💫', comingSoon:true }
+      { id:'v-rt2', title:"What Makes a Song Catchy?", sub:"Coming soon love — stay tuned!", source:"", emoji:'🎶', comingSoon:true, cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_rita_2.jpg" },
+      { id:'v-rt3', title:"The Power of Music", sub:"Coming soon love — stay tuned!", source:"", emoji:'💫', comingSoon:true, cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_rita_3.jpg" }
     ]}
 };
 
@@ -373,11 +373,11 @@ function renderWorld(world){
     const card=document.createElement('div');
     card.className='vid-card'+(v.comingSoon?' coming-soon':'');
     card.onclick=v.comingSoon?()=>openComingSoon(w.name):()=>openPlayer(i+1);
+    var cardThumb = v.cardThumb || w.thumbImg || '';
     card.innerHTML=`
-      <div class="vid-thumb" style="background:${w.color};">
-        <div class="vid-thumb-bg" style="background:${w.color};"></div>
+      <div class="vid-thumb">
+        <div class="vid-thumb-bg" style="background:${w.color};${cardThumb?'background-image:url('+cardThumb+');background-size:cover;background-position:center;':''}"></div>
         <div class="vid-thumb-overlay"></div>
-        ${w.thumbImg?`<img class="vid-thumb-img" src="${w.thumbImg}" alt="" style="width:35px;height:35px;object-fit:contain;opacity:.5;position:absolute;z-index:1;">`:''}
         ${v.comingSoon
           ?'<div class="vid-cs-stamp">COMING SOON</div>'
           :`<div class="vid-play-sm">▶</div>`}
