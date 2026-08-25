@@ -824,7 +824,7 @@ function finishGame(reason) {
 
   if (reason === 'perfect' || (reason === 'timeout' && S.correct === 4)) {
     earned = S.correct * cfg.perCar + cfg.bonus;
-    setResult('🏆','Perfect Match!','All 4 Beetles parked correctly!',`+${earned} BeatCoins!`,'#4ade80');
+    setResult('🏆','Perfect Match!','All 4 Beetles parked correctly!',`+${earned} EBCs!`,'#4ade80');
     ritaLine = pick(RITA_WIN_ALL);
     celebrate();
   } else if (S.correct > 0) {
