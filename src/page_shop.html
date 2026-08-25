@@ -29,10 +29,41 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 
 /* ── SHELF SECTION ── */
 .shelf-section{margin-bottom:22px;}
-.shelf-label{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.38);text-transform:uppercase;margin-bottom:10px;padding-left:8px;border-left:2.5px solid #ff6ef7;}
+.shelf-label{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.55);text-transform:uppercase;margin-bottom:10px;padding-left:8px;border-left:2.5px solid #ff6ef7;font-weight:bold;}
+.shelf-section:nth-child(2n) .shelf-label{border-left-color:#ffde59;color:rgba(255,222,89,.7);}
+.shelf-section:nth-child(3n) .shelf-label{border-left-color:#7bc6ff;color:rgba(123,198,255,.7);}
+.shelf-section:nth-child(2n) .carousel-wrap{border-color:rgba(255,222,89,.2);}
+.shelf-section:nth-child(3n) .carousel-wrap{border-color:rgba(123,198,255,.2);}
 
 /* ── CAROUSEL ── */
-.carousel-wrap{background:linear-gradient(180deg,#2a1a0a,#1a0e04);border:1px solid #3d2510;border-radius:12px;padding:12px 6px;box-shadow:0 4px 16px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.04);}
+.carousel-wrap{
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(255,110,247,.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(100,120,255,.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 80%, rgba(255,215,0,.06) 0%, transparent 50%),
+    linear-gradient(180deg,#1e0a2e,#0d0518);
+  border:1px solid rgba(255,110,247,.25);
+  border-radius:12px;
+  padding:12px 6px;
+  box-shadow:0 4px 20px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,110,247,.08);
+  position:relative;
+  overflow:hidden;
+}
+.carousel-wrap::before {
+  content: '♪ 🪙 ♫ ♪ 🪙 ♫ ♪ 🪙 ♫ ♪ 🪙 ♫ ♪ 🪙 ♫';
+  position:absolute;
+  top:0; left:0; right:0; bottom:0;
+  font-size:11px;
+  line-height:1.8;
+  letter-spacing:6px;
+  word-spacing:4px;
+  color:rgba(255,255,255,.04);
+  pointer-events:none;
+  overflow:hidden;
+  padding:4px;
+  z-index:0;
+  white-space:pre-wrap;
+}
 .carousel-row{display:flex;align-items:center;gap:6px;}
 .carousel-arrow{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:50%;width:28px;height:28px;flex-shrink:0;cursor:pointer;color:rgba(255,255,255,.6);font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .2s;}
 .carousel-arrow:hover{background:rgba(255,110,247,.2);border-color:#ff6ef7;color:#ff6ef7;}
@@ -40,7 +71,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 .carousel-track{display:flex;gap:8px;transition:transform .35s ease;}
 
 /* ── ITEM CARD ── */
-.item-card{flex:0 0 calc(50% - 4px);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 7px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:all .2s;position:relative;}
+.item-card{flex:0 0 calc(50% - 4px);background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,110,247,.04));border:1px solid rgba(255,110,247,.15);border-radius:10px;padding:10px 7px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:all .2s;position:relative;z-index:1;}
 .item-card:hover{background:rgba(255,110,247,.08);border-color:rgba(255,110,247,.35);}
 .item-card.owned-card{border-color:rgba(100,255,150,.25);}
 .item-img-wrap{width:100%;display:flex;align-items:center;justify-content:center;min-height:80px;position:relative;}
