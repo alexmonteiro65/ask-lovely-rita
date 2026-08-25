@@ -96,8 +96,10 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 #player-tap-title{font-size:13px;font-weight:bold;color:#fff;text-align:center;padding:0 20px;line-height:1.4;}
 #player-tap-source{font-size:9px;color:#ff6ef7;letter-spacing:1px;}
 #player-tap-btn{background:linear-gradient(135deg,#ff6ef7,#a855f7);border:none;border-radius:24px;padding:12px 28px;color:#000;font-weight:bold;font-size:13px;cursor:pointer;font-family:Georgia,serif;box-shadow:0 0 20px rgba(255,110,247,.6);}
-/* CSS overlay to hide YouTube logo area */
+/* Block YouTube logo area */
 #yt-logo-blocker{position:absolute;bottom:0;left:0;width:120px;height:40px;background:rgba(0,0,0,.01);z-index:10;}
+/* Block Vimeo three-dots menu (top-right corner) */
+#vimeo-dots-blocker{position:absolute;top:0;right:0;width:80px;height:50px;background:transparent;z-index:10;cursor:default;}
 
 #player-earned{background:rgba(74,222,128,.15);border:1px solid rgba(74,222,128,.4);border-radius:10px;padding:8px 14px;margin:0 14px 8px;text-align:center;display:none;font-size:12px;font-weight:bold;color:#4ade80;}
 #player-rita-box{background:rgba(255,255,255,.05);border-top:1px solid rgba(255,110,247,.15);padding:9px 14px;display:flex;align-items:center;gap:9px;flex-shrink:0;}
@@ -181,14 +183,10 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
       <div id="player-bc-badge"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin.png" alt=""><span id="player-bc-txt">+50 BeatCoins</span></div>
     </div>
     <div id="player-video-wrap">
-      <div id="player-tap-screen" onclick="startVideo()">
-        <span id="player-tap-emoji">🎬</span>
-        <div id="player-tap-title">Tap to Watch</div>
-        <div id="player-tap-source"></div>
-        <button class="player-tap-btn" style="background:linear-gradient(135deg,#ff6ef7,#a855f7);border:none;border-radius:24px;padding:12px 28px;color:#000;font-weight:bold;font-size:13px;cursor:pointer;font-family:Georgia,serif;box-shadow:0 0 20px rgba(255,110,247,.6);">▶ Watch Now</button>
-      </div>
+
       <iframe id="player-iframe" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>
       <div id="yt-logo-blocker"></div>
+      <div id="vimeo-dots-blocker"></div>
     </div>
     <div id="player-earned"></div>
     <div id="player-rita-box">
@@ -402,54 +400,39 @@ function openPlayer(idx){
   currentVidIdx=idx;
   const v=WORLDS[currentWorld].videos[idx];
   const watched=isWatched(v.id);
-  document.getElementById('player-tap-screen').style.display='flex';
-  document.getElementById('player-iframe').style.display='none';
-  document.getElementById('player-iframe').src='';
   document.getElementById('player-earned').style.display='none';
   document.getElementById('player-title-txt').textContent=v.title;
-  document.getElementById('player-tap-emoji').textContent=v.emoji;
-  document.getElementById('player-tap-title').textContent=v.title;
-  document.getElementById('player-tap-source').textContent=v.source?'▶ '+v.source:'';
   document.getElementById('player-bc-badge').style.display=watched?'none':'flex';
   document.getElementById('player-rita-say').textContent=
-    watched?'Great taste love! You already watched this wonderful video!'
-    :'Tap to start watching love! Stay until the end to earn your BeatCoins!';
+    watched?'Great taste love! You already watched this one — wonderful choice!'
+    :'Enjoy the video love! Stay until the end to earn your BeatCoins!';
   document.getElementById('player-overlay').classList.add('open');
+  // Load video immediately — user tap on card IS the required gesture
+  loadVideo(v, watched);
 }
-
-function startVideo(){
-  const v=WORLDS[currentWorld].videos[currentVidIdx];
-  document.getElementById('player-tap-screen').style.display='none';
+function loadVideo(v, watched){
   const iframe=document.getElementById('player-iframe');
-  // Build embed URL — Vimeo (clean, no logo) or YouTube fallback
+  iframe.style.display='block';
   if(v.type==='vimeo'){
-    iframe.src=`https://player.vimeo.com/video/${v.vimeoId}?autoplay=1&title=0&byline=0&portrait=0&color=ff6ef7&transparent=0`;
+    // api=1 enables postMessage events for reliable auto-return
+    iframe.src=`https://player.vimeo.com/video/${v.vimeoId}?autoplay=1&title=0&byline=0&portrait=0&color=ff6ef7&transparent=0&api=1`;
     iframe.allow='autoplay; fullscreen; picture-in-picture';
-    // Auto-return when video ends via Vimeo SDK
-    setTimeout(()=>{
-      try{
-        const vimeoPlayer = new Vimeo.Player(iframe);
-        vimeoPlayer.on('ended', ()=>{
-          setTimeout(()=>{ closePlayer(); speak('Great job love! That video was wonderful! Keep watching to earn more BeatCoins!'); }, 1500);
-        });
-      }catch(e){}
-    }, 1000);
   } else {
     iframe.src=`https://www.youtube-nocookie.com/embed/${v.ytId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&fs=0&showinfo=0`;
     iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
   }
-  iframe.style.display='block';
-  document.getElementById('player-rita-say').textContent='Watch the full video to earn 50 BeatCoins love! Enjoy!';
-  if(!isWatched(v.id)){
+  if(!watched){
     const daily=getDailyEarned();
     if(daily<200){
       if(playerTimer) clearTimeout(playerTimer);
       playerTimer=setTimeout(()=>awardBC(v),60000);
     } else {
-      document.getElementById('player-rita-say').textContent="You've reached today's video limit love! Come back tomorrow!";
+      document.getElementById('player-rita-say').textContent="You have reached today's video limit love! Come back tomorrow!";
     }
   }
 }
+
+// startVideo removed — logic now in loadVideo()
 
 function awardBC(v){
   const bc=getBC(); const newBC=bc+50;
@@ -468,9 +451,11 @@ function awardBC(v){
 
 function closePlayer(){
   if(playerTimer){clearTimeout(playerTimer);playerTimer=null;}
-  document.getElementById('player-iframe').src='';
-  document.getElementById('player-iframe').style.display='none';
+  const iframe=document.getElementById('player-iframe');
+  iframe.src='about:blank';
+  setTimeout(()=>{iframe.src='';iframe.style.display='none';},100);
   document.getElementById('player-overlay').classList.remove('open');
+  renderWorld(currentWorld);
 }
 
 function openComingSoon(worldName){
@@ -478,6 +463,13 @@ function openComingSoon(worldName){
     `We are working on amazing ${worldName} content for you love! Check back very soon — it is going to be wonderful!`;
   document.getElementById('coming-soon-overlay').classList.add('open');
   speak(`This video is coming very soon love! We are creating something amazing for ${worldName}. Come back soon!`);
+  // Auto-close after 5 seconds and return to video page
+  clearTimeout(window._csTimer);
+  window._csTimer = setTimeout(()=>{ closeComingSoon(); }, 5000);
+}
+function closeComingSoon(){
+  clearTimeout(window._csTimer);
+  document.getElementById('coming-soon-overlay').classList.remove('open');
 }
 function closeComingSoon(){
   document.getElementById('coming-soon-overlay').classList.remove('open');
@@ -502,6 +494,28 @@ function speak(text){
   else{window.speechSynthesis.addEventListener('voiceschanged',doSpeak,{once:true});setTimeout(doSpeak,500);}
 }
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',3000);}
+
+// Vimeo postMessage API — reliable auto-return on video end for ALL worlds
+window.addEventListener('message', function(event){
+  if(!event.origin || !event.origin.includes('vimeo.com')) return;
+  try{
+    var data = JSON.parse(event.data);
+    if(data.event==='ready'){
+      // Register to receive finish event
+      var iframe=document.getElementById('player-iframe');
+      if(iframe && iframe.contentWindow){
+        iframe.contentWindow.postMessage(JSON.stringify({method:'addEventListener',value:'finish'}),'*');
+      }
+    }
+    if(data.event==='finish'){
+      // Video ended — wait 2s then close and return to video page
+      setTimeout(function(){
+        closePlayer();
+        speak('Brilliant love! You have finished the video! Check out the other videos waiting for you!');
+      }, 2000);
+    }
+  }catch(e){}
+}, false);
 
 window.addEventListener('load',()=>{
   document.getElementById('bc-row-val').textContent=getBC().toLocaleString();
