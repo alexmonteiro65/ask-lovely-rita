@@ -119,6 +119,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 .nav-icon{font-size:20px;line-height:1;}
 #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;font-family:Georgia,serif;white-space:nowrap;}
 </style>
+<script src="https://player.vimeo.com/api/player.js"></script>
 </head>
 <body>
 <div id="phone-outer"><div id="phone">
@@ -422,10 +423,17 @@ function startVideo(){
   const iframe=document.getElementById('player-iframe');
   // Build embed URL — Vimeo (clean, no logo) or YouTube fallback
   if(v.type==='vimeo'){
-    // Vimeo: title=0, byline=0, portrait=0 removes all branding
-    // color=ff6ef7 sets accent to our pink
     iframe.src=`https://player.vimeo.com/video/${v.vimeoId}?autoplay=1&title=0&byline=0&portrait=0&color=ff6ef7&transparent=0`;
     iframe.allow='autoplay; fullscreen; picture-in-picture';
+    // Auto-return when video ends via Vimeo SDK
+    setTimeout(()=>{
+      try{
+        const vimeoPlayer = new Vimeo.Player(iframe);
+        vimeoPlayer.on('ended', ()=>{
+          setTimeout(()=>{ closePlayer(); speak('Great job love! That video was wonderful! Keep watching to earn more BeatCoins!'); }, 1500);
+        });
+      }catch(e){}
+    }, 1000);
   } else {
     iframe.src=`https://www.youtube-nocookie.com/embed/${v.ytId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&fs=0&showinfo=0`;
     iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
