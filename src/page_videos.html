@@ -12,199 +12,141 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 #phone::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#0a0a0a;border-radius:0 0 20px 20px;z-index:100;}
 
 /* ── HEADER ── */
-#vid-header{
-  padding:44px 16px 12px;
-  background:linear-gradient(180deg,#0d0028 0%,#1a0040 100%);
-  flex-shrink:0;
-}
-#header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
-#vid-title{
-  font-size:20px;font-weight:bold;letter-spacing:2px;
-  background:linear-gradient(135deg,#ff6ef7,#ffd700);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
-  filter:drop-shadow(0 0 10px rgba(255,110,247,.5));
-}
-#bc-header{display:flex;align-items:center;gap:6px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:20px;padding:5px 10px;}
-#bc-header img{width:22px;height:22px;object-fit:contain;}
-#bc-header-val{font-size:13px;font-weight:bold;color:#ffd700;}
+#vid-header{padding:44px 16px 10px;background:linear-gradient(180deg,#0d0028 0%,#1a0040 100%);flex-shrink:0;text-align:center;}
+#vid-title{font-size:20px;font-weight:bold;letter-spacing:2px;white-space:nowrap;background:linear-gradient(135deg,#ff6ef7,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 10px rgba(255,110,247,.5));}
+#bc-row{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:8px;margin-bottom:10px;}
+#bc-row img{width:26px;height:26px;object-fit:contain;}
+#bc-row-val{font-size:16px;font-weight:bold;color:#ffd700;min-width:70px;}
+#bc-row-label{font-size:10px;color:rgba(255,255,255,.4);}
 
 /* ── WORLD TABS ── */
-#world-tabs{display:flex;gap:8px;overflow-x:auto;padding:0 2px 8px;scrollbar-width:none;}
+#world-tabs{display:flex;gap:6px;overflow-x:auto;padding:0 2px 8px;scrollbar-width:none;}
 #world-tabs::-webkit-scrollbar{display:none;}
-.world-tab{
-  flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;
-  padding:8px 10px;border-radius:14px;cursor:pointer;transition:all .2s;
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
-  min-width:62px;
-}
+.world-tab{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 9px;border-radius:12px;cursor:pointer;transition:all .2s;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);min-width:58px;}
 .world-tab:hover{background:rgba(255,110,247,.1);border-color:rgba(255,110,247,.3);}
 .world-tab.active{background:rgba(255,110,247,.18);border-color:#ff6ef7;box-shadow:0 0 12px rgba(255,110,247,.3);}
-.world-tab-icon{font-size:22px;line-height:1;}
-.world-tab-name{font-size:8px;color:rgba(255,255,255,.6);text-align:center;letter-spacing:.5px;line-height:1.2;}
+.world-tab-icon{font-size:20px;line-height:1;}
+.world-tab-name{font-size:7px;color:rgba(255,255,255,.6);text-align:center;letter-spacing:.3px;line-height:1.2;}
 .world-tab.active .world-tab-name{color:#ff6ef7;}
 
 /* ── SCROLL ── */
-#vid-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:14px 14px 10px;}
+#vid-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:12px 14px 10px;}
 #vid-scroll::-webkit-scrollbar{width:0;}
 
 /* ── RITA INTRO ── */
-#rita-intro-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,110,247,.2);border-radius:14px;padding:10px 12px;}
-#rita-intro-img{width:48px;height:48px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(255,110,247,.6));}
-#rita-intro-text{font-size:11px;color:rgba(255,255,255,.75);line-height:1.5;font-style:italic;flex:1;}
+#rita-intro-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,110,247,.2);border-radius:14px;padding:10px 12px;}
+#rita-intro-img{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(255,110,247,.5));}
+#rita-intro-text{font-size:10px;color:rgba(255,255,255,.75);line-height:1.5;font-style:italic;flex:1;}
 #rita-speak-vid{background:none;border:none;color:#ff6ef7;font-size:16px;cursor:pointer;flex-shrink:0;}
 
 /* ── FEATURED VIDEO ── */
-#featured-card{
-  border-radius:18px;overflow:hidden;margin-bottom:12px;
-  border:2px solid rgba(255,110,247,.4);
-  box-shadow:0 0 24px rgba(255,110,247,.2);
-  cursor:pointer;position:relative;
-}
-#featured-thumb{
-  width:100%;height:180px;object-fit:cover;display:block;
-  background:linear-gradient(135deg,#0a2a4a,#1a0040);
-}
-#featured-thumb-placeholder{
-  width:100%;height:180px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:64px;
-  background:linear-gradient(135deg,#061a2e,#1a0040);
-}
-#featured-play{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);
-  width:60px;height:60px;border-radius:50%;
-  background:rgba(255,110,247,.9);border:3px solid #fff;
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;color:#fff;
-  box-shadow:0 0 30px rgba(255,110,247,.8);
-  transition:transform .2s;
-}
-#featured-card:hover #featured-play{transform:translate(-50%,-60%) scale(1.1);}
-#featured-bc-badge{
-  position:absolute;top:10px;right:10px;
-  display:flex;align-items:center;gap:4px;
-  background:rgba(0,0,0,.75);border:1px solid #ffd700;
-  border-radius:12px;padding:4px 8px;
-}
-#featured-bc-badge img{width:18px;height:18px;object-fit:contain;}
-#featured-bc-text{font-size:11px;font-weight:bold;color:#ffd700;}
-#featured-watched-badge{
-  position:absolute;top:10px;left:10px;
-  background:rgba(74,222,128,.85);border-radius:12px;padding:4px 10px;
-  font-size:10px;font-weight:bold;color:#000;display:none;
-}
-#featured-info{padding:12px 14px;background:rgba(0,0,0,.4);}
-#featured-title{font-size:14px;font-weight:bold;color:#fff;margin-bottom:3px;}
-#featured-sub{font-size:10px;color:rgba(255,255,255,.5);line-height:1.4;}
-#featured-source{font-size:9px;color:#ff6ef7;margin-top:4px;letter-spacing:.5px;}
+#featured-card{border-radius:16px;overflow:hidden;margin-bottom:12px;border:2px solid rgba(255,110,247,.4);box-shadow:0 0 24px rgba(255,110,247,.15);cursor:pointer;position:relative;background:#0a0a18;}
+#feat-placeholder{width:100%;height:170px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#061a2e,#1a0040);position:relative;}
+#feat-emoji-big{font-size:60px;opacity:.7;}
+.feat-play-btn{position:absolute;width:62px;height:62px;border-radius:50%;background:rgba(255,110,247,.92);border:3px solid #fff;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;box-shadow:0 0 30px rgba(255,110,247,.8);transition:transform .2s;}
+#featured-card:hover .feat-play-btn{transform:scale(1.1);}
+.feat-bc-badge{position:absolute;top:10px;right:10px;display:flex;align-items:center;gap:4px;background:rgba(0,0,0,.75);border:1px solid #ffd700;border-radius:10px;padding:3px 8px;}
+.feat-bc-badge img{width:16px;height:16px;object-fit:contain;}
+.feat-bc-badge span{font-size:10px;font-weight:bold;color:#ffd700;}
+.feat-watched-badge{position:absolute;top:10px;left:10px;background:rgba(74,222,128,.88);border-radius:8px;padding:3px 8px;font-size:9px;font-weight:bold;color:#000;display:none;}
+#featured-info{padding:11px 12px;background:rgba(0,0,0,.45);}
+#featured-title{font-size:13px;font-weight:bold;color:#fff;margin-bottom:2px;}
+#featured-sub{font-size:9px;color:rgba(255,255,255,.5);line-height:1.4;}
+#featured-source{font-size:8px;color:#ff6ef7;margin-top:3px;letter-spacing:.5px;}
 
-/* ── VIDEO GRID (2 smaller below) ── */
-#video-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
-.vid-card{border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.08);cursor:pointer;position:relative;background:rgba(255,255,255,.04);transition:all .2s;}
-.vid-card:hover{border-color:rgba(255,110,247,.4);box-shadow:0 0 16px rgba(255,110,247,.2);}
+/* ── VIDEO GRID ── */
+#video-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.vid-card{border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.08);cursor:pointer;position:relative;background:rgba(255,255,255,.04);transition:all .2s;}
+.vid-card:hover{border-color:rgba(255,110,247,.4);box-shadow:0 0 14px rgba(255,110,247,.2);}
 .vid-card.locked{opacity:.55;cursor:not-allowed;}
-.vid-thumb-wrap{position:relative;width:100%;height:90px;background:linear-gradient(135deg,#061a2e,#1a0040);display:flex;align-items:center;justify-content:center;font-size:36px;}
-.vid-play-sm{position:absolute;width:36px;height:36px;border-radius:50%;background:rgba(255,110,247,.85);border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;}
-.vid-lock{position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;font-size:24px;}
-.vid-bc-sm{position:absolute;top:5px;right:5px;display:flex;align-items:center;gap:2px;background:rgba(0,0,0,.7);border:1px solid #ffd700;border-radius:8px;padding:2px 5px;}
-.vid-bc-sm img{width:12px;height:12px;object-fit:contain;}
-.vid-bc-sm span{font-size:9px;font-weight:bold;color:#ffd700;}
-.vid-watched-sm{position:absolute;top:5px;left:5px;background:rgba(74,222,128,.85);border-radius:6px;padding:2px 6px;font-size:8px;font-weight:bold;color:#000;}
-.vid-info{padding:8px 8px 10px;}
-.vid-title-sm{font-size:10px;font-weight:bold;color:#fff;line-height:1.3;margin-bottom:2px;}
-.vid-sub-sm{font-size:8px;color:rgba(255,255,255,.45);line-height:1.3;}
-.vid-source-sm{font-size:8px;color:#ff6ef7;margin-top:3px;letter-spacing:.3px;}
+.vid-thumb{position:relative;width:100%;height:88px;background:linear-gradient(135deg,#061a2e,#1a0040);display:flex;align-items:center;justify-content:center;font-size:34px;}
+.vid-play-sm{position:absolute;width:34px;height:34px;border-radius:50%;background:rgba(255,110,247,.88);border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;}
+.vid-lock{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;font-size:22px;}
+.vid-bc-sm{position:absolute;top:5px;right:5px;display:flex;align-items:center;gap:2px;background:rgba(0,0,0,.72);border:1px solid #ffd700;border-radius:7px;padding:2px 5px;}
+.vid-bc-sm img{width:11px;height:11px;object-fit:contain;}
+.vid-bc-sm span{font-size:8px;font-weight:bold;color:#ffd700;}
+.vid-watched-sm{position:absolute;top:5px;left:5px;background:rgba(74,222,128,.88);border-radius:6px;padding:2px 5px;font-size:7px;font-weight:bold;color:#000;}
+.vid-info{padding:7px 8px 9px;}
+.vid-title-sm{font-size:9px;font-weight:bold;color:#fff;line-height:1.3;margin-bottom:2px;}
+.vid-sub-sm{font-size:7.5px;color:rgba(255,255,255,.42);line-height:1.3;}
+.vid-source-sm{font-size:7.5px;color:#ff6ef7;margin-top:2px;}
 
-/* ── DAILY LIMIT BAR ── */
-#daily-bar{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px 14px;margin-bottom:6px;}
+/* ── DAILY BAR ── */
+#daily-bar{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:10px 14px;}
 #daily-label{font-size:9px;color:rgba(255,255,255,.4);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
-#daily-track{height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;}
-#daily-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#ff6ef7,#ffd700);transition:width .5s ease;}
-#daily-text{font-size:9px;color:rgba(255,255,255,.4);margin-top:4px;text-align:right;}
+#daily-track{height:5px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;}
+#daily-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#ff6ef7,#ffd700);transition:width .6s ease;}
+#daily-text{font-size:9px;color:rgba(255,255,255,.35);margin-top:4px;text-align:right;}
 
-/* ── VIDEO PLAYER OVERLAY ── */
+/* ── PLAYER OVERLAY ── */
 #player-overlay{display:none;position:absolute;inset:0;z-index:200;background:#000;flex-direction:column;}
 #player-overlay.open{display:flex;}
-#player-header{display:flex;align-items:center;gap:10px;padding:44px 14px 10px;background:rgba(0,0,0,.8);}
-#player-back{background:rgba(255,255,255,.1);border:none;border-radius:50%;width:34px;height:34px;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-#player-title-text{font-size:13px;font-weight:bold;color:#fff;flex:1;}
-#player-bc-earn{display:flex;align-items:center;gap:4px;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4);border-radius:12px;padding:4px 8px;}
-#player-bc-earn img{width:16px;height:16px;object-fit:contain;}
-#player-bc-earn span{font-size:11px;font-weight:bold;color:#ffd700;}
-#player-frame-wrap{flex:1;display:flex;align-items:center;justify-content:center;background:#000;}
-#player-iframe{width:100%;height:220px;border:none;}
-#player-rita-box{background:rgba(255,255,255,.05);border-top:1px solid rgba(255,110,247,.2);padding:12px 14px;display:flex;align-items:center;gap:10px;}
-#player-rita-img{width:44px;height:44px;object-fit:contain;flex-shrink:0;}
-#player-rita-say{font-size:10px;color:rgba(255,255,255,.75);font-style:italic;flex:1;line-height:1.5;}
-#player-earned-msg{background:rgba(74,222,128,.15);border:1px solid rgba(74,222,128,.4);border-radius:10px;padding:10px 14px;margin:0 14px 10px;text-align:center;display:none;}
-#player-earned-msg span{font-size:13px;font-weight:bold;color:#4ade80;}
+#player-hdr{display:flex;align-items:center;gap:10px;padding:44px 14px 10px;background:rgba(0,0,0,.9);}
+#player-back{background:rgba(255,255,255,.1);border:none;border-radius:50%;width:34px;height:34px;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+#player-title-txt{font-size:12px;font-weight:bold;color:#fff;flex:1;line-height:1.3;}
+#player-bc-badge{display:flex;align-items:center;gap:4px;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4);border-radius:10px;padding:4px 8px;}
+#player-bc-badge img{width:16px;height:16px;object-fit:contain;}
+#player-bc-badge span{font-size:11px;font-weight:bold;color:#ffd700;white-space:nowrap;}
 
-/* ── NAV ── */
+/* Video wrapper with click blocker on YouTube bottom controls */
+#player-video-wrap{position:relative;flex:1;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+#player-iframe{width:100%;height:100%;border:none;display:none;}
+#player-tap-screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(10,0,20,.92);cursor:pointer;}
+#player-tap-emoji{font-size:56px;}
+#player-tap-title{font-size:14px;font-weight:bold;color:#fff;text-align:center;padding:0 20px;line-height:1.4;}
+#player-tap-source{font-size:10px;color:#ff6ef7;letter-spacing:1px;}
+#player-tap-btn{background:linear-gradient(135deg,#ff6ef7,#a855f7);border:none;border-radius:24px;padding:13px 32px;color:#000;font-weight:bold;font-size:14px;cursor:pointer;font-family:Georgia,serif;box-shadow:0 0 20px rgba(255,110,247,.6);}
+/* Block bottom 50px of iframe to prevent YouTube logo click */
+#player-yt-blocker{position:absolute;bottom:0;left:0;right:0;height:50px;background:rgba(0,0,0,.01);z-index:10;pointer-events:auto;}
+
+#player-earned{background:rgba(74,222,128,.15);border:1px solid rgba(74,222,128,.4);border-radius:10px;padding:9px 14px;margin:0 14px 8px;text-align:center;display:none;font-size:12px;font-weight:bold;color:#4ade80;}
+#player-rita-box{background:rgba(255,255,255,.05);border-top:1px solid rgba(255,110,247,.15);padding:10px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+#player-rita-mini{width:40px;height:40px;object-fit:contain;flex-shrink:0;}
+#player-rita-say{font-size:10px;color:rgba(255,255,255,.7);font-style:italic;flex:1;line-height:1.5;}
+
+/* ── NAV: 3 buttons ── */
 #nav-bar{display:flex;justify-content:space-around;align-items:center;padding:8px 0 14px;background:rgba(10,0,20,.95);border-top:1px solid rgba(255,255,255,.06);flex-shrink:0;}
-.nav-btn{background:none;border:none;color:rgba(255,255,255,.4);font-size:9px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 10px;transition:color .2s;font-family:Georgia,serif;}
+.nav-btn{background:none;border:none;color:rgba(255,255,255,.4);font-size:9px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 20px;transition:color .2s;font-family:Georgia,serif;}
 .nav-btn.active,.nav-btn:hover{color:#ff6ef7;}
 .nav-icon{font-size:20px;line-height:1;}
 .nav-btn.active .nav-icon{filter:drop-shadow(0 0 6px #ff6ef7);}
 
-#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;font-family:Georgia,serif;white-space:nowrap;}
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;font-family:Georgia,serif;}
 </style>
 </head>
 <body>
 <div id="phone-outer"><div id="phone">
 
-  <!-- HEADER -->
   <div id="vid-header">
-    <div id="header-row">
-      <div id="vid-title">🎬 LOVELY RITA VIDEOS</div>
-      <div id="bc-header">
-        <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin.png" alt="BeatCoin">
-        <span id="bc-header-val">0</span>
-      </div>
+    <div id="vid-title">LOVELY RITA VIDEOS</div>
+    <div id="bc-row">
+      <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin.png" alt="BeatCoin">
+      <span id="bc-row-val">0</span>
+      <span id="bc-row-label">BeatCoins</span>
     </div>
-    <!-- World tabs -->
     <div id="world-tabs">
-      <div class="world-tab active" onclick="switchWorld('ocean')" id="tab-ocean">
-        <span class="world-tab-icon">🐙</span>
-        <span class="world-tab-name">Octopus's Garden</span>
-      </div>
-      <div class="world-tab" onclick="switchWorld('space')" id="tab-space">
-        <span class="world-tab-icon">🚀</span>
-        <span class="world-tab-name">Across the Universe</span>
-      </div>
-      <div class="world-tab" onclick="switchWorld('india')" id="tab-india">
-        <span class="world-tab-icon">🪷</span>
-        <span class="world-tab-name">The Inner Light</span>
-      </div>
-      <div class="world-tab" onclick="switchWorld('city')" id="tab-city">
-        <span class="world-tab-icon">🎠</span>
-        <span class="world-tab-name">Penny Lane</span>
-      </div>
-      <div class="world-tab" onclick="switchWorld('rita')" id="tab-rita">
-        <span class="world-tab-icon">🎤</span>
-        <span class="world-tab-name">Rita's World</span>
-      </div>
+      <div class="world-tab active" onclick="switchWorld('ocean')" id="tab-ocean"><span class="world-tab-icon">🐙</span><span class="world-tab-name">Octopus's Garden</span></div>
+      <div class="world-tab" onclick="switchWorld('space')" id="tab-space"><span class="world-tab-icon">🚀</span><span class="world-tab-name">Across the Universe</span></div>
+      <div class="world-tab" onclick="switchWorld('india')" id="tab-india"><span class="world-tab-icon">✨</span><span class="world-tab-name">The Inner Light</span></div>
+      <div class="world-tab" onclick="switchWorld('city')" id="tab-city"><span class="world-tab-icon">🎠</span><span class="world-tab-name">Penny Lane</span></div>
+      <div class="world-tab" onclick="switchWorld('rita')" id="tab-rita"><span class="world-tab-icon">🎤</span><span class="world-tab-name">Rita's World</span></div>
     </div>
   </div>
 
-  <!-- SCROLL CONTENT -->
   <div id="vid-scroll">
-
-    <!-- Rita intro -->
     <div id="rita-intro-row">
       <img id="rita-intro-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/rita_apresentadora_clean.png" alt="Rita">
       <div id="rita-intro-text">Watch and earn love! Each video earns you 50 BeatCoins — up to 200 BeatCoins per day!</div>
-      <button id="rita-speak-vid" onclick="ritaSpeak(currentWorld)" title="Rita speaks">🔊</button>
+      <button id="rita-speak-vid" onclick="ritaIntroSpeak()" title="Rita speaks">🔊</button>
     </div>
 
-    <!-- Featured video -->
+    <!-- Featured -->
     <div id="featured-card" onclick="openPlayer(0)">
-      <div id="featured-thumb-placeholder"><span id="feat-emoji">🐙</span></div>
-      <div id="featured-watched-badge">✓ WATCHED</div>
-      <div id="featured-play">▶</div>
-      <div id="featured-bc-badge">
-        <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin.png" alt="">
-        <span class="featured-bc-text">+50 BeatCoins</span>
+      <div id="feat-placeholder">
+        <span id="feat-emoji-big">🐙</span>
+        <div class="feat-play-btn">▶</div>
+        <div class="feat-bc-badge" id="feat-bc-badge"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin.png" alt=""><span>+50 BeatCoins</span></div>
+        <div class="feat-watched-badge" id="feat-watched">✓ WATCHED</div>
       </div>
       <div id="featured-info">
         <div id="featured-title">Loading...</div>
@@ -213,47 +155,47 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
       </div>
     </div>
 
-    <!-- 2 smaller video cards -->
     <div id="video-grid"></div>
 
-    <!-- Daily BeatCoins bar -->
     <div id="daily-bar">
       <div id="daily-label">📺 Daily BeatCoins from Videos</div>
       <div id="daily-track"><div id="daily-fill" style="width:0%"></div></div>
       <div id="daily-text"><span id="daily-earned">0</span> / 200 BeatCoins earned today</div>
     </div>
+  </div>
 
-  </div><!-- /vid-scroll -->
-
-  <!-- VIDEO PLAYER OVERLAY -->
+  <!-- PLAYER OVERLAY -->
   <div id="player-overlay">
-    <div id="player-header">
+    <div id="player-hdr">
       <button id="player-back" onclick="closePlayer()">◀</button>
-      <div id="player-title-text">Video Title</div>
-      <div id="player-bc-earn">
-        <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin.png" alt="">
-        <span>+50 BeatCoins</span>
+      <div id="player-title-txt">Video</div>
+      <div id="player-bc-badge"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin.png" alt=""><span id="player-bc-txt">+50 BeatCoins</span></div>
+    </div>
+    <div id="player-video-wrap">
+      <!-- Tap to watch screen (prevents autoplay issues) -->
+      <div id="player-tap-screen" onclick="startVideo()">
+        <span id="player-tap-emoji">🎬</span>
+        <div id="player-tap-title">Tap to Watch</div>
+        <div id="player-tap-source"></div>
+        <button class="player-tap-btn" style="background:linear-gradient(135deg,#ff6ef7,#a855f7);border:none;border-radius:24px;padding:13px 32px;color:#000;font-weight:bold;font-size:14px;cursor:pointer;font-family:Georgia,serif;box-shadow:0 0 20px rgba(255,110,247,.6);">▶ Watch Now</button>
       </div>
+      <!-- YouTube iframe (loaded on tap) -->
+      <iframe id="player-iframe" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>
+      <!-- Bottom blocker to prevent YouTube logo exit -->
+      <div id="player-yt-blocker"></div>
     </div>
-    <div id="player-frame-wrap">
-      <iframe id="player-iframe" allowfullscreen
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
-      </iframe>
-    </div>
-    <div id="player-earned-msg"><span>🎉 +50 BeatCoins earned! Well done love!</span></div>
+    <div id="player-earned"></div>
     <div id="player-rita-box">
-      <img id="player-rita-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/rita_apresentadora_clean.png" alt="Rita">
-      <div id="player-rita-say">Watch the full video to earn your BeatCoins love!</div>
+      <img id="player-rita-mini" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/rita_apresentadora_clean.png" alt="Rita">
+      <div id="player-rita-say">Tap the video to start watching love! Stay until the end to earn your BeatCoins!</div>
     </div>
   </div>
 
-  <!-- NAV -->
+  <!-- NAV: Home | Videos | Collectibles -->
   <nav id="nav-bar">
-    <button class="nav-btn" onclick="window.location.href='page_adventures.html'"><span class="nav-icon">👤</span><span>Profile</span></button>
-    <button class="nav-btn" onclick="window.location.href='page1_landing.html'"><span class="nav-icon">🎵</span><span>Music</span></button>
+    <button class="nav-btn" onclick="window.location.href='page1_landing.html'"><span class="nav-icon">🏠</span><span>Home</span></button>
     <button class="nav-btn active"><span class="nav-icon">🎬</span><span>Videos</span></button>
-    <button class="nav-btn" onclick="window.location.href='page_shop.html'"><span class="nav-icon">🛒</span><span>Shop</span></button>
-    <button class="nav-btn" onclick="window.location.href='how_to_play.html'"><span class="nav-icon">❓</span><span>Help</span></button>
+    <button class="nav-btn" onclick="window.location.href='page_shop.html'"><span class="nav-icon">💎</span><span>Collectibles</span></button>
   </nav>
 
 </div></div>
@@ -263,352 +205,211 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 const RAW = 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/';
 const BC_KEY = 'askLovelyRitaV4_bc';
 const DAILY_KEY = 'lra_vid_daily_' + new Date().toDateString();
-const WATCHED_KEY = 'lra_watched_';
+const WATCHED_PRE = 'lra_watched_';
 
-/* ── VIDEO LIBRARY DATA ─────────────────────────────────────────
-   One real educational video per world, sourced from TED-Ed /
-   Khan Academy Kids / YouTube Education (freely embeddable).
-   Replace src with your own YouTube video IDs as you create them.
-──────────────────────────────────────────────────────────────── */
 const WORLDS = {
-  ocean: {
-    name:"Octopus's Garden",
-    emoji:'🐙',
-    rita:"Did you know an octopus has three hearts love? Watch this video to discover the wonders of the ocean!",
+  ocean:{ name:"Octopus's Garden", emoji:'🐙',
+    rita:"Did you know an octopus has three hearts love? Watch this to discover the wonders of the ocean!",
     videos:[
-      {
-        id:'vid-ocean-1',
-        title:"The Wonders of the Ocean",
-        sub:"Explore coral reefs, ocean creatures and the deep blue sea",
-        source:"TED-Ed",
-        ytId:"ckTM_TokuBo",   // TED-Ed: How do ocean waves work
-        emoji:'🌊',
-        bc:50
-      },
-      {
-        id:'vid-ocean-2',
-        title:"What Lives in the Deep Ocean?",
-        sub:"Incredible creatures from the darkest depths",
-        source:"TED-Ed",
-        ytId:"9GQSUN4XLUE",   // TED-Ed: Deep ocean creatures
-        emoji:'🐟',
-        bc:50,
-        locked:true
-      },
-      {
-        id:'vid-ocean-3',
-        title:"Why is the Ocean Salty?",
-        sub:"The science behind sea water explained simply",
-        source:"TED-Ed",
-        ytId:"NqSejAaXv1g",   // TED-Ed: Why is the ocean salty
-        emoji:'💧',
-        bc:50,
-        locked:true
-      }
-    ]
-  },
-  space: {
-    name:"Across the Universe",
-    emoji:'🚀',
+      {id:'v-oc1',title:"How Do Ocean Waves Work?",sub:"Discover the science behind the waves",source:"TED-Ed",ytId:"ckTM_TokuBo",emoji:'🌊'},
+      {id:'v-oc2',title:"What Lives in the Deep Ocean?",sub:"Incredible creatures from the darkest depths",source:"TED-Ed",ytId:"9GQSUN4XLUE",emoji:'🐟',locked:true},
+      {id:'v-oc3',title:"Why is the Ocean Salty?",sub:"The science behind sea water explained",source:"TED-Ed",ytId:"NqSejAaXv1g",emoji:'💧',locked:true}
+    ]},
+  space:{ name:"Across the Universe", emoji:'🚀',
     rita:"The universe is 13.8 billion years old love! Let's explore what's out there together!",
     videos:[
-      {
-        id:'vid-space-1',
-        title:"How Big is the Universe?",
-        sub:"A journey from Earth to the edge of everything we know",
-        source:"TED-Ed",
-        ytId:"Iy7NzjCmUf0",   // TED-Ed: How big is the universe
-        emoji:'🌌',
-        bc:50
-      },
-      {
-        id:'vid-space-2',
-        title:"How do Planets Form?",
-        sub:"From dust and gas to worlds like our own",
-        source:"TED-Ed",
-        ytId:"VC9yGCMBbGE",   // TED-Ed: Planet formation
-        emoji:'🪐',
-        bc:50,
-        locked:true
-      },
-      {
-        id:'vid-space-3',
-        title:"What Would Happen if You Fell Into a Black Hole?",
-        sub:"The science of one of the universe's greatest mysteries",
-        source:"TED-Ed",
-        ytId:"QqsLTNkzvaY",   // TED-Ed: Black holes
-        emoji:'⚫',
-        bc:50,
-        locked:true
-      }
-    ]
-  },
-  india: {
-    name:"The Inner Light",
-    emoji:'🪷',
-    rita:"Music connects all cultures love! Discover the beautiful sounds and traditions from around the world!",
+      {id:'v-sp1',title:"How Big is the Universe?",sub:"A journey from Earth to the edge of everything",source:"TED-Ed",ytId:"Iy7NzjCmUf0",emoji:'🌌'},
+      {id:'v-sp2',title:"How Do Planets Form?",sub:"From dust and gas to worlds like our own",source:"TED-Ed",ytId:"VC9yGCMBbGE",emoji:'🪐',locked:true},
+      {id:'v-sp3',title:"What If You Fell Into a Black Hole?",sub:"The science of one of the universe's greatest mysteries",source:"TED-Ed",ytId:"QqsLTNkzvaY",emoji:'⚫',locked:true}
+    ]},
+  india:{ name:"The Inner Light", emoji:'✨',
+    rita:"Music connects all cultures love! Discover the beautiful sounds and traditions of the world!",
     videos:[
-      {
-        id:'vid-india-1',
-        title:"The Science of Music",
-        sub:"Why music moves us and how it works in our brains",
-        source:"TED-Ed",
-        ytId:"94pT3eA1hgc",   // TED-Ed: Music and the brain
-        emoji:'🎵',
-        bc:50
-      },
-      {
-        id:'vid-india-2',
-        title:"How Music Connects the World",
-        sub:"From India to Brazil — one beat at a time",
-        source:"TED-Ed",
-        ytId:"Jb4prVsXkZU",   // TED-Ed: World music
-        emoji:'🌏',
-        bc:50,
-        locked:true
-      },
-      {
-        id:'vid-india-3',
-        title:"The Ancient Art of Meditation",
-        sub:"How stillness and music changed the world",
-        source:"Khan Academy",
-        ytId:"qRDf58Ghi8I",   // Khan Academy Kids: Mindfulness
-        emoji:'🧘',
-        bc:50,
-        locked:true
-      }
-    ]
-  },
-  city: {
-    name:"Penny Lane",
-    emoji:'🎠',
-    rita:"Cities are incredible love! Every street has a story. Let's explore the world's most amazing places!",
+      {id:'v-in1',title:"The Science of Music",sub:"Why music moves us and how it works in our brains",source:"TED-Ed",ytId:"94pT3eA1hgc",emoji:'🎵'},
+      {id:'v-in2',title:"How Music Connects the World",sub:"From India to Brazil — one beat at a time",source:"TED-Ed",ytId:"Jb4prVsXkZU",emoji:'🌏',locked:true},
+      {id:'v-in3',title:"How Does Music Affect Your Mood?",sub:"The surprising power music has on your feelings",source:"TED-Ed",ytId:"PBM8Eog0G-Q",emoji:'🧘',locked:true}
+    ]},
+  city:{ name:"Penny Lane", emoji:'🎠',
+    rita:"Every city has an amazing story love! Let's explore the world's most incredible places together!",
     videos:[
-      {
-        id:'vid-city-1',
-        title:"Why do Cities Exist?",
-        sub:"How humans came together to build the world's great cities",
-        source:"TED-Ed",
-        ytId:"ETsVrkp5sFg",   // TED-Ed: History of cities
-        emoji:'🏙️',
-        bc:50
-      },
-      {
-        id:'vid-city-2',
-        title:"How do Maps Show Us the World?",
-        sub:"Geography explained for curious minds",
-        source:"TED-Ed",
-        ytId:"q_0mOKCX3Is",   // TED-Ed: Maps and geography
-        emoji:'🗺️',
-        bc:50,
-        locked:true
-      },
-      {
-        id:'vid-city-3',
-        title:"The History of London",
-        sub:"Two thousand years of one of the world's greatest cities",
-        source:"TED-Ed",
-        ytId:"7kGQ1F6C-FQ",   // TED-Ed: London history
-        emoji:'🎡',
-        bc:50,
-        locked:true
-      }
-    ]
-  },
-  rita: {
-    name:"Rita's World",
-    emoji:'🎤',
-    rita:"Welcome to my world love! Here we celebrate music, creativity and everything that makes life beautiful!",
+      {id:'v-ct1',title:"Why Do Cities Exist?",sub:"How humans came together to build great cities",source:"TED-Ed",ytId:"ETsVrkp5sFg",emoji:'🏙️'},
+      {id:'v-ct2',title:"How Do Maps Show the World?",sub:"Geography explained for curious minds",source:"TED-Ed",ytId:"q_0mOKCX3Is",emoji:'🗺️',locked:true},
+      {id:'v-ct3',title:"How Big Were Ancient Populations?",sub:"A fascinating look at the world's history",source:"TED-Ed",ytId:"PUwmA3Q0_OE",emoji:'🎡',locked:true}
+    ]},
+  rita:{ name:"Rita's World", emoji:'🎤',
+    rita:"Welcome to my world love! Here we celebrate music creativity and everything that makes life beautiful!",
     videos:[
-      {
-        id:'vid-rita-1',
-        title:"How Recorded Music Changed the World",
-        sub:"From vinyl records to digital — the story of music technology",
-        source:"TED-Ed",
-        ytId:"GtmcVa5s700",   // TED-Ed: History of recorded music
-        emoji:'🎙️',
-        bc:50
-      },
-      {
-        id:'vid-rita-2',
-        title:"What Makes a Song Catchy?",
-        sub:"The science of earworms and why we love certain tunes",
-        source:"TED-Ed",
-        ytId:"SEdnHLRSOhM",   // TED-Ed: What makes music catchy
-        emoji:'🎶',
-        bc:50,
-        locked:true
-      },
-      {
-        id:'vid-rita-3',
-        title:"The Power of a Great Music Video",
-        sub:"How visuals and music create unforgettable moments",
-        source:"TED-Ed",
-        ytId:"7rtGR7p_PZk",   // TED-Ed: Music videos
-        emoji:'📺',
-        bc:50,
-        locked:true
-      }
-    ]
-  }
+      {id:'v-rt1',title:"How Did Recorded Music Change the World?",sub:"From vinyl records to digital — the story of music",source:"TED-Ed",ytId:"GtmcVa5s700",emoji:'🎙️'},
+      {id:'v-rt2',title:"What Makes a Song Catchy?",sub:"The science of earworms and why we love certain tunes",source:"TED-Ed",ytId:"SEdnHLRSOhM",emoji:'🎶',locked:true},
+      {id:'v-rt3',title:"Why Do We Feel Emotions Listening to Music?",sub:"How music reaches deep into who we are",source:"TED-Ed",ytId:"FxILY_BHqRM",emoji:'💫',locked:true}
+    ]}
 };
 
-let currentWorld = 'ocean';
-let playerTimer = null;
-let playerVideo = null;
+let currentWorld='ocean', currentVidIdx=0, playerTimer=null;
 
 function getBC(){ return Number(localStorage.getItem(BC_KEY)||25000); }
 function setBC(v){ localStorage.setItem(BC_KEY,v); }
 function getDailyEarned(){ return Number(localStorage.getItem(DAILY_KEY)||0); }
 function setDailyEarned(v){ localStorage.setItem(DAILY_KEY,v); }
-function isWatched(id){ return localStorage.getItem(WATCHED_KEY+id)==='1'; }
-function setWatched(id){ localStorage.setItem(WATCHED_KEY+id,'1'); }
+function isWatched(id){ return localStorage.getItem(WATCHED_PRE+id)==='1'; }
+function setWatched(id){ localStorage.setItem(WATCHED_PRE+id,'1'); }
+
+// Cashier sound (same as shop)
+function cashierSound(){
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    const t=ctx.currentTime;
+    [0,0.08,0.16].forEach((delay,i)=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.frequency.value=880-i*100;
+      g.gain.setValueAtTime(0.15,t+delay);
+      g.gain.exponentialRampToValueAtTime(0.001,t+delay+0.25);
+      o.start(t+delay);o.stop(t+delay+0.25);
+    });
+  }catch(e){}
+}
+
+function rollCounter(el,from,to,dur){
+  const start=Date.now();
+  function step(){
+    const p=Math.min((Date.now()-start)/dur,1);
+    const ease=1-Math.pow(1-p,3);
+    el.textContent=Math.round(from+(to-from)*ease).toLocaleString();
+    if(p<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
 
 function switchWorld(world){
-  currentWorld = world;
+  currentWorld=world;
   document.querySelectorAll('.world-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+world).classList.add('active');
   renderWorld(world);
-  const w = WORLDS[world];
-  document.getElementById('rita-intro-text').textContent = w.rita;
+  const w=WORLDS[world];
+  document.getElementById('rita-intro-text').textContent=w.rita;
   speak(w.rita);
 }
 
 function renderWorld(world){
-  const w = WORLDS[world];
-  const vids = w.videos;
-
-  // Featured card (first video)
-  const v0 = vids[0];
-  document.getElementById('feat-emoji').textContent = v0.emoji;
-  document.getElementById('featured-title').textContent = v0.title;
-  document.getElementById('featured-sub').textContent = v0.sub;
-  document.getElementById('featured-source').textContent = '▶ ' + v0.source;
-  const watched0 = isWatched(v0.id);
-  document.getElementById('featured-watched-badge').style.display = watched0 ? 'block' : 'none';
-
-  // Remove earned BeatCoins badge if already watched
-  const bcBadge = document.getElementById('featured-bc-badge');
-  bcBadge.style.display = watched0 ? 'none' : 'flex';
-
-  // Smaller grid (videos 2 and 3)
-  const grid = document.getElementById('video-grid');
-  grid.innerHTML = '';
-  vids.slice(1).forEach((v, i) => {
-    const watched = isWatched(v.id);
-    const locked = v.locked && !watched && !isWatched(vids[0].id);
-    const card = document.createElement('div');
-    card.className = 'vid-card' + (locked ? ' locked' : '');
-    card.onclick = locked ? null : () => openPlayer(i+1, world);
-    card.innerHTML = `
-      <div class="vid-thumb-wrap">
-        <span style="font-size:36px">${v.emoji}</span>
-        ${locked
-          ? '<div class="vid-lock">🔒</div>'
-          : `<div class="vid-play-sm">▶</div>`}
-        ${watched
-          ? '<div class="vid-watched-sm">✓ WATCHED</div>'
-          : (!locked ? `<div class="vid-bc-sm"><img src="${RAW}beatcoin.png" alt=""><span>+50</span></div>` : '')}
+  const w=WORLDS[world]; const vids=w.videos;
+  // Featured
+  const v0=vids[0]; const watched0=isWatched(v0.id);
+  document.getElementById('feat-emoji-big').textContent=v0.emoji;
+  document.getElementById('featured-title').textContent=v0.title;
+  document.getElementById('featured-sub').textContent=v0.sub;
+  document.getElementById('featured-source').textContent='▶ '+v0.source;
+  document.getElementById('feat-bc-badge').style.display=watched0?'none':'flex';
+  document.getElementById('feat-watched').style.display=watched0?'block':'none';
+  // Grid
+  const grid=document.getElementById('video-grid'); grid.innerHTML='';
+  vids.slice(1).forEach((v,i)=>{
+    const watched=isWatched(v.id);
+    const locked=v.locked&&!watched&&!isWatched(vids[0].id);
+    const card=document.createElement('div');
+    card.className='vid-card'+(locked?' locked':'');
+    if(!locked) card.onclick=()=>openPlayer(i+1);
+    card.innerHTML=`<div class="vid-thumb"><span>${v.emoji}</span>
+      ${locked?'<div class="vid-lock">🔒</div>':'<div class="vid-play-sm">▶</div>'}
+      ${watched?'<div class="vid-watched-sm">✓</div>':(!locked?`<div class="vid-bc-sm"><img src="${RAW}beatcoin.png" alt=""><span>+50</span></div>`:'')}
       </div>
-      <div class="vid-info">
-        <div class="vid-title-sm">${v.title}</div>
-        <div class="vid-sub-sm">${v.sub}</div>
-        <div class="vid-source-sm">▶ ${v.source}</div>
-      </div>`;
+      <div class="vid-info"><div class="vid-title-sm">${v.title}</div><div class="vid-sub-sm">${v.sub}</div><div class="vid-source-sm">▶ ${v.source}</div></div>`;
     grid.appendChild(card);
   });
-
-  // Daily bar
   updateDailyBar();
 }
 
 function updateDailyBar(){
-  const earned = getDailyEarned();
-  const pct = Math.min(earned/200*100, 100);
-  document.getElementById('daily-fill').style.width = pct+'%';
-  document.getElementById('daily-earned').textContent = earned;
+  const e=getDailyEarned();
+  document.getElementById('daily-fill').style.width=Math.min(e/200*100,100)+'%';
+  document.getElementById('daily-earned').textContent=e;
 }
 
-function openPlayer(vidIndex, world){
-  const w = WORLDS[world || currentWorld];
-  const v = w.videos[vidIndex];
-  playerVideo = {vidIndex, world: world || currentWorld, v};
-
-  document.getElementById('player-title-text').textContent = v.title;
-  document.getElementById('player-rita-say').textContent =
-    'Watch the full video to earn 50 BeatCoins love! ' + v.sub;
-  document.getElementById('player-earned-msg').style.display = 'none';
-
-  // Embed YouTube
-  const iframe = document.getElementById('player-iframe');
-  iframe.src = `https://www.youtube.com/embed/${v.ytId}?autoplay=1&rel=0&modestbranding=1`;
-
+function openPlayer(idx){
+  currentVidIdx=idx;
+  const v=WORLDS[currentWorld].videos[idx];
+  const watched=isWatched(v.id);
+  // Reset player UI
+  document.getElementById('player-tap-screen').style.display='flex';
+  document.getElementById('player-iframe').style.display='none';
+  document.getElementById('player-iframe').src='';
+  document.getElementById('player-earned').style.display='none';
+  document.getElementById('player-title-txt').textContent=v.title;
+  document.getElementById('player-tap-emoji').textContent=v.emoji;
+  document.getElementById('player-tap-title').textContent=v.title;
+  document.getElementById('player-tap-source').textContent='▶ '+v.source;
+  document.getElementById('player-bc-badge').style.display=watched?'none':'flex';
+  document.getElementById('player-rita-say').textContent=
+    watched?'Great taste love! You already watched this one — it is a wonderful video!':
+    'Tap the video to start watching love! Stay until the end to earn your BeatCoins!';
   document.getElementById('player-overlay').classList.add('open');
+}
 
-  // Award BeatCoins after 60 seconds of watching (if not already watched)
+function startVideo(){
+  const v=WORLDS[currentWorld].videos[currentVidIdx];
+  document.getElementById('player-tap-screen').style.display='none';
+  const iframe=document.getElementById('player-iframe');
+  // Use youtube-nocookie.com to reduce YouTube branding + exit points
+  iframe.src=`https://www.youtube-nocookie.com/embed/${v.ytId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&fs=0`;
+  iframe.style.display='block';
+  document.getElementById('player-rita-say').textContent=
+    'Watch the full video to earn 50 BeatCoins love! Enjoy!';
+  // Start BeatCoins timer (60 seconds)
   if(!isWatched(v.id)){
-    const daily = getDailyEarned();
-    if(daily < 200){
-      playerTimer = setTimeout(()=>{
-        const bc = getBC();
-        const newBC = bc + 50;
-        const newDaily = daily + 50;
-        setBC(newBC);
-        setDailyEarned(newDaily);
-        setWatched(v.id);
-        document.getElementById('bc-header-val').textContent = newBC.toLocaleString();
-        document.getElementById('player-earned-msg').style.display = 'block';
-        document.getElementById('player-rita-say').textContent =
-          '🎉 Brilliant love! You just earned 50 BeatCoins for watching!';
-        speak('Brilliant love! You just earned 50 BeatCoins for watching this video!');
-        updateDailyBar();
-        renderWorld(currentWorld);
-      }, 60000); // 60 seconds
+    const daily=getDailyEarned();
+    if(daily<200){
+      if(playerTimer) clearTimeout(playerTimer);
+      playerTimer=setTimeout(()=>awardBC(v),60000);
     } else {
-      document.getElementById('player-bc-earn').style.display = 'none';
-      document.getElementById('player-rita-say').textContent =
-        "You have reached today's video limit love! Come back tomorrow for more BeatCoins!";
+      document.getElementById('player-rita-say').textContent=
+        "You have reached today's video BeatCoins limit love! Come back tomorrow for more!";
     }
-  } else {
-    document.getElementById('player-bc-earn').style.display = 'none';
-    document.getElementById('player-rita-say').textContent =
-      "You already watched this one love! Great taste — it is a wonderful video!";
   }
+  speak('Enjoy the video love! Stay until the end to earn your BeatCoins!');
+}
+
+function awardBC(v){
+  const bc=getBC(); const newBC=bc+50;
+  const daily=getDailyEarned(); const newDaily=daily+50;
+  setBC(newBC); setDailyEarned(newDaily); setWatched(v.id);
+  cashierSound();
+  const el=document.getElementById('bc-row-val');
+  rollCounter(el, bc, newBC, 800);
+  document.getElementById('player-earned').style.display='block';
+  document.getElementById('player-earned').textContent='🎉 +50 BeatCoins earned! Brilliant love!';
+  document.getElementById('player-bc-badge').style.display='none';
+  document.getElementById('player-rita-say').textContent=
+    'Brilliant love! You just earned 50 BeatCoins for watching this video! You are a true Beat Explorer!';
+  speak('Brilliant love! You just earned 50 BeatCoins for watching! You are a true Beat Explorer!');
+  updateDailyBar();
+  renderWorld(currentWorld);
 }
 
 function closePlayer(){
-  if(playerTimer){ clearTimeout(playerTimer); playerTimer = null; }
-  const iframe = document.getElementById('player-iframe');
-  iframe.src = '';
+  if(playerTimer){clearTimeout(playerTimer);playerTimer=null;}
+  document.getElementById('player-iframe').src='';
+  document.getElementById('player-iframe').style.display='none';
   document.getElementById('player-overlay').classList.remove('open');
-  document.getElementById('player-bc-earn').style.display = 'flex';
 }
+
+function ritaIntroSpeak(){ speak(WORLDS[currentWorld].rita); }
 
 function speak(text){
-  if(!window.speechSynthesis) return;
+  if(!window.speechSynthesis)return;
   window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang='en-GB'; u.rate=0.92; u.pitch=1.1;
-  const v = window.speechSynthesis.getVoices();
-  const voice = v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));
-  if(voice) u.voice=voice;
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='en-GB';u.rate=0.92;u.pitch=1.1;
+  const v=window.speechSynthesis.getVoices();
+  const voice=v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));
+  if(voice)u.voice=voice;
   window.speechSynthesis.speak(u);
 }
-
-function ritaSpeak(world){
-  speak(WORLDS[world].rita);
-}
-
-function toast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.style.opacity='1';
-  clearTimeout(t._t); t._t=setTimeout(()=>t.style.opacity='0',3000);
-}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',3000);}
 
 window.addEventListener('load',()=>{
-  document.getElementById('bc-header-val').textContent = getBC().toLocaleString();
+  document.getElementById('bc-row-val').textContent=getBC().toLocaleString();
   renderWorld('ocean');
-  setTimeout(()=>speak(WORLDS['ocean'].rita), 800);
+  setTimeout(()=>speak(WORLDS['ocean'].rita),900);
 });
 </script>
 </body>
