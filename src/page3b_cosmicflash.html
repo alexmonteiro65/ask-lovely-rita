@@ -201,7 +201,7 @@ function showResult(){
   const r=document.getElementById('result-panel');
   r.style.display='block';
   document.getElementById('result-score').textContent='+'+S.earned;
-  const msgs={youngsters:"Superstar speed! You are a cosmic genius love!",grownups:"Outstanding darling! Lightning fast and razor sharp!",experts:"Extraordinary! A true astrophysics legend love!"};
+  const msgs={youngsters:"Superstar speed! You are a cosmic genius love! Keep collecting those EBCs!",grownups:"Outstanding darling! Lightning fast and razor sharp!",experts:"Extraordinary! A true astrophysics legend love!"};
   document.getElementById('result-msg').textContent=msgs[level];
   speak(msgs[level]);
 }
