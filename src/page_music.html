@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Beat Jukebox — Lovely Rita Adventures</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,serif;}
+#phone-outer{display:flex;justify-content:center;padding:20px 0 40px;width:100%;}
+#phone{width:393px;min-height:852px;background:#050510;overflow:hidden;display:flex;flex-direction:column;border-radius:48px;box-shadow:0 0 0 10px #1a1a1a,0 0 0 12px #333,0 30px 80px rgba(0,0,0,.9);position:relative;}
+#phone::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#0a0a0a;border-radius:0 0 20px 20px;z-index:100;}
+
+/* Neon glow background lines */
+#phone::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(255,110,247,.08) 0%,transparent 60%);pointer-events:none;z-index:0;}
+
+/* ── HEADER ── */
+#music-header{padding:44px 16px 14px;text-align:center;position:relative;z-index:1;flex-shrink:0;}
+#jukebox-sign{
+  display:inline-block;
+  border:2px solid rgba(255,110,247,.6);
+  border-radius:12px;padding:6px 18px;
+  background:rgba(255,110,247,.08);
+  box-shadow:0 0 20px rgba(255,110,247,.3),inset 0 0 20px rgba(255,110,247,.05);
+  margin-bottom:10px;
+}
+#jukebox-title{font-size:22px;font-weight:bold;letter-spacing:3px;color:#ff6ef7;text-shadow:0 0 20px #ff6ef7,0 0 40px #a855f7;}
+#jukebox-stars{font-size:10px;color:#ffd700;letter-spacing:4px;margin-top:2px;}
+#bc-header{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:8px;}
+#bc-header img{width:24px;height:24px;object-fit:contain;}
+#bc-header-val{font-size:16px;font-weight:bold;color:#ffd700;}
+#bc-header-label{font-size:16px;font-weight:bold;color:#ffd700;}
+
+/* ── SCROLL ── */
+#music-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 14px;position:relative;z-index:1;}
+#music-scroll::-webkit-scrollbar{width:0;}
+
+/* ── NOW PLAYING CARD ── */
+#now-playing{
+  background:linear-gradient(135deg,rgba(255,110,247,.12),rgba(168,85,247,.08));
+  border:1px solid rgba(255,110,247,.4);border-radius:20px;
+  padding:20px 16px;margin-bottom:16px;text-align:center;
+  box-shadow:0 0 30px rgba(255,110,247,.15);
+}
+#vinyl-wrap{width:120px;height:120px;margin:0 auto 16px;position:relative;}
+#vinyl-disc{
+  width:120px;height:120px;border-radius:50%;
+  background:conic-gradient(#1a1a1a 0deg,#2a2a2a 30deg,#1a1a1a 60deg,#2a2a2a 90deg,#1a1a1a 120deg,#2a2a2a 150deg,#1a1a1a 180deg,#2a2a2a 210deg,#1a1a1a 240deg,#2a2a2a 270deg,#1a1a1a 300deg,#2a2a2a 330deg,#1a1a1a 360deg);
+  border:3px solid #ff6ef7;
+  box-shadow:0 0 20px rgba(255,110,247,.5);
+  display:flex;align-items:center;justify-content:center;
+  animation:spin 4s linear infinite;
+  animation-play-state:paused;
+}
+#vinyl-disc.playing{animation-play-state:running;}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+#vinyl-centre{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#ffd700,#c8860a);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;font-size:14px;}
+
+#now-title{font-size:14px;font-weight:bold;color:#fff;margin-bottom:4px;min-height:20px;}
+#now-num{font-size:10px;color:#ff6ef7;letter-spacing:1px;margin-bottom:14px;}
+
+/* Progress bar */
+#progress-wrap{margin-bottom:14px;}
+#progress-bar{width:100%;height:4px;background:rgba(255,255,255,.1);border-radius:2px;cursor:pointer;position:relative;}
+#progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,#ff6ef7,#ffd700);width:0%;transition:width .5s linear;}
+#time-row{display:flex;justify-content:space-between;margin-top:5px;}
+#time-cur,#time-tot{font-size:9px;color:rgba(255,255,255,.4);}
+
+/* Controls */
+#controls{display:flex;align-items:center;justify-content:center;gap:18px;}
+.ctrl-btn{background:none;border:none;cursor:pointer;color:rgba(255,255,255,.6);font-size:20px;transition:all .2s;padding:4px;}
+.ctrl-btn:hover{color:#ff6ef7;}
+#play-btn{
+  width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(135deg,#ff6ef7,#a855f7);
+  color:#000;font-size:22px;
+  box-shadow:0 0 20px rgba(255,110,247,.6);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+#play-btn:hover{transform:scale(1.08);box-shadow:0 0 30px rgba(255,110,247,.8);}
+
+/* Volume */
+#vol-row{display:flex;align-items:center;gap:8px;margin-top:14px;}
+#vol-icon{font-size:14px;color:rgba(255,255,255,.4);}
+#vol-slider{flex:1;height:3px;-webkit-appearance:none;background:rgba(255,255,255,.15);border-radius:2px;outline:none;cursor:pointer;}
+#vol-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#ff6ef7;cursor:pointer;}
+
+/* ── PLAYLIST ── */
+#playlist-section{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:16px;overflow:hidden;margin-bottom:14px;}
+#pl-header{padding:12px 16px;background:rgba(255,110,247,.08);border-bottom:1px solid rgba(255,255,255,.06);}
+#pl-header-title{font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.5);text-transform:uppercase;}
+.pl-item{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 16px;cursor:pointer;
+  border-bottom:1px solid rgba(255,255,255,.04);
+  transition:background .2s;
+}
+.pl-item:last-child{border-bottom:none;}
+.pl-item:hover{background:rgba(255,110,247,.08);}
+.pl-item.active{background:rgba(255,110,247,.12);}
+.pl-num{font-size:12px;color:rgba(255,255,255,.3);min-width:18px;text-align:center;}
+.pl-num.playing{color:#ff6ef7;font-weight:bold;}
+.pl-vinyl{font-size:22px;flex-shrink:0;}
+.pl-info{flex:1;}
+.pl-name{font-size:12px;font-weight:bold;color:#fff;margin-bottom:2px;}
+.pl-sub{font-size:9px;color:rgba(255,255,255,.4);}
+.pl-play-icon{font-size:16px;color:rgba(255,255,255,.3);}
+.pl-item.active .pl-play-icon{color:#ff6ef7;}
+
+/* ── RITA BOX ── */
+#rita-box{background:rgba(255,255,255,.04);border:1px solid rgba(255,110,247,.2);border-radius:14px;padding:12px;display:flex;align-items:center;gap:10px;}
+#rita-music-img{width:52px;height:52px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,110,247,.5));flex-shrink:0;}
+#rita-music-text{font-size:11px;color:rgba(255,255,255,.7);font-style:italic;line-height:1.5;flex:1;}
+#rita-music-speak{background:none;border:none;color:#ff6ef7;font-size:16px;cursor:pointer;}
+
+/* ── NAV: 3 buttons ── */
+#nav-bar{display:flex;justify-content:space-around;align-items:center;padding:8px 0 14px;background:rgba(5,5,16,.95);border-top:1px solid rgba(255,110,247,.1);flex-shrink:0;position:relative;z-index:1;}
+.nav-btn{background:none;border:none;color:rgba(255,255,255,.4);font-size:9px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 20px;transition:color .2s;font-family:Georgia,serif;}
+.nav-btn.active,.nav-btn:hover{color:#ff6ef7;}
+.nav-icon{font-size:20px;line-height:1;}
+.nav-btn.active .nav-icon{filter:drop-shadow(0 0 6px #ff6ef7);}
+
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;font-family:Georgia,serif;}
+</style>
+</head>
+<body>
+<div id="phone-outer"><div id="phone">
+
+  <!-- HEADER -->
+  <div id="music-header">
+    <div id="jukebox-sign">
+      <div id="jukebox-title">THE BEAT JUKEBOX</div>
+      <div id="jukebox-stars">★ ★ ★ ★ ★</div>
+    </div>
+    <div id="bc-header">
+      <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin.png" alt="BeatCoin">
+      <span id="bc-header-val">0</span>
+      <span id="bc-header-label">BeatCoins</span>
+    </div>
+  </div>
+
+  <!-- SCROLL -->
+  <div id="music-scroll">
+
+    <!-- Now Playing -->
+    <div id="now-playing">
+      <div id="vinyl-wrap">
+        <div id="vinyl-disc" class="">
+          <div id="vinyl-centre">🎵</div>
+        </div>
+      </div>
+      <div id="now-title">Select a song to play love!</div>
+      <div id="now-num">THE LADS RAP COLLECTION</div>
+      <div id="progress-wrap">
+        <div id="progress-bar" onclick="seekAudio(event)">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="time-row">
+          <span id="time-cur">0:00</span>
+          <span id="time-tot">0:00</span>
+        </div>
+      </div>
+      <div id="controls">
+        <button class="ctrl-btn" onclick="prevTrack()" title="Previous">⏮</button>
+        <button id="play-btn" onclick="togglePlay()">▶</button>
+        <button class="ctrl-btn" onclick="nextTrack()" title="Next">⏭</button>
+      </div>
+      <div id="vol-row">
+        <span id="vol-icon">🔊</span>
+        <input type="range" id="vol-slider" min="0" max="1" step="0.05" value="0.8" oninput="setVolume(this.value)">
+      </div>
+    </div>
+
+    <!-- Playlist -->
+    <div id="playlist-section">
+      <div id="pl-header"><div id="pl-header-title">🎵 The Lads Rap Collection</div></div>
+      <div class="pl-item" id="pl-0" onclick="playTrack(0)">
+        <span class="pl-num" id="pn-0">1</span>
+        <span class="pl-vinyl">🎵</span>
+        <div class="pl-info">
+          <div class="pl-name">Lads Rap — Part 1</div>
+          <div class="pl-sub">The Original Beat</div>
+        </div>
+        <span class="pl-play-icon" id="pi-0">▶</span>
+      </div>
+      <div class="pl-item" id="pl-1" onclick="playTrack(1)">
+        <span class="pl-num" id="pn-1">2</span>
+        <span class="pl-vinyl">🎶</span>
+        <div class="pl-info">
+          <div class="pl-name">Lads Rap — Part 2</div>
+          <div class="pl-sub">The Original Beat Continues</div>
+        </div>
+        <span class="pl-play-icon" id="pi-1">▶</span>
+      </div>
+      <div class="pl-item" id="pl-2" onclick="playTrack(2)">
+        <span class="pl-num" id="pn-2">3</span>
+        <span class="pl-vinyl">🎵</span>
+        <div class="pl-info">
+          <div class="pl-name">Lads Rap V2 — Part 1</div>
+          <div class="pl-sub">The New Beat</div>
+        </div>
+        <span class="pl-play-icon" id="pi-2">▶</span>
+      </div>
+      <div class="pl-item" id="pl-3" onclick="playTrack(3)">
+        <span class="pl-num" id="pn-3">4</span>
+        <span class="pl-vinyl">🎶</span>
+        <div class="pl-info">
+          <div class="pl-name">Lads Rap V2 — Part 2</div>
+          <div class="pl-sub">The New Beat Continues</div>
+        </div>
+        <span class="pl-play-icon" id="pi-3">▶</span>
+      </div>
+    </div>
+
+    <!-- Rita -->
+    <div id="rita-box">
+      <img id="rita-music-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/rita_apresentadora_clean.png" alt="Rita">
+      <div id="rita-music-text">The Lads are playing just for you love! Tap any song to start the music!</div>
+      <button id="rita-music-speak" onclick="ritaSpeak()">🔊</button>
+    </div>
+
+  </div><!-- /scroll -->
+
+  <!-- NAV: Home | Music (active) | Collectibles -->
+  <nav id="nav-bar">
+    <button class="nav-btn" onclick="window.location.href='page1_landing.html'"><span class="nav-icon">🏠</span><span>Home</span></button>
+    <button class="nav-btn active"><span class="nav-icon">🎵</span><span>Music</span></button>
+    <button class="nav-btn" onclick="window.location.href='page_shop.html'"><span class="nav-icon">💎</span><span>Collectibles</span></button>
+  </nav>
+
+</div></div>
+<div id="toast"></div>
+
+<script>
+const RAW = 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/';
+const BC_KEY = 'askLovelyRitaV4_bc';
+
+const TRACKS = [
+  { title:'Lads Rap — Part 1',    file:RAW+'Beatles%20Rap%20-%20Part%201.mp3' },
+  { title:'Lads Rap — Part 2',    file:RAW+'Beatles%20Rap%20-%20Part%202.mp3' },
+  { title:'Lads Rap V2 — Part 1', file:RAW+'Beatles%20Rap%201.mp3' },
+  { title:'Lads Rap V2 — Part 2', file:RAW+'Beatles%20Rap%201%20part%20B.mp3' },
+];
+
+const audio = new Audio();
+audio.volume = 0.8;
+let currentTrack = -1;
+let isPlaying = false;
+
+function getBC(){ return Number(localStorage.getItem(BC_KEY)||25000); }
+
+function playTrack(idx){
+  // Stop current
+  audio.pause();
+  // Clear active states
+  for(let i=0;i<4;i++){
+    document.getElementById('pl-'+i).classList.remove('active');
+    document.getElementById('pn-'+i).classList.remove('playing');
+    document.getElementById('pi-'+i).textContent='▶';
+  }
+  currentTrack = idx;
+  const track = TRACKS[idx];
+  audio.src = track.file;
+  audio.play().then(()=>{
+    isPlaying = true;
+    document.getElementById('play-btn').textContent = '⏸';
+    document.getElementById('vinyl-disc').classList.add('playing');
+    document.getElementById('now-title').textContent = track.title;
+    document.getElementById('pl-'+idx).classList.add('active');
+    document.getElementById('pn-'+idx).classList.add('playing');
+    document.getElementById('pn-'+idx).textContent = '♪';
+    document.getElementById('pi-'+idx).textContent = '⏸';
+    speak('Now playing love — ' + track.title + '!');
+  }).catch(()=>{
+    toast('⚠️ Tap again to play love — browser needs a tap first!');
+  });
+}
+
+function togglePlay(){
+  if(currentTrack === -1){ playTrack(0); return; }
+  if(isPlaying){
+    audio.pause();
+    isPlaying = false;
+    document.getElementById('play-btn').textContent = '▶';
+    document.getElementById('vinyl-disc').classList.remove('playing');
+    document.getElementById('pi-'+currentTrack).textContent = '▶';
+  } else {
+    audio.play();
+    isPlaying = true;
+    document.getElementById('play-btn').textContent = '⏸';
+    document.getElementById('vinyl-disc').classList.add('playing');
+    document.getElementById('pi-'+currentTrack).textContent = '⏸';
+  }
+}
+
+function prevTrack(){
+  const prev = currentTrack <= 0 ? TRACKS.length-1 : currentTrack-1;
+  playTrack(prev);
+}
+function nextTrack(){
+  const next = currentTrack >= TRACKS.length-1 ? 0 : currentTrack+1;
+  playTrack(next);
+}
+
+function setVolume(v){
+  audio.volume = v;
+  document.getElementById('vol-icon').textContent = v==0 ? '🔇' : v<0.5 ? '🔉' : '🔊';
+}
+
+function seekAudio(e){
+  if(audio.duration){
+    const bar = document.getElementById('progress-bar');
+    const pct = e.offsetX / bar.offsetWidth;
+    audio.currentTime = pct * audio.duration;
+  }
+}
+
+function fmtTime(s){
+  if(isNaN(s)) return '0:00';
+  const m = Math.floor(s/60);
+  const sec = Math.floor(s%60).toString().padStart(2,'0');
+  return m+':'+sec;
+}
+
+audio.addEventListener('timeupdate',()=>{
+  if(audio.duration){
+    const pct = (audio.currentTime/audio.duration)*100;
+    document.getElementById('progress-fill').style.width = pct+'%';
+    document.getElementById('time-cur').textContent = fmtTime(audio.currentTime);
+    document.getElementById('time-tot').textContent = fmtTime(audio.duration);
+  }
+});
+
+audio.addEventListener('ended',()=>{ nextTrack(); });
+
+function ritaSpeak(){
+  if(currentTrack>=0) speak('The Lads are playing just for you love! Enjoy ' + TRACKS[currentTrack].title + '!');
+  else speak('Tap any song to start the music love! The Lads are ready to play!');
+}
+
+function speak(text){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='en-GB'; u.rate=0.92; u.pitch=1.1;
+  const v=window.speechSynthesis.getVoices();
+  const voice=v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));
+  if(voice) u.voice=voice;
+  window.speechSynthesis.speak(u);
+}
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.style.opacity='1';
+  clearTimeout(t._t); t._t=setTimeout(()=>t.style.opacity='0',3000);
+}
+
+window.addEventListener('load',()=>{
+  document.getElementById('bc-header-val').textContent = getBC().toLocaleString();
+  setTimeout(()=>speak('Welcome to The Beat Jukebox love! Tap any song to start the music!'),800);
+});
+</script>
+</body>
+</html>

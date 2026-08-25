@@ -380,12 +380,6 @@ body {
         <button id="rita-btn" onclick="askRita()">ASK RITA ♪</button>
       </div>
 
-      <div id="playlist-btn" onclick="togglePlaylist()">
-        <span class="pl-title">🎵 PLAYLIST — Choose a Song</span>
-        <span style="font-size:14px;color:var(--accent)" id="pl-arrow">▶</span>
-      </div>
-      <div id="playlist-dropdown">
-        <div class="pl-track" onclick="playTrack(0)"><span class="pl-track-num">1</span><span class="pl-track-name">Lads Rap — Part 1</span><span class="pl-track-icon" id="icon-0">▶</span></div>
         <div class="pl-track" onclick="playTrack(1)"><span class="pl-track-num">2</span><span class="pl-track-name">Lads Rap — Part 2</span><span class="pl-track-icon" id="icon-1">▶</span></div>
         <div class="pl-track" onclick="playTrack(2)"><span class="pl-track-num">3</span><span class="pl-track-name">Lads Rap V2 - Part 1</span><span class="pl-track-icon" id="icon-2">▶</span></div>
         <div class="pl-track" onclick="playTrack(3)"><span class="pl-track-num">4</span><span class="pl-track-name">Lads Rap V2 - Part 2</span><span class="pl-track-icon" id="icon-3">▶</span></div>
@@ -679,7 +673,7 @@ async function askRita() {
 }
 
 function goVideo() { toast('🎬 Video content coming soon love!'); }
-function goMusic(){ toast('🎵 Music Jukebox coming soon love!'); }
+function goMusic(){ window.location.href='page_music.html'; }
 function goVideo(){ window.location.href='page_videos.html'; }
 function goHome() {
   document.getElementById('phone-scroll').scrollTop=0;
