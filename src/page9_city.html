@@ -379,8 +379,10 @@ function checkFact(idx,city){
 
   document.getElementById('result-panel').classList.add('show');
   S.qIndex++;
-  if(S.qIndex<8) document.getElementById('next-btn').style.display='block';
-  else setTimeout(()=>finishGame(),2000);
+  if(S.qIndex<8){
+    document.getElementById('next-btn').style.display='block';
+    setTimeout(()=>{ const nb=document.getElementById('next-btn'); if(nb) nb.scrollIntoView({behavior:'smooth',block:'center'}); },200);
+  } else setTimeout(()=>finishGame(),2000);
 }
 
 function nextCity(){
