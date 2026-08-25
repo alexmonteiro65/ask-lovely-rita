@@ -231,7 +231,7 @@ const WORLDS = {
   ocean: {
     name:"Octopus's Garden", emoji:'🐙',
     color:'linear-gradient(135deg,#062a4a,#0a4a6e)',
-    thumbImg: RAW+'shop/badge_octopus.png',
+    thumbImg: 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_ocean.jpg',
     rita:"Did you know an octopus has three hearts love? Watch this and discover the wonders of the ocean!",
     videos:[
       { id:'v-oc1', title:"Hey Friends, Are You Ready?",
@@ -245,7 +245,7 @@ const WORLDS = {
   space: {
     name:"Across the Universe", emoji:'🚀',
     color:'linear-gradient(135deg,#0a0030,#1a0060)',
-    thumbImg: RAW+'shop/badge_space.png',
+    thumbImg: 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_space.jpg',
     rita:"The universe is 13.8 billion years old love! Let us explore what is out there together!",
     videos:[
       { id:'v-sp1', title:"Teamwork Makes the Dream Work",
@@ -259,7 +259,7 @@ const WORLDS = {
   india: {
     name:"The Inner Light", emoji:'✨',
     color:'linear-gradient(135deg,#3a0030,#6a0020)',
-    thumbImg: RAW+'innerlight/01_sitar.png',
+    thumbImg: 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_india.jpg',
     rita:"Music connects all cultures love! Discover the beautiful sounds and traditions of the world!",
     videos:[
       { id:'v-in1', title:"Bom Dia! — Good Morning World",
@@ -273,7 +273,7 @@ const WORLDS = {
   city: {
     name:"Penny Lane", emoji:'🎠',
     color:'linear-gradient(135deg,#0a2000,#1a4000)',
-    thumbImg: RAW+'innerlight/14_windmill.png',
+    thumbImg: 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_city.jpg',
     rita:"Every city has a fascinating story love! Let us explore the world's most incredible places together!",
     videos:[
       { id:'v-ct1', title:"Toolbox Tales — Let's Build!",
@@ -291,7 +291,7 @@ const WORLDS = {
   rita: {
     name:"Rita's World", emoji:'🎤',
     color:'linear-gradient(135deg,#300020,#600040)',
-    thumbImg: RAW+'rita_apresentadora_clean.png',
+    thumbImg: 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_rita.jpg',
     rita:"Welcome to my world love! Let us celebrate music creativity and everything that makes life beautiful!",
     videos:[
       { id:'v-rt1', title:"Welcome Back Love!",
@@ -353,8 +353,14 @@ function renderWorld(world){
   const v0=vids[0]; const watched0=isWatched(v0.id);
   // Featured
   document.getElementById('feat-bg').style.background=w.color;
+  var fbg=document.getElementById('feat-bg');
+  if(w.thumbImg){
+    fbg.style.backgroundImage='url('+w.thumbImg+')';
+    fbg.style.backgroundSize='cover';
+    fbg.style.backgroundPosition='center';
+  } else { fbg.style.backgroundImage=''; }
   const thumbImg=document.getElementById('feat-thumb-img');
-  thumbImg.src=w.thumbImg||''; thumbImg.style.display=w.thumbImg?'block':'none';
+  thumbImg.style.display='none';
   document.getElementById('feat-title').textContent=v0.title;
   document.getElementById('feat-sub').textContent=v0.sub;
   document.getElementById('feat-source-badge').textContent=v0.source?'▶ '+v0.source:'';
