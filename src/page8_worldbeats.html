@@ -325,7 +325,7 @@ const RITA_INTRO = {
 };
 const RITA_CORRECT=["Magnificent love! You know your world music!","The Quiet Lad is impressed darling!","Peaceful and correct love! Beautiful!","Brilliant knowledge darling!"];
 const RITA_WRONG=["Not quite love — but now you know!","Close darling! Here is the story behind this instrument...","Good try love! Let me share a musical fact..."];
-const RITA_COMPLETE=["Wonderful love! You travelled the world through music! The Quiet Lad bows to you!","Magnificent darling! Eight instruments from eight corners of the world! You are a true world music scholar!","Peaceful and brilliant love! The Inner Light shines through you!"];
+const RITA_COMPLETE=["Wonderful love! You travelled the world through music! Beautiful EBCs earned! The Quiet Lad bows to you!","Magnificent darling! Eight instruments from eight corners of the world! You are a true world music scholar!","Peaceful and brilliant love! The Inner Light shines through you!"];
 
 const LEVEL_CFG = {
   youngsters:{ bonus:25, bonusAll:100 },
@@ -471,7 +471,7 @@ function answer(chosen,instr){
   document.getElementById('result-icon').textContent=correct?'✅':'🪷';
   document.getElementById('result-title').textContent=correct?pick(RITA_CORRECT):pick(RITA_WRONG);
   document.getElementById('result-fact').textContent=instr.fact;
-  document.getElementById('result-pts').textContent=correct?`+${earned} BeatCoins!`:'+0 BeatCoins';
+  document.getElementById('result-pts').textContent=correct?`+${earned} EBCs!`:'+0 BeatCoins';
   document.getElementById('result-pts').style.color=correct?'#ffde59':'rgba(255,255,255,0.4)';
 
   const ri=document.getElementById('result-correct-img');
