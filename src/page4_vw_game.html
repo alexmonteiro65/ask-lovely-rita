@@ -412,12 +412,19 @@
         </div>
       </div>
 
-      <!-- GARAGES -->
+      <!-- GARAGES (VW Cars at top) -->
       <div id="garages"></div>
 
-      <!-- CARS -->
-      <div id="cars-label">Drag each Lad to their own car!</div>
+      <!-- LADS to drag (no obstacles between lads and cars) -->
       <div id="cars-area"></div>
+
+      <!-- START MATCHING BUTTON (below lads, small gap) -->
+      <div id="action-btns" style="margin-top:10px;margin-bottom:4px;">
+        <button class="action-btn" id="play-btn" onclick="startGame()">Start Matching!</button>
+      </div>
+
+      <!-- INSTRUCTION LINE (below button, Rita pointing) -->
+      <div id="cars-label" style="margin-bottom:8px;">👆 Drag each Lad to their own car!</div>
 
       <!-- RITA BOTTOM -->
       <div id="rita-section">
@@ -436,11 +443,6 @@
             <canvas id="flag-canvas" width="44" height="34"></canvas>
           </div>
         </div>
-      </div>
-
-            <!-- ACTION BTNS -->
-      <div id="action-btns">
-        <button class="action-btn" id="play-btn" onclick="startGame()">Start Matching!</button>
       </div>
 
       <!-- RESULT -->

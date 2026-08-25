@@ -139,6 +139,8 @@ function startQ(){
   document.getElementById('question-emoji').textContent=q.emoji;
   document.getElementById('topic-badge').textContent=q.topic;
   document.getElementById('question-text').textContent=q.q;
+  // Rita reads the question aloud
+  speak(q.q);
   for(let i=0;i<3;i++){
     const b=document.getElementById('opt'+i);
     b.textContent=q.opts[i]; b.className='opt-btn'; b.disabled=false;
@@ -152,6 +154,7 @@ function startQ(){
     bar.style.width='0%';
   },50);
   clearTimeout(S.timer);
+  startTickSound(timePerQ);
   S.timer=setTimeout(()=>{if(!S.answered)timeOut();},timePerQ*1000);
 }
 
@@ -159,6 +162,7 @@ function answer(idx){
   if(S.answered)return;
   S.answered=true;
   clearTimeout(S.timer);
+  stopTickSound();
   document.getElementById('timer-bar').style.transition='none';
   const q=qs[S.qIndex];
   for(let i=0;i<3;i++) document.getElementById('opt'+i).disabled=true;
@@ -181,6 +185,7 @@ function answer(idx){
 
 function timeOut(){
   S.answered=true;
+  stopTickSound();
   const q=qs[S.qIndex];
   for(let i=0;i<3;i++) document.getElementById('opt'+i).disabled=true;
   document.getElementById('opt'+q.correct).className='opt-btn correct';
@@ -209,6 +214,36 @@ function speak(text){
   const voice=v.find(x=>x.lang==='en-GB'&&/female|woman/i.test(x.name))||v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));
   if(voice)u.voice=voice;window.speechSynthesis.speak(u);
 }
+function playTick(urgency){
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    const osc=ctx.createOscillator();
+    const gain=ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.frequency.value = urgency ? 880 : 660;
+    osc.type='square';
+    gain.gain.setValueAtTime(urgency?0.15:0.08, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.08);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.1);
+  }catch(e){}
+}
+
+let tickInterval=null;
+function startTickSound(totalSeconds){
+  stopTickSound();
+  let elapsed=0;
+  const urgent=totalSeconds<=5;
+  tickInterval=setInterval(()=>{
+    elapsed+=0.5;
+    const remaining=totalSeconds-elapsed;
+    if(remaining<=5){ playTick(true); }
+    else if(remaining<=totalSeconds*0.5){ playTick(false); }
+  },500);
+}
+function stopTickSound(){
+  if(tickInterval){clearInterval(tickInterval);tickInterval=null;}
+}
+
 function saveLadBC(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';const k='askLovelyRitaV4_bc_'+lad;localStorage.setItem(k,Number(localStorage.getItem(k)||0)+amount);const t=Number(localStorage.getItem('askLovelyRitaV4_bc')||25000);localStorage.setItem('askLovelyRitaV4_bc',t+amount);}
 function postGlobalScore(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';fetch('https://empty-leaf-6e4b.alexmonteironeto.workers.dev/score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lad,amount})}).catch(()=>{});}
 function goBack(){window.location.href='page7_space.html';}
@@ -218,7 +253,7 @@ function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t
 
 window.addEventListener('load',()=>{
   document.getElementById('bc-display').textContent=Number(localStorage.getItem('askLovelyRitaV4_bc')||25000).toLocaleString();
-  const go=()=>{speak("Welcome to Cosmic Flash love! Five rapid fire space questions — beat the clock!");setTimeout(startQ,2000);};
+  const go=()=>{speak("Welcome to Cosmic Flash love! Five rapid fire space questions — can you answer before time runs out!");setTimeout(startQ,2000);};
   if(window.speechSynthesis.getVoices().length>0)go();
   else window.speechSynthesis.onvoiceschanged=go;
 });
