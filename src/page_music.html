@@ -86,8 +86,19 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 #vol-slider{flex:1;height:3px;-webkit-appearance:none;background:rgba(255,255,255,.15);border-radius:2px;outline:none;cursor:pointer;}
 #vol-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#ff6ef7;cursor:pointer;}
 
-/* ── PLAYLIST ── */
-#playlist-section{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:16px;overflow:hidden;margin-bottom:14px;}
+/* ── PLAYLIST DROPDOWN ── */
+#pl-dropdown-btn{
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(255,110,247,.1);border:1px solid rgba(255,110,247,.35);
+  border-radius:14px;padding:13px 16px;cursor:pointer;margin-bottom:4px;
+  transition:all .2s;
+}
+#pl-dropdown-btn:hover{background:rgba(255,110,247,.18);}
+#pl-dropdown-label{font-size:13px;font-weight:bold;color:#ff6ef7;letter-spacing:.5px;}
+#pl-dropdown-arrow{font-size:14px;color:#ff6ef7;transition:transform .3s;}
+#pl-dropdown-arrow.open{transform:rotate(180deg);}
+#playlist-section{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:16px;overflow:hidden;margin-bottom:14px;display:none;}
+#playlist-section.open{display:block;}
 #pl-header{padding:12px 16px;background:rgba(255,110,247,.08);border-bottom:1px solid rgba(255,255,255,.06);}
 #pl-header-title{font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.5);text-transform:uppercase;}
 .pl-item{
@@ -172,9 +183,13 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
       </div>
     </div>
 
-    <!-- Playlist -->
+    <!-- Playlist Dropdown -->
+    <div id="pl-dropdown-btn" onclick="togglePlaylistDrop()">
+      <span id="pl-dropdown-label">🎵 Choose Your Song</span>
+      <span id="pl-dropdown-arrow">▼</span>
+    </div>
     <div id="playlist-section">
-      <div id="pl-header"><div id="pl-header-title">🎵 The Lads Rap Collection</div></div>
+      <div id="pl-header"><div id="pl-header-title">📀 THE LADS RAP COLLECTION</div></div>
       <div class="pl-item" id="pl-0" onclick="playTrack(0)">
         <span class="pl-num" id="pn-0">1</span>
         <span class="pl-vinyl">🎵</span>
@@ -334,6 +349,13 @@ audio.addEventListener('timeupdate',()=>{
 
 audio.addEventListener('ended',()=>{ nextTrack(); });
 
+function togglePlaylistDrop(){
+  const sec = document.getElementById('playlist-section');
+  const arrow = document.getElementById('pl-dropdown-arrow');
+  const isOpen = sec.classList.contains('open');
+  sec.classList.toggle('open', !isOpen);
+  arrow.classList.toggle('open', !isOpen);
+}
 function ritaSpeak(){
   if(currentTrack>=0) speak('The Lads are playing just for you love! Enjoy ' + TRACKS[currentTrack].title + '!');
   else speak('Tap any song to start the music love! The Lads are ready to play!');
