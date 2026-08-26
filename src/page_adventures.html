@@ -70,6 +70,9 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 /* Collection */
 #collection-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
 .coll-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:transform .2s;}
+#collection-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-height:260px;overflow-y:auto;padding-right:4px;}
+#collection-grid::-webkit-scrollbar{width:3px;}
+#collection-grid::-webkit-scrollbar-thumb{background:rgba(255,110,247,.4);border-radius:2px;}
 .coll-item:hover{transform:scale(1.08);}
 .coll-item img{width:52px;height:52px;object-fit:contain;}
 .coll-item-name{font-size:8px;color:rgba(255,255,255,.45);text-align:center;line-height:1.2;}
@@ -314,6 +317,7 @@ function renderCollection(){
     grid.innerHTML='<div class="coll-empty">Visit The Beat Shop to start your collection love! 🛒</div>';
     return;
   }
+  grid.style.display='grid';
   grid.innerHTML=collItems.map(([id,item],i)=>`
     <div class="coll-item" onclick="openCollPopup(${i})">
       <img src="${item.img}" alt="${item.name}">
