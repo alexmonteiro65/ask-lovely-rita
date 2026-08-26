@@ -144,7 +144,6 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
   #slideshow-bc-badge{color:#ffd700;font-size:11px;text-align:center;margin-top:6px;
     font-family:Georgia,serif;}
 </style>
-<script src="https://player.vimeo.com/api/player.js"></script>
 </head>
 <body>
 <div id="phone-outer"><div id="phone">
@@ -168,18 +167,18 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
   <div id="vid-scroll">
     <div id="rita-intro-row">
       <img id="rita-intro-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/rita_apresentadora_clean.png" alt="Rita">
-      <div id="rita-intro-text">Watch and earn love! Each video earns you 50 BeatCoins — up to 200 per day!</div>
+      <div id="rita-intro-text">Watch the video clip love! Full video coming soon!</div>
       <button id="rita-speak-vid" onclick="ritaIntroSpeak()" title="Rita speaks">🔊</button>
     </div>
 
     <!-- Featured video -->
-    <div id="featured-card" onclick="openPlayer(0)">
+    <div id="featured-card" onclick="openSlideshow(currentWorld)">
       <div class="feat-thumb" id="feat-thumb">
         <div class="feat-thumb-bg" id="feat-bg"></div>
         <div class="feat-thumb-overlay"></div>
         <img class="feat-thumb-img" id="feat-thumb-img" src="" alt="">
         <div class="feat-play-btn">▶</div>
-        <div class="feat-bc-badge" id="feat-bc-badge"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin.png" alt=""><span>+50 BeatCoins</span></div>
+        <div class="feat-bc-badge" id="feat-bc-badge"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin.png" alt=""><span>+50 EBCs</span></div>
         <div class="feat-watched" id="feat-watched">✓ WATCHED</div>
         <div class="feat-source-badge" id="feat-source-badge"></div>
       </div>
@@ -189,18 +188,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
       </div>
     </div>
 
-    <!-- Slideshow Button -->
-    <div id="slideshow-btn-wrap" style="text-align:center;margin-bottom:10px;">
-      <button onclick="openSlideshow(currentWorld)" style="
-        background:linear-gradient(135deg,#ff6ef7,#8855ff);
-        border:none;border-radius:24px;padding:10px 22px;
-        color:#000;font-weight:900;font-size:13px;cursor:pointer;
-        font-family:Georgia,serif;display:inline-flex;align-items:center;gap:8px;
-        box-shadow:0 4px 16px rgba(255,110,247,.4);">
-        🎬 Watch Slideshow + Music
-      </button>
-      <div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:4px;">9 scenes · original music · +50 EBCs</div>
-    </div>
+
     <div id="video-grid"></div>
 
     <div id="daily-bar">
@@ -283,10 +271,10 @@ const WORLDS = {
     thumbImg: 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_ocean.jpg',
     rita:"Did you know an octopus has three hearts love? Watch this and discover the wonders of the ocean!",
     videos:[
-      { id:'v-oc1', title:"Hey Friends, Are You Ready?",
-        sub:"A fun energetic introduction — get ready for your Lovely Rita Adventures!",
+      { id:'v-oc1', title:"Coral Reef Beats",
+        sub:"Watch the video clip love! Full video coming soon!",
         source:"Lovely Rita Adventures",
-        vimeoId:"1221108833", type:'vimeo',
+        type:'slideshow', world:'ocean',
         emoji:'🌊', bc:50 },
       { id:'v-oc2', title:"Deep Ocean Wonders", sub:"Coming soon love — stay tuned!", source:"", emoji:'🐟', comingSoon:true, cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_ocean_2.jpg" },
       { id:'v-oc3', title:"Coral Reef Secrets", sub:"Coming soon love — stay tuned!", source:"", emoji:'💧', comingSoon:true, cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_ocean_3.jpg" }
@@ -297,10 +285,10 @@ const WORLDS = {
     thumbImg: 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_space.jpg',
     rita:"The universe is 13.8 billion years old love! Let us explore what is out there together!",
     videos:[
-      { id:'v-sp1', title:"Teamwork Makes the Dream Work",
-        sub:"Discover how working together leads to incredible discoveries — in space and beyond!",
+      { id:'v-sp1', title:"Cosmic Waves",
+        sub:"Watch the video clip love! Full video coming soon!",
         source:"Lovely Rita Adventures",
-        vimeoId:"1221112309", type:'vimeo',
+        type:'slideshow', world:'space',
         emoji:'🌌', bc:50 },
       { id:'v-sp2', title:"Our Solar System", sub:"Coming soon love — stay tuned!", source:"", emoji:'🪐', comingSoon:true, cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_space_2.jpg" },
       { id:'v-sp3', title:"What is a Black Hole?", sub:"Coming soon love — stay tuned!", source:"", emoji:'⚫', comingSoon:true, cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_space_3.jpg" }
@@ -311,11 +299,11 @@ const WORLDS = {
     thumbImg: 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_india.jpg',
     rita:"Music connects all cultures love! Discover the beautiful sounds and traditions of the world!",
     videos:[
-      { id:'v-in1', title:"Bom Dia! — Good Morning World",
-        sub:"Start your day with a smile! A cheerful greeting from Lovely Rita Adventures — Bom Dia!",
+      { id:'v-in1', title:"Peaceful Vibes",
+        sub:"Watch the video clip love! Full video coming soon!",
         source:"Lovely Rita Adventures",
-        vimeoId:"1221108831", type:'vimeo',
-        emoji:'🎵', bc:50 },
+        type:'slideshow', world:'india',
+        emoji:'✨', bc:50 },
       { id:'v-in2', title:"Instruments of the World", sub:"Coming soon love — stay tuned!", source:"", emoji:'🌏', comingSoon:true, cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_india_2.jpg" },
       { id:'v-in3', title:"The Power of Music", sub:"Coming soon love — stay tuned!", source:"", emoji:'🧘', comingSoon:true, cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_india_3.jpg" }
     ]},
@@ -325,16 +313,16 @@ const WORLDS = {
     thumbImg: 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_city.jpg',
     rita:"Every city has a fascinating story love! Let us explore the world's most incredible places together!",
     videos:[
-      { id:'v-ct1', title:"Toolbox Tales — Let's Build!",
-        sub:"Discover the amazing tools and skills it takes to build the cities and places we love",
+      { id:'v-ct1', title:"Urban Adventure",
+        sub:"Watch the video clip love! Full video coming soon!",
         source:"Lovely Rita Adventures",
-        vimeoId:"1221108832", type:'vimeo',
+        type:'slideshow', world:'city',
         emoji:'🏙️', bc:50 },
-      { id:'v-ct2', title:"Fix It — Build It!",
-        sub:"A fun adventure into building, fixing and creating — every city starts with an idea!",
-        source:"Lovely Rita Adventures",
-        vimeoId:"1221112310", type:'vimeo',
-        emoji:'🔧', bc:50 },
+      { id:'v-ct2', title:"City Street Shuffle",
+        sub:"Coming soon love — stay tuned!",
+        source:"", comingSoon:true,
+        cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_city_3.jpg",
+        emoji:'🔧' },
       { id:'v-ct3', title:"Maps and Geography for Kids", sub:"Coming soon love — stay tuned!", source:"", emoji:'🗺️', comingSoon:true, cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_city_3.jpg" }
     ]},
   rita: {
@@ -343,10 +331,10 @@ const WORLDS = {
     thumbImg: 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_rita.jpg',
     rita:"Welcome to my world love! Let us celebrate music creativity and everything that makes life beautiful!",
     videos:[
-      { id:'v-rt1', title:"Welcome Back Love!",
-        sub:"Lovely Rita welcomes you back to the most exciting music-powered learning platform in the world!",
+      { id:'v-rt1', title:"All Aboard!",
+        sub:"Watch the video clip love! Full video coming soon!",
         source:"Lovely Rita Adventures",
-        vimeoId:"1221108835", type:'vimeo',
+        type:'slideshow', world:'rita',
         emoji:'🎙️', bc:50 },
       { id:'v-rt2', title:"What Makes a Song Catchy?", sub:"Coming soon love — stay tuned!", source:"", emoji:'🎶', comingSoon:true, cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_rita_2.jpg" },
       { id:'v-rt3', title:"The Power of Music", sub:"Coming soon love — stay tuned!", source:"", emoji:'💫', comingSoon:true, cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_rita_3.jpg" }
@@ -521,6 +509,12 @@ function updateDailyBar(){
 function openPlayer(idx){
   currentVidIdx=idx;
   const v=WORLDS[currentWorld].videos[idx];
+  if(v.comingSoon){ showComingSoon(); return; }
+  if(v.type==='slideshow'){
+    openSlideshow(v.world||currentWorld);
+    speak('Watch the video clip love! Full video coming soon!');
+    return;
+  }
   const watched=isWatched(v.id);
   document.getElementById('player-earned').style.display='none';
   document.getElementById('player-title-txt').textContent=v.title;
