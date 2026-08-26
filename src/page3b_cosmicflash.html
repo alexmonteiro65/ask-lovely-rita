@@ -82,8 +82,8 @@ body{background:#0a0a0a;display:flex;flex-direction:column;align-items:center;mi
 .meteor{position:absolute;width:2px;height:60px;background:linear-gradient(180deg,rgba(255,255,255,.8),transparent);border-radius:2px;animation:meteor-fall var(--md,1.2s) linear infinite;opacity:0;}
 @keyframes meteor-fall{0%{opacity:0;transform:translateY(-80px) rotate(var(--mr,15deg))}10%{opacity:1}80%{opacity:.6}100%{opacity:0;transform:translateY(900px) rotate(var(--mr,15deg))}}
 /* Lad float above countdown */
-#lad-space{position:relative;display:flex;justify-content:center;align-items:flex-end;height:75px;flex-shrink:0;overflow:hidden;}
-#lad-space img{height:72px;width:auto;filter:drop-shadow(0 0 16px var(--accent));animation:lad-float 3s ease-in-out infinite alternate;object-fit:contain;}
+#lad-space{position:relative;display:flex;justify-content:center;align-items:flex-end;height:200px;flex-shrink:0;overflow:visible;margin-bottom:8px;}
+#lad-space img{height:190px;width:auto;filter:drop-shadow(0 0 20px var(--accent));animation:lad-float 3s ease-in-out infinite alternate;object-fit:contain;margin-bottom:12px;}
 @keyframes lad-float{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-8px) rotate(3deg)}}
 
 /* NAV */
