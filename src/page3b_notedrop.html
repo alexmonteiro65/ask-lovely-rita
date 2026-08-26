@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note Drop — Lovely Rita Adventures</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0a0a0a;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;font-family:Georgia,serif;}
+#phone{width:393px;max-width:100vw;min-height:100vh;position:relative;display:flex;flex-direction:column;overflow:hidden;}
+.theme-youngsters{background:#1a0040;--accent:#ff6ef7;--accent2:#ffde59;--btn-grad:linear-gradient(135deg,#ff6ef7,#a855f7);}
+.theme-grownups{background:#0d0d1e;--accent:#c8a96e;--accent2:#ffde59;--btn-grad:linear-gradient(135deg,#c8a96e,#8b6914);}
+.theme-experts{background:#050510;--accent:#ffd700;--accent2:#ffd700;--btn-grad:linear-gradient(135deg,#ffd700,#b8860b);}
+
+/* TOP BAR */
+#top-bar{display:flex;align-items:center;justify-content:space-between;padding:44px 16px 10px;flex-shrink:0;}
+#game-title{font-size:15px;font-weight:bold;color:var(--accent);}
+#bc-display{font-size:12px;color:var(--accent2);font-weight:bold;}
+
+/* SCORE BAR */
+#score-bar{display:flex;justify-content:space-around;padding:6px 16px;flex-shrink:0;}
+.stat-box{display:flex;flex-direction:column;align-items:center;gap:2px;}
+.stat-label{font-size:9px;color:rgba(255,255,255,.4);letter-spacing:1px;}
+.stat-val{font-size:16px;font-weight:bold;color:#fff;}
+
+/* LANE */
+#lane-wrap{flex:1;position:relative;overflow:hidden;margin:8px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.3);}
+#canvas{display:block;width:100%;height:100%;}
+
+/* TARGET ZONE */
+#target-zone{position:absolute;bottom:60px;left:0;right:0;height:50px;border-top:2px dashed rgba(255,110,247,.4);border-bottom:2px dashed rgba(255,110,247,.4);background:rgba(255,110,247,.06);display:flex;align-items:center;justify-content:center;}
+#target-label{font-size:9px;color:rgba(255,110,247,.6);letter-spacing:2px;}
+
+/* NOTE BUTTONS */
+#note-btns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:8px 16px;flex-shrink:0;}
+.note-btn{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.15);border-radius:12px;padding:14px 4px;font-size:20px;cursor:pointer;color:#fff;transition:transform .1s,background .1s;font-family:Georgia,serif;}
+.note-btn:active,.note-btn.hit{transform:scale(.92);background:rgba(255,110,247,.3);border-color:#ff6ef7;}
+.note-btn.miss{background:rgba(255,50,50,.2);border-color:#ff4444;}
+
+/* RESULT */
+#result-panel{display:none;position:absolute;inset:0;background:rgba(10,0,30,.96);flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;z-index:50;}
+#result-panel.show{display:flex;}
+#result-icon{font-size:56px;margin-bottom:10px;}
+#result-title{font-size:20px;font-weight:bold;color:var(--accent);margin-bottom:6px;}
+#result-msg{font-size:13px;color:rgba(255,255,255,.7);line-height:1.6;margin-bottom:14px;}
+#result-pts{font-size:22px;font-weight:bold;color:#ffde59;margin-bottom:20px;}
+.result-btn{background:var(--btn-grad);border:none;border-radius:20px;padding:12px 28px;color:#000;font-weight:bold;font-size:13px;cursor:pointer;font-family:Georgia,serif;margin:4px;}
+
+/* TOAST */
+#toast{position:absolute;bottom:140px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.85);color:#fff;padding:8px 18px;border-radius:16px;font-size:12px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:99;white-space:nowrap;}
+
+/* NAV */
+#nav-bar{display:flex;justify-content:space-around;padding:8px 0 14px;background:rgba(10,0,20,.95);border-top:1px solid rgba(255,255,255,.06);flex-shrink:0;}
+.nav-btn{background:none;border:none;color:rgba(255,255,255,.4);font-size:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 14px;font-family:Georgia,serif;}
+.nav-icon{font-size:18px;}
+</style>
+</head>
+<body>
+<div id="phone" class="theme-youngsters">
+
+  <div id="top-bar">
+    <div id="game-title">🎵 NOTE DROP</div>
+    <div id="bc-display">0 BeatCoins</div>
+  </div>
+
+  <div id="score-bar">
+    <div class="stat-box"><div class="stat-label">ROUND</div><div class="stat-val" id="round-val">1/5</div></div>
+    <div class="stat-box"><div class="stat-label">HITS</div><div class="stat-val" id="hits-val">0</div></div>
+    <div class="stat-box"><div class="stat-label">EARNED</div><div class="stat-val" id="earned-val">0</div></div>
+  </div>
+
+  <div id="lane-wrap">
+    <canvas id="canvas"></canvas>
+    <div id="target-zone"><div id="target-label">TAP WHEN NOTE REACHES HERE</div></div>
+  </div>
+
+  <div id="note-btns">
+    <button class="note-btn" id="nbtn0" onpointerdown="tapNote(0)">🎵</button>
+    <button class="note-btn" id="nbtn1" onpointerdown="tapNote(1)">🎶</button>
+    <button class="note-btn" id="nbtn2" onpointerdown="tapNote(2)">🎼</button>
+    <button class="note-btn" id="nbtn3" onpointerdown="tapNote(3)">🎹</button>
+  </div>
+
+  <div id="result-panel">
+    <div id="result-icon">🏆</div>
+    <div id="result-title">Note Drop Complete!</div>
+    <div id="result-msg"></div>
+    <div id="result-pts"></div>
+    <button class="result-btn" onclick="goBack()">🚀 Back to Space</button>
+    <button class="result-btn" onclick="goChooseWorld()">🌍 Choose World</button>
+  </div>
+
+  <div id="toast"></div>
+
+  <div id="nav-bar">
+    <button class="nav-btn" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
+    <button class="nav-btn" onclick="goChooseWorld()"><span class="nav-icon">🌍</span><span>Choose World</span></button>
+  </div>
+</div>
+
+<script>
+const params=new URLSearchParams(location.search);
+const level=params.get('level')||localStorage.getItem('askLovelyRitaV4_level')||'youngsters';
+const from=params.get('from')||'space';
+document.getElementById('phone').className='theme-'+level;
+
+const REWARD={youngsters:30,grownups:50,experts:70};
+const SPEED={youngsters:2.8,grownups:3.8,experts:5.0};
+const ROUNDS=5;
+const reward=REWARD[level];
+
+// Notes: emoji + label + colour
+const NOTES=[
+  {e:'🎵',label:'Do',  color:'#ff6ef7'},
+  {e:'🎶',label:'Re',  color:'#ffde59'},
+  {e:'🎼',label:'Mi',  color:'#4dc8ff'},
+  {e:'🎹',label:'Fa',  color:'#4ade80'},
+];
+
+let S={round:0,hits:0,earned:0,active:false,falling:null,raf:null,started:false};
+
+const canvas=document.getElementById('canvas');
+const ctx=canvas.getContext('2d');
+let CW=0,CH=0,targetY=0,noteY=0,noteIdx=0,noteDone=false;
+
+function resize(){
+  const wrap=document.getElementById('lane-wrap');
+  CW=wrap.clientWidth; CH=wrap.clientHeight;
+  canvas.width=CW; canvas.height=CH;
+  targetY=CH-110;
+}
+
+function drawNote(){
+  ctx.clearRect(0,0,CW,CH);
+  if(!S.active) return;
+  const n=NOTES[noteIdx];
+  ctx.font=`${CW*0.18}px serif`;
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  // glow
+  ctx.shadowColor=n.color;
+  ctx.shadowBlur=20;
+  ctx.fillText(n.e, CW/2, noteY);
+  ctx.shadowBlur=0;
+}
+
+let lastTime=0;
+function loop(ts){
+  if(!S.active) return;
+  const dt=(ts-lastTime)/1000; lastTime=ts;
+  noteY += SPEED[level]*60*dt;
+  if(noteY>CH+40 && !noteDone){
+    noteDone=true;
+    miss();
+    return;
+  }
+  drawNote();
+  S.raf=requestAnimationFrame(loop);
+}
+
+function startRound(){
+  if(S.round>=ROUNDS){showResult();return;}
+  S.active=true; noteDone=false;
+  noteIdx=Math.floor(Math.random()*4);
+  noteY=0-40;
+  document.getElementById('round-val').textContent=(S.round+1)+'/'+ROUNDS;
+  // Flash the correct button label
+  NOTES.forEach((_,i)=>document.getElementById('nbtn'+i).className='note-btn');
+  lastTime=performance.now();
+  S.raf=requestAnimationFrame(loop);
+  // Rita says what note to catch
+  const levelHints={youngsters:'Catch the note that reaches the target zone love!',grownups:'Time it right darling!',experts:'Lightning reflexes needed love!'};
+  if(S.round===0) speak(levelHints[level]);
+}
+
+function tapNote(idx){
+  if(!S.active||noteDone) return;
+  noteDone=true;
+  cancelAnimationFrame(S.raf);
+  S.active=false;
+  const inZone=noteY>=targetY-30 && noteY<=targetY+80;
+  const correct=idx===noteIdx;
+  const btn=document.getElementById('nbtn'+idx);
+  if(correct && inZone){
+    btn.className='note-btn hit';
+    S.hits++; S.earned+=reward;
+    saveLadBC(reward); postGlobalScore(reward);
+    updateDisplay();
+    speak('Brilliant love!');
+    toast('✅ Perfect timing! +'+reward+' EBCs!');
+    playBeep(true);
+  } else if(correct && !inZone){
+    btn.className='note-btn miss';
+    speak('Too early love! Wait for the zone!');
+    toast('⏱️ Too early! Wait for the target zone!');
+    playBeep(false);
+  } else {
+    btn.className='note-btn miss';
+    document.getElementById('nbtn'+noteIdx).className='note-btn hit';
+    speak('Not quite love! That was '+NOTES[noteIdx].e+'!');
+    toast('❌ Wrong note! It was '+NOTES[noteIdx].e);
+    playBeep(false);
+  }
+  ctx.clearRect(0,0,CW,CH);
+  S.round++;
+  setTimeout(()=>{
+    NOTES.forEach((_,i)=>document.getElementById('nbtn'+i).className='note-btn');
+    startRound();
+  },1500);
+}
+
+function miss(){
+  cancelAnimationFrame(S.raf);
+  S.active=false;
+  ctx.clearRect(0,0,CW,CH);
+  speak('Too slow love! The note slipped away!');
+  toast('💨 Missed! The note slipped away!');
+  playBeep(false);
+  S.round++;
+  setTimeout(()=>startRound(),1500);
+}
+
+function updateDisplay(){
+  document.getElementById('hits-val').textContent=S.hits;
+  document.getElementById('earned-val').textContent=S.earned;
+  document.getElementById('bc-display').textContent=Number(localStorage.getItem('askLovelyRitaV4_bc')||25000).toLocaleString()+' BeatCoins';
+}
+
+function showResult(){
+  const panel=document.getElementById('result-panel');
+  const pct=Math.round((S.hits/ROUNDS)*100);
+  const msgs={
+    youngsters:'Amazing rhythm love! Keep playing and you will be a music star!',
+    grownups:'Outstanding timing darling! Your musical instincts are extraordinary!',
+    experts:'Legendary reflexes love! A true Note Drop master!'
+  };
+  document.getElementById('result-icon').textContent= S.hits>=4 ? '🏆' : S.hits>=2 ? '⭐' : '🎵';
+  document.getElementById('result-title').textContent= pct>=80 ? 'Note Drop Master!' : pct>=40 ? 'Good Rhythm!' : 'Keep Practising!';
+  document.getElementById('result-msg').textContent=msgs[level];
+  document.getElementById('result-pts').textContent='+'+S.earned+' EBCs earned!';
+  panel.classList.add('show');
+  speak(msgs[level]);
+}
+
+function playBeep(ok){
+  try{
+    const ctx2=new(window.AudioContext||window.webkitAudioContext)();
+    const osc=ctx2.createOscillator();
+    const gain=ctx2.createGain();
+    osc.connect(gain);gain.connect(ctx2.destination);
+    osc.frequency.value=ok?880:220;
+    osc.type=ok?'sine':'sawtooth';
+    gain.gain.setValueAtTime(ok?0.12:0.08,ctx2.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001,ctx2.currentTime+(ok?0.3:0.2));
+    osc.start(ctx2.currentTime);osc.stop(ctx2.currentTime+(ok?0.35:0.25));
+  }catch(e){}
+}
+
+function speak(text){
+  if(localStorage.getItem('askLovelyRitaV4_mute')==='1'||!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.92;u.pitch=1.1;
+  const v=window.speechSynthesis.getVoices();
+  const voice=v.find(x=>x.lang==='en-GB'&&/female|woman/i.test(x.name))||v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));
+  if(voice)u.voice=voice;window.speechSynthesis.speak(u);
+}
+function saveLadBC(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';const k='askLovelyRitaV4_bc_'+lad;localStorage.setItem(k,Number(localStorage.getItem(k)||0)+amount);const t=Number(localStorage.getItem('askLovelyRitaV4_bc')||25000);localStorage.setItem('askLovelyRitaV4_bc',t+amount);}
+function postGlobalScore(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';fetch('https://empty-leaf-6e4b.alexmonteironeto.workers.dev/score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lad,amount})}).catch(()=>{});}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2500);}
+function goBack(){window.location.href='page7_space.html';}
+function goHome(){window.location.href='page1_landing.html';}
+function goChooseWorld(){window.location.href='page5_worlds.html';}
+
+window.addEventListener('load',()=>{
+  resize();
+  document.getElementById('bc-display').textContent=Number(localStorage.getItem('askLovelyRitaV4_bc')||25000).toLocaleString()+' BeatCoins';
+  const go=()=>{
+    speak("Welcome to Note Drop love! Watch the note fall and tap it when it hits the target zone!");
+    setTimeout(startRound,2500);
+  };
+  if(window.speechSynthesis.getVoices().length>0) go();
+  else window.speechSynthesis.onvoiceschanged=go;
+});
+window.addEventListener('resize',resize);
+</script>
+</body>
+</html>
