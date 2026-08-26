@@ -456,6 +456,7 @@ function showBonusGame() {
   const area = document.getElementById('bonus-area');
   if (!area) return;
   area.style.display = 'block';
+  setTimeout(()=>{ area.scrollIntoView({behavior:'smooth',block:'center'}); },100);
   const msgs = {
     youngsters: "Stellar work love! The Turntable bonus game is yours! Going there in 5 seconds!",
     grownups: "Magnificent darling! The Turntable bonus awaits! Off we go in 5 seconds!",
