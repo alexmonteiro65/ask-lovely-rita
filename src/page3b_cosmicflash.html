@@ -213,14 +213,10 @@ const reward=REWARD[level];
   }
 })();
 
-// ── Load chosen lad ────────────────────────────────────────
+// ── Load Space Lad ─────────────────────────────────────────
 (function(){
-  const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';
-  const ladImgs={smart:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lads/smart_lad.png',cute:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lads/cute_lad.png',quiet:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lads/quiet_lad.png',funny:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lads/funny_lad.png'};
   const wrap=document.getElementById('lad-space');
-  if(wrap && ladImgs[lad]){
-    wrap.innerHTML=`<img src="${ladImgs[lad]}" alt="${lad} lad" onerror="this.style.display='none'"/>`;
-  }
+  if(wrap) wrap.innerHTML='<img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lads/space_lad.png" alt="Space Lad" onerror="this.style.display='none'"/>';
 })();
 
 // ── Light-speed countdown ────────────────────────────────
