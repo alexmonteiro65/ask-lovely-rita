@@ -1035,6 +1035,7 @@ function showBonusGame() {
   const area = document.getElementById('bonus-area');
   if (!area) return;
   area.style.display = 'block';
+  setTimeout(()=>{ area.scrollIntoView({behavior:'smooth',block:'center'}); },100);
   const msgs = {
     youngsters: "Amazing love! You have unlocked Tic-Tac-Toe Underwater! Going there in 5 seconds!",
     grownups: "Brilliant darling! Tic-Tac-Toe Underwater is your bonus! Off we go in 5 seconds!",
