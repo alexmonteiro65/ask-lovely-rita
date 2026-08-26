@@ -172,7 +172,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
     </div>
 
     <!-- Featured video -->
-    <div id="featured-card" onclick="openSlideshow(currentWorld)">
+    <div id="featured-card" onclick="openPlayer(0)">
       <div class="feat-thumb" id="feat-thumb">
         <div class="feat-thumb-bg" id="feat-bg"></div>
         <div class="feat-thumb-overlay"></div>
@@ -359,6 +359,7 @@ let audioUnlocked=false;
 function unlockAudio(){
   if(audioUnlocked) return;
   const aud=document.getElementById('slideshow-audio');
+  if(!aud) return;
   aud.play().then(()=>{ aud.pause(); aud.currentTime=0; audioUnlocked=true; }).catch(()=>{});
 }
 document.addEventListener('touchstart', unlockAudio, {once:true});
