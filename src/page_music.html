@@ -134,13 +134,33 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 
 #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;font-family:Georgia,serif;}
 
-  /* ── LEVEL TABS ── */
-  #level-tabs{display:flex;gap:6px;margin-bottom:10px;justify-content:center;}
-  .level-tab{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:20px;
-    padding:6px 14px;color:rgba(255,255,255,.5);font-size:11px;cursor:pointer;font-family:Georgia,serif;
-    transition:all .2s;white-space:nowrap;}
-  .level-tab.active{background:var(--btn-grad,linear-gradient(135deg,#ff6ef7,#8855ff));
-    border-color:transparent;color:#000;font-weight:900;}
+  /* ── DROPDOWNS ── */
+  #dropdowns-wrap{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+  .dd-section{border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.1);}
+  .dd-btn{display:flex;align-items:center;justify-content:space-between;
+    padding:12px 16px;cursor:pointer;
+    background:linear-gradient(135deg,rgba(255,110,247,.12),rgba(136,85,255,.12));
+    transition:background .2s;}
+  .dd-btn:hover{background:linear-gradient(135deg,rgba(255,110,247,.22),rgba(136,85,255,.22));}
+  #dd-grownups .dd-btn{background:linear-gradient(135deg,rgba(255,222,89,.1),rgba(255,165,0,.1));}
+  #dd-grownups .dd-btn:hover{background:linear-gradient(135deg,rgba(255,222,89,.2),rgba(255,165,0,.2));}
+  #dd-experts .dd-btn{background:linear-gradient(135deg,rgba(200,169,110,.12),rgba(255,215,0,.1));}
+  #dd-experts .dd-btn:hover{background:linear-gradient(135deg,rgba(200,169,110,.22),rgba(255,215,0,.2));}
+  .dd-label{font-size:13px;font-weight:bold;color:#fff;font-family:Georgia,serif;letter-spacing:.5px;}
+  .dd-arrow{font-size:12px;color:rgba(255,255,255,.5);transition:transform .3s;}
+  .dd-arrow.open{transform:rotate(180deg);}
+  .dd-list{display:none;background:rgba(0,0,0,.3);}
+  .dd-list.open{display:block;}
+  .dd-item{display:flex;align-items:center;gap:10px;padding:11px 16px;cursor:pointer;
+    border-top:1px solid rgba(255,255,255,.05);transition:background .15s;}
+  .dd-item:hover{background:rgba(255,110,247,.1);}
+  .dd-item.active{background:rgba(255,110,247,.15);}
+  .dd-item-emoji{font-size:16px;flex-shrink:0;}
+  .dd-item-info{flex:1;min-width:0;}
+  .dd-item-name{font-size:12px;color:#fff;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .dd-item-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px;}
+  .dd-item-icon{font-size:14px;color:rgba(255,255,255,.3);flex-shrink:0;}
+  .dd-item.active .dd-item-icon{color:#ff6ef7;}
 </style>
 </head>
 <body>
@@ -191,17 +211,36 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
       </div>
     </div>
 
-    <!-- Level Tabs -->
-    <div id="level-tabs">
-      <button class="level-tab" id="tab-youngsters" onclick="switchLevel('youngsters')">🟣 Youngsters</button>
-      <button class="level-tab" id="tab-grownups" onclick="switchLevel('grownups')">🟡 Grown Ups</button>
-      <button class="level-tab" id="tab-experts" onclick="switchLevel('experts')">⭐ Experts</button>
-    </div>
+    <!-- 3 Independent Dropdowns -->
+    <div id="dropdowns-wrap">
 
-    <!-- Playlist Section -->
-    <div id="playlist-section">
-      <div id="pl-header"><div id="pl-header-title">🎵 NOW PLAYING</div></div>
-      <div id="pl-tracks"></div>
+      <!-- Youngsters Dropdown -->
+      <div class="dd-section" id="dd-youngsters">
+        <div class="dd-btn" onclick="toggleDrop('youngsters')">
+          <span class="dd-label">🟣 Youngsters</span>
+          <span class="dd-arrow" id="arr-youngsters">▼</span>
+        </div>
+        <div class="dd-list" id="list-youngsters"></div>
+      </div>
+
+      <!-- Grown Ups Dropdown -->
+      <div class="dd-section" id="dd-grownups">
+        <div class="dd-btn" onclick="toggleDrop('grownups')">
+          <span class="dd-label">🟡 Grown Ups</span>
+          <span class="dd-arrow" id="arr-grownups">▼</span>
+        </div>
+        <div class="dd-list" id="list-grownups"></div>
+      </div>
+
+      <!-- Experts Dropdown -->
+      <div class="dd-section" id="dd-experts">
+        <div class="dd-btn" onclick="toggleDrop('experts')">
+          <span class="dd-label">⭐ Experts</span>
+          <span class="dd-arrow" id="arr-experts">▼</span>
+        </div>
+        <div class="dd-list" id="list-experts"></div>
+      </div>
+
     </div>
 
     <!-- Rita -->
@@ -258,14 +297,13 @@ function playTrack(idx){
   // Stop current
   audio.pause();
   // Clear active states
-  for(let i=0;i<TRACKS.length;i++){
-    const el=document.getElementById('pl-'+i);
+  // Clear dropdown active states for current level
+  CATALOG[activeLevel].forEach((_,i) => {
+    const el=document.getElementById('ddi-'+activeLevel+'-'+i);
+    const ic=document.getElementById('ddicon-'+activeLevel+'-'+i);
     if(el) el.classList.remove('active');
-    const pn=document.getElementById('pn-'+i);
-    if(pn){ pn.classList.remove('playing'); pn.textContent=i+1; }
-    const pi=document.getElementById('pi-'+i);
-    if(pi) pi.textContent='▶';
-  }
+    if(ic) ic.textContent='▶';
+  });
   currentTrack = idx;
   const track = TRACKS[idx];
   audio.src = track.file;
@@ -274,10 +312,11 @@ function playTrack(idx){
     document.getElementById('play-btn').textContent = '⏸';
     document.getElementById('vinyl-disc').classList.add('playing');
     document.getElementById('now-title').textContent = track.title;
-    document.getElementById('pl-'+idx).classList.add('active');
-    document.getElementById('pn-'+idx).classList.add('playing');
-    document.getElementById('pn-'+idx).textContent = '♪';
-    document.getElementById('pi-'+idx).textContent = '⏸';
+    activeItemIdx = idx;
+    const activeEl = document.getElementById('ddi-'+activeLevel+'-'+idx);
+    const activeIc = document.getElementById('ddicon-'+activeLevel+'-'+idx);
+    if(activeEl) activeEl.classList.add('active');
+    if(activeIc) activeIc.textContent = '⏸';
     speak('Now playing love — ' + track.title + '!');
   }).catch(()=>{
     toast('⚠️ Tap again to play love — browser needs a tap first!');
@@ -307,7 +346,7 @@ function prevTrack(){
 }
 function nextTrack(){
   const next = currentTrack >= TRACKS.length-1 ? 0 : currentTrack+1;
-  playTrack(next);
+  playFromDropdown(activeLevel, next);
 }
 
 function setVolume(v){
@@ -339,44 +378,89 @@ audio.addEventListener('timeupdate',()=>{
   }
 });
 
-audio.addEventListener('ended',()=>{ nextTrack(); });
+audio.addEventListener('ended',()=>{ const next = currentTrack >= TRACKS.length-1 ? 0 : currentTrack+1; playFromDropdown(activeLevel, next); });
 
-function switchLevel(level){
-  audio.pause(); isPlaying=false; currentTrack=-1;
-  document.getElementById('play-btn').textContent='▶';
-  document.getElementById('vinyl-disc').classList.remove('playing');
-  document.getElementById('now-title').textContent='Choose a song below love!';
-  currentLevel=level;
-  TRACKS=CATALOG[level];
-  // Update tab styles
-  ['youngsters','grownups','experts'].forEach(l=>{
-    const t=document.getElementById('tab-'+l);
-    if(t) t.classList.toggle('active', l===level);
-  });
-  renderPlaylist();
-  const labels={youngsters:'🟣 Youngsters Mix',grownups:'🟡 Grown Ups Collection',experts:'⭐ Experts Collection'};
-  speak('Switching to the '+labels[level]+' love!');
-}
+// Dropdown system
+let openDropdown = null;
+let activeLevel = 'youngsters';
+let activeItemIdx = -1;
 
-function renderPlaylist(){
-  const container=document.getElementById('pl-tracks');
-  if(!container) return;
-  container.innerHTML='';
-  TRACKS.forEach((track,i)=>{
-    const div=document.createElement('div');
-    div.className='pl-item'; div.id='pl-'+i;
-    div.onclick=()=>playTrack(i);
-    div.innerHTML=`
-      <span class="pl-num" id="pn-${i}">${i+1}</span>
-      <span class="pl-vinyl">${track.emoji}</span>
-      <div class="pl-info">
-        <div class="pl-name">${track.title}</div>
-        <div class="pl-sub">${track.sub}</div>
-      </div>
-      <span class="pl-play-icon" id="pi-${i}">▶</span>`;
-    container.appendChild(div);
+function initDropdowns(){
+  ['youngsters','grownups','experts'].forEach(level => {
+    const list = document.getElementById('list-'+level);
+    if(!list) return;
+    list.innerHTML = '';
+    CATALOG[level].forEach((track, i) => {
+      const div = document.createElement('div');
+      div.className = 'dd-item';
+      div.id = 'ddi-'+level+'-'+i;
+      div.onclick = () => playFromDropdown(level, i);
+      div.innerHTML = `
+        <span class="dd-item-emoji">${track.emoji}</span>
+        <div class="dd-item-info">
+          <div class="dd-item-name">${track.title}</div>
+          <div class="dd-item-sub">${track.sub}</div>
+        </div>
+        <span class="dd-item-icon" id="ddicon-${level}-${i}">▶</span>`;
+      list.appendChild(div);
+    });
   });
 }
+
+function toggleDrop(level){
+  const list = document.getElementById('list-'+level);
+  const arrow = document.getElementById('arr-'+level);
+  const isOpen = list.classList.contains('open');
+  // Close all
+  ['youngsters','grownups','experts'].forEach(l => {
+    document.getElementById('list-'+l).classList.remove('open');
+    document.getElementById('arr-'+l).classList.remove('open');
+  });
+  // Open clicked if it was closed
+  if(!isOpen){
+    list.classList.add('open');
+    arrow.classList.add('open');
+    openDropdown = level;
+  } else {
+    openDropdown = null;
+  }
+}
+
+function playFromDropdown(level, idx){
+  // Clear all active states
+  ['youngsters','grownups','experts'].forEach(l => {
+    CATALOG[l].forEach((_,i) => {
+      const el = document.getElementById('ddi-'+l+'-'+i);
+      const ic = document.getElementById('ddicon-'+l+'-'+i);
+      if(el) el.classList.remove('active');
+      if(ic) ic.textContent = '▶';
+    });
+  });
+  // Set active
+  activeLevel = level;
+  activeItemIdx = idx;
+  TRACKS = CATALOG[level];
+  currentTrack = idx;
+  const item = document.getElementById('ddi-'+level+'-'+idx);
+  const icon = document.getElementById('ddicon-'+level+'-'+idx);
+  if(item) item.classList.add('active');
+  if(icon) icon.textContent = '⏸';
+  // Play
+  const track = TRACKS[idx];
+  audio.pause();
+  audio.src = track.file;
+  audio.play().then(()=>{
+    isPlaying = true;
+    document.getElementById('play-btn').textContent = '⏸';
+    document.getElementById('vinyl-disc').classList.add('playing');
+    document.getElementById('now-title').textContent = track.title;
+    speak('Now playing love — ' + track.title + '!');
+  }).catch(()=>{
+    toast('⚠️ Tap again to play love!');
+  });
+}
+
+function switchLevel(level){ activeLevel = level; TRACKS = CATALOG[level]; }
 
 function togglePlaylistDrop(){
   const sec = document.getElementById('playlist-section');
@@ -409,9 +493,8 @@ function toast(msg){
 
 window.addEventListener('load',()=>{
   document.getElementById('bc-header-val').textContent = getBC().toLocaleString();
-  const savedLevel = localStorage.getItem('askLovelyRitaV4_level')||'youngsters';
-  switchLevel(savedLevel);
-  setTimeout(()=>speak('Welcome to The Beat Jukebox love! Choose your level and tap a song to begin!'),800);
+  initDropdowns();
+  setTimeout(()=>speak('Welcome to The Beat Jukebox love! Choose a level and pick your song!'),800);
 });
 </script>
 </body>
