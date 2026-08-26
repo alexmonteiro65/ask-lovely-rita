@@ -120,6 +120,29 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 .nav-btn.active,.nav-btn:hover{color:#ff6ef7;}
 .nav-icon{font-size:20px;line-height:1;}
 #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;font-family:Georgia,serif;white-space:nowrap;}
+
+  /* ── SLIDESHOW PLAYER ── */
+  #slideshow-overlay{display:none;position:absolute;inset:0;z-index:300;
+    background:#000;flex-direction:column;align-items:center;justify-content:center;}
+  #slideshow-overlay.open{display:flex;}
+  #slideshow-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;
+    transition:opacity .6s ease;}
+  #slideshow-top{position:absolute;top:0;left:0;right:0;z-index:10;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 14px;background:linear-gradient(180deg,rgba(0,0,0,.7),transparent);}
+  #slideshow-title{color:#fff;font-size:13px;font-weight:bold;font-family:Georgia,serif;}
+  #slideshow-close{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);
+    border-radius:50%;width:32px;height:32px;color:#fff;font-size:16px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;}
+  #slideshow-bottom{position:absolute;bottom:0;left:0;right:0;z-index:10;
+    padding:14px;background:linear-gradient(0deg,rgba(0,0,0,.8),transparent);}
+  #slideshow-dots{display:flex;gap:5px;justify-content:center;margin-bottom:8px;}
+  .ss-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.3);transition:all .3s;}
+  .ss-dot.active{background:#ff6ef7;transform:scale(1.4);}
+  #slideshow-progress{height:3px;background:rgba(255,255,255,.2);border-radius:2px;overflow:hidden;}
+  #slideshow-prog-fill{height:100%;background:#ff6ef7;width:0%;transition:width linear;}
+  #slideshow-bc-badge{color:#ffd700;font-size:11px;text-align:center;margin-top:6px;
+    font-family:Georgia,serif;}
 </style>
 <script src="https://player.vimeo.com/api/player.js"></script>
 </head>
@@ -166,6 +189,18 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
       </div>
     </div>
 
+    <!-- Slideshow Button -->
+    <div id="slideshow-btn-wrap" style="text-align:center;margin-bottom:10px;">
+      <button onclick="openSlideshow(currentWorld)" style="
+        background:linear-gradient(135deg,#ff6ef7,#8855ff);
+        border:none;border-radius:24px;padding:10px 22px;
+        color:#000;font-weight:900;font-size:13px;cursor:pointer;
+        font-family:Georgia,serif;display:inline-flex;align-items:center;gap:8px;
+        box-shadow:0 4px 16px rgba(255,110,247,.4);">
+        🎬 Watch Slideshow + Music
+      </button>
+      <div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:4px;">9 scenes · original music · +50 EBCs</div>
+    </div>
     <div id="video-grid"></div>
 
     <div id="daily-bar">
@@ -203,6 +238,21 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
     <button id="cs-close" onclick="closeComingSoon()">✓ I'll Come Back!</button>
   </div>
 
+
+  <!-- SLIDESHOW OVERLAY -->
+  <div id="slideshow-overlay">
+    <img id="slideshow-img" src="" alt="">
+    <div id="slideshow-top">
+      <div id="slideshow-title">🎵 Now Playing</div>
+      <button id="slideshow-close" onclick="closeSlideshow()">✕</button>
+    </div>
+    <div id="slideshow-bottom">
+      <div id="slideshow-dots"></div>
+      <div id="slideshow-progress"><div id="slideshow-prog-fill"></div></div>
+      <div id="slideshow-bc-badge"></div>
+    </div>
+    <audio id="slideshow-audio" preload="auto"></audio>
+  </div>
   <nav id="nav-bar">
     <button class="nav-btn" onclick="window.location.href='page1_landing.html'"><span class="nav-icon">🏠</span><span>Home</span></button>
     <button class="nav-btn active"><span class="nav-icon">🎬</span><span>Videos</span></button>
@@ -303,6 +353,78 @@ const WORLDS = {
     ]}
 };
 
+
+const SLIDESHOWS = {
+  ocean:    { title:'Coral Reef Beats',    music:MUSIC+'coral_reef_beats.mp3',    scenes:9, folder:'octopus',   bc:50 },
+  space:    { title:'Cosmic Waves',        music:MUSIC+'cosmic_waves.mp3',         scenes:9, folder:'universe',  bc:50 },
+  india:    { title:'Peaceful Vibes',      music:MUSIC+'peaceful_vibes.mp3',       scenes:9, folder:'innerlight',bc:50 },
+  city:     { title:'Urban Adventure',     music:MUSIC+'urban_adventure.mp3',      scenes:9, folder:'pennylane', bc:50 },
+  rita:     { title:'All Aboard!',         music:MUSIC+'all_aboard.mp3',           scenes:9, folder:'rita',      bc:50 },
+};
+
+let ssTimer=null, ssSceneIdx=0, ssWorld=null, ssInterval=null;
+
+function openSlideshow(world){
+  const ss = SLIDESHOWS[world];
+  if(!ss) return;
+  ssWorld=world; ssSceneIdx=0;
+  const overlay=document.getElementById('slideshow-overlay');
+  overlay.classList.add('open');
+  document.getElementById('slideshow-title').textContent='🎵 '+ss.title;
+  // Build dots
+  const dots=document.getElementById('slideshow-dots');
+  dots.innerHTML='';
+  for(let i=0;i<ss.scenes;i++){
+    const d=document.createElement('div');
+    d.className='ss-dot'+(i===0?' active':'');
+    d.id='ss-dot-'+i;
+    dots.appendChild(d);
+  }
+  // Start audio
+  const aud=document.getElementById('slideshow-audio');
+  aud.src=ss.music; aud.play().catch(()=>{});
+  // Start slideshow
+  showScene(0);
+  const secPerScene=30/ss.scenes;
+  document.getElementById('slideshow-prog-fill').style.transition='width '+30+'s linear';
+  setTimeout(()=>document.getElementById('slideshow-prog-fill').style.width='100%',50);
+  ssInterval=setInterval(()=>{
+    ssSceneIdx=(ssSceneIdx+1)%ss.scenes;
+    showScene(ssSceneIdx);
+  }, secPerScene*1000);
+  // BeatCoin reward after 25s
+  ssTimer=setTimeout(()=>{
+    const bc=Number(localStorage.getItem('askLovelyRitaV4_bc')||25000)+ss.bc;
+    localStorage.setItem('askLovelyRitaV4_bc',bc);
+    document.getElementById('slideshow-bc-badge').textContent='+'+ss.bc+' EBCs earned love!';
+  },25000);
+  speak('Now playing '+ss.title+' love! Enjoy the show!');
+}
+
+function showScene(idx){
+  const ss=SLIDESHOWS[ssWorld];
+  const img=document.getElementById('slideshow-img');
+  img.style.opacity='0';
+  setTimeout(()=>{
+    img.src=SCENES+ss.folder+'/scene_'+(String(idx+1).padStart(2,'0'))+'.png';
+    img.style.opacity='1';
+  },300);
+  // Update dots
+  for(let i=0;i<ss.scenes;i++){
+    const d=document.getElementById('ss-dot-'+i);
+    if(d) d.className='ss-dot'+(i===idx?' active':'');
+  }
+}
+
+function closeSlideshow(){
+  clearInterval(ssInterval); clearTimeout(ssTimer);
+  document.getElementById('slideshow-audio').pause();
+  document.getElementById('slideshow-overlay').classList.remove('open');
+  document.getElementById('slideshow-prog-fill').style.width='0%';
+  document.getElementById('slideshow-prog-fill').style.transition='none';
+  document.getElementById('slideshow-bc-badge').textContent='';
+  ssWorld=null;
+}
 let currentWorld='ocean', currentVidIdx=0, playerTimer=null;
 
 function getBC(){ return Number(localStorage.getItem(BC_KEY)||25000); }
