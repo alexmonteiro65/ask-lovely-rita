@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lovely Rita Adventures — Beta Terms</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;font-family:Georgia,serif;padding:20px 16px 40px;}
+#phone{background:#1a0040;width:393px;max-width:100%;min-height:852px;border-radius:48px;box-shadow:0 0 0 10px #1a1a1a,0 0 0 12px #333,0 30px 80px rgba(0,0,0,.8);position:relative;display:flex;flex-direction:column;overflow:hidden;}
+#phone::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#0a0a0a;border-radius:0 0 20px 20px;z-index:10;}
+#scroll{flex:1;overflow-y:auto;padding:50px 20px 30px;}
+#scroll::-webkit-scrollbar{width:0;}
+.logo{text-align:center;margin-bottom:20px;}
+.logo-title{font-size:20px;font-weight:bold;color:#ff6ef7;line-height:1.2;}
+.logo-sub{font-size:11px;color:rgba(255,255,255,.4);margin-top:4px;letter-spacing:1px;}
+.beta-badge{display:inline-block;background:rgba(255,110,247,.15);border:1px solid rgba(255,110,247,.3);border-radius:20px;padding:4px 14px;font-size:10px;font-weight:bold;color:#ff6ef7;letter-spacing:1px;margin-bottom:20px;}
+h1{font-size:16px;font-weight:bold;color:#fff;margin-bottom:6px;margin-top:18px;}
+h1:first-of-type{margin-top:0;}
+p{font-size:12px;color:rgba(255,255,255,.65);line-height:1.7;margin-bottom:8px;}
+.divider{border:none;border-top:1px solid rgba(255,255,255,.08);margin:14px 0;}
+.highlight{background:rgba(255,222,89,.08);border-left:3px solid #ffde59;border-radius:0 8px 8px 0;padding:10px 12px;margin:10px 0;}
+.highlight p{color:rgba(255,222,89,.85);margin:0;}
+#accept-wrap{padding:20px;background:rgba(10,0,30,.95);border-top:1px solid rgba(255,255,255,.08);}
+#accept-check-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;}
+#accept-check{width:20px;height:20px;min-width:20px;accent-color:#ff6ef7;margin-top:2px;cursor:pointer;}
+#accept-check-label{font-size:12px;color:rgba(255,255,255,.7);line-height:1.5;cursor:pointer;}
+#accept-btn{width:100%;background:linear-gradient(135deg,#ff6ef7,#a855f7);border:none;border-radius:20px;padding:14px;color:#000;font-weight:bold;font-size:14px;cursor:pointer;font-family:Georgia,serif;opacity:.4;transition:opacity .3s;}
+#accept-btn.ready{opacity:1;}
+#accept-btn.ready:hover{filter:brightness(1.1);}
+</style>
+</head>
+<body>
+<div id="phone">
+  <div id="scroll">
+    <div class="logo">
+      <div class="logo-title">Lovely Rita Adventures</div>
+      <div class="logo-sub">TERMS OF USE &amp; BETA DISCLAIMER</div>
+    </div>
+    <div style="text-align:center"><span class="beta-badge">BETA VERSION</span></div>
+
+    <h1>Welcome, love!</h1>
+    <p>Before you begin your adventure, please take a moment to read these terms. They are simple and written in plain language.</p>
+
+    <hr class="divider">
+
+    <h1>1. What this platform is</h1>
+    <p>Lovely Rita Adventures is an interactive educational platform combining music, games, collectibles and a virtual economy. It is designed for all ages and is completely family-friendly.</p>
+    <p>This is a <strong style="color:#ff6ef7;">Beta version</strong> — meaning it is a work in progress. Some features may change, be updated, or behave unexpectedly.</p>
+
+    <hr class="divider">
+
+    <h1>2. Educational BeatCoins (EBCs)</h1>
+    <p>EBCs are virtual credits earned by playing games and watching videos. They exist solely within this platform and have no real-world monetary value at this time.</p>
+    <div class="highlight"><p>EBCs cannot be exchanged for money, transferred to other platforms, or used outside of Lovely Rita Adventures.</p></div>
+
+    <hr class="divider">
+
+    <h1>3. Content &amp; safety</h1>
+    <p>All content on this platform is family-safe and appropriate for all ages. We do not display advertisements. We do not collect personal data beyond what you voluntarily enter (such as your player nickname).</p>
+    <p>The Ask Rita feature is powered by AI and is designed to provide educational responses. Rita will always redirect inappropriate questions politely.</p>
+
+    <hr class="divider">
+
+    <h1>4. Beta disclaimer</h1>
+    <p>As a Beta user, you understand that:</p>
+    <p>• The platform is still in active development and features may change without notice.</p>
+    <p>• Virtual items, EBC balances, and progress are stored locally on your device and may be reset during major updates.</p>
+    <p>• We appreciate your patience and feedback as we continue to build and improve.</p>
+
+    <hr class="divider">
+
+    <h1>5. Intellectual property</h1>
+    <p>All original characters, artwork, music, and platform content are the property of Lovely Rita Adventures. The world themes are inspired by the spirit of classic music and are presented as original creative works.</p>
+
+    <hr class="divider">
+
+    <h1>6. Contact</h1>
+    <p>Questions or feedback? We would love to hear from you. This platform is a labour of love — thank you for being part of the journey.</p>
+
+    <div style="height:20px;"></div>
+  </div>
+
+  <div id="accept-wrap">
+    <div id="accept-check-row">
+      <input type="checkbox" id="accept-check" onchange="toggleBtn()">
+      <label id="accept-check-label" for="accept-check">I have read and agree to the Terms of Use. I understand this is a Beta version.</label>
+    </div>
+    <button id="accept-btn" onclick="accept()" disabled>Let the adventure begin! 🎵</button>
+  </div>
+</div>
+
+<script>
+function toggleBtn(){
+  const ok=document.getElementById('accept-check').checked;
+  const btn=document.getElementById('accept-btn');
+  btn.disabled=!ok;
+  btn.classList.toggle('ready',ok);
+}
+function accept(){
+  if(!document.getElementById('accept-check').checked) return;
+  localStorage.setItem('lra_terms_accepted','1');
+  window.location.href='page1_landing.html';
+}
+// If already accepted, skip straight to landing
+if(localStorage.getItem('lra_terms_accepted')==='1'){
+  window.location.href='page1_landing.html';
+}
+</script>
+</body>
+</html>
