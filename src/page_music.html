@@ -133,6 +133,14 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 .nav-btn.active .nav-icon{filter:drop-shadow(0 0 6px #ff6ef7);}
 
 #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;font-family:Georgia,serif;}
+
+  /* ── LEVEL TABS ── */
+  #level-tabs{display:flex;gap:6px;margin-bottom:10px;justify-content:center;}
+  .level-tab{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:20px;
+    padding:6px 14px;color:rgba(255,255,255,.5);font-size:11px;cursor:pointer;font-family:Georgia,serif;
+    transition:all .2s;white-space:nowrap;}
+  .level-tab.active{background:var(--btn-grad,linear-gradient(135deg,#ff6ef7,#8855ff));
+    border-color:transparent;color:#000;font-weight:900;}
 </style>
 </head>
 <body>
@@ -183,49 +191,17 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
       </div>
     </div>
 
-    <!-- Playlist Dropdown -->
-    <div id="pl-dropdown-btn" onclick="togglePlaylistDrop()">
-      <span id="pl-dropdown-label">🎵 Choose Your Song</span>
-      <span id="pl-dropdown-arrow">▼</span>
+    <!-- Level Tabs -->
+    <div id="level-tabs">
+      <button class="level-tab" id="tab-youngsters" onclick="switchLevel('youngsters')">🟣 Youngsters</button>
+      <button class="level-tab" id="tab-grownups" onclick="switchLevel('grownups')">🟡 Grown Ups</button>
+      <button class="level-tab" id="tab-experts" onclick="switchLevel('experts')">⭐ Experts</button>
     </div>
+
+    <!-- Playlist Section -->
     <div id="playlist-section">
-      <div id="pl-header"><div id="pl-header-title">📀 THE LADS RAP COLLECTION</div></div>
-      <div class="pl-item" id="pl-0" onclick="playTrack(0)">
-        <span class="pl-num" id="pn-0">1</span>
-        <span class="pl-vinyl">🎵</span>
-        <div class="pl-info">
-          <div class="pl-name">Lads Rap — Part 1</div>
-          <div class="pl-sub">The Original Beat</div>
-        </div>
-        <span class="pl-play-icon" id="pi-0">▶</span>
-      </div>
-      <div class="pl-item" id="pl-1" onclick="playTrack(1)">
-        <span class="pl-num" id="pn-1">2</span>
-        <span class="pl-vinyl">🎶</span>
-        <div class="pl-info">
-          <div class="pl-name">Lads Rap — Part 2</div>
-          <div class="pl-sub">The Original Beat Continues</div>
-        </div>
-        <span class="pl-play-icon" id="pi-1">▶</span>
-      </div>
-      <div class="pl-item" id="pl-2" onclick="playTrack(2)">
-        <span class="pl-num" id="pn-2">3</span>
-        <span class="pl-vinyl">🎵</span>
-        <div class="pl-info">
-          <div class="pl-name">Lads Rap V2 — Part 1</div>
-          <div class="pl-sub">The New Beat</div>
-        </div>
-        <span class="pl-play-icon" id="pi-2">▶</span>
-      </div>
-      <div class="pl-item" id="pl-3" onclick="playTrack(3)">
-        <span class="pl-num" id="pn-3">4</span>
-        <span class="pl-vinyl">🎶</span>
-        <div class="pl-info">
-          <div class="pl-name">Lads Rap V2 — Part 2</div>
-          <div class="pl-sub">The New Beat Continues</div>
-        </div>
-        <span class="pl-play-icon" id="pi-3">▶</span>
-      </div>
+      <div id="pl-header"><div id="pl-header-title">🎵 NOW PLAYING</div></div>
+      <div id="pl-tracks"></div>
     </div>
 
     <!-- Rita -->
@@ -251,12 +227,25 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 const RAW = 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/';
 const BC_KEY = 'askLovelyRitaV4_bc';
 
-const TRACKS = [
-  { title:'Lads Rap — Part 1',    file:RAW+'Beatles%20Rap%20-%20Part%201.mp3' },
-  { title:'Lads Rap — Part 2',    file:RAW+'Beatles%20Rap%20-%20Part%202.mp3' },
-  { title:'Lads Rap V2 — Part 1', file:RAW+'Beatles%20Rap%201.mp3' },
-  { title:'Lads Rap V2 — Part 2', file:RAW+'Beatles%20Rap%201%20part%20B.mp3' },
-];
+const CATALOG = {
+  youngsters: [
+    { title:'Deep Sea Groove',      sub:'Octopus World',          file:RAW+'music/deep_sea_groove.mp3',    emoji:'🐙' },
+    { title:'Glow From Within',     sub:'Inner Light World',      file:RAW+'music/glow_from_within.mp3',   emoji:'✨' },
+    { title:'City Street Shuffle',  sub:'Penny Lane World',       file:RAW+'music/city_street_shuffle.mp3',emoji:'🌆' },
+    { title:'Starlight Journey',    sub:'Across the Universe',    file:RAW+'music/starlight_journey.mp3',  emoji:'🌌' },
+    { title:"Rita's Rally",         sub:"Rita's World",           file:RAW+'music/ritas_rally.mp3',        emoji:'🎤' },
+  ],
+  grownups: [
+    { title:'Lads Rap — Part 1',    sub:'The Original Beat',      file:RAW+'Beatles%20Rap%20-%20Part%201.mp3', emoji:'🎵' },
+    { title:'Lads Rap — Part 2',    sub:'The Original Beat Cont.',file:RAW+'Beatles%20Rap%20-%20Part%202.mp3', emoji:'🎶' },
+  ],
+  experts: [
+    { title:'Lads Rap V2 — Part 1', sub:'The New Beat',           file:RAW+'Beatles%20Rap%201.mp3',           emoji:'🎵' },
+    { title:'Lads Rap V2 — Part 2', sub:'The New Beat Continues', file:RAW+'Beatles%20Rap%201%20part%20B.mp3',emoji:'🎶' },
+  ],
+};
+let TRACKS = CATALOG.youngsters;
+let currentLevel = 'youngsters';
 
 const audio = new Audio();
 audio.volume = 0.8;
@@ -269,10 +258,13 @@ function playTrack(idx){
   // Stop current
   audio.pause();
   // Clear active states
-  for(let i=0;i<4;i++){
-    document.getElementById('pl-'+i).classList.remove('active');
-    document.getElementById('pn-'+i).classList.remove('playing');
-    document.getElementById('pi-'+i).textContent='▶';
+  for(let i=0;i<TRACKS.length;i++){
+    const el=document.getElementById('pl-'+i);
+    if(el) el.classList.remove('active');
+    const pn=document.getElementById('pn-'+i);
+    if(pn){ pn.classList.remove('playing'); pn.textContent=i+1; }
+    const pi=document.getElementById('pi-'+i);
+    if(pi) pi.textContent='▶';
   }
   currentTrack = idx;
   const track = TRACKS[idx];
@@ -349,6 +341,43 @@ audio.addEventListener('timeupdate',()=>{
 
 audio.addEventListener('ended',()=>{ nextTrack(); });
 
+function switchLevel(level){
+  audio.pause(); isPlaying=false; currentTrack=-1;
+  document.getElementById('play-btn').textContent='▶';
+  document.getElementById('vinyl-disc').classList.remove('playing');
+  document.getElementById('now-title').textContent='Choose a song below love!';
+  currentLevel=level;
+  TRACKS=CATALOG[level];
+  // Update tab styles
+  ['youngsters','grownups','experts'].forEach(l=>{
+    const t=document.getElementById('tab-'+l);
+    if(t) t.classList.toggle('active', l===level);
+  });
+  renderPlaylist();
+  const labels={youngsters:'🟣 Youngsters Mix',grownups:'🟡 Grown Ups Collection',experts:'⭐ Experts Collection'};
+  speak('Switching to the '+labels[level]+' love!');
+}
+
+function renderPlaylist(){
+  const container=document.getElementById('pl-tracks');
+  if(!container) return;
+  container.innerHTML='';
+  TRACKS.forEach((track,i)=>{
+    const div=document.createElement('div');
+    div.className='pl-item'; div.id='pl-'+i;
+    div.onclick=()=>playTrack(i);
+    div.innerHTML=`
+      <span class="pl-num" id="pn-${i}">${i+1}</span>
+      <span class="pl-vinyl">${track.emoji}</span>
+      <div class="pl-info">
+        <div class="pl-name">${track.title}</div>
+        <div class="pl-sub">${track.sub}</div>
+      </div>
+      <span class="pl-play-icon" id="pi-${i}">▶</span>`;
+    container.appendChild(div);
+  });
+}
+
 function togglePlaylistDrop(){
   const sec = document.getElementById('playlist-section');
   const arrow = document.getElementById('pl-dropdown-arrow');
@@ -380,7 +409,9 @@ function toast(msg){
 
 window.addEventListener('load',()=>{
   document.getElementById('bc-header-val').textContent = getBC().toLocaleString();
-  setTimeout(()=>speak('Welcome to The Beat Jukebox love! Tap any song to start the music!'),800);
+  const savedLevel = localStorage.getItem('askLovelyRitaV4_level')||'youngsters';
+  switchLevel(savedLevel);
+  setTimeout(()=>speak('Welcome to The Beat Jukebox love! Choose your level and tap a song to begin!'),800);
 });
 </script>
 </body>
