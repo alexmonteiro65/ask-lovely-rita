@@ -344,17 +344,7 @@ body {
 }
 #size-label { color:#333; font-size:10px; font-family:monospace; margin-top:8px; letter-spacing:1px; }
 
-/* ── TAP TO START OVERLAY ── */
-#tap-overlay{
-  position:absolute;inset:0;z-index:999;
-  background:linear-gradient(180deg,#0d0028 0%,#1a0040 60%,#0d0028 100%);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:0;border-radius:48px;
-  animation:fadeInOverlay .5s ease;
-}
-@keyframes fadeInOverlay{from{opacity:0}to{opacity:1}}
-#tap-overlay.hiding{animation:fadeOutOverlay .6s ease forwards;}
-@keyframes fadeOutOverlay{from{opacity:1}to{opacity:0;pointer-events:none;}}
+/* Tap overlay removed — audio unlock via PLAY button */
 
 #tap-stars{font-size:11px;color:#ffd700;letter-spacing:6px;margin-bottom:8px;opacity:.7;}
 #tap-app-title{
@@ -410,18 +400,7 @@ body {
 <div id="phone-outer">
 <div id="phone" class="theme-youngsters">
 
-  <!-- TAP TO START OVERLAY — unlocks Rita voice on mobile -->
-  <div id="tap-overlay">
-    <div id="tap-stars">★ ★ ★ ★ ★</div>
-    <div id="tap-app-title">LOVELY RITA<br/>ADVENTURES</div>
-    <div id="tap-app-sub">LEARNING WITH MUSIC FOR GENERATIONS</div>
-    <img id="tap-rita"
-      src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/rita_apresentadora_clean.png"
-      alt="Lovely Rita">
-    <div id="tap-bubble">Hello love! I have been waiting for you! Welcome to the world's first interactive music-powered learning platform. Your adventure is about to begin!</div>
-    <button id="tap-btn" onclick="tapToStart()">&#9654; TAP TO START</button>
-    <div id="tap-version">LOVELY RITA ADVENTURES · BETA</div>
-  </div>
+
 
   <div id="phone-scroll">
 
@@ -505,7 +484,7 @@ body {
         </div>
 
         <div id="spin-platform">
-          <button id="pick-lad-btn" onclick="spinLads()">PLAY</button>
+          <button id="pick-lad-btn" onclick="unlockAndSpin()">PLAY</button>
         </div>
 
         <div id="bc-wrap">
@@ -703,7 +682,7 @@ window.addEventListener('load', ()=>{
   // Rita text box transparent on load
   const rtb0 = document.getElementById('rita-text-box');
   if(rtb0) rtb0.style.background = 'transparent';
-  const greeting = "Welcome to the adventure darling! Here is what you can do — choose your level, spin to pick your Lad companion, ask me any question you like, or tap Music and Videos to explore. This is the only platform in the world that combines games collectibles videos and a real economy. Let us begin!";
+  const greeting = "Hello love! Welcome to the world's first interactive music-powered learning platform. Choose your level, spin to meet your companion, ask me anything, or explore Music and Videos. Your adventure begins now!";
   const speak = () => { if(!muteState) ritaSpeak(greeting); };
   if(window.speechSynthesis.getVoices().length > 0) {
     setTimeout(speak, 800);
@@ -850,23 +829,23 @@ function toast(msg) {
   clearTimeout(t._t); t._t=setTimeout(()=>t.style.opacity='0',3000);
 }
 
-// ── TAP TO START — unlocks audio on mobile ──────────────────
-function tapToStart(){
-  const overlay = document.getElementById('tap-overlay');
-  // Unlock audio with a silent sound (required gesture)
+// ── AUDIO UNLOCK + SPIN — triggered by PLAY button ──────────
+let audioUnlocked = false;
+
+function unlockAudio(){
+  if(audioUnlocked) return;
   try {
     const ctx = new(window.AudioContext||window.webkitAudioContext)();
     const buf = ctx.createBuffer(1,1,22050);
     const src = ctx.createBufferSource();
     src.buffer = buf; src.connect(ctx.destination); src.start(0);
+    audioUnlocked = true;
   } catch(e){}
-  // Rita speaks welcome
-  setTimeout(()=>{
-    ritaSpeak("Hello love! I have been waiting for you! Welcome to the world's first interactive music-powered learning platform. Your adventure is about to begin!");
-  }, 200);
-  // Fade out overlay
-  overlay.classList.add('hiding');
-  setTimeout(()=>{ overlay.style.display='none'; }, 600);
+}
+
+function unlockAndSpin(){
+  unlockAudio();
+  spinLads();
 }
 
 </script>
