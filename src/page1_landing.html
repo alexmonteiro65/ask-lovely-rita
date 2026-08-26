@@ -849,5 +849,15 @@ function unlockAndSpin(){
 }
 
 </script>
+
+<script>
+// L1: Terms of Use — redirect if not accepted
+(function(){
+  if(localStorage.getItem('lra_terms_accepted')!=='1'){
+    window.location.href='page_terms.html';
+  }
+})();
+</script>
+
 </body>
 </html>
