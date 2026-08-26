@@ -640,14 +640,13 @@ window.addEventListener('message', function(event){
       var iframe=document.getElementById('player-iframe');
       if(iframe && iframe.contentWindow){
         iframe.contentWindow.postMessage(JSON.stringify({method:'addEventListener',value:'finish'}),'*');
+        iframe.contentWindow.postMessage(JSON.stringify({method:'addEventListener',value:'ended'}),'*');
       }
     }
-    if(data.event==='finish'){
-      // Video ended — wait 2s then close and return to video page
-      setTimeout(function(){
-        closePlayer();
-        speak('Brilliant love! You have finished the video! Check out the other videos waiting for you!');
-      }, 2000);
+    if(data.event==='finish'||data.event==='ended'){
+      // Close immediately — no delay so Vimeo end screen never shows
+      closePlayer();
+      speak('Brilliant love! You have finished the video! Check out the other videos waiting for you!');
     }
   }catch(e){}
 }, false);
