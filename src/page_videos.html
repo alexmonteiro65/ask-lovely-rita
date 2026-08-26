@@ -373,6 +373,12 @@ function openSlideshow(world){
   // Start audio
   const aud=document.getElementById('slideshow-audio');
   aud.src=ss.music; aud.play().catch(()=>{});
+  // When song ends, stop slideshow and close after 2 seconds
+  aud.onended = () => {
+    clearInterval(ssInterval); ssInterval=null;
+    speak('Hope you enjoyed that love!');
+    setTimeout(()=>closeSlideshow(), 2000);
+  };
   // Start slideshow
   showScene(0);
   const secPerScene=30/ss.scenes;
