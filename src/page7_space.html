@@ -495,7 +495,15 @@ function loadQuestion() {
   // Rita reads every question at all levels
   setTimeout(()=>speak(q.q),600);
   // Auto-scroll so all answer buttons are visible
-  setTimeout(()=>{ const g=document.getElementById('options-grid'); if(g) g.scrollIntoView({behavior:'smooth',block:'nearest'}); },200);
+  // Scroll scroll-area so options are fully visible above the lad and nav
+  setTimeout(()=>{
+    const sa=document.getElementById('scroll-area');
+    const og=document.getElementById('options-grid');
+    if(sa&&og){
+      const ogBottom=og.offsetTop+og.offsetHeight;
+      sa.scrollTo({top:ogBottom-sa.clientHeight+20,behavior:'smooth'});
+    }
+  },250);
 }
 
 function answerQuestion(idx,q) {
@@ -521,6 +529,11 @@ function answerQuestion(idx,q) {
   pts.textContent=isCorrect?`+${earned} EBCs!`:'+0 BeatCoins';
   pts.style.color=isCorrect?'#4ade80':'rgba(255,255,255,.4)';
   document.getElementById('result-panel').classList.add('show');
+  setTimeout(()=>{
+    const sa=document.getElementById('scroll-area');
+    const rp=document.getElementById('result-panel');
+    if(sa&&rp) sa.scrollTo({top:rp.offsetTop-20,behavior:'smooth'});
+  },200);
 
   if(isCorrect)celebrate();
   // Show image after answer for GROWN UPS + EXPERTS — auto-hide after 3s
@@ -560,6 +573,11 @@ function finishGame() {
   document.getElementById('result-pts').textContent=`+${bonus} Bonus BeatCoins!`;
   document.getElementById('result-pts').style.color='#ffde59';
   document.getElementById('result-panel').classList.add('show');
+  setTimeout(()=>{
+    const sa=document.getElementById('scroll-area');
+    const rp=document.getElementById('result-panel');
+    if(sa&&rp) sa.scrollTo({top:rp.offsetTop-20,behavior:'smooth'});
+  },200);
   document.getElementById('next-btn').style.display='none';
   document.getElementById('start-btn').textContent='🔄 New Mission!';
   document.getElementById('start-btn').style.display='block';
