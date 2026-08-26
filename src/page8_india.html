@@ -137,6 +137,18 @@
   @keyframes cf { 0%{transform:translateY(-20px) rotate(0deg);opacity:1} 100%{transform:translateY(900px) rotate(720deg);opacity:0} }
   #toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(80px); background:rgba(26,8,0,.95); border:1px solid #ff6b35; border-radius:20px; padding:8px 16px; font-size:11px; color:#fff; z-index:1000; transition:transform .3s,opacity .3s; opacity:0; white-space:nowrap; pointer-events:none; }
   #toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+
+  /* G5 - Congratulations overlay */
+  #congrats-overlay{display:none;position:fixed;inset:0;z-index:999;background:rgba(10,0,30,.96);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;}
+  #congrats-overlay.show{display:flex;}
+  #congrats-emoji{font-size:64px;margin-bottom:12px;animation:bounceIn .5s ease;}
+  #congrats-title{font-size:22px;font-weight:900;color:#ff6ef7;margin-bottom:8px;font-family:Georgia,serif;}
+  #congrats-sub{font-size:14px;color:#ffde59;margin-bottom:6px;}
+  #congrats-bc{font-size:18px;font-weight:bold;color:#ffd700;margin-bottom:20px;}
+  #congrats-bar-wrap{width:80%;max-width:260px;height:6px;background:rgba(255,255,255,.15);border-radius:3px;overflow:hidden;}
+  #congrats-bar{height:100%;background:linear-gradient(90deg,#ff6ef7,#a855f7);width:0%;transition:width 2.4s linear;border-radius:3px;}
+  @keyframes bounceIn{0%{transform:scale(.3);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+
 </style>
 </head>
 <body class="theme-youngsters">
@@ -428,7 +440,7 @@ function finishGame(success){
   document.getElementById('start-btn').style.display='block';
   document.getElementById('start-btn').onclick=()=>{resetGame();startGame();};
   celebrate();speak(pick(RITA_COMPLETE));
-  setTimeout(showBonusGame, 4500);
+  showCongrats(bonus);
 }
 
 
@@ -450,6 +462,19 @@ function postGlobalScore(amount) {
       body: JSON.stringify({ lad: lad, amount: amount })
     }).catch(()=>{});
   } catch(e) {}
+}
+
+
+function showCongrats(bonus) {
+  const ov = document.getElementById('congrats-overlay');
+  if(!ov) return;
+  document.getElementById('congrats-emoji').textContent = '✨';
+  document.getElementById('congrats-title').textContent = 'Inner Light Found!';
+  document.getElementById('congrats-sub').textContent = 'You discovered the inner light love!';
+  document.getElementById('congrats-bc').textContent = '+' + bonus + ' BeatCoins earned!';
+  ov.classList.add('show');
+  setTimeout(()=>document.getElementById('congrats-bar').style.width='100%', 50);
+  setTimeout(()=>{ ov.classList.remove('show'); showBonusGame(); }, 2600);
 }
 
 function showBonusGame() {
