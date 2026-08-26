@@ -494,6 +494,8 @@ function loadQuestion() {
 
   // Rita reads every question at all levels
   setTimeout(()=>speak(q.q),600);
+  // Auto-scroll so all answer buttons are visible
+  setTimeout(()=>{ const g=document.getElementById('options-grid'); if(g) g.scrollIntoView({behavior:'smooth',block:'nearest'}); },200);
 }
 
 function answerQuestion(idx,q) {
