@@ -276,7 +276,7 @@ const WORLDS = {
       { id:'v-oc1', title:"Coral Reef Beats",
         sub:"Watch the video clip love! Full video coming soon!",
         source:"Lovely Rita Adventures",
-        type:'slideshow', world:'ocean',
+        type:'vimeo', vimeoId:'1221389114', world:'ocean',
         emoji:'🌊', bc:50 },
       { id:'v-oc2', title:"Deep Ocean Wonders", sub:"Coming soon love — stay tuned!", source:"", emoji:'🐟', comingSoon:true, cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_ocean_2.jpg" },
       { id:'v-oc3', title:"Coral Reef Secrets", sub:"Coming soon love — stay tuned!", source:"", emoji:'💧', comingSoon:true, cardThumb:"https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/videos/thumb_ocean_3.jpg" }
@@ -353,6 +353,16 @@ const SLIDESHOWS = {
 };
 
 let ssTimer=null, ssSceneIdx=0, ssWorld=null, ssInterval=null;
+
+// Unlock audio context on first gesture (iOS/Android autoplay fix)
+let audioUnlocked=false;
+function unlockAudio(){
+  if(audioUnlocked) return;
+  const aud=document.getElementById('slideshow-audio');
+  aud.play().then(()=>{ aud.pause(); aud.currentTime=0; audioUnlocked=true; }).catch(()=>{});
+}
+document.addEventListener('touchstart', unlockAudio, {once:true});
+document.addEventListener('click', unlockAudio, {once:true});
 
 function openSlideshow(world){
   const ss = SLIDESHOWS[world];
@@ -649,3 +659,4 @@ window.addEventListener('load',()=>{
 </script>
 </body>
 </html>
+
