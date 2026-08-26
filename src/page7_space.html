@@ -474,7 +474,8 @@ function loadQuestion() {
   // YOUNGSTERS: show image before question
   const qImgEl = document.getElementById('q-image');
   if(S.level==='youngsters' && q.photo){
-    qImgEl.innerHTML = '<img src="'+q.photo+'" style="width:100%;max-width:120px;border-radius:10px;display:block;margin:0 auto" onerror="this.parentElement.textContent=q.emoji"/>';
+    const previewMax = (S.level==='youngsters') ? '60px' : '120px';
+    qImgEl.innerHTML = '<img src="'+q.photo+'" style="width:100%;max-width:'+previewMax+';border-radius:10px;display:block;margin:0 auto" onerror="this.parentElement.textContent=q.emoji"/>';
   } else {
     qImgEl.textContent = q.emoji;
   }
