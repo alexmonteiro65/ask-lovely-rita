@@ -216,7 +216,13 @@ const reward=REWARD[level];
 // ── Load Space Lad ─────────────────────────────────────────
 (function(){
   const wrap=document.getElementById('lad-space');
-  if(wrap) wrap.innerHTML='<img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lads/space_lad.png" alt="Space Lad" onerror="this.style.display='none'"/>';
+  if(wrap){
+    const img=document.createElement('img');
+    img.src='https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lads/space_lad.png';
+    img.alt='Space Lad';
+    img.onerror=function(){this.style.display='none';};
+    wrap.appendChild(img);
+  }
 })();
 
 // ── Light-speed countdown ────────────────────────────────
