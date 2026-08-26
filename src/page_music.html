@@ -149,7 +149,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
   .dd-label{font-size:13px;font-weight:bold;color:#fff;font-family:Georgia,serif;letter-spacing:.5px;}
   .dd-arrow{font-size:12px;color:rgba(255,255,255,.5);transition:transform .3s;}
   .dd-arrow.open{transform:rotate(180deg);}
-  .dd-list{display:none;background:rgba(0,0,0,.3);}
+  .dd-list{display:none;background:rgba(0,0,0,.3);max-height:220px;overflow-y:auto;}
   .dd-list.open{display:block;}
   .dd-item{display:flex;align-items:center;gap:10px;padding:11px 16px;cursor:pointer;
     border-top:1px solid rgba(255,255,255,.05);transition:background .15s;}
@@ -217,7 +217,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
       <!-- Youngsters Dropdown -->
       <div class="dd-section" id="dd-youngsters">
         <div class="dd-btn" onclick="toggleDrop('youngsters')">
-          <span class="dd-label">🟣 Youngsters</span>
+          <span class="dd-label">🟣 Youngsters Playlist</span>
           <span class="dd-arrow" id="arr-youngsters">▼</span>
         </div>
         <div class="dd-list" id="list-youngsters"></div>
@@ -226,7 +226,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
       <!-- Grown Ups Dropdown -->
       <div class="dd-section" id="dd-grownups">
         <div class="dd-btn" onclick="toggleDrop('grownups')">
-          <span class="dd-label">🟡 Grown Ups</span>
+          <span class="dd-label">🟡 Grown Ups Playlist</span>
           <span class="dd-arrow" id="arr-grownups">▼</span>
         </div>
         <div class="dd-list" id="list-grownups"></div>
@@ -235,7 +235,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
       <!-- Experts Dropdown -->
       <div class="dd-section" id="dd-experts">
         <div class="dd-btn" onclick="toggleDrop('experts')">
-          <span class="dd-label">⭐ Experts</span>
+          <span class="dd-label">⭐ Experts Playlist</span>
           <span class="dd-arrow" id="arr-experts">▼</span>
         </div>
         <div class="dd-list" id="list-experts"></div>
@@ -317,7 +317,7 @@ function playTrack(idx){
     const activeIc = document.getElementById('ddicon-'+activeLevel+'-'+idx);
     if(activeEl) activeEl.classList.add('active');
     if(activeIc) activeIc.textContent = '⏸';
-    speak('Now playing love — ' + track.title + '!');
+    // Rita does not read track titles — let the music speak!
   }).catch(()=>{
     toast('⚠️ Tap again to play love — browser needs a tap first!');
   });
@@ -445,6 +445,12 @@ function playFromDropdown(level, idx){
   const icon = document.getElementById('ddicon-'+level+'-'+idx);
   if(item) item.classList.add('active');
   if(icon) icon.textContent = '⏸';
+  // Auto-close dropdown after 3 seconds
+  setTimeout(()=>{
+    document.getElementById('list-'+level).classList.remove('open');
+    document.getElementById('arr-'+level).classList.remove('open');
+    openDropdown = null;
+  }, 3000);
   // Play
   const track = TRACKS[idx];
   audio.pause();
@@ -454,7 +460,7 @@ function playFromDropdown(level, idx){
     document.getElementById('play-btn').textContent = '⏸';
     document.getElementById('vinyl-disc').classList.add('playing');
     document.getElementById('now-title').textContent = track.title;
-    speak('Now playing love — ' + track.title + '!');
+    // music plays silently
   }).catch(()=>{
     toast('⚠️ Tap again to play love!');
   });
