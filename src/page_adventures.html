@@ -10,6 +10,22 @@
 body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,serif;}
 #phone-outer{display:flex;justify-content:center;padding:20px 0 40px;width:100%;}
 #phone{width:393px;min-height:852px;background:#1a0040;overflow:hidden;display:flex;flex-direction:column;border-radius:48px;box-shadow:0 0 0 10px #1a1a1a,0 0 0 12px #333,0 30px 80px rgba(0,0,0,.8);position:relative;}
+/* Level themes for My Adventures */
+#phone.theme-youngsters{background:#1a0040;}
+#phone.theme-grownups{background:#0d0d1e;}
+#phone.theme-experts{background:#050510;}
+#phone.theme-youngsters #adv-header{background:linear-gradient(180deg,#12003a,#1a0040);}
+#phone.theme-grownups #adv-header{background:linear-gradient(180deg,#060618,#0d0d1e);}
+#phone.theme-experts #adv-header{background:linear-gradient(180deg,#020208,#050510);}
+#phone.theme-youngsters #adv-title{color:#ffde59;}
+#phone.theme-grownups #adv-title{color:#c8a96e;}
+#phone.theme-experts #adv-title{color:#ffd700;}
+#phone.theme-youngsters .tab-btn.active{color:#ff6ef7;border-bottom-color:#ff6ef7;}
+#phone.theme-grownups .tab-btn.active{color:#c8a96e;border-bottom-color:#c8a96e;}
+#phone.theme-experts .tab-btn.active{color:#ffd700;border-bottom-color:#ffd700;}
+#phone.theme-youngsters #bank-header{background:linear-gradient(135deg,rgba(255,222,89,.1),rgba(255,110,247,.1));border-color:rgba(255,222,89,.25);}
+#phone.theme-grownups #bank-header{background:linear-gradient(135deg,rgba(200,169,110,.1),rgba(100,120,200,.1));border-color:rgba(200,169,110,.25);}
+#phone.theme-experts #bank-header{background:linear-gradient(135deg,rgba(255,215,0,.1),rgba(100,80,0,.1));border-color:rgba(255,215,0,.25);}
 #phone::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#0a0a0a;border-radius:0 0 20px 20px;z-index:100;}
 
 /* HEADER */
@@ -374,6 +390,11 @@ function getSessionEarned(){
 }
 const BC_BONUS=0;
 function initSessionTracking(){
+  // Migration: clear old 25000 welcome bonus if still present
+  const currentBC = Number(localStorage.getItem('askLovelyRitaV4_bc'));
+  if(currentBC === 25000 || currentBC === 10000){
+    localStorage.setItem('askLovelyRitaV4_bc', '0');
+  }
   if(!sessionStorage.getItem(SESSION_START_KEY)){
     sessionStorage.setItem(SESSION_START_KEY,getBC());
   }
@@ -704,6 +725,9 @@ window.addEventListener('load',()=>{
   renderLadRecords();
   renderWorldProgress();
   checkSpinUnlock();
+  // Apply level theme
+  const lvl = localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
+  document.getElementById('phone').className = document.getElementById('phone').className.replace(/theme-\w+/,'') + ' theme-' + lvl;
   speak("Welcome to My Adventures love! This is your personal journey. Explore, collect, and grow your portfolio!");
 });
 window.addEventListener('focus',()=>{
