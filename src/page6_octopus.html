@@ -532,8 +532,8 @@ const WORDS_BY_LEVEL = {
 // Rita speeches
 const RITA_INTRO = {
   youngsters: "Hello love! Welcome to Octopus's Garden! Look at each ocean creature and spell its name using the letters below. You have THREE hints per word if you get stuck darling!",
-  grownups:   "Hello there! Read each riddle carefully and type the ocean word on the keyboard. You have TWO hints per word. Think like a sea explorer!",
-  experts:    "Right then! Expert divers only down here! Solve the riddle and type the word. ONE hint per word and that is all. The deep ocean keeps its secrets well!",
+  grownups:   "Hello there! Read each riddle carefully and type the ocean word on the keyboard. You have THREE hints per word. Think like a sea explorer!",
+  experts:    "Right then! Expert divers only down here! Solve the riddle and type the word. You have THREE hints love — but these words are deep sea secrets!",
 };
 const RITA_CORRECT = [
   "Brilliant! You got it! The Funny Lad is doing a little underwater dance for you!",
@@ -553,8 +553,8 @@ const RITA_COMPLETE = [
 
 const LEVEL_CFG = {
   youngsters: { hints:3, bonusCorrect:20, bonusAll:100, inputType:'scramble', ladImg:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/aqua_lad_grownups.png' },
-  grownups:   { hints:2, bonusCorrect:30, bonusAll:150, inputType:'keyboard', ladImg:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/aqua_lad_grownups.png' },
-  experts:    { hints:1, bonusCorrect:50, bonusAll:250, inputType:'keyboard', ladImg:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/aqua_lad_grownups.png' },
+  grownups:   { hints:3, bonusCorrect:30, bonusAll:150, inputType:'keyboard', ladImg:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/aqua_lad_grownups.png' },
+  experts:    { hints:3, bonusCorrect:50, bonusAll:250, inputType:'keyboard', ladImg:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/aqua_lad_grownups.png' },
 };
 
 const KB_ROWS = [
@@ -602,6 +602,16 @@ function init() {
 }
 
 function setLevel(lvl) {
+  const chosenLevel = localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
+  // Youngsters: block level change
+  if(chosenLevel === 'youngsters' && lvl !== 'youngsters'){
+    speak("Stay on your level love! Youngsters have their own special ocean adventure!");
+    return;
+  }
+  // Grown ups / Experts: allow with Rita warning
+  if(lvl !== chosenLevel){
+    speak("Changing levels love! You started as " + chosenLevel.replace('grownups','Grown Ups') + " — just so you know!");
+  }
   S.level = lvl;
   document.getElementById('phone').className = 'theme-' + lvl;
   window.speechSynthesis && window.speechSynthesis.cancel();
