@@ -292,10 +292,16 @@ body {
   cursor:pointer; display:flex; align-items:center; justify-content:center;
   font-size:14px; font-weight:bold; color:#ffd700; letter-spacing:1.5px;
   font-family:Georgia,serif;
-  transition:transform .15s, box-shadow .2s;
+  transition:transform .15s, box-shadow .2s, opacity .3s;
 }
-#pick-lad-btn:hover { transform:scale(1.07); box-shadow:0 0 38px var(--rita-glow),0 0 80px rgba(255,60,200,.35); }
-#pick-lad-btn:active { transform:scale(.94); }
+#pick-lad-btn:hover:not(:disabled) { transform:scale(1.07); box-shadow:0 0 38px var(--rita-glow),0 0 80px rgba(255,60,200,.35); }
+#pick-lad-btn:active:not(:disabled) { transform:scale(.94); }
+#pick-lad-btn:disabled { opacity:0.3; cursor:not-allowed; filter:grayscale(0.5); }
+@keyframes level-pulse {
+  0%,100% { box-shadow:0 0 8px var(--accent); transform:scale(1); }
+  50% { box-shadow:0 0 18px var(--accent),0 0 30px var(--accent); transform:scale(1.04); }
+}
+.theme-btn.pulse { animation:level-pulse 1.2s ease-in-out infinite; }
 
 /* ═══════════════════════════════════════════════════════════════
    BEATCOINS TOTAL BAR
@@ -487,7 +493,7 @@ body {
         </div>
 
         <div id="spin-platform">
-          <button id="pick-lad-btn" onclick="unlockAndSpin()">PLAY</button>
+          <button id="pick-lad-btn" onclick="unlockAndSpin()" disabled>PLAY</button>
         </div>
 
         <div id="bc-wrap">
@@ -551,7 +557,16 @@ let isSpinning=false, chosenLad=null, playlistOpen=false, muteState=false;
 let activeLevel='youngsters';
 const LADS = ['smart','cute','quiet','funny'];
 
+let levelChosen = false;
 function switchTheme(t) {
+  // Enable PLAY button on first level selection
+  if(!levelChosen){
+    levelChosen = true;
+    const playBtn = document.getElementById('pick-lad-btn');
+    if(playBtn){ playBtn.disabled = false; }
+  }
+  // Stop pulsing on all theme buttons
+  document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('pulse'));
   activeLevel = t;
   document.getElementById('phone').className = 'theme-'+t;
   document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));
@@ -698,7 +713,7 @@ window.addEventListener('load', ()=>{
   switchTheme('youngsters');
   muteState = localStorage.getItem('askLovelyRitaV4_mute') === '1';
   document.getElementById('sound-icon').textContent = muteState ? '🔇' : '🔊';
-  const bc = Number(localStorage.getItem('askLovelyRitaV4_bc') || 10000);
+  const bc = Number(localStorage.getItem('askLovelyRitaV4_bc') || 0);
   document.getElementById('bc-display').textContent = bc.toLocaleString();
   loadLadScores();
   clearRitaDisplay();
@@ -714,6 +729,10 @@ window.addEventListener('load', ()=>{
   } else {
     window.speechSynthesis.onvoiceschanged = () => setTimeout(trySpeak, 800);
   }
+  // Start pulsing level buttons to guide player
+  setTimeout(()=>{
+    if(!levelChosen) document.querySelectorAll('.theme-btn').forEach(b=>b.classList.add('pulse'));
+  }, 1200);
 });
 
 function toggleMic() {
@@ -845,7 +864,7 @@ function loadLadScores() {
     const val = Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0);
     document.getElementById('score-'+l).textContent = val.toLocaleString();
   });
-  const localBc = Number(localStorage.getItem('askLovelyRitaV4_bc')||10000);
+  const localBc = Number(localStorage.getItem('askLovelyRitaV4_bc')||0);
   document.getElementById('bc-display').textContent = localBc.toLocaleString();
   fetch('https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/scores.json?t='+Date.now())
     .then(r => r.json())
