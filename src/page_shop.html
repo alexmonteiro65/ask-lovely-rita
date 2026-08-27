@@ -469,6 +469,8 @@ function getBC(){ return Number(localStorage.getItem(BC_KEY)||25000); }
 function setBC(v){ localStorage.setItem(BC_KEY,v); }
 function getStock(id){ if(localStorage.getItem('lra_stock_'+id)===null) localStorage.setItem('lra_stock_'+id,ITEMS[id].stock); return Number(localStorage.getItem('lra_stock_'+id)); }
 function setStock(id,v){ localStorage.setItem('lra_stock_'+id,v); }
+function getQty(id){ return Number(localStorage.getItem('lra_qty_'+id)||0); }
+function addQty(id){ localStorage.setItem('lra_qty_'+id, getQty(id)+1); }
 // Owned tracking removed — BUY always available until sold out
 function isOwned(id){ return false; }
 function setOwned(id){ /* no-op */ }
@@ -547,6 +549,7 @@ function buyItem(id) {
   const newBC = bc - item.price;
   setBC(newBC);
   setStock(id, getStock(id)-1);
+  addQty(id);
   updateBCDisplay(newBC, true);
   renderItem(id);
   updatePopupState(id);
