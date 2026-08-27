@@ -84,7 +84,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 .asset-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);}
 .asset-row:last-child{border-bottom:none;padding-bottom:0;}
 .asset-label{font-size:11px;color:rgba(255,255,255,.45);}
-.asset-val{font-size:13px;font-weight:bold;color:#ffde59;font-family:Georgia,serif;}
+.asset-val{font-size:13px;font-weight:bold;color:#ffde59;font-family:Georgia,serif;font-variant-numeric:tabular-nums;font-feature-settings:'tnum';letter-spacing:0.5px;}
 .asset-val.positive{color:#64ff96;}
 .asset-val.negative{color:rgba(255,120,120,.9);}
 .asset-val.neutral{color:rgba(255,255,255,.5);}
@@ -106,12 +106,12 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 #bank-bc-label{font-size:13px;font-weight:bold;color:#ff6ef7;}
 #bank-bc-right{display:flex;align-items:center;gap:6px;}
 #bank-bc-img{width:20px;height:20px;object-fit:contain;}
-#bank-bc-val{font-size:16px;font-weight:bold;color:#ff6ef7;font-family:Georgia,serif;}
+#bank-bc-val{font-size:16px;font-weight:bold;color:#ff6ef7;font-family:Georgia,serif;font-variant-numeric:tabular-nums;font-feature-settings:'tnum';letter-spacing:0.5px;}
 
 /* Bank carousel — wider viewport */
 #bank-coll-title{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:10px;padding-left:6px;border-left:2.5px solid #ffde59;}
-#bank-carousel-wrap{display:flex;align-items:flex-start;gap:5px;margin-bottom:8px;}
-#bank-arrow-l,#bank-arrow-r{background:rgba(255,222,89,.15);border:1px solid rgba(255,222,89,.4);border-radius:50%;width:26px;height:26px;min-width:26px;cursor:pointer;color:#ffde59;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;margin-top:30px;}
+#bank-carousel-wrap{display:flex;align-items:flex-start;gap:3px;margin-bottom:8px;}
+#bank-arrow-l,#bank-arrow-r{background:rgba(255,222,89,.15);border:1px solid rgba(255,222,89,.4);border-radius:50%;width:22px;height:22px;min-width:22px;cursor:pointer;color:#ffde59;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;margin-top:30px;}
 #bank-arrow-l:hover,#bank-arrow-r:hover{background:rgba(255,222,89,.3);}
 #bank-viewport{flex:1;overflow:hidden;border-radius:12px;}
 #bank-track{display:flex;gap:8px;transition:transform .35s cubic-bezier(.4,0,.2,1);}
@@ -353,10 +353,22 @@ function getMarketMultiplier(id){
   if(!sessionStorage.getItem(k)){
     const r=Math.random();
     let mult;
-    if(r<0.05) mult=1.40+Math.random()*0.40;
-    else if(r<0.25) mult=1.03+Math.random()*0.17;
-    else if(r<0.55) mult=0.80+Math.random()*0.18;
-    else mult=0.60+Math.random()*0.20;
+    if(r<0.08){
+      // 8% jackpot: +25% to +60%
+      mult=1.25+Math.random()*0.35;
+    } else if(r<0.38){
+      // 30% gain: +2% to +20%
+      mult=1.02+Math.random()*0.18;
+    } else if(r<0.55){
+      // 17% flat/tiny change: -3% to +3%
+      mult=0.97+Math.random()*0.06;
+    } else if(r<0.78){
+      // 23% slight loss: -2% to -15%
+      mult=0.85+Math.random()*0.13;
+    } else {
+      // 22% bigger loss: -15% to -30%
+      mult=0.70+Math.random()*0.15;
+    }
     sessionStorage.setItem(k,mult.toFixed(3));
   }
   return parseFloat(sessionStorage.getItem(k));
