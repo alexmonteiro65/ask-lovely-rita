@@ -109,15 +109,17 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 #bank-bc-val{font-size:16px;font-weight:bold;color:#ff6ef7;font-family:'Courier New',Courier,monospace;}
 
 /* Bank carousel — wider viewport */
-#bank-coll-title{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:10px;padding-left:6px;border-left:2.5px solid #ffde59;}
-#bank-carousel-wrap{display:flex;align-items:flex-start;gap:5px;margin-bottom:8px;}
-#bank-arrow-l,#bank-arrow-r{background:rgba(255,222,89,.15);border:1px solid rgba(255,222,89,.4);border-radius:50%;width:22px;height:22px;min-width:22px;cursor:pointer;color:#ffde59;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;margin-top:30px;}
+/* My Collection header row: arrows + centred title */
+#bank-coll-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+#bank-coll-title{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.35);text-transform:uppercase;text-align:center;flex:1;}
+#bank-arrow-l,#bank-arrow-r{background:rgba(255,222,89,.15);border:1px solid rgba(255,222,89,.4);border-radius:50%;width:26px;height:26px;min-width:26px;cursor:pointer;color:#ffde59;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
 #bank-arrow-l:hover,#bank-arrow-r:hover{background:rgba(255,222,89,.3);}
-#bank-viewport{flex:1;overflow:hidden;border-radius:12px;}
+#bank-carousel-wrap{margin-bottom:8px;}
+#bank-viewport{overflow:hidden;border-radius:12px;width:100%;}
 #bank-track{display:flex;gap:8px;transition:transform .35s cubic-bezier(.4,0,.2,1);}
 
 /* Bank cards — wider to show 3 properly */
-.bank-card{min-width:104px;max-width:104px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 5px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;position:relative;margin-top:8px;}
+.bank-card{min-width:116px;max-width:116px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 5px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;position:relative;margin-top:8px;}
 .bank-card img{width:52px;height:52px;object-fit:contain;}
 .bank-card-name{font-size:7px;color:rgba(255,255,255,.5);text-align:center;line-height:1.2;}
 /* Single line for pct + value */
@@ -298,13 +300,15 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
       </div>
 
       <!-- My Collection carousel — always visible -->
-      <div id="bank-coll-title">📦 My Collection</div>
-      <div id="bank-carousel-wrap">
+      <div id="bank-coll-header">
         <button id="bank-arrow-l" onclick="scrollBank(-1)">◀</button>
+        <div id="bank-coll-title">My Collection</div>
+        <button id="bank-arrow-r" onclick="scrollBank(1)">▶</button>
+      </div>
+      <div id="bank-carousel-wrap">
         <div id="bank-viewport">
           <div id="bank-track"></div>
         </div>
-        <button id="bank-arrow-r" onclick="scrollBank(1)">▶</button>
       </div>
       <div id="bank-dots"></div>
 
@@ -353,10 +357,18 @@ function getMarketMultiplier(id){
   if(!sessionStorage.getItem(k)){
     const r=Math.random();
     let mult;
-    if(r<0.10) mult=1.40+Math.random()*0.40;       // 10% jackpot: +40% to +80%
-    else if(r<0.45) mult=1.03+Math.random()*0.22;   // 35% gain: +3% to +25%
-    else if(r<0.75) mult=0.95+Math.random()*0.06;   // 30% near-neutral: -5% to +1%
-    else mult=0.70+Math.random()*0.20;               // 25% loss: -10% to -30%
+    if(r<0.50){
+      // 50% stable — tiny drift ±2%
+      mult=0.98+Math.random()*0.04;
+    } else if(r<0.75){
+      // 25% gain: +5% to +40% (top 4% of those = jackpot +40-80%)
+      const g=Math.random();
+      if(g<0.16) mult=1.40+Math.random()*0.40;  // jackpot ~4% overall
+      else mult=1.05+Math.random()*0.30;
+    } else {
+      // 25% loss: -5% to -25%
+      mult=0.75+Math.random()*0.20;
+    }
     sessionStorage.setItem(k,mult.toFixed(3));
   }
   return parseFloat(sessionStorage.getItem(k));
@@ -441,7 +453,7 @@ function updateMyAssets(){
 
 // ── Bank carousel — 3 visible, one-by-one, circular ──────────────────────────
 const VISIBLE=3;
-const CARD_W=108; // card width + gap
+const CARD_W=124; // card 116px + 8px gap
 let bankItems=[];
 let bankOffset=0;
 
