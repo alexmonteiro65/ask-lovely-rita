@@ -685,8 +685,15 @@ window.addEventListener('load', ()=>{
   // Rita text box transparent on load
   const rtb0 = document.getElementById('rita-text-box');
   if(rtb0) rtb0.style.background = 'transparent';
-  // Store greeting — will speak after PLAY button (user gesture required on Android)
-  window._ritaGreeting = "Hello love! Welcome to the world's first interactive music-powered learning platform. Choose your level, spin to meet your companion, ask me anything, or explore Music and Videos. Your adventure begins now!";
+  const greeting = "Hello love! Welcome to the world's first interactive music-powered learning platform. Choose your level, spin to meet your companion, ask me anything, or explore Music and Videos. Your adventure begins now!";
+  window._ritaGreeting = greeting;
+  // Try speaking on load (works on desktop/iOS after previous gesture)
+  const trySpeak = () => { if(!muteState) ritaSpeak(greeting); };
+  if(window.speechSynthesis.getVoices().length > 0) {
+    setTimeout(trySpeak, 800);
+  } else {
+    window.speechSynthesis.onvoiceschanged = () => setTimeout(trySpeak, 800);
+  }
 });
 
 function toggleMic() {
