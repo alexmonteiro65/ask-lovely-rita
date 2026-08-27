@@ -558,15 +558,15 @@ let activeLevel='youngsters';
 const LADS = ['smart','cute','quiet','funny'];
 
 let levelChosen = false;
-function switchTheme(t) {
-  // Enable PLAY button on first level selection
-  if(!levelChosen){
+function switchTheme(t, fromInit) {
+  // Only enable PLAY if player actually clicked — not from init
+  if(!fromInit && !levelChosen){
     levelChosen = true;
     const playBtn = document.getElementById('pick-lad-btn');
     if(playBtn){ playBtn.disabled = false; }
+    // Stop pulsing
+    document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('pulse'));
   }
-  // Stop pulsing on all theme buttons
-  document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('pulse'));
   activeLevel = t;
   document.getElementById('phone').className = 'theme-'+t;
   document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));
@@ -710,7 +710,7 @@ function clearRitaDisplay() {
 }
 
 window.addEventListener('load', ()=>{
-  switchTheme('youngsters');
+  switchTheme('youngsters', true);
   muteState = localStorage.getItem('askLovelyRitaV4_mute') === '1';
   document.getElementById('sound-icon').textContent = muteState ? '🔇' : '🔊';
   const bc = Number(localStorage.getItem('askLovelyRitaV4_bc') || 0);
@@ -729,10 +729,12 @@ window.addEventListener('load', ()=>{
   } else {
     window.speechSynthesis.onvoiceschanged = () => setTimeout(trySpeak, 800);
   }
-  // Start pulsing level buttons to guide player
+  // Start pulsing level buttons to guide player (only if not already chosen)
   setTimeout(()=>{
-    if(!levelChosen) document.querySelectorAll('.theme-btn').forEach(b=>b.classList.add('pulse'));
-  }, 1200);
+    if(!levelChosen){
+      document.querySelectorAll('.theme-btn').forEach(b=>b.classList.add('pulse'));
+    }
+  }, 1500);
 });
 
 function toggleMic() {
