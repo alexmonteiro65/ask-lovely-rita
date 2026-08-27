@@ -546,7 +546,6 @@ function buyItem(id) {
   if(isOwned(id)){ toast('✅ Already in your collection love!'); return; }
   if(getStock(id)<=0){ toast('😢 Sold out! Trade with another player!'); return; }
   if(bc < item.price){ toast(`🪙 You need ${item.price.toLocaleString()} BeatCoins love! You have ${bc.toLocaleString()}`); return; }
-  if(!confirm(`Invest ${item.price.toLocaleString()} BeatCoins for "${item.name}"?`)) return;
   const newBC = bc - item.price;
   setBC(newBC);
   setStock(id, getStock(id)-1);
