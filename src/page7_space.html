@@ -362,9 +362,14 @@ let S = { level:'youngsters', beatcoins: 0, score:0, qIndex:0, order:[], gameAct
 
 function loadStorage() {
   try {
-    const d=JSON.parse(localStorage.getItem('askLovelyRitaV4_bc_compat')||'{}');
-    if(d.theme&&LEVEL_CFG[d.theme])S.level=d.theme;
-    if(typeof d.beatcoins==='number')S.beatcoins=d.beatcoins;
+    // Read level from page1 key first
+    const lv = localStorage.getItem('askLovelyRitaV4_level');
+    if(lv && LEVEL_CFG[lv]) S.level = lv;
+    else {
+      const d=JSON.parse(localStorage.getItem('askLovelyRitaV4_bc_compat')||'{}');
+      if(d.theme&&LEVEL_CFG[d.theme])S.level=d.theme;
+    }
+    S.beatcoins = Number(localStorage.getItem('askLovelyRitaV4_bc')||0);
   } catch(e){}
 }
 function saveStorage() {
