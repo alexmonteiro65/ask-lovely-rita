@@ -73,7 +73,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 /* ── ITEM CARD ── */
 .item-card{flex:0 0 calc(50% - 4px);background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,110,247,.04));border:1px solid rgba(255,110,247,.15);border-radius:10px;padding:10px 7px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:all .2s;position:relative;z-index:1;}
 .item-card:hover{background:rgba(255,110,247,.08);border-color:rgba(255,110,247,.35);}
-.item-card.owned-card{border-color:rgba(100,255,150,.25);}
+/* owned-card removed */
 .item-img-wrap{width:100%;display:flex;align-items:center;justify-content:center;min-height:80px;position:relative;}
 .item-img{max-width:100%;max-height:88px;object-fit:contain;}
 .sold-out-stamp{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);background:rgba(180,10,10,.92);color:#fff;font-weight:bold;font-size:10px;letter-spacing:2px;padding:4px 10px;border-radius:4px;border:2px solid #fff;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.6);}
@@ -469,8 +469,9 @@ function getBC(){ return Number(localStorage.getItem(BC_KEY)||25000); }
 function setBC(v){ localStorage.setItem(BC_KEY,v); }
 function getStock(id){ if(localStorage.getItem('lra_stock_'+id)===null) localStorage.setItem('lra_stock_'+id,ITEMS[id].stock); return Number(localStorage.getItem('lra_stock_'+id)); }
 function setStock(id,v){ localStorage.setItem('lra_stock_'+id,v); }
-function isOwned(id){ return localStorage.getItem('lra_owned_'+id)==='1'; }
-function setOwned(id){ localStorage.setItem('lra_owned_'+id,'1'); }
+// Owned tracking removed — BUY always available until sold out
+function isOwned(id){ return false; }
+function setOwned(id){ /* no-op */ }
 
 // Cashier sound
 function cashierSound() {
@@ -524,10 +525,7 @@ function renderItem(id) {
 
   imgWrap.querySelectorAll('.sold-out-stamp').forEach(e=>e.remove());
 
-  if(owned) {
-    btn.textContent='OWNED'; btn.className='buy-btn owned-btn'; btn.disabled=true;
-    card.classList.add('owned-card');
-  } else if(stock<=0) {
+  if(stock<=0) {
     const stamp=document.createElement('div');
     stamp.className='sold-out-stamp'; stamp.textContent='SOLD OUT';
     imgWrap.appendChild(stamp);
@@ -536,7 +534,7 @@ function renderItem(id) {
   } else {
     btn.textContent='BUY'; btn.className='buy-btn'; btn.disabled=false;
     if(stockEl) stockEl.textContent=stock;
-    card.classList.remove('owned-card');
+    
   }
 }
 
@@ -549,7 +547,6 @@ function buyItem(id) {
   const newBC = bc - item.price;
   setBC(newBC);
   setStock(id, getStock(id)-1);
-  setOwned(id);
   updateBCDisplay(newBC, true);
   renderItem(id);
   updatePopupState(id);
@@ -570,16 +567,15 @@ function openPopup(id) {
 }
 function updatePopupState(id) {
   if(!id||currentPopupId!==id) return;
-  const owned = isOwned(id);
+  const owned = false;
   const stock = getStock(id);
   const btn = document.getElementById('popup-buy-btn');
   const msg = document.getElementById('popup-msg');
   document.getElementById('popup-stock-line').textContent =
-    owned ? 'In your collection ✓' :
+
     stock<=0 ? 'Sold out!' :
     `${stock} remaining`;
-  if(owned){ btn.textContent='OWNED ✓'; btn.disabled=true; msg.textContent=''; }
-  else if(stock<=0){ btn.textContent='SOLD OUT'; btn.disabled=true; msg.textContent=''; }
+  if(stock<=0){ btn.textContent='SOLD OUT'; btn.disabled=true; msg.textContent=''; }
   else { btn.textContent='BUY NOW 🛒'; btn.disabled=false; msg.textContent=''; }
 }
 function buyFromPopup() {
