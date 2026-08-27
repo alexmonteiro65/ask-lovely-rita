@@ -305,7 +305,7 @@ function answer(idx){
     speak('Not quite love! '+q.fact);
     toast('❌ '+q.fact.slice(0,60)+'...');
   }
-  document.getElementById('bc-display-top').textContent=Number(localStorage.getItem('askLovelyRitaV4_bc')||25000).toLocaleString()+' EBCs';
+  document.getElementById('bc-display-top').textContent=Number(localStorage.getItem('askLovelyRitaV4_bc')||0).toLocaleString()+' EBCs';
   S.qIndex++;
   setTimeout(startQ,2000);
 }
@@ -367,14 +367,14 @@ function startTickSound(totalSeconds){
   },500);
 }
 function stopTickSound(){if(tickInterval){clearInterval(tickInterval);tickInterval=null;}}
-function saveLadBC(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';const k='askLovelyRitaV4_bc_'+lad;localStorage.setItem(k,Number(localStorage.getItem(k)||0)+amount);const t=Number(localStorage.getItem('askLovelyRitaV4_bc')||25000);localStorage.setItem('askLovelyRitaV4_bc',t+amount);}
+function saveLadBC(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';const k='askLovelyRitaV4_bc_'+lad;localStorage.setItem(k,Number(localStorage.getItem(k)||0)+amount);const t=Number(localStorage.getItem('askLovelyRitaV4_bc')||0);localStorage.setItem('askLovelyRitaV4_bc',t+amount);}
 function postGlobalScore(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';fetch('https://empty-leaf-6e4b.alexmonteironeto.workers.dev/score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lad,amount})}).catch(()=>{});}
 function goHome(){window.location.href='page1_landing.html';}
 function goChooseWorld(){window.location.href='page5_worlds.html';}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',3000);}
 
 window.addEventListener('load',()=>{
-  document.getElementById('bc-display-top').textContent=Number(localStorage.getItem('askLovelyRitaV4_bc')||25000).toLocaleString()+' EBCs';
+  document.getElementById('bc-display-top').textContent=Number(localStorage.getItem('askLovelyRitaV4_bc')||0).toLocaleString()+' EBCs';
   // Reset beam to 0 initially
   document.getElementById('beam-fill').style.width='0%';
   document.getElementById('ls-number').textContent=timePerQ;
