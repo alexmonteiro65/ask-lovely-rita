@@ -369,6 +369,8 @@ document.addEventListener('touchstart', unlockAudio, {once:true});
 document.addEventListener('click', unlockAudio, {once:true});
 
 function openSlideshow(world){
+  // Stop Rita when slideshow starts
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
   const ss = SLIDESHOWS[world];
   if(!ss) return;
   ssWorld=world; ssSceneIdx=0;
@@ -543,6 +545,8 @@ function updateDailyBar(){
 }
 
 function openPlayer(idx){
+  // Stop Rita speaking immediately when user opens a video
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
   currentVidIdx=idx;
   const v=WORLDS[currentWorld].videos[idx];
   if(v.comingSoon){ showComingSoon(); return; }
