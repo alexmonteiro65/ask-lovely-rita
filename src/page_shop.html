@@ -476,13 +476,26 @@ function setBC(v){ localStorage.setItem(BC_KEY,v); }
 // Session tracking
 const SESS_KEY = 'lra_session_bc_start';
 function initSession(){
-  if(!sessionStorage.getItem(SESS_KEY)) sessionStorage.setItem(SESS_KEY, getBC());
+  if(!sessionStorage.getItem(SESS_KEY)){
+    // New session starts — EBCs already safe in BC balance (no action needed)
+    // Show Rita message if they had unspent last session
+    const hadUnspent = localStorage.getItem('lra_had_unspent');
+    if(hadUnspent){
+      localStorage.removeItem('lra_had_unspent');
+      setTimeout(()=>{
+        toast('Your unspent BeatCoins are safe in your account love! Play to unlock your next investing allowance!');
+        speak('Your unspent BeatCoins have been safely returned to your account love! Play more games to unlock your next investing allowance!');
+      }, 1500);
+    }
+    sessionStorage.setItem(SESS_KEY, getBC());
+  }
 }
 function getSessionEarned(){
   const start = Number(sessionStorage.getItem(SESS_KEY)||BC_BONUS);
   return Math.max(0, getBC() - start);
 }
-// Spendable = 50% of EBCs earned this session (above bonus)
+
+// Spendable = 50% of EBCs earned this session
 function getSpendable(){
   return Math.floor(getSessionEarned() * 0.5);
 }
