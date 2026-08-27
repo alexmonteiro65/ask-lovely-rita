@@ -378,7 +378,15 @@ audio.addEventListener('timeupdate',()=>{
   }
 });
 
-audio.addEventListener('ended',()=>{ const next = currentTrack >= TRACKS.length-1 ? 0 : currentTrack+1; playFromDropdown(activeLevel, next); });
+audio.addEventListener('ended',()=>{
+  // Reward for completing the track
+  rewardMusicListen(activeLevel, currentTrack);
+  // Auto-advance to next track after reward
+  setTimeout(()=>{
+    const next = currentTrack >= TRACKS.length-1 ? 0 : currentTrack+1;
+    playFromDropdown(activeLevel, next);
+  }, 2000);
+});
 
 // Dropdown system
 let openDropdown = null;
@@ -489,6 +497,27 @@ function speak(text){
   const voice=v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));
   if(voice) u.voice=voice;
   window.speechSynthesis.speak(u);
+}
+
+// ── EBC rewards for listening ──
+const BC_KEY_MUSIC = 'askLovelyRitaV4_bc';
+const MUSIC_REWARD = {youngsters:25, grownups:50, experts:100};
+const MUSIC_REWARDED_KEY = 'lra_music_rewarded_'; // + level + idx per session
+
+function getMusicBC(){ return Number(localStorage.getItem(BC_KEY_MUSIC)||10000); }
+function setMusicBC(v){ localStorage.setItem(BC_KEY_MUSIC,v); }
+
+function rewardMusicListen(level, idx){
+  // Only reward once per track per session
+  const key = MUSIC_REWARDED_KEY + level + '_' + idx;
+  if(sessionStorage.getItem(key)) return;
+  sessionStorage.setItem(key,'1');
+  const reward = MUSIC_REWARD[level] || 25;
+  const newBC = getMusicBC() + reward;
+  setMusicBC(newBC);
+  document.getElementById('bc-header-val').textContent = newBC.toLocaleString();
+  toast(`+${reward} EBCs earned for listening love!`);
+  speak(`Wonderful love! You earned ${reward} Educational BeatCoins for listening to that track!`);
 }
 
 function toast(msg){
