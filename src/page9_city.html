@@ -245,7 +245,16 @@ function init(){
   localStorage.setItem('lra_visited_page9_city.html','1');loadStorage();buildCityBg();applyLevel(S.level);highlightTab(S.level);setTimeout(()=>speak(RITA_INTRO[S.level]),900);}
 
 function setLevel(lvl){
-S.level=lvl;window.speechSynthesis&&window.speechSynthesis.cancel();applyLevel(lvl);highlightTab(lvl);setTimeout(()=>speak(RITA_INTRO[lvl]),400);}
+  const chosenLevel = localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
+  if(chosenLevel === 'youngsters' && lvl !== 'youngsters'){
+    speak("Stay on your level love! Youngsters have their own special adventure here!");
+    return;
+  }
+  if(lvl !== chosenLevel){
+    speak("Changing levels love! You started as " + chosenLevel.replace('grownups','Grown Ups') + " just so you know!");
+  }
+  S.level=lvl;window.speechSynthesis&&window.speechSynthesis.cancel();applyLevel(lvl);highlightTab(lvl);setTimeout(()=>speak(RITA_INTRO[lvl]),400);
+}
 function highlightTab(lvl){document.querySelectorAll('#level-tabs button').forEach(b=>b.classList.toggle('active',(lvl==='youngsters'&&b.textContent.includes('Young'))||(lvl==='grownups'&&b.textContent.includes('Grown'))||(lvl==='experts'&&b.textContent.includes('Expert'))));}
 
 function applyLevel(lvl){
