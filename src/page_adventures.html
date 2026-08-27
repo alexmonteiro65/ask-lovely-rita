@@ -72,7 +72,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 /* Collection */
 #collection-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
 .coll-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:transform .2s;}
-#collection-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;overflow-y:visible;padding-right:4px;}
+#collection-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:4px 2px;}
 #collection-grid::-webkit-scrollbar{width:3px;}
 #collection-grid::-webkit-scrollbar-thumb{background:rgba(255,110,247,.4);border-radius:2px;}
 .coll-item:hover{transform:scale(1.08);}
@@ -313,11 +313,13 @@ function goWorld(url){ window.location.href=url; }
 
 // Collection
 function resetAll(){
-  if(!confirm('Reset ALL data? This clears your EBCs, collection and progress.')) return;
-  const keys=Object.keys(localStorage).filter(k=>k.startsWith('askLovelyRitaV4'));
+  // Only clear owned items and stock — keep EBCs and player name
+  const keys=Object.keys(localStorage).filter(k=>
+    k.startsWith('askLovelyRitaV4_owned_') ||
+    k.startsWith('askLovelyRitaV4_stock_')
+  );
   keys.forEach(k=>localStorage.removeItem(k));
-  localStorage.setItem('askLovelyRitaV4_bc','25000');
-  toast('✅ Reset complete! Starting fresh with 25,000 EBCs.');
+  toast('✅ Collection reset! All items available to purchase again.');
   setTimeout(()=>location.reload(),1500);
 }
 let collItems=[], collIdx=0;
