@@ -23,8 +23,6 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 
 /* SCROLL */
 #adv-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 14px;}
-#reset-btn{display:block;width:100%;margin-top:18px;padding:10px;background:rgba(255,50,50,.15);border:1px solid rgba(255,80,80,.3);border-radius:12px;color:rgba(255,120,120,.8);font-size:11px;font-family:Georgia,serif;cursor:pointer;letter-spacing:1px;text-align:center;}
-#reset-btn:hover{background:rgba(255,50,50,.25);}
 #adv-scroll::-webkit-scrollbar{width:0;}
 .adv-section{display:none;}
 .adv-section.active{display:block;}
@@ -193,7 +191,6 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
       <div class="section-card">
         <div class="section-title">My Collection</div>
         <div id="collection-grid"><div class="coll-empty">Visit The Beat Shop to start your collection love! 🛒</div></div>
-        <button id="reset-btn" onclick="resetAll()">🔄 RESET ALL DATA (TEST ONLY)</button>
       </div>
 
     </div><!-- /journey -->
@@ -312,16 +309,6 @@ function saveName(){
 function goWorld(url){ window.location.href=url; }
 
 // Collection
-function resetAll(){
-  // Only clear owned items and stock — keep EBCs and player name
-  const keys=Object.keys(localStorage).filter(k=>
-    k.startsWith('askLovelyRitaV4_owned_') ||
-    k.startsWith('askLovelyRitaV4_stock_')
-  );
-  keys.forEach(k=>localStorage.removeItem(k));
-  toast('✅ Collection reset! All items available to purchase again.');
-  setTimeout(()=>location.reload(),1500);
-}
 let collItems=[], collIdx=0;
 function renderCollection(){
   const grid=document.getElementById('collection-grid');
