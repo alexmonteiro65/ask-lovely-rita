@@ -166,29 +166,11 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
     <div id="adv-sub">YOUR LOVELY RITA JOURNEY</div>
   </div>
 
-  <!-- SPIN UNLOCK BANNER (shown after 5 worlds visited) -->
+  <!-- WORLD UNLOCK BANNER (shown after 5 worlds visited) -->
   <div id="spin-banner">
-    <div id="spin-banner-title">🎉 You've unlocked Lad Choice!</div>
-    <div id="spin-banner-text">You've explored all 5 worlds! Choose your favourite Lad to play with from now on, love!</div>
-    <div id="spin-lad-row">
-      <div class="spin-lad-btn" onclick="selectSpinLad('smart',this)">
-        <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-smart-regular.png" alt="Smart">
-        <span class="spin-lad-btn-name">Smart</span>
-      </div>
-      <div class="spin-lad-btn" onclick="selectSpinLad('cute',this)">
-        <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-cute-regular.png" alt="Cute">
-        <span class="spin-lad-btn-name">Cute</span>
-      </div>
-      <div class="spin-lad-btn" onclick="selectSpinLad('quiet',this)">
-        <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-quiet-regular.png" alt="Quiet">
-        <span class="spin-lad-btn-name">Quiet</span>
-      </div>
-      <div class="spin-lad-btn" onclick="selectSpinLad('funny',this)">
-        <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-funny-regular.png" alt="Funny">
-        <span class="spin-lad-btn-name">Funny</span>
-      </div>
-    </div>
-    <button id="spin-confirm-btn" onclick="confirmSpinLad()">Confirm My Lad ✓</button>
+    <div id="spin-banner-title">🌍 You've Unlocked Free World Choice!</div>
+    <div id="spin-banner-text">Amazing love! You have explored all five worlds! From now on you can play any world in any order you like!</div>
+    <button id="spin-confirm-btn" onclick="goFreeWorlds()" style="display:block;background:linear-gradient(135deg,#ffde59,#ff6ef7);border:none;border-radius:12px;padding:10px 24px;color:#000;font-weight:bold;font-size:13px;cursor:pointer;font-family:Georgia,serif;margin:0 auto;">🗺️ Choose Your World!</button>
   </div>
 
   <!-- PLAYER CARD -->
@@ -282,14 +264,14 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
       <div id="my-assets-box">
         <div id="my-assets-title">My Assets</div>
         <div class="asset-row">
-          <span class="asset-label">EBCs Available</span>
+          <span class="asset-label">EBCs Balance</span>
           <span class="asset-val" id="asset-bc">0</span>
         </div>
-        <div class="asset-row">
+        <div class="asset-row" id="asset-earned-row">
           <span class="asset-label">Earned this session</span>
           <span class="asset-val" id="asset-session">+0</span>
         </div>
-        <div class="asset-row">
+        <div class="asset-row" id="asset-coll-row">
           <span class="asset-label">Collection value</span>
           <span class="asset-val" id="asset-coll">0 EBCs</span>
         </div>
@@ -378,7 +360,7 @@ function isProfitable(id){ return getCurrentValue(id)>COLL_ITEMS[id].price; }
 
 const LAD_IMGS={smart:RAW+'lad-smart-regular.png',cute:RAW+'lad-cute-regular.png',quiet:RAW+'lad-quiet-regular.png',funny:RAW+'lad-funny-regular.png'};
 
-function getBC(){ return Number(localStorage.getItem('askLovelyRitaV4_bc')||10000); }
+function getBC(){ return Number(localStorage.getItem('askLovelyRitaV4_bc')||0); }
 function getLadBC(lad){ return Number(localStorage.getItem('askLovelyRitaV4_bc_'+lad)||0); }
 function getNickname(){ return localStorage.getItem('lra_nickname')||'Explorer'; }
 function getQty(id){ return Number(localStorage.getItem('lra_qty_'+id)||0); }
@@ -390,7 +372,7 @@ function getSessionEarned(){
   const start=Number(sessionStorage.getItem(SESSION_START_KEY)||getBC());
   return getBC()-start;
 }
-const BC_BONUS=10000;
+const BC_BONUS=0;
 function initSessionTracking(){
   if(!sessionStorage.getItem(SESSION_START_KEY)){
     sessionStorage.setItem(SESSION_START_KEY,getBC());
@@ -430,7 +412,7 @@ function closeRitaTip(){
 function updateMyAssets(){
   const bc=getBC();
   const sessionEarned=getSessionEarned();
-  // Collection total current market value
+  const level=localStorage.getItem('askLovelyRitaV4_level')||'youngsters';
   let collVal=0;
   Object.keys(COLL_ITEMS).forEach(id=>{
     const qty=getQty(id);
@@ -439,16 +421,32 @@ function updateMyAssets(){
   const total=bc+collVal;
 
   document.getElementById('asset-bc').textContent=bc.toLocaleString()+' EBCs';
-  const sessEl=document.getElementById('asset-session');
-  if(sessionEarned>=0){
-    sessEl.textContent='+'+sessionEarned.toLocaleString()+' EBCs';
-    sessEl.className='asset-val positive';
+
+  // Youngsters: simplified — hide session earned and collection value details
+  const earnedRow=document.getElementById('asset-earned-row');
+  const collRow=document.getElementById('asset-coll-row');
+  if(level==='youngsters'){
+    if(earnedRow) earnedRow.style.display='none';
+    if(collRow) collRow.style.display='none';
+    document.getElementById('asset-total').textContent=total.toLocaleString()+' EBCs';
+    document.getElementById('asset-total-label').textContent='My Total EBCs';
   } else {
-    sessEl.textContent=sessionEarned.toLocaleString()+' EBCs';
-    sessEl.className='asset-val negative';
+    if(earnedRow) earnedRow.style.display='';
+    if(collRow) collRow.style.display='';
+    const sessEl=document.getElementById('asset-session');
+    if(sessionEarned>=0){
+      sessEl.textContent='+'+sessionEarned.toLocaleString()+' EBCs';
+      sessEl.className='asset-val positive';
+    } else {
+      sessEl.textContent=sessionEarned.toLocaleString()+' EBCs';
+      sessEl.className='asset-val negative';
+    }
+    document.getElementById('asset-coll').textContent=collVal.toLocaleString()+' EBCs';
+    document.getElementById('asset-total').textContent=total.toLocaleString()+' EBCs';
+    if(level==='experts'){
+      document.getElementById('asset-total-label').textContent='Total Portfolio';
+    }
   }
-  document.getElementById('asset-coll').textContent=collVal.toLocaleString()+' EBCs';
-  document.getElementById('asset-total').textContent=total.toLocaleString()+' EBCs';
 }
 
 // ── Bank carousel — 3 visible, one-by-one, circular ──────────────────────────
@@ -472,7 +470,12 @@ function buildBankCarousel(){
       <div class="bank-card" style="opacity:.15"><div style="font-size:28px;margin:12px 0">💎</div><div class="bank-card-name">Invest your</div><div class="bank-card-name">EBCs today</div></div>`;
     dots.innerHTML='';
     // Rita tip after delay
-    setTimeout(()=>showRitaTip("Your collection is empty love! Head to the Beat Shop to start investing your Educational BeatCoins!"),1200);
+    const sessEarned = getSessionEarned();
+    if(sessEarned === 0){
+      setTimeout(()=>showRitaTip("Your collection is empty love! Go and play a game first to earn your Educational BeatCoins! Then head to the Beat Shop to invest!"),1200);
+    } else {
+      setTimeout(()=>showRitaTip("Your collection is empty love! You have earned " + sessEarned.toLocaleString() + " BeatCoins this session — head to the Beat Shop to start investing!"),1200);
+    }
     return;
   }
 
@@ -501,15 +504,21 @@ function buildBankCarousel(){
     const pct=Math.round(((val-item.price)/item.price)*100);
     const pctStr=pct>=0?`+${pct}%`:`${pct}%`;
     const pctColor=profit?'#64ff96':'rgba(255,120,120,.8)';
+    const level=localStorage.getItem('askLovelyRitaV4_level')||'youngsters';
+    // Youngsters: simplified card — no market % shown
+    const qtyLine = level==='youngsters'
+      ? `<div class="bank-card-qty" style="color:#ffde59">${val.toLocaleString()} EBCs</div>`
+      : `<div class="bank-card-qty" style="color:${pctColor}">${pctStr} · ${val.toLocaleString()} EBCs</div>`;
+    const actionBtn = level==='youngsters'
+      ? `<button class="sell-btn loss" onclick="sellItem('${id}')">↩ EXCHANGE</button>`
+      : `<button class="sell-btn${profit?' profit':' loss'}" onclick="sellItem('${id}')">${profit?'💰 SELL':'↩ EXCHANGE'}</button>`;
     return `<div class="bank-card">
       ${qty>1?`<span class="bank-qty-badge">×${qty}</span>`:''}
       <img src="${item.img}" alt="${item.name}">
       <div class="bank-card-name">${item.name}</div>
-      <div class="bank-card-qty" style="color:${pctColor}">${pctStr} · ${val.toLocaleString()} EBCs</div>
+      ${qtyLine}
       <div class="bank-card-val">Qty: ${qty}</div>
-      <button class="sell-btn${profit?' profit':' loss'}" onclick="sellItem('${id}')">
-        ${profit?'💰 SELL':'↩ EXCHANGE'}
-      </button>
+      ${actionBtn}
     </div>`;
   }).join('');
 
@@ -598,37 +607,29 @@ function playProfitSound(){
 }
 
 // ── SPIN — Lad unlock after 5 worlds ─────────────────────────────────────────
-let spinSelectedLad=null;
 const WORLD_PAGES=['page6_octopus','page7_space','page8_india','page9_city','page10_rita'];
 
 function checkSpinUnlock(){
-  // Already confirmed — no banner
-  if(localStorage.getItem('lra_spin_confirmed')==='1')return;
+  if(localStorage.getItem('lra_worlds_unlocked')==='1'){
+    // Already unlocked — show subtle indicator only
+    return;
+  }
   const visited=WORLD_PAGES.filter(p=>localStorage.getItem('lra_visited_'+p+'.html')==='1'||localStorage.getItem('lra_visited_'+p)==='1');
   if(visited.length>=5){
+    localStorage.setItem('lra_worlds_unlocked','1');
     document.getElementById('spin-banner').style.display='block';
     if(!localStorage.getItem('lra_spin_shown')){
       localStorage.setItem('lra_spin_shown','1');
-      setTimeout(()=>speak("Congratulations love! You have explored all five worlds! Now you can choose your favourite Lad to play with from now on!"),800);
+      setTimeout(()=>speak("Congratulations love! You have explored all five worlds! You have unlocked free world choice — now you can play any world in any order you like!"),800);
     }
   }
 }
 
-function selectSpinLad(lad,btn){
-  spinSelectedLad=lad;
-  document.querySelectorAll('.spin-lad-btn').forEach(b=>b.classList.remove('selected'));
-  btn.classList.add('selected');
-  document.getElementById('spin-confirm-btn').style.display='inline-block';
-  speak(`${LAD_NAMES[lad]} it is love! Tap confirm to lock in your choice!`);
-}
-
-function confirmSpinLad(){
-  if(!spinSelectedLad)return;
-  localStorage.setItem('lra_chosen_lad',spinSelectedLad);
-  localStorage.setItem('lra_spin_confirmed','1');
+function goFreeWorlds(){
+  localStorage.setItem('lra_worlds_unlocked','1');
   document.getElementById('spin-banner').style.display='none';
-  toast(`🎉 ${LAD_NAMES[spinSelectedLad]} is your Lad from now on love!`);
-  speak(`Wonderful love! ${LAD_NAMES[spinSelectedLad]} will be your companion from now on! Have fun!`);
+  speak("Off to choose your next adventure love!");
+  setTimeout(()=>window.location.href='page5_worlds.html',800);
 }
 
 // ── My Records ────────────────────────────────────────────────────────────────
