@@ -660,6 +660,9 @@ function scrollToTop(){
 })();
 
 window.addEventListener('load',()=>{
+  // Migration: clear old welcome bonus
+  const _bc = Number(localStorage.getItem('askLovelyRitaV4_bc'));
+  if(_bc === 25000 || _bc === 10000) localStorage.setItem('askLovelyRitaV4_bc','0');
   initSession();
   updateBCDisplay(getBC());
   Object.keys(ITEMS).forEach(id=>renderItem(id));
