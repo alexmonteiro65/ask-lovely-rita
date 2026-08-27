@@ -115,6 +115,9 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 .nav-btn:hover,.nav-btn.active{color:#ff6ef7;}
 .nav-icon{font-size:20px;line-height:1;}
 
+#back-top{position:fixed;bottom:90px;right:16px;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#ff6ef7,#a855f7);border:none;color:#fff;font-size:20px;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(255,110,247,.5);z-index:500;transition:opacity .3s;}
+#back-top.show{display:flex;}
+#back-top:hover{filter:brightness(1.15);}
 #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;font-family:Georgia,serif;white-space:nowrap;}
 
   /* ── STICKER SHEETS ── */
@@ -415,6 +418,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
   </div>
 
   <!-- NAV: 4 buttons — no Music -->
+  <button id="back-top" onclick="scrollToTop()" title="Back to top">↑</button>
   <nav id="nav-bar">
     <button class="nav-btn" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
     <button class="nav-btn active"><span class="nav-icon">💎</span><span>Collectibles</span></button>
@@ -599,6 +603,22 @@ function speak(text){
 }
 function goHome(){ window.location.href='page1_landing.html'; }
 function toast(msg){ const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',3500); }
+
+function scrollToTop(){
+  const s=document.getElementById('phone-scroll')||document.querySelector('#phone>div');
+  if(s) s.scrollTo({top:0,behavior:'smooth'});
+  else window.scrollTo({top:0,behavior:'smooth'});
+}
+// Show/hide back-to-top based on scroll
+(function(){
+  const phone=document.getElementById('phone');
+  if(!phone) return;
+  const scroll=phone.querySelector('[id$="-scroll"]')||phone;
+  scroll.addEventListener('scroll',()=>{
+    const btn=document.getElementById('back-top');
+    if(btn) btn.classList.toggle('show', scroll.scrollTop>200);
+  });
+})();
 
 window.addEventListener('load',()=>{
   updateBCDisplay(getBC());
