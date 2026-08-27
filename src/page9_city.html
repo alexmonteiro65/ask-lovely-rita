@@ -236,9 +236,9 @@ const LEVEL_CFG={
   experts:   {bonus:60,bonusAll:200,ladImg:'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/urban_lad_grownups.png'},
 };
 
-let S={level:'youngsters',beatcoins: 10000,score:0,qIndex:0,order:[],gameActive:false,answered:false};
+let S={level:'youngsters',beatcoins: 0,score:0,qIndex:0,order:[],gameActive:false,answered:false};
 
-function loadStorage(){try{S.beatcoins=Number(localStorage.getItem('askLovelyRitaV4_bc')||10000); try{const lv=localStorage.getItem('askLovelyRitaV4_level');if(lv&&LEVEL_CFG[lv])S.level=lv;}catch(e){}}catch(e){}}
+function loadStorage(){try{S.beatcoins=Number(localStorage.getItem('askLovelyRitaV4_bc')||0); try{const lv=localStorage.getItem('askLovelyRitaV4_level');if(lv&&LEVEL_CFG[lv])S.level=lv;}catch(e){}}catch(e){}}
 function saveStorage(){try{localStorage.setItem('askLovelyRitaV4_bc',S.beatcoins);}catch(e){}}
 
 function init(){
