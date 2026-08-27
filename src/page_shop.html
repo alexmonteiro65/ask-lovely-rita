@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Beat Shop — Lovely Rita Adventures</title>
+<title>Beat Shop — Lovely Rita Adventures</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,serif;}
@@ -136,10 +136,10 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 
   <!-- HEADER -->
   <div id="shop-header">
-    <div id="shop-title">THE BEAT SHOP</div>
-    <div id="shop-subtitle">COLLECT · TRADE · INVEST</div>
+    <div id="shop-title">BEAT SHOP</div>
+    <div id="shop-subtitle">INVEST · COLLECT · TRADE</div>
     <div id="bc-box">
-      <span id="bc-icon">🪙</span>
+      <img id="bc-icon" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin_small.png" alt="EBC" style="width:24px;height:24px;object-fit:contain;" onerror="this.outerHTML='<span id="bc-icon" style="font-size:22px">🎵</span>'">
       <span id="bc-val">0</span>
       <span id="bc-sublabel">BeatCoins Available</span>
     </div>
@@ -421,7 +421,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
   <button id="back-top" onclick="scrollToTop()" title="Back to top">↑</button>
   <nav id="nav-bar">
     <button class="nav-btn" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
-    <button class="nav-btn active"><span class="nav-icon">💎</span><span>Collectibles</span></button>
+    <button class="nav-btn active"><span class="nav-icon">🛍️</span><span>Beat Shop</span></button>
     <button class="nav-btn" onclick="window.location.href='page_adventures.html'"><span class="nav-icon">👤</span><span>Profile</span></button>
   </nav>
 
@@ -605,18 +605,16 @@ function goHome(){ window.location.href='page1_landing.html'; }
 function toast(msg){ const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',3500); }
 
 function scrollToTop(){
-  const s=document.getElementById('phone-scroll')||document.querySelector('#phone>div');
+  const s=document.getElementById('shop-scroll');
   if(s) s.scrollTo({top:0,behavior:'smooth'});
-  else window.scrollTo({top:0,behavior:'smooth'});
 }
 // Show/hide back-to-top based on scroll
 (function(){
-  const phone=document.getElementById('phone');
-  if(!phone) return;
-  const scroll=phone.querySelector('[id$="-scroll"]')||phone;
+  const scroll=document.getElementById('shop-scroll');
+  if(!scroll) return;
   scroll.addEventListener('scroll',()=>{
     const btn=document.getElementById('back-top');
-    if(btn) btn.classList.toggle('show', scroll.scrollTop>200);
+    if(btn) btn.classList.toggle('show', scroll.scrollTop>150);
   });
 })();
 
@@ -627,7 +625,7 @@ window.addEventListener('load',()=>{
   initCarousel('posters',2); initCarousel('beetles',2);
   initCarousel('badges',2);  initCarousel('lads',4);
   initCarousel('stickers',5);
-  speak("Welcome to The Beat Shop love! Explore and invest your BeatCoins in exclusive collectibles!");
+  speak("Welcome to Beat Shop love! Explore and invest your BeatCoins in exclusive collectibles!");
 });
 </script>
 </body>
