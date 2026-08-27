@@ -98,12 +98,12 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 #bank-arrow-l:hover,#bank-arrow-r:hover{background:rgba(255,222,89,.3);}
 #bank-viewport{flex:1;overflow:hidden;border-radius:12px;}
 #bank-track{display:flex;gap:10px;transition:transform .35s cubic-bezier(.4,0,.2,1);}
-.bank-card{min-width:88px;max-width:88px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:8px 5px;display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;position:relative;}
+.bank-card{min-width:92px;max-width:92px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 5px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;position:relative;margin-top:8px;}
 .bank-card img{width:52px;height:52px;object-fit:contain;}
 .bank-card-name{font-size:7px;color:rgba(255,255,255,.5);text-align:center;line-height:1.2;}
 .bank-card-qty{font-size:10px;font-weight:bold;color:#ffde59;}
 .bank-card-val{font-size:9px;color:rgba(255,255,255,.4);}
-.bank-qty-badge{position:absolute;top:-5px;right:-5px;background:#ff6ef7;color:#000;font-size:9px;font-weight:bold;border-radius:10px;padding:2px 5px;}
+.bank-qty-badge{position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:#ff6ef7;color:#000;font-size:10px;font-weight:bold;border-radius:10px;padding:2px 8px;white-space:nowrap;}
 .sell-btn{background:linear-gradient(135deg,rgba(100,255,150,.25),rgba(0,200,100,.2));border:1px solid rgba(100,255,150,.4);border-radius:8px;padding:5px 4px;color:#64ff96;font-size:9px;font-weight:bold;cursor:pointer;font-family:Georgia,serif;width:100%;}
 .sell-btn.profit{border-color:#64ff96;animation:glow-profit 1.5s ease-in-out infinite alternate;}
 .sell-btn.loss{border-color:rgba(255,100,100,.4);color:rgba(255,150,150,.8);background:linear-gradient(135deg,rgba(255,100,100,.15),rgba(200,0,0,.1));}
@@ -179,7 +179,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
             <div class="world-pin-stars" id="wstars-spc">☆</div>
           </div>
           <div class="world-pin" onclick="goWorld('page8_india.html')">
-            <div class="world-pin-icon" id="wpin-ind" style="background:rgba(160,80,0,.25)">🪷</div>
+            <div class="world-pin-icon" id="wpin-ind" style="background:rgba(160,80,0,.25)">✨</div>
             <div class="world-pin-name"><span>The Inner</span><span>Light</span></div>
             <div class="world-pin-stars" id="wstars-ind">☆</div>
           </div>
@@ -268,7 +268,13 @@ const COLL_ITEMS = {
 function getMarketMultiplier(id){
   const k = 'lra_market_'+id;
   if(!sessionStorage.getItem(k)){
-    const mult = 0.7 + Math.random()*0.8; // 0.7 to 1.5
+    // 20% chance of profit (1.05-1.4x), 80% chance of loss/flat (0.6-0.98x)
+    let mult;
+    if(Math.random() < 0.20){
+      mult = 1.05 + Math.random()*0.35; // profit: +5% to +40%
+    } else {
+      mult = 0.60 + Math.random()*0.38; // loss/flat: -40% to -2%
+    }
     sessionStorage.setItem(k, mult.toFixed(3));
   }
   return parseFloat(sessionStorage.getItem(k));
