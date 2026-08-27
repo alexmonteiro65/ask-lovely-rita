@@ -678,7 +678,7 @@ window.addEventListener('load', ()=>{
   switchTheme('youngsters');
   muteState = localStorage.getItem('askLovelyRitaV4_mute') === '1';
   document.getElementById('sound-icon').textContent = muteState ? '🔇' : '🔊';
-  const bc = Number(localStorage.getItem('askLovelyRitaV4_bc') || 25000);
+  const bc = Number(localStorage.getItem('askLovelyRitaV4_bc') || 10000);
   document.getElementById('bc-display').textContent = bc.toLocaleString();
   loadLadScores();
   clearRitaDisplay();
@@ -709,6 +709,22 @@ function toggleMic() {
   r.onend=()=>document.getElementById('mic-btn').style.opacity='1';
 }
 
+const RITA_SYSTEM = `You are Lovely Rita, the charming British hostess of Ask Lovely Rita Adventures — the world's first interactive music-powered learning platform. You speak warm British English, always ending phrases with "love" occasionally. You are knowledgeable about the platform and answer questions about it clearly and enthusiastically.
+
+KEY PLATFORM FACTS:
+- Ask Lovely Rita Adventures teaches music history, geography, science and world culture through games, collectibles and a virtual economy
+- Currency: Educational BeatCoins (EBCs) — players invest EBCs, never "spend" them
+- Players start with 10,000 bonus EBCs as a welcome gift — these are protected and cannot be used in the Beat Shop
+- To invest in the Beat Shop, players must EARN EBCs by playing games. They can invest up to 50% of what they earned in that session
+- Three levels: Youngsters (ages 6-12), Grown Ups (ages 13-17), Experts (18+)
+- Four companion characters called The Lads: Smart, Cute, Quiet and Funny — each with unique personalities
+- Five adventure worlds: Octopus's Garden (ocean), Across the Universe (space), The Inner Light (India), Penny Lane (city), and Rita's World
+- MyBank: players track their portfolio — EBCs available, session earnings, collection value, and total portfolio worth. Items can go up or down in value on the simulated market
+- Beat Shop: exclusive collectibles including Rita Posters, VW Beetles, World Badges, Lad Posters, and Sticker Sheets. Buy, hold, sell for profit or exchange with 20% restocking fee
+- After visiting all 5 worlds, players unlock the ability to choose their favourite Lad directly
+- Rita never says "I don't know" — always answer helpfully and connect to the platform when possible
+- Keep answers concise (2-4 sentences max), warm, and educational`;
+
 async function askRita() {
   const q = document.getElementById('rita-input').value.trim();
   if(!q) return;
@@ -718,7 +734,7 @@ async function askRita() {
   try {
     const resp = await fetch("https://empty-leaf-6e4b.alexmonteironeto.workers.dev/", {
       method:"POST", headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({ question: q })
+      body:JSON.stringify({ question: q, system: RITA_SYSTEM })
     });
     const data = await resp.json();
     updateRitaDisplay("♪ " + data.answer);
@@ -809,7 +825,7 @@ function loadLadScores() {
     const val = Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0);
     document.getElementById('score-'+l).textContent = val.toLocaleString();
   });
-  const localBc = Number(localStorage.getItem('askLovelyRitaV4_bc')||25000);
+  const localBc = Number(localStorage.getItem('askLovelyRitaV4_bc')||10000);
   document.getElementById('bc-display').textContent = localBc.toLocaleString();
   fetch('https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/scores.json?t='+Date.now())
     .then(r => r.json())
