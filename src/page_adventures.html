@@ -19,38 +19,31 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 
 /* ── PLAYER CARD ── */
 #player-card{margin:12px 14px 0;background:linear-gradient(135deg,rgba(255,110,247,.12),rgba(168,85,247,.1));border:1px solid rgba(255,110,247,.3);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:14px;flex-shrink:0;}
-#player-lad-img{width:56px;height:56px;object-fit:contain;filter:drop-shadow(0 0 10px rgba(255,110,247,.6));}
+
+/* Photo circle */
+#photo-wrap{position:relative;flex-shrink:0;}
+#player-photo{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,110,247,.5);display:block;cursor:pointer;background:#12003a;}
+#photo-placeholder{width:64px;height:64px;border-radius:50%;border:2px dashed rgba(255,110,247,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:rgba(255,110,247,.07);gap:3px;}
+#photo-placeholder-icon{font-size:22px;}
+#photo-placeholder-txt{font-size:8px;color:rgba(255,110,247,.7);letter-spacing:.5px;text-align:center;}
+#photo-input{display:none;}
+#photo-edit-badge{position:absolute;bottom:0;right:0;background:#ff6ef7;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;border:2px solid #1a0040;}
+
 #player-info{flex:1;}
 #player-name-display{font-size:20px;font-weight:bold;color:#fff;line-height:1.2;}
 #change-name-btn{font-size:10px;color:#ff6ef7;cursor:pointer;background:rgba(255,110,247,.1);border:1px solid rgba(255,110,247,.3);border-radius:8px;padding:4px 10px;font-family:Georgia,serif;margin-top:4px;}
-#bc-line{display:flex;align-items:center;gap:5px;margin-top:6px;}
-#bc-coin-icon{font-size:15px;}
-#bc-adv-val{font-size:17px;font-weight:bold;color:#ffde59;text-shadow:0 0 10px rgba(255,222,89,.5);}
-#bc-adv-label{font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.5px;}
+
+/* EBC line — matches page1 style */
+#bc-line{display:flex;align-items:center;justify-content:space-between;margin-top:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:6px 10px;}
+#bc-line-left{font-size:13px;font-weight:bold;color:#ff6ef7;letter-spacing:.3px;}
+#bc-line-right{display:flex;align-items:center;gap:5px;}
+#bc-coin-img{width:18px;height:18px;object-fit:contain;}
+#bc-adv-val{font-size:15px;font-weight:bold;color:#ff6ef7;letter-spacing:.5px;}
 
 /* NAME EDIT */
 #name-edit-wrap{display:none;margin:8px 14px 0;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;}
 #name-input{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,110,247,.4);border-radius:10px;padding:9px 12px;color:#fff;font-size:14px;outline:none;font-family:Georgia,serif;margin-bottom:8px;}
 #name-save-btn{background:linear-gradient(135deg,#ff6ef7,#a855f7);border:none;border-radius:10px;padding:9px;color:#000;font-weight:bold;font-size:13px;cursor:pointer;font-family:Georgia,serif;width:100%;}
-
-/* ── COLLECTION CAROUSEL ── */
-#coll-section{margin:14px 14px 0;flex-shrink:0;}
-#coll-section-title{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:10px;padding-left:6px;border-left:2.5px solid #ff6ef7;}
-#coll-carousel-wrap{position:relative;display:flex;align-items:center;gap:8px;}
-#coll-arrow-l,#coll-arrow-r{background:rgba(255,110,247,.15);border:1px solid rgba(255,110,247,.4);border-radius:50%;width:34px;height:34px;min-width:34px;cursor:pointer;color:#ff6ef7;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
-#coll-arrow-l:hover,#coll-arrow-r:hover{background:rgba(255,110,247,.3);}
-#coll-arrow-l:disabled,#coll-arrow-r:disabled{opacity:.25;cursor:default;}
-#coll-viewport{flex:1;overflow:hidden;border-radius:12px;}
-#coll-track{display:flex;gap:10px;transition:transform .35s cubic-bezier(.4,0,.2,1);}
-.coll-card{min-width:90px;max-width:90px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:border-color .2s;position:relative;flex-shrink:0;}
-.coll-card:hover{border-color:#ff6ef7;}
-.coll-card img{width:58px;height:58px;object-fit:contain;}
-.coll-card-name{font-size:8px;color:rgba(255,255,255,.5);text-align:center;line-height:1.3;}
-.coll-qty-badge{position:absolute;top:-5px;right:-5px;background:#ff6ef7;color:#000;font-size:9px;font-weight:bold;border-radius:10px;padding:2px 6px;min-width:18px;text-align:center;}
-#coll-empty{font-size:12px;color:rgba(255,255,255,.25);text-align:center;padding:24px 0;font-style:italic;display:none;}
-#coll-dots{display:flex;justify-content:center;gap:5px;margin-top:8px;}
-.coll-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);transition:background .2s;}
-.coll-dot.active{background:#ff6ef7;}
 
 /* ── TAB BAR ── */
 #tab-bar{display:flex;background:#12003a;flex-shrink:0;padding:0 10px;margin-top:12px;border-top:1px solid rgba(255,255,255,.05);}
@@ -67,12 +60,16 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 .section-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px;margin-bottom:14px;}
 .section-title{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:12px;padding-left:6px;border-left:2.5px solid #ff6ef7;}
 
-/* Lad grid */
+/* My Records — lad grid with medals */
 #lad-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
-.lad-stat{display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px 4px;border-radius:8px;background:rgba(255,255,255,.04);}
-.lad-stat img{width:44px;height:44px;object-fit:contain;}
+.lad-stat{display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 4px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);position:relative;}
+.lad-medal{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:16px;}
+.lad-stat img{width:46px;height:46px;object-fit:contain;margin-top:6px;}
 .lad-stat-name{font-size:9px;color:rgba(255,255,255,.5);text-align:center;}
-.lad-stat-bc{font-size:13px;font-weight:bold;color:#ff6ef7;}
+.lad-stat-bc{font-size:14px;font-weight:bold;color:#ff6ef7;}
+.lad-stat.rank1{border-color:rgba(255,215,0,.4);background:rgba(255,215,0,.06);}
+.lad-stat.rank2{border-color:rgba(180,180,180,.3);background:rgba(180,180,180,.04);}
+.lad-stat.rank3{border-color:rgba(205,127,50,.3);background:rgba(205,127,50,.04);}
 
 /* World pins */
 #world-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
@@ -80,64 +77,43 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 .world-pin:hover{transform:scale(1.1);}
 .world-pin-icon{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid transparent;}
 .world-pin-icon.visited{border-color:#ff6ef7;box-shadow:0 0 14px rgba(255,110,247,.4);}
-.world-pin-icon.locked{filter:grayscale(1);opacity:.35;}
 .world-pin-name{font-size:8px;color:rgba(255,255,255,.5);text-align:center;line-height:1.2;}
 .world-pin-stars{font-size:9px;}
 
-/* ── MYBANK TAB ── */
-#bank-header{background:linear-gradient(135deg,rgba(255,222,89,.1),rgba(255,110,247,.1));border:1px solid rgba(255,222,89,.25);border-radius:14px;padding:14px;text-align:center;margin-bottom:16px;}
+/* ── MYBANK ── */
+#bank-header{background:linear-gradient(135deg,rgba(255,222,89,.1),rgba(255,110,247,.1));border:1px solid rgba(255,222,89,.25);border-radius:14px;padding:14px;text-align:center;margin-bottom:12px;}
 #bank-title{font-size:20px;font-weight:bold;color:#ffde59;text-shadow:0 0 15px rgba(255,222,89,.5);}
 #bank-sub{font-size:10px;color:rgba(255,255,255,.35);letter-spacing:1px;margin-top:3px;}
 
-#portfolio-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
-.portfolio-item{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px;display:flex;align-items:center;gap:12px;}
-.portfolio-item img{width:48px;height:48px;object-fit:contain;border-radius:8px;}
-.portfolio-info{flex:1;}
-.portfolio-name{font-size:13px;font-weight:bold;color:#fff;}
-.portfolio-qty{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px;}
-.portfolio-price{font-size:12px;color:rgba(255,255,255,.5);margin-top:1px;}
-.portfolio-sell-btn{background:linear-gradient(135deg,rgba(255,110,247,.3),rgba(168,85,247,.3));border:1px solid #ff6ef7;border-radius:10px;padding:8px 12px;color:#ff6ef7;font-size:11px;font-weight:bold;cursor:pointer;font-family:Georgia,serif;white-space:nowrap;}
-.portfolio-sell-btn:hover{background:linear-gradient(135deg,rgba(255,110,247,.5),rgba(168,85,247,.5));}
-.portfolio-empty{text-align:center;font-size:12px;color:rgba(255,255,255,.25);font-style:italic;padding:24px;}
+/* EBC balance in bank */
+#bank-bc-line{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:8px 14px;margin-bottom:14px;}
+#bank-bc-label{font-size:13px;font-weight:bold;color:#ff6ef7;}
+#bank-bc-right{display:flex;align-items:center;gap:6px;}
+#bank-bc-img{width:20px;height:20px;object-fit:contain;}
+#bank-bc-val{font-size:16px;font-weight:bold;color:#ff6ef7;}
 
-#bank-tip{background:rgba(255,222,89,.07);border:1px solid rgba(255,222,89,.2);border-radius:12px;padding:12px 14px;font-size:11px;color:rgba(255,222,89,.8);line-height:1.6;margin-bottom:14px;}
+#bank-tip{background:rgba(255,222,89,.07);border:1px solid rgba(255,222,89,.2);border-radius:12px;padding:10px 12px;font-size:11px;color:rgba(255,222,89,.8);line-height:1.6;margin-bottom:14px;}
 
-/* RECORDS */
-#records-top{background:linear-gradient(135deg,rgba(255,222,89,.1),rgba(255,110,247,.1));border:1px solid rgba(255,222,89,.25);border-radius:14px;padding:14px;text-align:center;margin-bottom:16px;}
-#records-big-title{font-size:22px;font-weight:bold;color:#ffde59;text-shadow:0 0 15px rgba(255,222,89,.5);}
-#records-big-sub{font-size:11px;color:rgba(255,255,255,.35);letter-spacing:1px;margin-top:4px;}
-.score-row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:10px 12px;margin-bottom:8px;}
-.score-rank{font-size:20px;font-weight:bold;min-width:22px;color:rgba(255,255,255,.3);}
-.score-rank.r1{color:#ffd700;}.score-rank.r2{color:#aaa;}.score-rank.r3{color:#cd7f32;}
-.score-lad-img{width:42px;height:42px;object-fit:contain;flex-shrink:0;}
-.score-info{flex:1;}
-.score-lad-label{font-size:13px;font-weight:bold;color:#fff;}
-.score-lad-sub{font-size:10px;color:rgba(255,255,255,.35);}
-.score-bc{font-size:18px;font-weight:bold;color:#ffd700;}
-.score-trophy{font-size:20px;}
-#worlds-progress-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px;margin-top:16px;}
-#worlds-prog-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px;}
-.world-prog-item{display:flex;flex-direction:column;align-items:center;gap:4px;}
-.world-prog-icon{font-size:24px;}
-.world-prog-name{font-size:8px;color:rgba(255,255,255,.4);text-align:center;line-height:1.2;}
-.world-prog-bar-wrap{width:100%;background:rgba(255,255,255,.08);border-radius:4px;height:5px;}
-.world-prog-bar{height:100%;border-radius:4px;background:linear-gradient(90deg,#ff6ef7,#a855f7);transition:width .8s ease;}
-.world-prog-pct{font-size:9px;color:#ff6ef7;}
-#motivate-card{background:rgba(255,110,247,.07);border:1px solid rgba(255,110,247,.2);border-radius:12px;padding:14px;margin-top:14px;text-align:center;}
-#motivate-text{font-size:13px;color:#ddd;font-style:italic;line-height:1.6;}
-
-/* COLLECTION POPUP */
-#coll-popup{display:none;position:absolute;inset:0;z-index:200;}
-#coll-popup.open{display:flex;flex-direction:column;justify-content:flex-end;}
-#coll-overlay{position:absolute;inset:0;background:rgba(0,0,0,.65);}
-#coll-sheet{position:relative;background:linear-gradient(180deg,#1e0050,#1a0040);border-radius:24px 24px 0 0;border:1px solid rgba(255,110,247,.3);border-bottom:none;padding:20px 16px 24px;max-height:55%;display:flex;flex-direction:column;gap:12px;}
-#coll-sheet-header{display:flex;align-items:center;justify-content:space-between;}
-#coll-sheet-title{font-size:14px;font-weight:bold;color:#ff6ef7;}
-#coll-sheet-close{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:50%;width:30px;height:30px;cursor:pointer;color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center;}
-#coll-sheet-img-wrap{display:flex;align-items:center;justify-content:center;flex:1;}
-#coll-sheet-img{max-height:140px;max-width:170px;object-fit:contain;filter:drop-shadow(0 0 16px rgba(255,110,247,.5));}
-#coll-sheet-name{font-size:14px;font-weight:bold;color:#fff;text-align:center;}
-#coll-sheet-qty{font-size:11px;color:#ff6ef7;text-align:center;}
+/* Bank carousel */
+#bank-coll-title{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:10px;padding-left:6px;border-left:2.5px solid #ffde59;}
+#bank-carousel-wrap{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+#bank-arrow-l,#bank-arrow-r{background:rgba(255,222,89,.15);border:1px solid rgba(255,222,89,.4);border-radius:50%;width:34px;height:34px;min-width:34px;cursor:pointer;color:#ffde59;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+#bank-arrow-l:hover,#bank-arrow-r:hover{background:rgba(255,222,89,.3);}
+#bank-arrow-l:disabled,#bank-arrow-r:disabled{opacity:.25;cursor:default;}
+#bank-viewport{flex:1;overflow:hidden;border-radius:12px;}
+#bank-track{display:flex;gap:10px;transition:transform .35s cubic-bezier(.4,0,.2,1);}
+.bank-card{min-width:90px;max-width:90px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;position:relative;}
+.bank-card img{width:54px;height:54px;object-fit:contain;}
+.bank-card-name{font-size:8px;color:rgba(255,255,255,.5);text-align:center;line-height:1.2;}
+.bank-card-qty{font-size:10px;font-weight:bold;color:#ffde59;}
+.bank-card-val{font-size:9px;color:rgba(255,255,255,.4);}
+.bank-qty-badge{position:absolute;top:-5px;right:-5px;background:#ff6ef7;color:#000;font-size:9px;font-weight:bold;border-radius:10px;padding:2px 5px;}
+.exchange-btn{background:linear-gradient(135deg,rgba(255,222,89,.25),rgba(255,110,247,.2));border:1px solid rgba(255,222,89,.4);border-radius:8px;padding:5px 6px;color:#ffde59;font-size:9px;font-weight:bold;cursor:pointer;font-family:Georgia,serif;width:100%;margin-top:2px;}
+.exchange-btn:hover{background:linear-gradient(135deg,rgba(255,222,89,.4),rgba(255,110,247,.3));}
+#bank-dots{display:flex;justify-content:center;gap:5px;margin-bottom:14px;}
+.bank-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);transition:background .2s;}
+.bank-dot.active{background:#ffde59;}
+#bank-empty{text-align:center;font-size:12px;color:rgba(255,255,255,.25);font-style:italic;padding:24px;display:none;}
 
 /* NAV */
 #nav-bar{display:flex;justify-content:space-around;align-items:center;padding:8px 0 14px;background:rgba(10,0,20,.95);border-top:1px solid rgba(255,255,255,.06);flex-shrink:0;}
@@ -155,60 +131,53 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
     <div id="adv-sub">YOUR LOVELY RITA JOURNEY</div>
   </div>
 
-  <!-- PLAYER CARD — no Rita image -->
+  <!-- PLAYER CARD -->
   <div id="player-card">
-    <img id="player-lad-img" src="" alt="Lad">
+    <div id="photo-wrap">
+      <div id="photo-placeholder" onclick="triggerPhoto()">
+        <div id="photo-placeholder-icon">📷</div>
+        <div id="photo-placeholder-txt">ADD<br>PHOTO</div>
+      </div>
+      <img id="player-photo" src="" alt="Player" style="display:none;" onclick="triggerPhoto()">
+      <div id="photo-edit-badge" onclick="triggerPhoto()">✏️</div>
+      <input type="file" id="photo-input" accept="image/*" capture="user" onchange="handlePhoto(this)">
+    </div>
     <div id="player-info">
       <div id="player-name-display">Explorer</div>
       <button id="change-name-btn" onclick="toggleNameEdit()">✏️ Change Name</button>
       <div id="bc-line">
-        <span id="bc-coin-icon">🪙</span>
-        <span id="bc-adv-val">0</span>
-        <span id="bc-adv-label">EBCs</span>
+        <span id="bc-line-left">Educational BeatCoins</span>
+        <div id="bc-line-right">
+          <img id="bc-coin-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin_small.png" alt="EBC">
+          <span id="bc-adv-val">0</span>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- NAME EDIT -->
   <div id="name-edit-wrap">
     <input id="name-input" type="text" placeholder="Your first name or nickname..." maxlength="20">
     <button id="name-save-btn" onclick="saveName()">Save Name ✓</button>
   </div>
 
-  <!-- MY COLLECTION CAROUSEL -->
-  <div id="coll-section">
-    <div id="coll-section-title">⭐ My Collection</div>
-    <div id="coll-empty">Visit The Beat Shop to start your collection love! 🛒</div>
-    <div id="coll-carousel-wrap" style="display:none;">
-      <button id="coll-arrow-l" onclick="scrollColl(-1)">◀</button>
-      <div id="coll-viewport">
-        <div id="coll-track"></div>
-      </div>
-      <button id="coll-arrow-r" onclick="scrollColl(1)">▶</button>
-    </div>
-    <div id="coll-dots"></div>
-  </div>
-
-  <!-- TAB BAR -->
+  <!-- TABS -->
   <div id="tab-bar">
     <button class="tab-btn active" onclick="switchTab('journey',this)">🗺️ My Journey</button>
-    <button class="tab-btn" onclick="switchTab('records',this)">🏆 My Records</button>
     <button class="tab-btn" onclick="switchTab('bank',this)">🏦 MyBank</button>
   </div>
 
   <div id="adv-scroll">
 
-    <!-- JOURNEY TAB -->
+    <!-- MY JOURNEY -->
     <div id="tab-journey" class="adv-section active">
+
+      <!-- MY RECORDS (renamed from Lad Scores) -->
       <div class="section-card" style="margin-top:4px;">
-        <div class="section-title">My Lad Scores</div>
-        <div id="lad-grid">
-          <div class="lad-stat"><img src="" id="lad-smart-img" alt="Smart"><div class="lad-stat-name">Smart</div><div class="lad-stat-bc" id="lad-smart-bc">0</div></div>
-          <div class="lad-stat"><img src="" id="lad-cute-img" alt="Cute"><div class="lad-stat-name">Cute</div><div class="lad-stat-bc" id="lad-cute-bc">0</div></div>
-          <div class="lad-stat"><img src="" id="lad-quiet-img" alt="Quiet"><div class="lad-stat-name">Quiet</div><div class="lad-stat-bc" id="lad-quiet-bc">0</div></div>
-          <div class="lad-stat"><img src="" id="lad-funny-img" alt="Funny"><div class="lad-stat-name">Funny</div><div class="lad-stat-bc" id="lad-funny-bc">0</div></div>
-        </div>
+        <div class="section-title">⭐ My Records</div>
+        <div id="lad-grid"></div>
       </div>
+
+      <!-- WORLDS EXPLORED -->
       <div class="section-card">
         <div class="section-title">Worlds Explored</div>
         <div id="world-grid">
@@ -219,57 +188,43 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
           <div class="world-pin" onclick="goWorld('page10_rita.html')"><div class="world-pin-icon" id="wpin-rit" style="background:rgba(120,0,80,.25)">🎤</div><div class="world-pin-name">Rita's World</div><div class="world-pin-stars" id="wstars-rit">☆</div></div>
         </div>
       </div>
+
     </div>
 
-    <!-- RECORDS TAB -->
-    <div id="tab-records" class="adv-section">
-      <div id="records-top" style="margin-top:4px;">
-        <div id="records-big-title">🏆 MY RECORDS</div>
-        <div id="records-big-sub">YOUR PERSONAL BEATCOINS PER LAD</div>
-      </div>
-      <div id="lad-leaderboard"></div>
-      <div id="worlds-progress-card">
-        <div class="section-title">Worlds Visited</div>
-        <div id="worlds-prog-grid">
-          <div class="world-prog-item"><div class="world-prog-icon">🐙</div><div class="world-prog-name">Octopus's Garden</div><div class="world-prog-bar-wrap"><div class="world-prog-bar" id="prog-oct" style="width:0%"></div></div><div class="world-prog-pct" id="pct-oct">0%</div></div>
-          <div class="world-prog-item"><div class="world-prog-icon">🚀</div><div class="world-prog-name">Across the Universe</div><div class="world-prog-bar-wrap"><div class="world-prog-bar" id="prog-spc" style="width:0%"></div></div><div class="world-prog-pct" id="pct-spc">0%</div></div>
-          <div class="world-prog-item"><div class="world-prog-icon">🪷</div><div class="world-prog-name">The Inner Light</div><div class="world-prog-bar-wrap"><div class="world-prog-bar" id="prog-ind" style="width:0%"></div></div><div class="world-prog-pct" id="pct-ind">0%</div></div>
-          <div class="world-prog-item"><div class="world-prog-icon">🎠</div><div class="world-prog-name">Penny Lane</div><div class="world-prog-bar-wrap"><div class="world-prog-bar" id="prog-pen" style="width:0%"></div></div><div class="world-prog-pct" id="pct-pen">0%</div></div>
-          <div class="world-prog-item"><div class="world-prog-icon">🎤</div><div class="world-prog-name">Rita's World</div><div class="world-prog-bar-wrap"><div class="world-prog-bar" id="prog-rit" style="width:0%"></div></div><div class="world-prog-pct" id="pct-rit">0%</div></div>
-        </div>
-      </div>
-      <div id="motivate-card"><div id="motivate-text">Keep exploring love! Every world has a new beat waiting for you!</div></div>
-    </div>
-
-    <!-- MYBANK TAB -->
+    <!-- MYBANK -->
     <div id="tab-bank" class="adv-section">
+
       <div id="bank-header" style="margin-top:4px;">
         <div id="bank-title">🏦 MyBank</div>
         <div id="bank-sub">YOUR COLLECTION PORTFOLIO</div>
       </div>
-      <div id="bank-tip">
-        💡 <strong>Tip:</strong> Return any item to the store for <strong>80% of what you paid</strong> (20% restocking fee). Hold onto items that might increase in value!
+
+      <!-- EBC Balance -->
+      <div id="bank-bc-line">
+        <span id="bank-bc-label">Educational BeatCoins</span>
+        <div id="bank-bc-right">
+          <img id="bank-bc-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin_small.png" alt="EBC">
+          <span id="bank-bc-val">0</span>
+        </div>
       </div>
-      <div id="portfolio-list"><div class="portfolio-empty">Your portfolio is empty love! Visit the Beat Shop to start investing! 🛒</div></div>
+
+      <div id="bank-tip">💡 <strong>Exchange</strong> any item back to the store for <strong>80% of its value</strong>. A 20% restocking fee applies — just like the real world!</div>
+
+      <!-- Collection carousel in bank -->
+      <div id="bank-coll-title">📦 My Collection</div>
+      <div id="bank-empty">Your portfolio is empty love! Visit the Beat Shop to start investing! 🛒</div>
+      <div id="bank-carousel-wrap" style="display:none;">
+        <button id="bank-arrow-l" onclick="scrollBank(-1)">◀</button>
+        <div id="bank-viewport">
+          <div id="bank-track"></div>
+        </div>
+        <button id="bank-arrow-r" onclick="scrollBank(1)">▶</button>
+      </div>
+      <div id="bank-dots"></div>
+
     </div>
 
   </div><!-- /scroll -->
-
-  <!-- COLLECTION POPUP -->
-  <div id="coll-popup">
-    <div id="coll-overlay" onclick="closeCollPopup()"></div>
-    <div id="coll-sheet">
-      <div id="coll-sheet-header">
-        <div id="coll-sheet-title">My Collection</div>
-        <button id="coll-sheet-close" onclick="closeCollPopup()">✕</button>
-      </div>
-      <div id="coll-sheet-img-wrap">
-        <img id="coll-sheet-img" src="" alt="">
-      </div>
-      <div id="coll-sheet-name"></div>
-      <div id="coll-sheet-qty"></div>
-    </div>
-  </div>
 
   <nav id="nav-bar">
     <button class="nav-btn" onclick="window.location.href='page1_landing.html'"><span class="nav-icon">🏠</span><span>Home</span></button>
@@ -284,156 +239,158 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 const RAW = 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/';
 const LADS = ['smart','cute','quiet','funny'];
 const LAD_NAMES = {smart:'Smart Lad',cute:'Cute Lad',quiet:'Quiet Lad',funny:'Funny Lad'};
-const TROPHIES = ['🥇','🥈','🥉','🏅'];
+const MEDALS = ['🥇','🥈','🥉','🏅'];
 
 const COLL_ITEMS = {
-  rita_p1:   {name:'Rita Poster — Presenter',      img:RAW+'rita_apresentadora_clean.png',      price:500},
-  rita_p2:   {name:'Rita Poster — Traffic Warden', img:RAW+'shop/rita_poster_warden.png',       price:450},
-  vw_red:    {name:'VW Beetle — Classic Red',       img:RAW+'shop/vw_red.png',                  price:800},
-  vw_yellow: {name:'VW Beetle — Yellow Flowers',    img:RAW+'shop/vw_yellow.png',               price:750},
-  badge_oct: {name:'Ocean World Badge',             img:RAW+'shop/badge_octopus.png',           price:350},
-  badge_spc: {name:'Space World Badge',             img:RAW+'shop/badge_space.png',             price:330},
-  note_gold: {name:'Gold Musical Note',             img:RAW+'shop/note_gold.png',               price:200},
-  note_red:  {name:'Red Wrong Note',                img:RAW+'shop/note_red.png',                price:150},
+  rita_p1:   {name:'Rita Poster — Presenter',      img:RAW+'rita_apresentadora_clean.png',price:500},
+  rita_p2:   {name:'Rita Poster — Traffic Warden', img:RAW+'shop/rita_poster_warden.png', price:450},
+  vw_red:    {name:'VW Beetle — Classic Red',       img:RAW+'shop/vw_red.png',            price:800},
+  vw_yellow: {name:'VW Beetle — Yellow Flowers',    img:RAW+'shop/vw_yellow.png',         price:750},
+  badge_oct: {name:'Ocean World Badge',             img:RAW+'shop/badge_octopus.png',     price:350},
+  badge_spc: {name:'Space World Badge',             img:RAW+'shop/badge_space.png',       price:330},
+  note_gold: {name:'Gold Musical Note',             img:RAW+'shop/note_gold.png',         price:200},
+  note_red:  {name:'Red Wrong Note',                img:RAW+'shop/note_red.png',          price:150},
 };
 
-const LAD_IMGS = {
-  smart: RAW+'lad-smart-regular.png',
-  cute:  RAW+'lad-cute-regular.png',
-  quiet: RAW+'lad-quiet-regular.png',
-  funny: RAW+'lad-funny-regular.png',
-};
+const LAD_IMGS = {smart:RAW+'lad-smart-regular.png',cute:RAW+'lad-cute-regular.png',quiet:RAW+'lad-quiet-regular.png',funny:RAW+'lad-funny-regular.png'};
 
 function getBC(){ return Number(localStorage.getItem('askLovelyRitaV4_bc')||25000); }
 function getLadBC(lad){ return Number(localStorage.getItem('askLovelyRitaV4_bc_'+lad)||0); }
 function getNickname(){ return localStorage.getItem('lra_nickname')||'Explorer'; }
 function getQty(id){ return Number(localStorage.getItem('lra_qty_'+id)||0); }
 function setQty(id,v){ localStorage.setItem('lra_qty_'+id,v); }
-function getWorldVisits(world){ return Number(localStorage.getItem('lra_world_bc_'+world)||0); }
 
-// ── Carousel ─────────────────────────────────────────────────────────────────
-const VISIBLE = 3; // cards visible at once
-let carouselItems = [];
-let carouselOffset = 0;
-const CARD_W = 100; // card width + gap
+// ── Photo ─────────────────────────────────────────────────────────────────────
+function triggerPhoto(){ document.getElementById('photo-input').click(); }
+function handlePhoto(input){
+  if(!input.files||!input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const data = e.target.result;
+    localStorage.setItem('lra_player_photo', data);
+    showPhoto(data);
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+function showPhoto(data){
+  const ph = document.getElementById('photo-placeholder');
+  const img = document.getElementById('player-photo');
+  ph.style.display = 'none';
+  img.style.display = 'block';
+  img.src = data;
+}
+function loadPhoto(){
+  const data = localStorage.getItem('lra_player_photo');
+  if(data) showPhoto(data);
+}
 
-function buildCarousel(){
-  carouselItems = Object.entries(COLL_ITEMS).filter(([id])=>getQty(id)>0);
-  const wrap = document.getElementById('coll-carousel-wrap');
-  const empty = document.getElementById('coll-empty');
-  const dots  = document.getElementById('coll-dots');
+// ── Bank carousel ─────────────────────────────────────────────────────────────
+const VISIBLE = 3;
+const CARD_W = 100;
+let bankItems = [];
+let bankOffset = 0;
 
-  if(carouselItems.length===0){
+function buildBankCarousel(){
+  bankItems = Object.entries(COLL_ITEMS).filter(([id])=>getQty(id)>0);
+  const wrap  = document.getElementById('bank-carousel-wrap');
+  const empty = document.getElementById('bank-empty');
+  const dots  = document.getElementById('bank-dots');
+  const bcVal = document.getElementById('bank-bc-val');
+  bcVal.textContent = getBC().toLocaleString();
+
+  if(bankItems.length===0){
     wrap.style.display='none';
     empty.style.display='block';
     dots.innerHTML='';
     return;
   }
-
   empty.style.display='none';
   wrap.style.display='flex';
-  carouselOffset=0;
+  bankOffset=0;
 
-  // Build track
-  const track = document.getElementById('coll-track');
-  track.innerHTML = carouselItems.map(([id,item],i)=>{
+  const track = document.getElementById('bank-track');
+  track.innerHTML = bankItems.map(([id,item],i)=>{
     const qty = getQty(id);
-    return `<div class="coll-card" onclick="openCollItem(${i})">
-      ${qty>1?`<span class="coll-qty-badge">×${qty}</span>`:''}
+    const ret = Math.floor(item.price*0.8);
+    return `<div class="bank-card">
+      ${qty>1?`<span class="bank-qty-badge">×${qty}</span>`:''}
       <img src="${item.img}" alt="${item.name}">
-      <div class="coll-card-name">${item.name}</div>
+      <div class="bank-card-name">${item.name}</div>
+      <div class="bank-card-qty">Qty: ${qty}</div>
+      <div class="bank-card-val">↩ ${ret.toLocaleString()} EBCs</div>
+      <button class="exchange-btn" onclick="exchangeItem('${id}')">⇄ EXCHANGE</button>
     </div>`;
   }).join('');
 
-  // Build dots
-  const pages = Math.ceil(carouselItems.length / VISIBLE);
+  const pages = Math.ceil(bankItems.length/VISIBLE);
   dots.innerHTML = Array.from({length:pages},(_,i)=>
-    `<div class="coll-dot${i===0?' active':''}" onclick="goCarouselPage(${i})"></div>`
+    `<div class="bank-dot${i===0?' active':''}" onclick="goBankPage(${i})"></div>`
   ).join('');
-
-  updateCarouselArrows();
+  updateBankArrows();
 }
 
-function scrollColl(dir){
-  const maxOffset = Math.max(0, carouselItems.length - VISIBLE);
-  carouselOffset = Math.max(0, Math.min(maxOffset, carouselOffset + dir));
-  document.getElementById('coll-track').style.transform = `translateX(-${carouselOffset * CARD_W}px)`;
-  updateCarouselDots();
-  updateCarouselArrows();
+function scrollBank(dir){
+  const max = Math.max(0, bankItems.length-VISIBLE);
+  bankOffset = Math.max(0,Math.min(max,bankOffset+dir));
+  document.getElementById('bank-track').style.transform=`translateX(-${bankOffset*CARD_W}px)`;
+  updateBankDots(); updateBankArrows();
+}
+function goBankPage(page){
+  bankOffset = page*VISIBLE;
+  document.getElementById('bank-track').style.transform=`translateX(-${bankOffset*CARD_W}px)`;
+  updateBankDots(); updateBankArrows();
+}
+function updateBankDots(){
+  const page=Math.floor(bankOffset/VISIBLE);
+  document.querySelectorAll('.bank-dot').forEach((d,i)=>d.classList.toggle('active',i===page));
+}
+function updateBankArrows(){
+  const max=Math.max(0,bankItems.length-VISIBLE);
+  document.getElementById('bank-arrow-l').disabled=bankOffset===0;
+  document.getElementById('bank-arrow-r').disabled=bankOffset>=max;
 }
 
-function goCarouselPage(page){
-  carouselOffset = page * VISIBLE;
-  document.getElementById('coll-track').style.transform = `translateX(-${carouselOffset * CARD_W}px)`;
-  updateCarouselDots();
-  updateCarouselArrows();
+function exchangeItem(id){
+  const item=COLL_ITEMS[id];
+  const qty=getQty(id);
+  if(qty<=0){toast('No items to exchange love!');return;}
+  const ret=Math.floor(item.price*0.8);
+  setQty(id,qty-1);
+  const newBC=getBC()+ret;
+  localStorage.setItem('askLovelyRitaV4_bc',newBC);
+  // Restore 1 stock in shop
+  const sk='lra_stock_'+id;
+  localStorage.setItem(sk,Number(localStorage.getItem(sk)||0)+1);
+  // Update displays
+  document.getElementById('bc-adv-val').textContent=newBC.toLocaleString();
+  document.getElementById('bank-bc-val').textContent=newBC.toLocaleString();
+  buildBankCarousel();
+  toast(`✅ Exchanged! +${ret.toLocaleString()} EBCs love! (20% restocking fee applied)`);
+  speak(`Exchanged love! ${ret.toLocaleString()} Educational BeatCoins added to your balance!`);
+  // Go to shop after 2s
+  setTimeout(()=>window.location.href='page_shop.html',2200);
 }
 
-function updateCarouselDots(){
-  const page = Math.floor(carouselOffset / VISIBLE);
-  document.querySelectorAll('.coll-dot').forEach((d,i)=>d.classList.toggle('active',i===page));
+// ── My Records lad grid ───────────────────────────────────────────────────────
+function renderLadRecords(){
+  const sorted = LADS.map(l=>({lad:l,bc:getLadBC(l)})).sort((a,b)=>b.bc-a.bc);
+  document.getElementById('lad-grid').innerHTML = sorted.map((s,i)=>`
+    <div class="lad-stat rank${i+1}">
+      <div class="lad-medal">${MEDALS[i]}</div>
+      <img src="${LAD_IMGS[s.lad]}" alt="${s.lad}">
+      <div class="lad-stat-name">${LAD_NAMES[s.lad]}</div>
+      <div class="lad-stat-bc">${s.bc.toLocaleString()}</div>
+    </div>`).join('');
 }
 
-function updateCarouselArrows(){
-  const maxOffset = Math.max(0, carouselItems.length - VISIBLE);
-  document.getElementById('coll-arrow-l').disabled = carouselOffset===0;
-  document.getElementById('coll-arrow-r').disabled = carouselOffset>=maxOffset;
-}
-
-function openCollItem(idx){
-  const [id,item] = carouselItems[idx];
-  const qty = getQty(id);
-  document.getElementById('coll-sheet-img').src = item.img;
-  document.getElementById('coll-sheet-name').textContent = item.name;
-  document.getElementById('coll-sheet-qty').textContent = qty>1?`You own ${qty} of these`:'';
-  document.getElementById('coll-popup').classList.add('open');
-}
-function closeCollPopup(){ document.getElementById('coll-popup').classList.remove('open'); }
-
-// ── MyBank portfolio ─────────────────────────────────────────────────────────
-function buildPortfolio(){
-  const items = Object.entries(COLL_ITEMS).filter(([id])=>getQty(id)>0);
-  const list = document.getElementById('portfolio-list');
-
-  if(items.length===0){
-    list.innerHTML='<div class="portfolio-empty">Your portfolio is empty love! Visit the Beat Shop to start investing! 🛒</div>';
-    return;
-  }
-
-  list.innerHTML = items.map(([id,item])=>{
-    const qty = getQty(id);
-    const returnVal = Math.floor(item.price * 0.8);
-    return `<div class="portfolio-item">
-      <img src="${item.img}" alt="${item.name}">
-      <div class="portfolio-info">
-        <div class="portfolio-name">${item.name}</div>
-        <div class="portfolio-qty">Qty owned: <strong style="color:#ff6ef7">${qty}</strong></div>
-        <div class="portfolio-price">Return value: <strong style="color:#ffde59">${returnVal.toLocaleString()} EBCs</strong> each</div>
-      </div>
-      <button class="portfolio-sell-btn" onclick="returnItem('${id}')">RETURN<br>-20%</button>
-    </div>`;
-  }).join('');
-}
-
-function returnItem(id){
-  const item = COLL_ITEMS[id];
-  const qty = getQty(id);
-  if(qty<=0){ toast('No items to return love!'); return; }
-  const returnVal = Math.floor(item.price * 0.8);
-  // Deduct qty, add EBCs, restore stock in shop
-  setQty(id, qty-1);
-  const newBC = getBC() + returnVal;
-  localStorage.setItem('askLovelyRitaV4_bc', newBC);
-  // Restore 1 unit of stock in shop
-  const stockKey = 'lra_stock_'+id;
-  const currentStock = Number(localStorage.getItem(stockKey)||0);
-  localStorage.setItem(stockKey, currentStock+1);
-  // Refresh
-  document.getElementById('bc-adv-val').textContent = newBC.toLocaleString();
-  buildCarousel();
-  buildPortfolio();
-  toast(`✅ Returned! +${returnVal.toLocaleString()} EBCs love! (20% restocking fee applied)`);
-  speak(`Returned love! ${returnVal.toLocaleString()} Educational BeatCoins added to your balance!`);
+// ── World progress ────────────────────────────────────────────────────────────
+function renderWorldProgress(){
+  [{key:'oct',page:'page6_octopus'},{key:'spc',page:'page7_space'},{key:'ind',page:'page8_india'},{key:'pen',page:'page9_city'},{key:'rit',page:'page10_rita'}]
+  .forEach(w=>{
+    const visited=localStorage.getItem('lra_visited_'+w.page)==='1';
+    const pin=document.getElementById('wpin-'+w.key);
+    if(pin&&visited) pin.classList.add('visited');
+  });
 }
 
 // ── Tabs ─────────────────────────────────────────────────────────────────────
@@ -442,14 +399,14 @@ function switchTab(tab,btn){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+tab).classList.add('active');
   btn.classList.add('active');
-  if(tab==='bank') buildPortfolio();
+  if(tab==='bank') buildBankCarousel();
 }
 
 // ── Name ─────────────────────────────────────────────────────────────────────
 function toggleNameEdit(){
   const w=document.getElementById('name-edit-wrap');
   w.style.display=w.style.display==='block'?'none':'block';
-  if(w.style.display==='block'){ document.getElementById('name-input').value=getNickname(); document.getElementById('name-input').focus(); }
+  if(w.style.display==='block'){document.getElementById('name-input').value=getNickname();document.getElementById('name-input').focus();}
 }
 function saveName(){
   const v=document.getElementById('name-input').value.trim();
@@ -460,42 +417,8 @@ function saveName(){
   toast('✅ Name saved love!');
   speak('Lovely name love! Welcome '+v+'!');
 }
-function goWorld(url){ window.location.href=url; }
+function goWorld(url){window.location.href=url;}
 
-// ── Leaderboard ──────────────────────────────────────────────────────────────
-function renderLeaderboard(){
-  const scores=LADS.map(l=>({lad:l,bc:getLadBC(l)})).sort((a,b)=>b.bc-a.bc);
-  document.getElementById('lad-leaderboard').innerHTML=scores.map((s,i)=>`
-    <div class="score-row">
-      <div class="score-rank ${['r1','r2','r3','r4'][i]}">${i+1}</div>
-      <img class="score-lad-img" src="${LAD_IMGS[s.lad]}" alt="${s.lad}">
-      <div class="score-info">
-        <div class="score-lad-label">${LAD_NAMES[s.lad]}</div>
-        <div class="score-lad-sub">${getNickname()}</div>
-      </div>
-      <div class="score-bc">${s.bc.toLocaleString()}</div>
-      <div class="score-trophy">${TROPHIES[i]}</div>
-    </div>`).join('');
-}
-
-// ── World progress ────────────────────────────────────────────────────────────
-function renderWorldProgress(){
-  const MAX=800;
-  [{key:'oct',page:'page6_octopus'},{key:'spc',page:'page7_space'},{key:'ind',page:'page8_india'},{key:'pen',page:'page9_city'},{key:'rit',page:'page10_rita'}]
-  .forEach(w=>{
-    const bc=Number(localStorage.getItem('lra_world_bc_'+w.page)||0);
-    const visited=localStorage.getItem('lra_visited_'+w.page)==='1';
-    const pct=visited?Math.min(Math.round((bc/MAX)*100)||10,100):0;
-    const bar=document.getElementById('prog-'+w.key);
-    const lbl=document.getElementById('pct-'+w.key);
-    const pin=document.getElementById('wpin-'+w.key);
-    if(bar) setTimeout(()=>bar.style.width=pct+'%',300);
-    if(lbl) lbl.textContent=pct+'%';
-    if(pin&&visited) pin.classList.add('visited');
-  });
-}
-
-// ── Speak ─────────────────────────────────────────────────────────────────────
 function speak(text){
   if(!window.speechSynthesis)return;
   window.speechSynthesis.cancel();
@@ -506,31 +429,17 @@ function speak(text){
 }
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',3500);}
 
-// ── Init ─────────────────────────────────────────────────────────────────────
 window.addEventListener('load',()=>{
-  // Player card
-  const lad = localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';
-  document.getElementById('player-lad-img').src = LAD_IMGS[lad];
-  document.getElementById('player-name-display').textContent = getNickname();
-  document.getElementById('bc-adv-val').textContent = getBC().toLocaleString();
-
-  // Lad images + scores
-  LADS.forEach(l=>{
-    const img=document.getElementById('lad-'+l+'-img');
-    if(img) img.src=LAD_IMGS[l];
-    const el=document.getElementById('lad-'+l+'-bc');
-    if(el) el.textContent=getLadBC(l).toLocaleString();
-  });
-
-  buildCarousel();
-  renderLeaderboard();
+  loadPhoto();
+  document.getElementById('player-name-display').textContent=getNickname();
+  document.getElementById('bc-adv-val').textContent=getBC().toLocaleString();
+  document.getElementById('bank-bc-val').textContent=getBC().toLocaleString();
+  renderLadRecords();
   renderWorldProgress();
-  speak("Welcome to My Adventures love! This is your personal journey. Explore, collect, and celebrate every beat!");
+  speak("Welcome to My Adventures love! This is your personal journey. Explore, collect, and grow your portfolio!");
 });
-
 window.addEventListener('focus',()=>{
   document.getElementById('bc-adv-val').textContent=getBC().toLocaleString();
-  buildCarousel();
 });
 </script>
 </body>
