@@ -574,6 +574,7 @@ function spinLads() {
     c.classList.remove('highlighted','chosen','locked','clickable');
   });
   playSpinSound();
+  playLevelMusic();
   const btn = document.getElementById('pick-lad-btn');
   btn.style.transform = 'scale(0.88)';
   setTimeout(()=>{ btn.style.transform = ''; }, 180);
@@ -619,6 +620,25 @@ function chooseLad(lad) {
   setTimeout(()=>{
     window.location.href = 'https://alexmonteiro65.github.io/ask-lovely-rita/src/page5_worlds.html?level='+activeLevel+'&lad='+lad;
   }, 1200);
+}
+
+const BASE_MUSIC = 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/music/';
+let spinAudio = null;
+const LEVEL_TRACKS = {
+  youngsters: BASE_MUSIC + 'Beatles%20Rap%20-%20Part%201.mp3',
+  grownups:   BASE_MUSIC + 'Beatles%20Rap%201.mp3',
+  experts:    BASE_MUSIC + 'Beatles%20Rap%20-%20Part%202.mp3'
+};
+
+function playLevelMusic() {
+  if(muteState) return;
+  if(spinAudio){ spinAudio.pause(); spinAudio.currentTime=0; }
+  const track = LEVEL_TRACKS[activeLevel] || LEVEL_TRACKS.youngsters;
+  spinAudio = new Audio(track);
+  spinAudio.volume = 0.55;
+  spinAudio.play().catch(()=>{});
+  // Stop after 30s automatically
+  setTimeout(()=>{ if(spinAudio){ spinAudio.pause(); spinAudio=null; } }, 30000);
 }
 
 function playSpinSound() {
