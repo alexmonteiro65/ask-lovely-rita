@@ -8,7 +8,7 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,serif;}
 #phone-outer{display:flex;justify-content:center;padding:20px 0 40px;width:100%;}
-#phone{width:393px;min-height:852px;background:#1a0040;overflow:hidden;display:flex;flex-direction:column;border-radius:48px;box-shadow:0 0 0 10px #1a1a1a,0 0 0 12px #333,0 30px 80px rgba(0,0,0,.8);position:relative;}
+#phone{width:393px;height:852px;background:#1a0040;overflow:hidden;display:flex;flex-direction:column;border-radius:48px;box-shadow:0 0 0 10px #1a1a1a,0 0 0 12px #333,0 30px 80px rgba(0,0,0,.8);position:relative;}
 #phone::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#0a0a0a;border-radius:0 0 20px 20px;z-index:100;}
 
 /* ── HEADER ── */
@@ -20,8 +20,8 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 /* BeatCoins box — below subtitle */
 #bc-box{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:20px;padding:8px 18px;margin:10px auto 0;width:fit-content;}
 #bc-icon{font-size:18px;}
-#bc-val{font-size:18px;font-weight:bold;color:#ffd700;min-width:80px;text-align:center;text-shadow:0 0 10px rgba(255,215,0,.8);}
-#bc-sublabel{font-size:18px;font-weight:bold;color:#ff6ef7;text-shadow:0 0 8px rgba(255,110,247,.7);}
+#bc-val{font-size:18px;font-weight:bold;color:#ffd700;min-width:80px;text-align:center;text-shadow:0 0 10px rgba(255,215,0,.8);font-variant-numeric:tabular-nums;letter-spacing:0.5px;}
+#bc-sublabel{font-size:11px;font-weight:bold;color:rgba(255,110,247,.8);letter-spacing:1px;}
 
 /* ── SCROLL ── */
 #shop-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:14px 12px 16px;}
@@ -115,7 +115,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 .nav-btn:hover,.nav-btn.active{color:#ff6ef7;}
 .nav-icon{font-size:20px;line-height:1;}
 
-#back-top{position:fixed;bottom:90px;right:16px;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#ff6ef7,#a855f7);border:none;color:#fff;font-size:20px;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(255,110,247,.5);z-index:500;transition:opacity .3s;}
+#back-top{position:absolute;bottom:90px;right:16px;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#ff6ef7,#a855f7);border:none;color:#fff;font-size:20px;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(255,110,247,.5);z-index:500;transition:opacity .3s;}
 #back-top.show{display:flex;}
 #back-top:hover{filter:brightness(1.15);}
 #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;font-family:Georgia,serif;white-space:nowrap;}
@@ -469,8 +469,23 @@ function navCarousel(id, dir) {
 }
 
 // BC functions
-function getBC(){ return Number(localStorage.getItem(BC_KEY)||25000); }
+const BC_BONUS = 10000; // Welcome bonus — protected, cannot be spent in shop
+function getBC(){ return Number(localStorage.getItem(BC_KEY)||BC_BONUS); }
 function setBC(v){ localStorage.setItem(BC_KEY,v); }
+
+// Session tracking
+const SESS_KEY = 'lra_session_bc_start';
+function initSession(){
+  if(!sessionStorage.getItem(SESS_KEY)) sessionStorage.setItem(SESS_KEY, getBC());
+}
+function getSessionEarned(){
+  const start = Number(sessionStorage.getItem(SESS_KEY)||BC_BONUS);
+  return Math.max(0, getBC() - start);
+}
+// Spendable = 50% of EBCs earned this session (above bonus)
+function getSpendable(){
+  return Math.floor(getSessionEarned() * 0.5);
+}
 function getStock(id){ if(localStorage.getItem('lra_stock_'+id)===null) localStorage.setItem('lra_stock_'+id,ITEMS[id].stock); return Number(localStorage.getItem('lra_stock_'+id)); }
 function setStock(id,v){ localStorage.setItem('lra_stock_'+id,v); }
 function getQty(id){ return Number(localStorage.getItem('lra_qty_'+id)||0); }
@@ -509,13 +524,14 @@ function rollCounter(from, to, duration, el) {
 }
 
 function updateBCDisplay(newVal, animate=false) {
+  const spendable = getSpendable();
   const el = document.getElementById('bc-val');
   if(animate) {
     const oldVal = Number(el.textContent.replace(/,/g,''));
     cashierSound();
-    rollCounter(oldVal, newVal, 800, el);
+    rollCounter(oldVal, spendable, 800, el);
   } else {
-    el.textContent = newVal.toLocaleString();
+    el.textContent = spendable.toLocaleString();
   }
 }
 
@@ -547,9 +563,21 @@ function renderItem(id) {
 function buyItem(id) {
   const item = ITEMS[id];
   const bc = getBC();
-  // Multiple purchases allowed — players can buy same item to gift or collect
+  const spendable = getSpendable();
   if(getStock(id)<=0){ toast('😢 Sold out! Trade with another player!'); return; }
-  if(bc < item.price){ toast(`🪙 You need ${item.price.toLocaleString()} BeatCoins love! You have ${bc.toLocaleString()}`); return; }
+  // Check if they have earned enough to spend
+  if(getSessionEarned()===0){
+    toast('Play first love! Earn BeatCoins then invest!');
+    speak("You need to play first love! Earn your Educational BeatCoins and then come invest in the Beat Shop!");
+    return;
+  }
+  if(spendable < item.price){
+    const needed = item.price;
+    toast(`Keep playing love! You can spend ${spendable.toLocaleString()} EBCs now.`);
+    speak(`Keep playing love! You have earned ${getSessionEarned().toLocaleString()} BeatCoins this session and can invest up to ${spendable.toLocaleString()}. Keep going and earn more!`);
+    return;
+  }
+  if(bc < item.price){ toast(`Not enough EBCs love! You need ${item.price.toLocaleString()}`); return; }
   const newBC = bc - item.price;
   setBC(newBC);
   setStock(id, getStock(id)-1);
@@ -619,6 +647,7 @@ function scrollToTop(){
 })();
 
 window.addEventListener('load',()=>{
+  initSession();
   updateBCDisplay(getBC());
   Object.keys(ITEMS).forEach(id=>renderItem(id));
   // Init carousels
