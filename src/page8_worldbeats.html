@@ -360,6 +360,9 @@ window.addEventListener('load',()=>{
 });
 
 function setLevel(lvl){
+  const chosenLevel = localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
+  if(chosenLevel === 'youngsters' && lvl !== 'youngsters'){ speak("Stay on your level love! Youngsters have their own special adventure!"); return; }
+  if(lvl !== chosenLevel){ speak("Changing levels love! You started as " + chosenLevel.replace('grownups','Grown Ups') + " just so you know!"); }
   S.level=lvl;
   document.getElementById('phone').className='theme-'+lvl;
   ['y','g','e'].forEach(t=>document.getElementById('tab-'+t).classList.remove('active'));
