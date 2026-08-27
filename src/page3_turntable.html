@@ -621,12 +621,13 @@ const SLICE_COLORS = {
   experts:    ['#ffd700','#c8860a','#e8a020','#a06000','#ffee80','#805000','#d4a000','#603800'],
 };
 
-const TRACKS = [
-  'Beatles Rap - Part 1.mp3',
-  'Beatles Rap - Part 2.mp3',
-  'Beatles Rap 1.mp3',
-  'Beatles Rap 1 part B.mp3',
-];
+// Music tracks mapped by level
+// Youngsters: Rap Part 1 | Grown Ups: Rap 1 (full) | Experts: Rap Part 2
+const TRACKS_BY_LEVEL = {
+  youngsters: ['Beatles Rap - Part 1.mp3'],
+  grownups:   ['Beatles Rap 1.mp3', 'Beatles Rap 1 part B.mp3'],
+  experts:    ['Beatles Rap - Part 2.mp3'],
+};
 
 // Rita intro — fala ao carregar a página
 const RITA_INTRO = {
@@ -669,7 +670,7 @@ let S = {
   attemptsLeft: 3,
   spinning: false,
   currentDeg: 0,
-  beatcoins: 25000,
+  beatcoins: 10000,
   roundOver: false,
   audio: null,
 };
@@ -1075,7 +1076,8 @@ function goForward() {
 
 function playRandomTrack() {
   stopAudio();
-  const track = TRACKS[Math.floor(Math.random() * TRACKS.length)];
+  const levelTracks = TRACKS_BY_LEVEL[S.level] || TRACKS_BY_LEVEL.youngsters;
+  const track = levelTracks[Math.floor(Math.random() * levelTracks.length)];
   try {
     S.audio = new Audio(BASE_URL + encodeURIComponent(track));
     S.audio.volume = 0.5;
