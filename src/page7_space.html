@@ -381,6 +381,14 @@ function init() {
 }
 
 function setLevel(lvl) {
+  const chosenLevel = localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
+  if(chosenLevel === 'youngsters' && lvl !== 'youngsters'){
+    speak("Stay on your level love! Youngsters have their own special adventure!");
+    return;
+  }
+  if(lvl !== chosenLevel){
+    speak("Changing levels love! You started as " + chosenLevel.replace('grownups','Grown Ups') + " just so you know!");
+  }
   S.level=lvl; window.speechSynthesis&&window.speechSynthesis.cancel();
   applyLevel(lvl); highlightTab(lvl);
   setTimeout(()=>speak(RITA_INTRO[lvl]),400);
