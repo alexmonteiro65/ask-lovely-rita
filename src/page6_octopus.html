@@ -69,8 +69,8 @@
     display: inline-block;
   }
   @keyframes fish-drift {
-    0%   { transform: translateX(420px); opacity:.3; }
-    100% { transform: translateX(-60px); opacity:.3; }
+    0%   { transform: translateX(420px) scaleX(-1); opacity:.3; }
+    100% { transform: translateX(-60px) scaleX(-1); opacity:.3; }
   }
 
   /* FUNNY LAD FIXED BOTTOM */
@@ -566,7 +566,7 @@ const KB_ROWS = [
 // ── STATE ──────────────────────────────────────────────────
 let S = {
   level: 'youngsters',
-  beatcoins: 25000, score: 0,
+  beatcoins: 10000, score: 0,
   wordIndex: 0, wordsOrder: [],
   currentInput: [],
   gameActive: false, wordComplete: false,
@@ -591,6 +591,8 @@ function saveStorage() {
 // ── INIT ───────────────────────────────────────────────────
 function init() {
   loadStorage();
+  // Mark world as visited
+  localStorage.setItem('lra_visited_page6_octopus.html','1');
   document.getElementById('phone').className = 'theme-' + (S.level || 'youngsters');
   buildOceanBg();
   buildKeyboard();
@@ -877,6 +879,8 @@ function checkWord() {
     S.wordComplete = true;
     const earned = LEVEL_CFG[S.level].bonusCorrect;
     S.score += earned; S.beatcoins += earned;
+    const wk='lra_world_bc_page6_octopus.html';
+    localStorage.setItem(wk, Number(localStorage.getItem(wk)||0)+earned);
   saveLadBC(earned); postGlobalScore(earned);
     document.getElementById('score-val').textContent = S.score;
     document.getElementById('bc-val').textContent = S.beatcoins;
@@ -1025,6 +1029,8 @@ function finishGame() {
   document.getElementById('bc-val').textContent = S.beatcoins;
   document.getElementById('score-val').textContent = S.score;
   saveStorage();
+  const wKey='lra_world_bc_page6_octopus.html';
+  localStorage.setItem(wKey, Number(localStorage.getItem(wKey)||0)+bonus);
 
   document.getElementById('result-icon').textContent = '🏆';
   document.getElementById('result-title').textContent = 'Ocean Master!';
