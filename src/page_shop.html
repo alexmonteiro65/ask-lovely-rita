@@ -20,7 +20,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 /* BeatCoins box — below subtitle */
 #bc-box{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:20px;padding:8px 18px;margin:10px auto 0;width:fit-content;}
 #bc-icon{font-size:18px;}
-#bc-val{font-size:18px;font-weight:bold;color:#ffd700;min-width:80px;text-align:center;text-shadow:0 0 10px rgba(255,215,0,.8);font-variant-numeric:tabular-nums;letter-spacing:0.5px;}
+#bc-val{font-size:18px;font-weight:bold;color:#ffd700;min-width:80px;text-align:center;text-shadow:0 0 10px rgba(255,215,0,.8);font-variant-numeric:tabular-nums;font-feature-settings:'tnum';letter-spacing:0;font-family:'Courier New',monospace;}
 #bc-sublabel{font-size:11px;font-weight:bold;color:rgba(255,110,247,.8);letter-spacing:1px;}
 
 /* ── SCROLL ── */
@@ -139,7 +139,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
     <div id="shop-title">BEAT SHOP</div>
     <div id="shop-subtitle">INVEST · COLLECT · TRADE</div>
     <div id="bc-box">
-      <img id="bc-icon" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin_small.png" alt="EBC" style="width:24px;height:24px;object-fit:contain;" onerror="this.outerHTML='<span id="bc-icon" style="font-size:22px">🎵</span>'">
+      <img id="bc-icon" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin_small.png" alt="EBC" style="width:24px;height:24px;object-fit:contain;" onerror="this.style.display='none'">
       <span id="bc-val">0</span>
       <span id="bc-sublabel">BeatCoins Available</span>
     </div>
