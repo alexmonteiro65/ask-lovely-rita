@@ -583,6 +583,7 @@
 // ════════════════════════════════
 
 const BASE_URL = 'https://alexmonteiro65.github.io/ask-lovely-rita/src/';
+const AUDIO_BASE_URL = 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/';
 
 const LADS = {
   smart:  { name:'Smart',  instrument:'hootenanny',   label:'Hootenanny',   emoji:'🎸' },
@@ -1090,7 +1091,7 @@ function playRandomTrack() {
   const levelTracks = TRACKS_BY_LEVEL[S.level] || TRACKS_BY_LEVEL.youngsters;
   const track = levelTracks[Math.floor(Math.random() * levelTracks.length)];
   try {
-    S.audio = new Audio(BASE_URL + encodeURIComponent(track));
+    S.audio = new Audio(AUDIO_BASE_URL + encodeURIComponent(track));
     S.audio.volume = 0.5;
     S.audio.play().catch(() => {});
   } catch(e) {}
