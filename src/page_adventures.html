@@ -17,10 +17,8 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 #adv-title{font-size:26px;font-weight:bold;letter-spacing:2px;color:#ffde59;text-shadow:0 0 20px rgba(255,222,89,.6);}
 #adv-sub{font-size:11px;color:rgba(255,255,255,.35);letter-spacing:2px;margin-top:3px;}
 
-/* ── PLAYER CARD ── */
+/* PLAYER CARD */
 #player-card{margin:12px 14px 0;background:linear-gradient(135deg,rgba(255,110,247,.12),rgba(168,85,247,.1));border:1px solid rgba(255,110,247,.3);border-radius:16px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px;flex-shrink:0;}
-
-/* Photo circle — doubled size */
 #photo-wrap{position:relative;}
 #player-photo{width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,110,247,.6);display:block;cursor:pointer;background:#12003a;}
 #photo-placeholder{width:110px;height:110px;border-radius:50%;border:3px dashed rgba(255,110,247,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:rgba(255,110,247,.07);gap:4px;}
@@ -28,8 +26,6 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 #photo-placeholder-txt{font-size:9px;color:rgba(255,110,247,.7);letter-spacing:.5px;text-align:center;}
 #photo-input{display:none;}
 #photo-edit-badge{position:absolute;bottom:4px;right:4px;background:#ff6ef7;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;border:2px solid #1a0040;}
-
-/* Name centered */
 #player-name-display{font-size:22px;font-weight:bold;color:#fff;text-align:center;}
 #change-name-btn{font-size:10px;color:#ff6ef7;cursor:pointer;background:rgba(255,110,247,.1);border:1px solid rgba(255,110,247,.3);border-radius:8px;padding:5px 14px;font-family:Georgia,serif;}
 
@@ -38,7 +34,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 #name-input{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,110,247,.4);border-radius:10px;padding:9px 12px;color:#fff;font-size:14px;outline:none;font-family:Georgia,serif;margin-bottom:8px;}
 #name-save-btn{background:linear-gradient(135deg,#ff6ef7,#a855f7);border:none;border-radius:10px;padding:9px;color:#000;font-weight:bold;font-size:13px;cursor:pointer;font-family:Georgia,serif;width:100%;}
 
-/* ── TAB BAR ── */
+/* TAB BAR */
 #tab-bar{display:flex;background:#12003a;flex-shrink:0;padding:0 10px;margin-top:12px;border-top:1px solid rgba(255,255,255,.05);}
 .tab-btn{flex:1;padding:11px 0;border:none;background:none;color:rgba(255,255,255,.4);font-size:12px;cursor:pointer;font-family:Georgia,serif;letter-spacing:.3px;border-bottom:2px solid transparent;transition:all .2s;}
 .tab-btn.active{color:#ff6ef7;border-bottom-color:#ff6ef7;font-weight:bold;}
@@ -64,7 +60,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 .lad-stat.rank2{border-color:rgba(180,180,180,.3);background:rgba(180,180,180,.04);}
 .lad-stat.rank3{border-color:rgba(205,127,50,.3);background:rgba(205,127,50,.04);}
 
-/* World pins — two-line names */
+/* World pins */
 #world-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
 .world-pin{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:transform .2s;}
 .world-pin:hover{transform:scale(1.1);}
@@ -82,31 +78,51 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 #bank-title{font-size:20px;font-weight:bold;color:#ffde59;text-shadow:0 0 15px rgba(255,222,89,.5);}
 #bank-sub{font-size:10px;color:rgba(255,255,255,.35);letter-spacing:1px;margin-top:3px;}
 
+/* ── MY ASSETS box (replaces policy box) ── */
+#my-assets-box{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px;margin-bottom:14px;}
+#my-assets-title{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:12px;padding-left:6px;border-left:2.5px solid #ffde59;}
+.asset-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.asset-row:last-child{border-bottom:none;padding-bottom:0;}
+.asset-label{font-size:11px;color:rgba(255,255,255,.45);}
+.asset-val{font-size:13px;font-weight:bold;color:#ffde59;font-family:Georgia,serif;}
+.asset-val.positive{color:#64ff96;}
+.asset-val.negative{color:rgba(255,120,120,.9);}
+.asset-val.neutral{color:rgba(255,255,255,.5);}
+#asset-total-row{margin-top:4px;padding-top:10px;border-top:2px solid rgba(255,222,89,.2)!important;border-bottom:none!important;}
+#asset-total-label{font-size:12px;font-weight:bold;color:#ffde59;}
+#asset-total-val{font-size:16px;font-weight:bold;color:#ffde59;text-shadow:0 0 10px rgba(255,222,89,.4);}
+
+/* ── Rita popup box (exchange/sell tips) ── */
+#rita-tip-box{display:none;position:relative;background:linear-gradient(135deg,rgba(255,110,247,.12),rgba(168,85,247,.08));border:1px solid rgba(255,110,247,.4);border-radius:14px;padding:14px;margin-bottom:14px;animation:slideDown .3s ease;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+#rita-tip-close{position:absolute;top:10px;right:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:50%;width:24px;height:24px;cursor:pointer;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;}
+#rita-tip-header{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+#rita-tip-avatar{font-size:28px;}
+#rita-tip-name{font-size:11px;font-weight:bold;color:#ff6ef7;letter-spacing:.5px;}
+#rita-tip-text{font-size:12px;color:rgba(255,255,255,.75);line-height:1.6;}
+
 /* EBC in bank */
 #bank-bc-line{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:8px 14px;margin-bottom:14px;}
 #bank-bc-label{font-size:13px;font-weight:bold;color:#ff6ef7;}
 #bank-bc-right{display:flex;align-items:center;gap:6px;}
 #bank-bc-img{width:20px;height:20px;object-fit:contain;}
-#bank-bc-val{font-size:16px;font-weight:bold;color:#ff6ef7;}
+#bank-bc-val{font-size:16px;font-weight:bold;color:#ff6ef7;font-family:Georgia,serif;}
 
-/* Exchange + Selling policy box */
-#bank-policy{background:rgba(255,222,89,.07);border:1px solid rgba(255,222,89,.2);border-radius:12px;padding:12px 14px;margin-bottom:14px;}
-#bank-policy-title{font-size:12px;font-weight:bold;color:#ffde59;margin-bottom:6px;letter-spacing:.5px;}
-.policy-line{font-size:11px;color:rgba(255,222,89,.8);line-height:1.6;display:flex;align-items:flex-start;gap:6px;}
-.policy-line-sell{font-size:11px;color:rgba(100,255,150,.8);line-height:1.6;display:flex;align-items:flex-start;gap:6px;margin-top:4px;}
-
-/* Bank carousel */
+/* Bank carousel — wider viewport */
 #bank-coll-title{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:10px;padding-left:6px;border-left:2.5px solid #ffde59;}
-#bank-carousel-wrap{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;}
-#bank-arrow-l,#bank-arrow-r{background:rgba(255,222,89,.15);border:1px solid rgba(255,222,89,.4);border-radius:50%;width:34px;height:34px;min-width:34px;cursor:pointer;color:#ffde59;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;margin-top:30px;}
+#bank-carousel-wrap{display:flex;align-items:flex-start;gap:5px;margin-bottom:8px;}
+#bank-arrow-l,#bank-arrow-r{background:rgba(255,222,89,.15);border:1px solid rgba(255,222,89,.4);border-radius:50%;width:26px;height:26px;min-width:26px;cursor:pointer;color:#ffde59;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;margin-top:30px;}
 #bank-arrow-l:hover,#bank-arrow-r:hover{background:rgba(255,222,89,.3);}
 #bank-viewport{flex:1;overflow:hidden;border-radius:12px;}
-#bank-track{display:flex;gap:10px;transition:transform .35s cubic-bezier(.4,0,.2,1);}
-.bank-card{min-width:92px;max-width:92px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 5px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;position:relative;margin-top:8px;}
+#bank-track{display:flex;gap:8px;transition:transform .35s cubic-bezier(.4,0,.2,1);}
+
+/* Bank cards — wider to show 3 properly */
+.bank-card{min-width:98px;max-width:98px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 5px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;position:relative;margin-top:8px;}
 .bank-card img{width:52px;height:52px;object-fit:contain;}
 .bank-card-name{font-size:7px;color:rgba(255,255,255,.5);text-align:center;line-height:1.2;}
-.bank-card-qty{font-size:10px;font-weight:bold;color:#ffde59;}
-.bank-card-val{font-size:9px;color:rgba(255,255,255,.4);}
+/* Single line for pct + value */
+.bank-card-qty{font-size:9px;font-weight:bold;white-space:nowrap;text-align:center;}
+.bank-card-val{font-size:9px;color:rgba(255,255,255,.4);font-family:Georgia,serif;}
 .bank-qty-badge{position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:#ff6ef7;color:#000;font-size:10px;font-weight:bold;border-radius:10px;padding:2px 8px;white-space:nowrap;}
 .sell-btn{background:linear-gradient(135deg,rgba(100,255,150,.25),rgba(0,200,100,.2));border:1px solid rgba(100,255,150,.4);border-radius:8px;padding:5px 4px;color:#64ff96;font-size:9px;font-weight:bold;cursor:pointer;font-family:Georgia,serif;width:100%;}
 .sell-btn.profit{border-color:#64ff96;animation:glow-profit 1.5s ease-in-out infinite alternate;}
@@ -115,14 +131,29 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 #bank-dots{display:flex;justify-content:center;gap:5px;margin-bottom:14px;}
 .bank-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);transition:background .2s;cursor:pointer;}
 .bank-dot.active{background:#ffde59;}
-#bank-empty{text-align:center;font-size:12px;color:rgba(255,255,255,.25);font-style:italic;padding:24px;display:none;}
+
+/* Empty state — always shows carousel area */
+#bank-empty-msg{text-align:center;font-size:11px;color:rgba(255,255,255,.3);font-style:italic;padding:16px 0;}
 
 /* NAV */
 #nav-bar{display:flex;justify-content:space-around;align-items:center;padding:8px 0 14px;background:rgba(10,0,20,.95);border-top:1px solid rgba(255,255,255,.06);flex-shrink:0;}
 .nav-btn{background:none;border:none;color:rgba(255,255,255,.4);font-size:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 14px;transition:color .2s;font-family:Georgia,serif;}
 .nav-btn:hover,.nav-btn.active{color:#ff6ef7;}
 .nav-icon{font-size:20px;line-height:1;}
+
 #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;font-family:Georgia,serif;white-space:nowrap;}
+
+/* SPIN unlock banner */
+#spin-banner{display:none;margin:0 14px 12px;background:linear-gradient(135deg,rgba(255,222,89,.15),rgba(255,110,247,.12));border:1px solid rgba(255,222,89,.4);border-radius:14px;padding:14px;text-align:center;}
+#spin-banner-title{font-size:14px;font-weight:bold;color:#ffde59;margin-bottom:6px;}
+#spin-banner-text{font-size:11px;color:rgba(255,255,255,.7);line-height:1.5;margin-bottom:10px;}
+#spin-lad-row{display:flex;justify-content:center;gap:12px;margin-bottom:12px;}
+.spin-lad-btn{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:8px;border-radius:10px;border:2px solid rgba(255,222,89,.3);background:rgba(255,222,89,.06);transition:all .2s;}
+.spin-lad-btn:hover{border-color:#ffde59;background:rgba(255,222,89,.14);}
+.spin-lad-btn.selected{border-color:#ff6ef7;background:rgba(255,110,247,.15);box-shadow:0 0 12px rgba(255,110,247,.4);}
+.spin-lad-btn img{width:48px;height:48px;object-fit:contain;}
+.spin-lad-btn-name{font-size:9px;color:rgba(255,255,255,.6);}
+#spin-confirm-btn{background:linear-gradient(135deg,#ffde59,#ff6ef7);border:none;border-radius:12px;padding:10px 24px;color:#000;font-weight:bold;font-size:13px;cursor:pointer;font-family:Georgia,serif;display:none;}
 </style>
 </head>
 <body>
@@ -133,7 +164,32 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
     <div id="adv-sub">YOUR LOVELY RITA JOURNEY</div>
   </div>
 
-  <!-- PLAYER CARD — centered, large photo, no EBCs -->
+  <!-- SPIN UNLOCK BANNER (shown after 5 worlds visited) -->
+  <div id="spin-banner">
+    <div id="spin-banner-title">🎉 You've unlocked Lad Choice!</div>
+    <div id="spin-banner-text">You've explored all 5 worlds! Choose your favourite Lad to play with from now on, love!</div>
+    <div id="spin-lad-row">
+      <div class="spin-lad-btn" onclick="selectSpinLad('smart',this)">
+        <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-smart-regular.png" alt="Smart">
+        <span class="spin-lad-btn-name">Smart</span>
+      </div>
+      <div class="spin-lad-btn" onclick="selectSpinLad('cute',this)">
+        <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-cute-regular.png" alt="Cute">
+        <span class="spin-lad-btn-name">Cute</span>
+      </div>
+      <div class="spin-lad-btn" onclick="selectSpinLad('quiet',this)">
+        <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-quiet-regular.png" alt="Quiet">
+        <span class="spin-lad-btn-name">Quiet</span>
+      </div>
+      <div class="spin-lad-btn" onclick="selectSpinLad('funny',this)">
+        <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-funny-regular.png" alt="Funny">
+        <span class="spin-lad-btn-name">Funny</span>
+      </div>
+    </div>
+    <button id="spin-confirm-btn" onclick="confirmSpinLad()">Confirm My Lad ✓</button>
+  </div>
+
+  <!-- PLAYER CARD -->
   <div id="player-card">
     <div id="photo-wrap">
       <div id="photo-placeholder" onclick="triggerPhoto()">
@@ -153,7 +209,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
     <button id="name-save-btn" onclick="saveName()">Save Name ✓</button>
   </div>
 
-  <!-- TABS — 2 only -->
+  <!-- TABS -->
   <div id="tab-bar">
     <button class="tab-btn active" onclick="switchTab('journey',this)">🗺️ My Journey</button>
     <button class="tab-btn" onclick="switchTab('bank',this)">🏦 MyBank</button>
@@ -210,24 +266,40 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
         <div id="bank-sub">YOUR COLLECTION PORTFOLIO</div>
       </div>
 
-      <div id="bank-bc-line">
-        <span id="bank-bc-label">Educational BeatCoins</span>
-        <div id="bank-bc-right">
-          <img id="bank-bc-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin_small.png" alt="EBC">
-          <span id="bank-bc-val">0</span>
+      <!-- Rita Tip Box (appears contextually) -->
+      <div id="rita-tip-box">
+        <button id="rita-tip-close" onclick="closeRitaTip()">✕</button>
+        <div id="rita-tip-header">
+          <span id="rita-tip-avatar">👮‍♀️</span>
+          <span id="rita-tip-name">LOVELY RITA</span>
+        </div>
+        <div id="rita-tip-text"></div>
+      </div>
+
+      <!-- MY ASSETS mini bank statement -->
+      <div id="my-assets-box">
+        <div id="my-assets-title">My Assets</div>
+        <div class="asset-row">
+          <span class="asset-label">EBCs Available</span>
+          <span class="asset-val" id="asset-bc">0</span>
+        </div>
+        <div class="asset-row">
+          <span class="asset-label">Earned this session</span>
+          <span class="asset-val" id="asset-session">+0</span>
+        </div>
+        <div class="asset-row">
+          <span class="asset-label">Collection value</span>
+          <span class="asset-val" id="asset-coll">0 EBCs</span>
+        </div>
+        <div class="asset-row" id="asset-total-row">
+          <span class="asset-label" id="asset-total-label">Total Portfolio</span>
+          <span class="asset-val" id="asset-total">0 EBCs</span>
         </div>
       </div>
 
-      <!-- Exchange + Selling Policy -->
-      <div id="bank-policy">
-        <div id="bank-policy-title">📋 Exchange Policy</div>
-        <div class="policy-line">↩ 20% restocking fee applies — just like the real world!</div>
-        <div class="policy-line-sell">📈 Selling Opportunity: items can increase in value over time. When your item is worth more than you paid, Rita will let you know — it's your chance to make a profit!</div>
-      </div>
-
+      <!-- My Collection carousel — always visible -->
       <div id="bank-coll-title">📦 My Collection</div>
-      <div id="bank-empty">Your portfolio is empty love! Visit the Beat Shop to start investing! 🛒</div>
-      <div id="bank-carousel-wrap" style="display:none;">
+      <div id="bank-carousel-wrap">
         <button id="bank-arrow-l" onclick="scrollBank(-1)">◀</button>
         <div id="bank-viewport">
           <div id="bank-track"></div>
@@ -242,7 +314,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 
   <nav id="nav-bar">
     <button class="nav-btn" onclick="window.location.href='page1_landing.html'"><span class="nav-icon">🏠</span><span>Home</span></button>
-    <button class="nav-btn" onclick="window.location.href='page_shop.html'"><span class="nav-icon">💎</span><span>Collectibles</span></button>
+    <button class="nav-btn" onclick="window.location.href='page_shop.html'"><span class="nav-icon">🛍️</span><span>Beat Shop</span></button>
     <button class="nav-btn active"><span class="nav-icon">👤</span><span>Profile</span></button>
   </nav>
 
@@ -255,7 +327,6 @@ const LADS = ['smart','cute','quiet','funny'];
 const LAD_NAMES = {smart:'Smart Lad',cute:'Cute Lad',quiet:'Quiet Lad',funny:'Funny Lad'};
 const MEDALS = ['🥇','🥈','🥉','🏅'];
 
-// Item prices — must match shop
 const COLL_ITEMS = {
   rita_p1:   {name:'Rita Poster — Presenter',      img:RAW+'rita_apresentadora_clean.png',price:500},
   rita_p2:   {name:'Rita Poster — Traffic Warden', img:RAW+'shop/rita_poster_warden.png', price:450},
@@ -265,40 +336,35 @@ const COLL_ITEMS = {
   badge_spc: {name:'Space World Badge',             img:RAW+'shop/badge_space.png',       price:330},
   note_gold: {name:'Gold Musical Note',             img:RAW+'shop/note_gold.png',         price:200},
   note_red:  {name:'Red Wrong Note',                img:RAW+'shop/note_red.png',          price:150},
+  lad_smart: {name:'Smart One Poster',              img:RAW+'shop/lad_poster_smart.png',  price:400},
+  lad_cute:  {name:'Cute One Poster',               img:RAW+'shop/lad_poster_cute.png',   price:400},
+  lad_quiet: {name:'Quiet One Poster',              img:RAW+'shop/lad_poster_quiet.png',  price:400},
+  lad_funny: {name:'Funny One Poster',              img:RAW+'shop/lad_poster_funny.png',  price:400},
+  stk_lads:        {name:'Lads Sticker Sheet',      img:RAW+'shop/stickers/sticker_lads.png',        price:800},
+  stk_vw:          {name:'VW Sticker Sheet',        img:RAW+'shop/stickers/sticker_vw.png',          price:800},
+  stk_instruments: {name:'Instruments Stickers',    img:RAW+'shop/stickers/sticker_instruments.png', price:800},
+  stk_albums:      {name:'Music Icons Stickers',    img:RAW+'shop/stickers/sticker_albums.png',      price:800},
+  stk_rita:        {name:'Rita Special Edition',    img:RAW+'shop/stickers/sticker_rita.png',        price:1600},
 };
 
-// Simulated market: each item gets a small random multiplier per session
-// Between 0.7x and 1.5x — stored in sessionStorage so it resets each visit
+// Market multiplier per session
 function getMarketMultiplier(id){
-  const k = 'lra_market_'+id;
+  const k='lra_market_'+id;
   if(!sessionStorage.getItem(k)){
-    const r = Math.random();
+    const r=Math.random();
     let mult;
-    if(r < 0.05){
-      // 5% jackpot — big gain +40% to +80%
-      mult = 1.40 + Math.random()*0.40;
-    } else if(r < 0.25){
-      // 20% small gain +3% to +20%
-      mult = 1.03 + Math.random()*0.17;
-    } else if(r < 0.55){
-      // 30% slight loss -2% to -20%
-      mult = 0.80 + Math.random()*0.18;
-    } else {
-      // 45% bigger loss -20% to -40%
-      mult = 0.60 + Math.random()*0.20;
-    }
-    sessionStorage.setItem(k, mult.toFixed(3));
+    if(r<0.05) mult=1.40+Math.random()*0.40;
+    else if(r<0.25) mult=1.03+Math.random()*0.17;
+    else if(r<0.55) mult=0.80+Math.random()*0.18;
+    else mult=0.60+Math.random()*0.20;
+    sessionStorage.setItem(k,mult.toFixed(3));
   }
   return parseFloat(sessionStorage.getItem(k));
 }
-function getCurrentValue(id){
-  return Math.floor(COLL_ITEMS[id].price * getMarketMultiplier(id));
-}
-function isProfitable(id){
-  return getCurrentValue(id) > COLL_ITEMS[id].price;
-}
+function getCurrentValue(id){ return Math.floor(COLL_ITEMS[id].price*getMarketMultiplier(id)); }
+function isProfitable(id){ return getCurrentValue(id)>COLL_ITEMS[id].price; }
 
-const LAD_IMGS = {smart:RAW+'lad-smart-regular.png',cute:RAW+'lad-cute-regular.png',quiet:RAW+'lad-quiet-regular.png',funny:RAW+'lad-funny-regular.png'};
+const LAD_IMGS={smart:RAW+'lad-smart-regular.png',cute:RAW+'lad-cute-regular.png',quiet:RAW+'lad-quiet-regular.png',funny:RAW+'lad-funny-regular.png'};
 
 function getBC(){ return Number(localStorage.getItem('askLovelyRitaV4_bc')||25000); }
 function getLadBC(lad){ return Number(localStorage.getItem('askLovelyRitaV4_bc_'+lad)||0); }
@@ -306,65 +372,103 @@ function getNickname(){ return localStorage.getItem('lra_nickname')||'Explorer';
 function getQty(id){ return Number(localStorage.getItem('lra_qty_'+id)||0); }
 function setQty(id,v){ localStorage.setItem('lra_qty_'+id,v); }
 
+// Session EBCs tracking
+const SESSION_START_KEY='lra_session_bc_start';
+function getSessionEarned(){
+  const start=Number(sessionStorage.getItem(SESSION_START_KEY)||getBC());
+  return getBC()-start;
+}
+function initSessionTracking(){
+  if(!sessionStorage.getItem(SESSION_START_KEY)){
+    sessionStorage.setItem(SESSION_START_KEY,getBC());
+  }
+}
+
 // ── Photo ─────────────────────────────────────────────────────────────────────
 function triggerPhoto(){ document.getElementById('photo-input').click(); }
 function handlePhoto(input){
-  if(!input.files||!input.files[0]) return;
+  if(!input.files||!input.files[0])return;
   const reader=new FileReader();
-  reader.onload=e=>{
-    localStorage.setItem('lra_player_photo',e.target.result);
-    showPhoto(e.target.result);
-  };
+  reader.onload=e=>{localStorage.setItem('lra_player_photo',e.target.result);showPhoto(e.target.result);};
   reader.readAsDataURL(input.files[0]);
 }
 function showPhoto(data){
   document.getElementById('photo-placeholder').style.display='none';
   const img=document.getElementById('player-photo');
-  img.style.display='block';
-  img.src=data;
+  img.style.display='block';img.src=data;
 }
-function loadPhoto(){
-  const d=localStorage.getItem('lra_player_photo');
-  if(d) showPhoto(d);
+function loadPhoto(){ const d=localStorage.getItem('lra_player_photo');if(d)showPhoto(d); }
+
+// ── Rita Tip Box ──────────────────────────────────────────────────────────────
+function showRitaTip(text){
+  document.getElementById('rita-tip-text').textContent=text;
+  document.getElementById('rita-tip-box').style.display='block';
+  speak(text);
+}
+function closeRitaTip(){ document.getElementById('rita-tip-box').style.display='none'; }
+
+// ── My Assets ─────────────────────────────────────────────────────────────────
+function updateMyAssets(){
+  const bc=getBC();
+  const sessionEarned=getSessionEarned();
+  // Collection total current market value
+  let collVal=0;
+  Object.keys(COLL_ITEMS).forEach(id=>{
+    const qty=getQty(id);
+    if(qty>0) collVal+=getCurrentValue(id)*qty;
+  });
+  const total=bc+collVal;
+
+  document.getElementById('asset-bc').textContent=bc.toLocaleString()+' EBCs';
+  const sessEl=document.getElementById('asset-session');
+  if(sessionEarned>=0){
+    sessEl.textContent='+'+sessionEarned.toLocaleString()+' EBCs';
+    sessEl.className='asset-val positive';
+  } else {
+    sessEl.textContent=sessionEarned.toLocaleString()+' EBCs';
+    sessEl.className='asset-val negative';
+  }
+  document.getElementById('asset-coll').textContent=collVal.toLocaleString()+' EBCs';
+  document.getElementById('asset-total').textContent=total.toLocaleString()+' EBCs';
 }
 
-// ── Bank carousel — circular ──────────────────────────────────────────────────
+// ── Bank carousel — 3 visible, one-by-one, circular ──────────────────────────
 const VISIBLE=3;
-const CARD_W=98;
+const CARD_W=106; // card width + gap
 let bankItems=[];
 let bankOffset=0;
 
 function buildBankCarousel(){
+  updateMyAssets();
   bankItems=Object.entries(COLL_ITEMS).filter(([id])=>getQty(id)>0);
-  const wrap=document.getElementById('bank-carousel-wrap');
-  const empty=document.getElementById('bank-empty');
+  const track=document.getElementById('bank-track');
   const dots=document.getElementById('bank-dots');
-  document.getElementById('bank-bc-val').textContent=getBC().toLocaleString();
-
-  if(bankItems.length===0){
-    wrap.style.display='none';
-    empty.style.display='block';
-    dots.innerHTML='';
-    return;
-  }
-  empty.style.display='none';
-  wrap.style.display='flex';
   bankOffset=0;
 
-  // Check for profitable items and notify
+  if(bankItems.length===0){
+    // Show 3 empty placeholder slots
+    track.innerHTML=`
+      <div class="bank-card" style="opacity:.4"><div style="font-size:28px;margin:12px 0">🛍️</div><div class="bank-card-name" style="font-size:9px;">Go to</div><div class="bank-card-name">Beat Shop</div></div>
+      <div class="bank-card" style="opacity:.25"><div style="font-size:28px;margin:12px 0">📦</div><div class="bank-card-name">Start your</div><div class="bank-card-name">collection!</div></div>
+      <div class="bank-card" style="opacity:.15"><div style="font-size:28px;margin:12px 0">💎</div><div class="bank-card-name">Invest your</div><div class="bank-card-name">EBCs today</div></div>`;
+    dots.innerHTML='';
+    // Rita tip after delay
+    setTimeout(()=>showRitaTip("Your collection is empty love! Head to the Beat Shop to start investing your Educational BeatCoins!"),1200);
+    return;
+  }
+
+  // Check for profitable items and notify once
   const profits=bankItems.filter(([id])=>isProfitable(id));
   if(profits.length>0){
     const [pid,pitem]=profits[0];
     const val=getCurrentValue(pid);
     setTimeout(()=>{
       playProfitSound();
-      speak(`Darling! Your ${pitem.name} has gone up in value! You paid ${pitem.price.toLocaleString()} and it is now worth ${val.toLocaleString()} BeatCoins! Would you like to sell?`);
-      toast(`📈 ${pitem.name} is up! Worth ${val.toLocaleString()} EBCs now!`);
+      showRitaTip(`Darling! Your ${pitem.name} has gone up in value! You paid ${pitem.price.toLocaleString()} EBCs and it is now worth ${val.toLocaleString()} EBCs. Shall we sell?`);
     },1500);
   }
 
-  const track=document.getElementById('bank-track');
-  track.innerHTML=bankItems.map(([id,item],i)=>{
+  track.innerHTML=bankItems.map(([id,item])=>{
     const qty=getQty(id);
     const val=getCurrentValue(id);
     const profit=isProfitable(id);
@@ -383,39 +487,31 @@ function buildBankCarousel(){
     </div>`;
   }).join('');
 
-  const pages=Math.ceil(bankItems.length/VISIBLE);
-  dots.innerHTML=Array.from({length:pages},(_,i)=>
-    `<div class="bank-dot${i===0?' active':''}" onclick="goBankPage(${i})"></div>`
+  // Dots — one per item
+  dots.innerHTML=bankItems.map((_,i)=>
+    `<div class="bank-dot${i===0?' active':''}" onclick="goBankItem(${i})"></div>`
   ).join('');
-  updateBankArrows();
+
+  updateBankTrack();
 }
 
 function scrollBank(dir){
-  // Circular navigation
-  const max=bankItems.length-VISIBLE;
-  if(dir>0){
-    bankOffset=bankOffset>=Math.max(0,max)?0:bankOffset+1;
-  } else {
-    bankOffset=bankOffset<=0?Math.max(0,max):bankOffset-1;
-  }
-  document.getElementById('bank-track').style.transform=`translateX(-${bankOffset*CARD_W}px)`;
-  updateBankDots();
-  updateBankArrows();
+  if(bankItems.length===0)return;
+  // One item at a time, circular
+  const max=bankItems.length-1;
+  if(dir>0) bankOffset=bankOffset>=max?0:bankOffset+1;
+  else bankOffset=bankOffset<=0?max:bankOffset-1;
+  updateBankTrack();
 }
 
-function goBankPage(page){
-  bankOffset=page*VISIBLE;
+function goBankItem(idx){
+  bankOffset=idx;
+  updateBankTrack();
+}
+
+function updateBankTrack(){
   document.getElementById('bank-track').style.transform=`translateX(-${bankOffset*CARD_W}px)`;
-  updateBankDots(); updateBankArrows();
-}
-function updateBankDots(){
-  const page=Math.floor(bankOffset/VISIBLE);
-  document.querySelectorAll('.bank-dot').forEach((d,i)=>d.classList.toggle('active',i===page));
-}
-function updateBankArrows(){
-  // Arrows always active for circular navigation
-  document.getElementById('bank-arrow-l').disabled=false;
-  document.getElementById('bank-arrow-r').disabled=false;
+  document.querySelectorAll('.bank-dot').forEach((d,i)=>d.classList.toggle('active',i===bankOffset));
 }
 
 function sellItem(id){
@@ -429,17 +525,15 @@ function sellItem(id){
   localStorage.setItem('askLovelyRitaV4_bc',newBC);
   const sk='lra_stock_'+id;
   localStorage.setItem(sk,Number(localStorage.getItem(sk)||0)+1);
-  document.getElementById('bank-bc-val').textContent=newBC.toLocaleString();
   buildBankCarousel();
   if(profit){
     const gain=val-item.price;
     toast(`💰 Sold for ${val.toLocaleString()} EBCs! Profit: +${gain.toLocaleString()} EBCs love!`);
-    speak(`Brilliant investment love! You made a profit of ${gain.toLocaleString()} Educational BeatCoins!`);
+    showRitaTip(`Brilliant investment love! You made a profit of ${gain.toLocaleString()} Educational BeatCoins! Reinvest wisely!`);
     playProfitSound();
   } else {
-    const fee=item.price-val;
     toast(`✅ Exchanged! +${val.toLocaleString()} EBCs love! (20% restocking fee applied)`);
-    speak(`Exchanged love! ${val.toLocaleString()} Educational BeatCoins added to your balance!`);
+    showRitaTip(`Exchanged love! ${val.toLocaleString()} Educational BeatCoins added to your balance!`);
   }
   setTimeout(()=>window.location.href='page_shop.html',2500);
 }
@@ -459,6 +553,40 @@ function playProfitSound(){
   }catch(e){}
 }
 
+// ── SPIN — Lad unlock after 5 worlds ─────────────────────────────────────────
+let spinSelectedLad=null;
+const WORLD_PAGES=['page6_octopus','page7_space','page8_india','page9_city','page10_rita'];
+
+function checkSpinUnlock(){
+  // Already confirmed — no banner
+  if(localStorage.getItem('lra_spin_confirmed')==='1')return;
+  const visited=WORLD_PAGES.filter(p=>localStorage.getItem('lra_visited_'+p+'.html')==='1'||localStorage.getItem('lra_visited_'+p)==='1');
+  if(visited.length>=5){
+    document.getElementById('spin-banner').style.display='block';
+    if(!localStorage.getItem('lra_spin_shown')){
+      localStorage.setItem('lra_spin_shown','1');
+      setTimeout(()=>speak("Congratulations love! You have explored all five worlds! Now you can choose your favourite Lad to play with from now on!"),800);
+    }
+  }
+}
+
+function selectSpinLad(lad,btn){
+  spinSelectedLad=lad;
+  document.querySelectorAll('.spin-lad-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('spin-confirm-btn').style.display='inline-block';
+  speak(`${LAD_NAMES[lad]} it is love! Tap confirm to lock in your choice!`);
+}
+
+function confirmSpinLad(){
+  if(!spinSelectedLad)return;
+  localStorage.setItem('lra_chosen_lad',spinSelectedLad);
+  localStorage.setItem('lra_spin_confirmed','1');
+  document.getElementById('spin-banner').style.display='none';
+  toast(`🎉 ${LAD_NAMES[spinSelectedLad]} is your Lad from now on love!`);
+  speak(`Wonderful love! ${LAD_NAMES[spinSelectedLad]} will be your companion from now on! Have fun!`);
+}
+
 // ── My Records ────────────────────────────────────────────────────────────────
 function renderLadRecords(){
   const sorted=LADS.map(l=>({lad:l,bc:getLadBC(l)})).sort((a,b)=>b.bc-a.bc);
@@ -476,28 +604,28 @@ function renderWorldProgress(){
   const MAX=800;
   [{key:'oct',page:'page6_octopus'},{key:'spc',page:'page7_space'},{key:'ind',page:'page8_india'},{key:'pen',page:'page9_city'},{key:'rit',page:'page10_rita'}]
   .forEach(w=>{
-    const visited=localStorage.getItem('lra_visited_'+w.page)==='1';
-    const bc=Number(localStorage.getItem('lra_world_bc_'+w.page)||0);
+    const visited=localStorage.getItem('lra_visited_'+w.page+'.html')==='1'||localStorage.getItem('lra_visited_'+w.page)==='1';
+    const bc=Number(localStorage.getItem('lra_world_bc_'+w.page+'.html')||localStorage.getItem('lra_world_bc_'+w.page)||0);
     const pct=visited?Math.min(Math.round((bc/MAX)*100)||10,100):0;
     const pin=document.getElementById('wpin-'+w.key);
     const bar=document.getElementById('prog-'+w.key);
     const lbl=document.getElementById('pct-'+w.key);
-    if(pin&&visited) pin.classList.add('visited');
-    if(bar) setTimeout(()=>bar.style.width=pct+'%',400);
-    if(lbl) lbl.textContent=pct+'%';
+    if(pin&&visited)pin.classList.add('visited');
+    if(bar)setTimeout(()=>bar.style.width=pct+'%',400);
+    if(lbl)lbl.textContent=pct+'%';
   });
 }
 
-// ── Tabs ─────────────────────────────────────────────────────────────────────
+// ── Tabs ──────────────────────────────────────────────────────────────────────
 function switchTab(tab,btn){
   document.querySelectorAll('.adv-section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+tab).classList.add('active');
   btn.classList.add('active');
-  if(tab==='bank') buildBankCarousel();
+  if(tab==='bank')buildBankCarousel();
 }
 
-// ── Name ─────────────────────────────────────────────────────────────────────
+// ── Name ──────────────────────────────────────────────────────────────────────
 function toggleNameEdit(){
   const w=document.getElementById('name-edit-wrap');
   w.style.display=w.style.display==='block'?'none':'block';
@@ -525,10 +653,12 @@ function speak(text){
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',4000);}
 
 window.addEventListener('load',()=>{
+  initSessionTracking();
   loadPhoto();
   document.getElementById('player-name-display').textContent=getNickname();
   renderLadRecords();
   renderWorldProgress();
+  checkSpinUnlock();
   speak("Welcome to My Adventures love! This is your personal journey. Explore, collect, and grow your portfolio!");
 });
 window.addEventListener('focus',()=>{
