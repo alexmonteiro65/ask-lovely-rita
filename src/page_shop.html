@@ -543,7 +543,7 @@ function renderItem(id) {
 function buyItem(id) {
   const item = ITEMS[id];
   const bc = getBC();
-  if(isOwned(id)){ toast('✅ Already in your collection love!'); return; }
+  // Multiple purchases allowed — players can buy same item to gift or collect
   if(getStock(id)<=0){ toast('😢 Sold out! Trade with another player!'); return; }
   if(bc < item.price){ toast(`🪙 You need ${item.price.toLocaleString()} BeatCoins love! You have ${bc.toLocaleString()}`); return; }
   const newBC = bc - item.price;
