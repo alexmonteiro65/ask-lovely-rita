@@ -683,7 +683,10 @@ function loadStorage() {
   try {
     const d = JSON.parse(localStorage.getItem('askLovelyRitaV4') || '{}');
     if (d.selectedLad && LADS[d.selectedLad]) S.lad = d.selectedLad;
-    if (d.theme && ['youngsters','grownups','experts'].includes(d.theme)) S.level = d.theme;
+    // Read level from page1 key first, fallback to JSON theme
+    const lv_ = localStorage.getItem('askLovelyRitaV4_level');
+    if (lv_ && ['youngsters','grownups','experts'].includes(lv_)) S.level = lv_;
+    else if (d.theme && ['youngsters','grownups','experts'].includes(d.theme)) S.level = d.theme;
     if (typeof d.beatcoins === 'number') S.beatcoins = d.beatcoins;
   } catch(e) {}
 }
@@ -754,6 +757,14 @@ function init() {
 // ════════════════════════════════
 
 function setLevel(lvl) {
+  const chosenLevel = localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
+  if(chosenLevel === 'youngsters' && lvl !== 'youngsters'){
+    speak("Stay on your level love! Youngsters have their own special turntable adventure!");
+    return;
+  }
+  if(lvl !== chosenLevel){
+    speak("Changing levels love! You started as " + chosenLevel.replace('grownups','Grown Ups') + " just so you know!");
+  }
   S.level = lvl;
   stopAudio();
   window.speechSynthesis && window.speechSynthesis.cancel();
