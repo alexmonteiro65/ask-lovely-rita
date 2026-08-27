@@ -469,7 +469,7 @@ function navCarousel(id, dir) {
 }
 
 // BC functions
-const BC_BONUS = 10000; // Welcome bonus — protected, cannot be spent in shop
+const BC_BONUS = 0; // Welcome bonus — protected, cannot be spent in shop
 function getBC(){ return Number(localStorage.getItem(BC_KEY)||BC_BONUS); }
 function setBC(v){ localStorage.setItem(BC_KEY,v); }
 
