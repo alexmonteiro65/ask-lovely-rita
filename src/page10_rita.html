@@ -688,7 +688,7 @@ const LEVEL_CFG = {
 
 // ── STATE
 let S = {
-  level:'youngsters', beatcoins: 25000, score:0,
+  level:'youngsters', beatcoins: 10000, score:0,
   qIndex:0, order:[], gameActive:false, answered:false,
   grownupTries:0, currentQ:null,
   listening:false, recognition:null,
@@ -713,6 +713,7 @@ function saveStorage() {
 }
 
 function init() {
+  localStorage.setItem('lra_visited_page10_rita.html','1');
   loadStorage();
   buildStageBg();
   buildGrownUpKeyboard();
@@ -1132,6 +1133,7 @@ function finishGame() {
   document.getElementById('bc-val').textContent=S.beatcoins;
   document.getElementById('score-val').textContent=S.score;
   saveStorage();
+  const wKey_=`lra_world_bc_page10_rita.html`; localStorage.setItem(wKey_, Number(localStorage.getItem(wKey_)||0)+(LEVEL_CFG&&LEVEL_CFG[S&&S.level]?LEVEL_CFG[S.level].bonusAll:50));
   setPose('celebrate');
   document.getElementById('result-icon').textContent='🏆';
   document.getElementById('result-title').textContent="Rita's Star!";
