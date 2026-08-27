@@ -381,9 +381,23 @@ function openSlideshow(world){
     d.id='ss-dot-'+i;
     dots.appendChild(d);
   }
-  // Start audio
+  // Start audio with gain boost for mobile volume
   const aud=document.getElementById('slideshow-audio');
-  aud.src=ss.music; aud.play().catch(()=>{});
+  aud.src=ss.music;
+  aud.volume=1.0;
+  aud.play().then(()=>{
+    try{
+      if(!window._audCtx){
+        window._audCtx=new(window.AudioContext||window.webkitAudioContext)();
+        window._audSrc=window._audCtx.createMediaElementSource(aud);
+        window._audGain=window._audCtx.createGain();
+        window._audSrc.connect(window._audGain);
+        window._audGain.connect(window._audCtx.destination);
+      }
+      window._audGain.gain.value=2.0;
+      if(window._audCtx.state==='suspended') window._audCtx.resume();
+    }catch(e){}
+  }).catch(()=>{});
   // When song ends, stop slideshow and close after 2 seconds
   aud.onended = () => {
     clearInterval(ssInterval); ssInterval=null;
