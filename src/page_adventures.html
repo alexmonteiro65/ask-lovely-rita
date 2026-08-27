@@ -366,7 +366,7 @@ function isProfitable(id){ return getCurrentValue(id)>COLL_ITEMS[id].price; }
 
 const LAD_IMGS={smart:RAW+'lad-smart-regular.png',cute:RAW+'lad-cute-regular.png',quiet:RAW+'lad-quiet-regular.png',funny:RAW+'lad-funny-regular.png'};
 
-function getBC(){ return Number(localStorage.getItem('askLovelyRitaV4_bc')||25000); }
+function getBC(){ return Number(localStorage.getItem('askLovelyRitaV4_bc')||10000); }
 function getLadBC(lad){ return Number(localStorage.getItem('askLovelyRitaV4_bc_'+lad)||0); }
 function getNickname(){ return localStorage.getItem('lra_nickname')||'Explorer'; }
 function getQty(id){ return Number(localStorage.getItem('lra_qty_'+id)||0); }
@@ -378,6 +378,7 @@ function getSessionEarned(){
   const start=Number(sessionStorage.getItem(SESSION_START_KEY)||getBC());
   return getBC()-start;
 }
+const BC_BONUS=10000;
 function initSessionTracking(){
   if(!sessionStorage.getItem(SESSION_START_KEY)){
     sessionStorage.setItem(SESSION_START_KEY,getBC());
@@ -400,12 +401,18 @@ function showPhoto(data){
 function loadPhoto(){ const d=localStorage.getItem('lra_player_photo');if(d)showPhoto(d); }
 
 // ── Rita Tip Box ──────────────────────────────────────────────────────────────
+let _ritaTipTimer=null;
 function showRitaTip(text){
   document.getElementById('rita-tip-text').textContent=text;
   document.getElementById('rita-tip-box').style.display='block';
   speak(text);
+  clearTimeout(_ritaTipTimer);
+  _ritaTipTimer=setTimeout(closeRitaTip,5000);
 }
-function closeRitaTip(){ document.getElementById('rita-tip-box').style.display='none'; }
+function closeRitaTip(){
+  document.getElementById('rita-tip-box').style.display='none';
+  clearTimeout(_ritaTipTimer);
+}
 
 // ── My Assets ─────────────────────────────────────────────────────────────────
 function updateMyAssets(){
@@ -457,14 +464,21 @@ function buildBankCarousel(){
     return;
   }
 
-  // Check for profitable items and notify once
+  // Rita tip — 50% chance on profitable, always on loss (different message)
   const profits=bankItems.filter(([id])=>isProfitable(id));
-  if(profits.length>0){
+  const losses=bankItems.filter(([id])=>!isProfitable(id));
+  if(profits.length>0 && Math.random()<0.50){
     const [pid,pitem]=profits[0];
     const val=getCurrentValue(pid);
     setTimeout(()=>{
       playProfitSound();
       showRitaTip(`Darling! Your ${pitem.name} has gone up in value! You paid ${pitem.price.toLocaleString()} EBCs and it is now worth ${val.toLocaleString()} EBCs. Shall we sell?`);
+    },1500);
+  } else if(losses.length>0 && profits.length===0 && Math.random()<0.40){
+    const [lid,litem]=losses[0];
+    const val=getCurrentValue(lid);
+    setTimeout(()=>{
+      showRitaTip(`Love, your ${litem.name} has dipped a little. Consider whether to hold on until the market recovers or exchange it now. Sometimes patience is the best investment!`);
     },1500);
   }
 
@@ -529,13 +543,31 @@ function sellItem(id){
   if(profit){
     const gain=val-item.price;
     toast(`💰 Sold for ${val.toLocaleString()} EBCs! Profit: +${gain.toLocaleString()} EBCs love!`);
-    showRitaTip(`Brilliant investment love! You made a profit of ${gain.toLocaleString()} Educational BeatCoins! Reinvest wisely!`);
     playProfitSound();
+    const sellMsg=`Brilliant investment love! You made a profit of ${gain.toLocaleString()} Educational BeatCoins! Back to the Beat Shop to reinvest wisely!`;
+    showRitaTip(sellMsg);
+    // Wait for Rita to finish speaking before redirect
+    const waitAndRedirect=()=>{
+      if(window.speechSynthesis&&window.speechSynthesis.speaking){
+        setTimeout(waitAndRedirect,300);
+      } else {
+        setTimeout(()=>window.location.href='page_shop.html',600);
+      }
+    };
+    setTimeout(waitAndRedirect,800);
   } else {
     toast(`✅ Exchanged! +${val.toLocaleString()} EBCs love! (20% restocking fee applied)`);
-    showRitaTip(`Exchanged love! ${val.toLocaleString()} Educational BeatCoins added to your balance!`);
+    const exchMsg=`Exchanged love! ${val.toLocaleString()} Educational BeatCoins have been added to your balance. Remember a twenty percent restocking fee was applied just like in the real world. Head back to the Beat Shop to explore more investments!`;
+    showRitaTip(exchMsg);
+    const waitAndRedirect2=()=>{
+      if(window.speechSynthesis&&window.speechSynthesis.speaking){
+        setTimeout(waitAndRedirect2,300);
+      } else {
+        setTimeout(()=>window.location.href='page_shop.html',600);
+      }
+    };
+    setTimeout(waitAndRedirect2,800);
   }
-  setTimeout(()=>window.location.href='page_shop.html',2500);
 }
 
 function playProfitSound(){
