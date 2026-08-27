@@ -69,8 +69,8 @@
     display: inline-block;
   }
   @keyframes fish-drift {
-    0%   { transform: translateX(-60px) scaleX(1); opacity:.3; }
-    100% { transform: translateX(430px) scaleX(1); opacity:.3; }
+    0%   { transform: translateX(420px); opacity:.3; }
+    100% { transform: translateX(-60px); opacity:.3; }
   }
 
   /* FUNNY LAD FIXED BOTTOM */
@@ -179,7 +179,7 @@
   }
   .stat-label { font-size:7px; color:rgba(255,255,255,.3); text-transform:uppercase; letter-spacing:.5px; }
   .stat-val { font-size:13px; font-weight:900; }
-  #bc-val { color:#ffde59; font-variant-numeric:tabular-nums; font-feature-settings:'tnum'; letter-spacing:0.5px; }
+  #bc-val { color:#ffde59; }
   #score-val { color:#4dc8ff; }
   #word-count-val { color:#00e5cc; }
 
@@ -419,7 +419,7 @@
       </div>
 
       <div id="status-bar">
-        <div class="stat-card"><div class="stat-label">Educational BeatCoins</div><div class="stat-val" id="bc-val">10,000</div></div>
+        <div class="stat-card"><div class="stat-label">BeatCoins</div><div class="stat-val" id="bc-val">25,000</div></div>
         <div class="stat-card"><div class="stat-label">Score</div><div class="stat-val" id="score-val">0</div></div>
         <div class="stat-card"><div class="stat-label">Words</div><div class="stat-val" id="word-count-val">0/8</div></div>
       </div>
@@ -566,7 +566,7 @@ const KB_ROWS = [
 // ── STATE ──────────────────────────────────────────────────
 let S = {
   level: 'youngsters',
-  beatcoins: 10000, score: 0,
+  beatcoins: 25000, score: 0,
   wordIndex: 0, wordsOrder: [],
   currentInput: [],
   gameActive: false, wordComplete: false,
@@ -579,9 +579,7 @@ function loadStorage() {
   try {
     const d = JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');
     if (d.theme && LEVEL_CFG[d.theme]) S.level = d.theme;
-    // Always load from canonical BC key — never from internal state
-    const savedBC = Number(localStorage.getItem('askLovelyRitaV4_bc')||10000);
-    S.beatcoins = savedBC;
+    if (typeof d.beatcoins==='number') S.beatcoins = d.beatcoins;
   } catch(e) {}
 }
 function saveStorage() {
