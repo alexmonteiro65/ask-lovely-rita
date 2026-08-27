@@ -122,6 +122,11 @@
   }
   #spin-world-btn:hover { transform: scale(1.02); }
   #spin-world-btn:active { transform: scale(0.97); }
+  @keyframes spin-btn-pulse {
+    0%,100%{box-shadow:0 0 10px rgba(255,110,247,.4);transform:scale(1);}
+    50%{box-shadow:0 0 22px rgba(255,110,247,.8),0 0 40px rgba(255,110,247,.4);transform:scale(1.03);}
+  }
+  #spin-world-btn.pulsing { animation:spin-btn-pulse 1.4s ease-in-out infinite; }
 
   .world-card.spin-highlight {
     box-shadow: 0 0 30px rgba(255,110,247,0.9), 0 0 60px rgba(255,110,247,0.5) !important;
@@ -1051,18 +1056,23 @@ function init() {
     const u = new SpeechSynthesisUtterance('');
     u.volume = 0;
     window.speechSynthesis.speak(u);
-    setTimeout(() => speak(RITA_INTRO), 400);
+    // Do NOT speak RITA_INTRO again here — already spoke on load
   };
   document.getElementById('phone').addEventListener('click', unlockSpeech, { once: true });
   document.getElementById('phone').addEventListener('touchstart', unlockSpeech, { once: true });
-  // Try immediately too (works if page was already interacted with)
+  // Speak once on load
   setTimeout(() => { if (!gestureUnlocked) speak(RITA_INTRO); }, 1200);
+  setTimeout(() => {
+    const sb = document.getElementById('spin-world-btn');
+    if(sb) sb.classList.add('pulsing');
+  }, 2000);
 }
 
 function loadStorage() {
   try {
-    S.beatcoins = Number(localStorage.getItem('askLovelyRitaV4_bc') || 25000);
-    if (d.theme && ['youngsters','grownups','experts'].includes(d.theme)) S.level = d.theme;
+    S.beatcoins = Number(localStorage.getItem('askLovelyRitaV4_bc') || 0);
+    const lv = localStorage.getItem('askLovelyRitaV4_level');
+    if(lv && ['youngsters','grownups','experts'].includes(lv)) S.level = lv;
   } catch(e) {}
 }
 
@@ -1264,6 +1274,8 @@ let chosenWorld = null;
 function spinWorlds() {
   if (isWorldSpinning) return;
   isWorldSpinning = true;
+  const sb = document.getElementById('spin-world-btn');
+  if(sb) sb.classList.remove('pulsing');
   chosenWorld = null;
 
   // Reset all cards
