@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ask Lovely Rita — The Turntable</title>
 <style>
@@ -1089,13 +1092,17 @@ function goForward() {
 
 function playRandomTrack() {
   stopAudio();
-  const levelTracks = TRACKS_BY_LEVEL[S.level] || TRACKS_BY_LEVEL.youngsters;
+  // Always re-read level from URL params to ensure correct music
+  const urlLevel = new URLSearchParams(window.location.search).get('level');
+  const activeLevel = urlLevel || S.level || 'youngsters';
+  const levelTracks = TRACKS_BY_LEVEL[activeLevel] || TRACKS_BY_LEVEL.youngsters;
   const track = levelTracks[Math.floor(Math.random() * levelTracks.length)];
+  console.log('[Turntable] Level:', activeLevel, '| Track:', track);
   try {
     S.audio = new Audio(AUDIO_BASE_URL + encodeURIComponent(track));
     S.audio.volume = 0.5;
-    S.audio.play().catch(() => {});
-  } catch(e) {}
+    S.audio.play().catch((e) => { console.log('[Turntable] Audio error:', e); });
+  } catch(e) { console.log('[Turntable] Exception:', e); }
 }
 
 function stopAudio() {
