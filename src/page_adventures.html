@@ -187,6 +187,18 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 .spin-lad-btn img{width:48px;height:48px;object-fit:contain;}
 .spin-lad-btn-name{font-size:9px;color:rgba(255,255,255,.6);}
 #spin-confirm-btn{background:linear-gradient(135deg,#ffde59,#ff6ef7);border:none;border-radius:12px;padding:10px 24px;color:#000;font-weight:bold;font-size:13px;cursor:pointer;font-family:Georgia,serif;display:none;}
+
+/* ── EBC number font — uniform digits globally ── */
+.ebc-num, #bc-display, #bc-amount, #bc-val, #bank-bc-val, 
+#asset-bc, #asset-session, #asset-coll, #asset-total,
+.lad-stat-bc, .lad-total-val, .bank-card-qty,
+.price-val, #popup-price-val, #bc-row-val,
+[id*="score-"][id*="smart"],[id*="score-"][id*="cute"],
+[id*="score-"][id*="quiet"],[id*="score-"][id*="funny"] {
+  font-family: 'Courier New', Courier, monospace !important;
+  font-variant-numeric: tabular-nums !important;
+  letter-spacing: 0.5px;
+}
 </style>
 </head>
 <body>
@@ -413,22 +425,16 @@ function setQty(id,v){ localStorage.setItem('lra_qty_'+id,v); }
 const SESSION_START_KEY='lra_session_bc_start';
 function getSessionEarned(){
   const start=Number(sessionStorage.getItem(SESSION_START_KEY)||0);
-  return Math.max(0, getBC()-start);
+  const current=['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
+  return Math.max(0, current-start);
 }
 const BC_BONUS=0;
 function initSessionTracking(){
-  // Migration: detect and clear legacy bonus amounts
-  // Any value that was set as a starting bonus (not earned) should be cleared
-  const legacyKey = 'lra_bc_migrated_v5';
-  if(!localStorage.getItem(legacyKey)){
-    localStorage.setItem(legacyKey,'1');
-    // Clear any pre-existing EBC balance — player starts from 0
-    localStorage.setItem('askLovelyRitaV4_bc','0');
-    // Clear stale session tracking so it recalculates from 0
-    sessionStorage.removeItem(SESSION_START_KEY);
-  }
+  // Record session start BEFORE any sync — preserves earned EBCs
   if(!sessionStorage.getItem(SESSION_START_KEY)){
-    sessionStorage.setItem(SESSION_START_KEY, getBC());
+    // Use sum of lads as session start point (consistent source of truth)
+    const ladTotal = ['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
+    sessionStorage.setItem(SESSION_START_KEY, ladTotal);
   }
 }
 
@@ -813,10 +819,10 @@ function speak(text){
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',4000);}
 
 window.addEventListener('load',()=>{
-  initSessionTracking();
   loadPhoto();
   document.getElementById('player-name-display').textContent=getNickname();
-  renderLadRecords();
+  renderLadRecords(); // Syncs askLovelyRitaV4_bc from lad sum first
+  initSessionTracking(); // Then record session start from synced value
   renderWorldProgress();
   checkSpinUnlock();
   // Apply level theme
