@@ -919,6 +919,12 @@ function unlockAudio(){
 
 function unlockAndSpin(){
   unlockAudio();
+  // Record session start — total EBCs before this play session
+  const SESSION_START_KEY = 'lra_session_start_bc';
+  if(!sessionStorage.getItem(SESSION_START_KEY)){
+    const ladTotal=['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
+    sessionStorage.setItem(SESSION_START_KEY, ladTotal);
+  }
   // Also unlock speechSynthesis on Android with a silent utterance first
   try {
     const u = new SpeechSynthesisUtterance('');
