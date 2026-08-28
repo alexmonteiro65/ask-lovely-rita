@@ -759,9 +759,10 @@ function scrollToTop(){
 })();
 
 window.addEventListener('load',()=>{
+  // Clear any accumulated invest value — always calculate fresh
+  localStorage.removeItem('lra_ebc_to_invest');
   initSession();
-  setTimeout(()=>updateBCDisplay(getBC()), 50);
-  updateBCDisplay(getBC());
+  setTimeout(()=>updateBCDisplay(getBC()), 100);
   Object.keys(ITEMS).forEach(id=>renderItem(id));
   // Init carousels
   initCarousel('posters',2); initCarousel('beetles',2);
