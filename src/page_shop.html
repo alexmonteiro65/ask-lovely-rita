@@ -737,16 +737,6 @@ function open3DPopup(id){
   const item = ITEMS_3D[id];
   if(!item) return;
 
-  // Registar item 3D no ITEMS para buyItem() funcionar
-  ITEMS[id] = { name: item.name, img: item.img, price: item.price };
-  const stockKey = 'lra_stock_'+id;
-  if(localStorage.getItem(stockKey)===null) localStorage.setItem(stockKey, item.stock);
-
-  currentPopupId = id;
-  document.getElementById('popup-img').src = item.img;
-  document.getElementById('popup-name').textContent = item.name;
-  document.getElementById('popup-price-val').textContent = item.price.toLocaleString();
-
   // Limpar botão Copy anterior
   const oldCopy = document.getElementById('popup-copy-btn');
   if(oldCopy) oldCopy.remove();
@@ -754,6 +744,10 @@ function open3DPopup(id){
   const alreadyOwned = (parseInt(localStorage.getItem('lra_qty_'+id))||0) > 0;
   const btn = document.getElementById('popup-buy-btn');
   const msg = document.getElementById('popup-msg');
+
+  document.getElementById('popup-img').src = item.img;
+  document.getElementById('popup-name').textContent = item.name;
+  document.getElementById('popup-price-val').textContent = item.price.toLocaleString();
   msg.textContent = '';
   btn.style.cssText = '';
   btn.disabled = false;
@@ -764,22 +758,63 @@ function open3DPopup(id){
     _show3DCopyBtn(id, item, msg);
   } else {
     btn.style.display = '';
+    const stockStored = Number(localStorage.getItem('lra_stock_'+id));
+    const stockLeft = isNaN(stockStored) || stockStored === 0 ? item.stock : stockStored;
+    document.getElementById('popup-stock-line').textContent = 'Limited Edition — ' + stockLeft + ' left!';
     btn.textContent = '🪙 Invest ' + item.price.toLocaleString() + ' EBCs';
     btn.style.background = 'linear-gradient(135deg,#ffd700,#c8a96e)';
     btn.style.color = '#000';
-    document.getElementById('popup-stock-line').textContent = 'Limited Edition — ' + getStock(id) + ' left!';
-    btn.onclick = function(){
-      buyItem(id);
-      if((parseInt(localStorage.getItem('lra_qty_'+id))||0) > 0){
-        btn.style.display = 'none';
-        document.getElementById('popup-stock-line').textContent = '✅ In your collection!';
-        msg.innerHTML = '<span style="color:#4ade80;">🎉 Added to your collection love!</span>';
-        _show3DCopyBtn(id, item, msg);
-      }
-    };
+    btn.onclick = function(){ buy3DItem(id, item, btn, msg); };
   }
   document.getElementById('item-popup').classList.add('open');
   setTimeout(()=>speak(item.rita), 400);
+}
+
+function buy3DItem(id, item, btn, msg){
+  const bal = getBC();
+  if(bal < item.price){
+    toast('Not enough EBCs love! Keep playing to earn more!');
+    speak('Keep playing love! You need more Educational BeatCoins to invest in this item!');
+    return;
+  }
+  // Deduzir do Lad ativo
+  const lad = localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';
+  const ladKey = 'askLovelyRitaV4_bc_'+lad;
+  const ladBal = Number(localStorage.getItem(ladKey)||0);
+  const deduct = Math.min(item.price, ladBal);
+  localStorage.setItem(ladKey, ladBal - deduct);
+  // Se faltou saldo no Lad ativo, deduzir do resto
+  let remaining = item.price - deduct;
+  if(remaining > 0){
+    ['smart','cute','quiet','funny'].filter(l=>l!==lad).forEach(l=>{
+      if(remaining<=0) return;
+      const k='askLovelyRitaV4_bc_'+l;
+      const v=Number(localStorage.getItem(k)||0);
+      const d=Math.min(remaining,v);
+      localStorage.setItem(k, v-d);
+      remaining-=d;
+    });
+  }
+  // Sincronizar cache
+  const newTotal = ['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
+  localStorage.setItem('askLovelyRitaV4_bc', newTotal);
+  // Stock
+  const stockKey = 'lra_stock_'+id;
+  const curStock = Number(localStorage.getItem(stockKey)||item.stock);
+  localStorage.setItem(stockKey, Math.max(0, curStock-1));
+  const stockEl = document.getElementById('stock-'+id);
+  if(stockEl) stockEl.textContent = Math.max(0, curStock-1);
+  // Coleção
+  localStorage.setItem('lra_qty_'+id, 1);
+  // Atualizar display EBCs na loja
+  updateBCDisplay(newTotal, true);
+  // UI do popup
+  btn.style.display = 'none';
+  document.getElementById('popup-stock-line').textContent = '✅ In your collection!';
+  msg.innerHTML = '<span style="color:#4ade80;">🎉 Added to your collection love!</span>';
+  _show3DCopyBtn(id, item, msg);
+  toast('🎉 ' + item.name + ' is now in your collection love!');
+  speak(item.rita);
 }
 
 function _show3DCopyBtn(id, item, msg){
@@ -801,11 +836,12 @@ function _show3DCopyBtn(id, item, msg){
         document.body.appendChild(ta); ta.focus(); ta.select();
         document.execCommand('copy'); document.body.removeChild(ta);
         doCopy();
-      } catch(e){ msg.textContent = 'Copy failed — code: ' + item.code; }
+      } catch(e){ msg.textContent = 'Copy failed — please note code manually.'; }
     });
   };
   document.getElementById('popup-buy-btn').insertAdjacentElement('afterend', copyBtn);
 }
+
 
 // Rita speaks when sticker popup opens
 const STICKER_IDS_SHOP = ['stk_lads','stk_vw','stk_instruments','stk_albums','stk_rita'];
