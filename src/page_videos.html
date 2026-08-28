@@ -69,7 +69,6 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 .vid-source-sm{font-size:7.5px;color:#ff6ef7;margin-top:2px;}
 
 /* DAILY BAR */
-#daily-text{font-size:9px;color:rgba(255,255,255,.35);margin-top:4px;text-align:right;}
 
 /* PLAYER OVERLAY */
 #player-overlay{display:none;position:absolute;inset:0;z-index:200;background:#000;flex-direction:column;}
@@ -175,7 +174,6 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 
 
     <div id="video-grid"></div>
-      <div id="daily-track"><div id="daily-fill" style="width:0%"></div></div>
     </div>
   </div>
 
@@ -548,13 +546,6 @@ function loadVideo(v, watched){
     iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
   }
   if(!watched){
-
-    if(daily<200){
-      if(playerTimer) clearTimeout(playerTimer);
-      playerTimer=setTimeout(()=>awardBC(v),60000);
-    } else {
-      document.getElementById('player-rita-say').textContent="You have reached today's video limit love! Come back tomorrow!";
-    }
   }
 }
 
