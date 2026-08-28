@@ -75,6 +75,9 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 .lad-stat.rank1{border-color:rgba(255,215,0,.4);background:rgba(255,215,0,.06);}
 .lad-stat.rank2{border-color:rgba(180,180,180,.3);background:rgba(180,180,180,.04);}
 .lad-stat.rank3{border-color:rgba(205,127,50,.3);background:rgba(205,127,50,.04);}
+.lad-total-row{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:rgba(255,222,89,.08);border:1px solid rgba(255,222,89,.2);border-radius:8px;margin-top:4px;}
+.lad-total-label{font-size:10px;letter-spacing:2px;color:rgba(255,222,89,.7);font-weight:bold;}
+.lad-total-val{font-size:14px;font-weight:bold;color:#ffde59;font-family:'Courier New',Courier,monospace;}
 
 /* World pins */
 #world-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
@@ -152,6 +155,18 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 
 /* Empty state — always shows carousel area */
 #bank-empty-msg{text-align:center;font-size:11px;color:rgba(255,255,255,.3);font-style:italic;padding:16px 0;}
+/* Collection image overlay */
+#coll-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.85);align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+#coll-overlay.open{display:flex;}
+#coll-overlay-img{max-width:280px;max-height:280px;object-fit:contain;border-radius:12px;box-shadow:0 0 40px rgba(255,110,247,.4);}
+#coll-overlay-name{font-size:14px;font-weight:bold;color:#fff;text-align:center;}
+#coll-overlay-val{font-size:12px;color:#ffde59;font-family:'Courier New',Courier,monospace;}
+#coll-overlay-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.coll-overlay-btn{padding:8px 18px;border:none;border-radius:12px;font-size:12px;font-weight:bold;cursor:pointer;font-family:Georgia,serif;}
+#coll-btn-close{background:rgba(255,255,255,.15);color:#fff;}
+#coll-btn-download{background:linear-gradient(135deg,#ff6ef7,#a855f7);color:#000;}
+#coll-btn-print{background:linear-gradient(135deg,#64ff96,#00c864);color:#000;}
+#coll-btn-3d{background:linear-gradient(135deg,#ffd700,#c8a96e);color:#000;}
 
 /* NAV */
 #nav-bar{display:flex;justify-content:space-around;align-items:center;padding:8px 0 14px;background:rgba(10,0,20,.95);border-top:1px solid rgba(255,255,255,.06);flex-shrink:0;}
@@ -314,6 +329,18 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 
   </div><!-- /scroll -->
 
+  <!-- Collection image overlay -->
+  <div id="coll-overlay">
+    <img id="coll-overlay-img" src="" alt="">
+    <div id="coll-overlay-name"></div>
+    <div id="coll-overlay-val"></div>
+    <div id="coll-overlay-btns">
+      <button class="coll-overlay-btn" id="coll-btn-close" onclick="closeColl()">✕ Close</button>
+      <button class="coll-overlay-btn" id="coll-btn-download" onclick="downloadColl()" style="display:none">⬇ Download</button>
+      <button class="coll-overlay-btn" id="coll-btn-print" onclick="printColl()" style="display:none">🖨️ Print</button>
+      <button class="coll-overlay-btn" id="coll-btn-3d" onclick="copy3D()" style="display:none">📐 3D Print Code</button>
+    </div>
+  </div>
   <nav id="nav-bar">
     <button class="nav-btn" onclick="window.location.href='page1_landing.html'"><span class="nav-icon">🏠</span><span>Home</span></button>
     <button class="nav-btn" onclick="window.location.href='page_shop.html'"><span class="nav-icon">🛍️</span><span>Beat Shop</span></button>
@@ -547,7 +574,7 @@ function buildBankCarousel(){
       : `<button class="sell-btn${profit?' profit':' loss'}" onclick="sellItem('${id}')">${profit?'💰 SELL':'↩ EXCHANGE'}</button>`;
     return `<div class="bank-card">
       ${qty>1?`<span class="bank-qty-badge">×${qty}</span>`:''}
-      <img src="${item.img}" alt="${item.name}">
+      <img src="${item.img}" alt="${item.name}" onclick="openCollOverlay('${id}',COLL_ITEMS['${id}'],${val})" style="cursor:pointer;">
       <div class="bank-card-name">${item.name}</div>
       ${qtyLine}
       <div class="bank-card-val">Qty: ${qty}</div>
@@ -668,13 +695,20 @@ function goFreeWorlds(){
 // ── My Records ────────────────────────────────────────────────────────────────
 function renderLadRecords(){
   const sorted=LADS.map(l=>({lad:l,bc:getLadBC(l)})).sort((a,b)=>b.bc-a.bc);
+  const total=LADS.reduce((sum,l)=>sum+getLadBC(l),0);
+  // Sync central BC key to match sum of lads
+  localStorage.setItem('askLovelyRitaV4_bc', total);
   document.getElementById('lad-grid').innerHTML=sorted.map((s,i)=>`
     <div class="lad-stat rank${i+1}">
       <div class="lad-medal">${MEDALS[i]}</div>
       <img src="${LAD_IMGS[s.lad]}" alt="${s.lad}">
       <div class="lad-stat-name">${LAD_NAMES[s.lad]}</div>
       <div class="lad-stat-bc">${s.bc.toLocaleString()}</div>
-    </div>`).join('');
+    </div>`).join('') +
+    `<div class="lad-total-row">
+      <span class="lad-total-label">TOTAL</span>
+      <span class="lad-total-val">${total.toLocaleString()} EBCs</span>
+    </div>`;
 }
 
 // ── World progress ────────────────────────────────────────────────────────────
@@ -719,6 +753,54 @@ function saveName(){
   speak('Lovely name love! Welcome '+v+'!');
 }
 function goWorld(url){window.location.href=url;}
+
+// ── Collection image overlay ──────────────────────────────────────────────────
+const STICKER_IDS = ['stk_lads','stk_vw','stk_instruments','stk_albums','stk_rita'];
+const STL_CODES = {
+  vw_red:    'LRA-STL-VW-RED-V1',
+  vw_yellow: 'LRA-STL-VW-YLW-V1',
+  lad_smart: 'LRA-STL-LAD-SMT-V1',
+  lad_cute:  'LRA-STL-LAD-CTE-V1',
+  lad_quiet: 'LRA-STL-LAD-QET-V1',
+  lad_funny: 'LRA-STL-LAD-FNY-V1',
+};
+let _collOverlayId = null;
+
+function openCollOverlay(id, item, val){
+  _collOverlayId = id;
+  const level = localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
+  document.getElementById('coll-overlay-img').src = item.img;
+  document.getElementById('coll-overlay-name').textContent = item.name;
+  document.getElementById('coll-overlay-val').textContent = val.toLocaleString() + ' EBCs';
+  // Show buttons based on level
+  document.getElementById('coll-btn-download').style.display = level !== 'youngsters' ? 'block' : 'none';
+  document.getElementById('coll-btn-print').style.display = (level !== 'youngsters' && STICKER_IDS.includes(id)) ? 'block' : 'none';
+  document.getElementById('coll-btn-3d').style.display = (level === 'experts' && STL_CODES[id]) ? 'block' : 'none';
+  document.getElementById('coll-overlay').classList.add('open');
+}
+function closeColl(){ document.getElementById('coll-overlay').classList.remove('open'); }
+function downloadColl(){
+  if(!_collOverlayId) return;
+  const item = COLL_ITEMS[_collOverlayId];
+  const a = document.createElement('a');
+  a.href = item.img; a.download = item.name + '.png'; a.target = '_blank';
+  a.click();
+  speak('Downloading your collectible love! Enjoy!');
+}
+function printColl(){
+  if(!_collOverlayId) return;
+  const item = COLL_ITEMS[_collOverlayId];
+  const win = window.open('');
+  win.document.write('<html><body style="margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh"><img src="' + item.img + '" style="max-width:80%;"><script>window.onload=()=>window.print()<\/script></body></html>');
+  speak('Opening print dialog love! Great for trading with friends!');
+}
+function copy3D(){
+  if(!_collOverlayId || !STL_CODES[_collOverlayId]) return;
+  const code = STL_CODES[_collOverlayId];
+  navigator.clipboard.writeText(code).catch(()=>{});
+  toast('📐 3D code copied: ' + code);
+  speak('Your three D print code has been copied love! Use it with your three D printer to bring your collectible to life!');
+}
 
 function speak(text){
   if(!window.speechSynthesis)return;
