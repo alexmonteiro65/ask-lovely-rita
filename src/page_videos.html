@@ -453,7 +453,7 @@ function closeSlideshow(){
 }
 let currentWorld='ocean', currentVidIdx=0, playerTimer=null;
 
-function getBC(){ return Number(localStorage.getItem(BC_KEY)||25000); }
+function getBC(){ return Number(localStorage.getItem(BC_KEY)||0); }
 function setBC(v){ localStorage.setItem(BC_KEY,v); }
 function getDailyEarned(){ return Number(localStorage.getItem(DAILY_KEY)||0); }
 function setDailyEarned(v){ localStorage.setItem(DAILY_KEY,v); }
@@ -591,16 +591,24 @@ function loadVideo(v, watched){
 // startVideo removed — logic now in loadVideo()
 
 function awardBC(v){
-  const bc=getBC(); const newBC=bc+50;
-  const daily=getDailyEarned(); const newDaily=daily+50;
-  setBC(newBC); setDailyEarned(newDaily); setWatched(v.id);
+  // Reward by level
+  const lvl = localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
+  const rewardMap = {youngsters:25, grownups:50, experts:100};
+  const reward = rewardMap[lvl] || 25;
+  // Only reward once per video per session
+  const sessKey = 'lra_video_rewarded_' + (v ? v.id : 'unknown');
+  if(sessionStorage.getItem(sessKey)) return;
+  sessionStorage.setItem(sessKey, '1');
+  const bc=getBC(); const newBC=bc+reward;
+  const daily=getDailyEarned(); const newDaily=daily+reward;
+  setBC(newBC); setDailyEarned(newDaily); if(v) setWatched(v.id);
   cashierSound();
   rollCounter(document.getElementById('bc-row-val'),bc,newBC,800);
   document.getElementById('player-earned').style.display='block';
-  document.getElementById('player-earned').textContent='🎉 +50 BeatCoins earned! Brilliant love!';
+  document.getElementById('player-earned').textContent='+'+reward+' BeatCoins earned! Brilliant love!';
   document.getElementById('player-bc-badge').style.display='none';
-  document.getElementById('player-rita-say').textContent='Brilliant love! You just earned 50 BeatCoins! You are a true Beat Explorer!';
-  speak('Brilliant love! You just earned 50 BeatCoins for watching! You are a true Beat Explorer!');
+  document.getElementById('player-rita-say').textContent='Brilliant love! You just earned '+reward+' BeatCoins for watching! You are a true Beat Explorer!';
+  speak('Brilliant love! You just earned '+reward+' BeatCoins for watching! You are a true Beat Explorer!');
   updateDailyBar();
   renderWorld(currentWorld);
 }
@@ -665,9 +673,11 @@ window.addEventListener('message', function(event){
       }
     }
     if(data.event==='finish'||data.event==='ended'){
-      // Close immediately — no delay so Vimeo end screen never shows
-      closePlayer();
-      speak('Brilliant love! You have finished the video! Check out the other videos waiting for you!');
+      // Award EBCs for completing the video
+      const currentVid = window._currentPlayingVideo || null;
+      if(currentVid) awardBC(currentVid);
+      // Close after short delay to show reward
+      setTimeout(closePlayer, 1500);
     }
   }catch(e){}
 }, false);
