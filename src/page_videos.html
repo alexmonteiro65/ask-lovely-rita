@@ -17,10 +17,6 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 /* HEADER */
 #vid-header{padding:44px 14px 10px;background:linear-gradient(180deg,#0d0028,#1a0040);flex-shrink:0;text-align:center;}
 #vid-title{font-size:20px;font-weight:bold;letter-spacing:2px;white-space:nowrap;background:linear-gradient(135deg,#ff6ef7,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 10px rgba(255,110,247,.5));}
-#bc-row{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:7px;margin-bottom:10px;}
-#bc-row img{width:24px;height:24px;object-fit:contain;}
-#bc-row-val{font-size:16px;font-weight:bold;color:#ffd700;}
-#bc-row-label{font-size:16px;font-weight:bold;color:#ffd700;}
 
 /* WORLD TABS */
 #world-tabs{display:flex;gap:4px;padding:0 0 8px;overflow:visible;}
@@ -49,8 +45,6 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 .feat-thumb-img{position:absolute;width:80px;height:80px;object-fit:contain;opacity:.7;filter:drop-shadow(0 0 16px rgba(255,110,247,.6));}
 .feat-play-btn{position:relative;width:60px;height:60px;border-radius:50%;background:rgba(255,110,247,.92);border:3px solid #fff;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;box-shadow:0 0 30px rgba(255,110,247,.8);transition:transform .2s;z-index:2;}
 #featured-card:hover .feat-play-btn{transform:scale(1.1);}
-.feat-bc-badge{position:absolute;top:10px;right:10px;display:flex;align-items:center;gap:4px;background:rgba(0,0,0,.78);border:1px solid #ffd700;border-radius:10px;padding:3px 8px;z-index:2;}
-.feat-bc-badge img{width:15px;height:15px;object-fit:contain;}
 .feat-bc-badge span{font-size:10px;font-weight:bold;color:#ffd700;}
 .feat-watched{position:absolute;top:10px;left:10px;background:rgba(74,222,128,.9);border-radius:8px;padding:3px 8px;font-size:9px;font-weight:bold;color:#000;display:none;z-index:2;}
 .feat-source-badge{position:absolute;bottom:8px;left:10px;font-size:8px;color:rgba(255,255,255,.5);background:rgba(0,0,0,.5);padding:2px 6px;border-radius:4px;z-index:2;}
@@ -75,10 +69,6 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 .vid-source-sm{font-size:7.5px;color:#ff6ef7;margin-top:2px;}
 
 /* DAILY BAR */
-#daily-bar{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:10px 14px;}
-#daily-label{font-size:9px;color:rgba(255,255,255,.4);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
-#daily-track{height:5px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;}
-#daily-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#ff6ef7,#ffd700);transition:width .6s ease;}
 #daily-text{font-size:9px;color:rgba(255,255,255,.35);margin-top:4px;text-align:right;}
 
 /* PLAYER OVERLAY */
@@ -87,9 +77,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 #player-hdr{display:flex;align-items:center;gap:10px;padding:44px 14px 10px;background:rgba(0,0,0,.9);}
 #player-back{background:rgba(255,255,255,.1);border:none;border-radius:50%;width:34px;height:34px;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 #player-title-txt{font-size:12px;font-weight:bold;color:#fff;flex:1;line-height:1.3;}
-#player-bc-badge{display:flex;align-items:center;gap:4px;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4);border-radius:10px;padding:4px 8px;flex-shrink:0;}
-#player-bc-badge img{width:14px;height:14px;object-fit:contain;}
-#player-bc-badge span{font-size:10px;font-weight:bold;color:#ffd700;white-space:nowrap;}
+
 
 #player-video-wrap{position:relative;flex:1;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden;}
 #player-iframe{width:100%;height:100%;border:none;display:none;}
@@ -104,7 +92,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 /* Block Vimeo three-dots menu (top-right corner) */
 #vimeo-dots-blocker{position:absolute;top:0;right:0;width:80px;height:50px;background:transparent;z-index:10;cursor:default;}
 
-#player-earned{background:rgba(74,222,128,.15);border:1px solid rgba(74,222,128,.4);border-radius:10px;padding:8px 14px;margin:0 14px 8px;text-align:center;display:none;font-size:12px;font-weight:bold;color:#4ade80;}
+
 #player-rita-box{background:rgba(255,255,255,.05);border-top:1px solid rgba(255,110,247,.15);padding:9px 14px;display:flex;align-items:center;gap:9px;flex-shrink:0;}
 #player-rita-mini{width:38px;height:38px;object-fit:contain;flex-shrink:0;}
 #player-rita-say{font-size:9.5px;color:rgba(255,255,255,.7);font-style:italic;flex:1;line-height:1.5;}
@@ -153,11 +141,6 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 
   <div id="vid-header">
     <div id="vid-title">LOVELY RITA VIDEOS</div>
-    <div id="bc-row">
-      <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin.png" alt="BeatCoin">
-      <span id="bc-row-val">0</span>
-      <span id="bc-row-label">BeatCoins</span>
-    </div>
     <div id="world-tabs">
       <div class="world-tab active" onclick="switchWorld('ocean')" id="tab-ocean"><span class="world-tab-icon">🐙</span><span class="world-tab-name">Octopus's<br>Garden</span></div>
       <div class="world-tab" onclick="switchWorld('space')" id="tab-space"><span class="world-tab-icon">🚀</span><span class="world-tab-name">Across the<br>Universe</span></div>
@@ -181,7 +164,6 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
         <div class="feat-thumb-overlay"></div>
         <img class="feat-thumb-img" id="feat-thumb-img" src="" alt="">
         <div class="feat-play-btn">▶</div>
-        <div class="feat-bc-badge" id="feat-bc-badge"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin.png" alt=""><span>✓ Watched</span></div>
         <div class="feat-watched" id="feat-watched">✓ WATCHED</div>
         <div class="feat-source-badge" id="feat-source-badge"></div>
       </div>
@@ -193,9 +175,6 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 
 
     <div id="video-grid"></div>
-
-    <div id="daily-bar">
-      <div id="daily-label">📺 Daily BeatCoins from Videos</div>
       <div id="daily-track"><div id="daily-fill" style="width:0%"></div></div>
       <div id="daily-text"><span id="daily-earned">0</span> / 200 BeatCoins earned today</div>
     </div>
@@ -206,7 +185,6 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
     <div id="player-hdr">
       <button id="player-back" onclick="closePlayer()">◀</button>
       <div id="player-title-txt">Video</div>
-      <div id="player-bc-badge"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin.png" alt=""><span id="player-bc-txt">+50 BeatCoins</span></div>
     </div>
     <div id="player-video-wrap">
 
@@ -214,7 +192,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
       <div id="yt-logo-blocker"></div>
       <div id="vimeo-dots-blocker"></div>
     </div>
-    <div id="player-earned"></div>
+
     <div id="player-rita-box">
       <img id="player-rita-mini" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/rita_apresentadora_clean.png" alt="Rita">
       <div id="player-rita-say">Tap the video to start watching love!</div>
@@ -455,8 +433,8 @@ let currentWorld='ocean', currentVidIdx=0, playerTimer=null;
 
 function getBC(){ return Number(localStorage.getItem(BC_KEY)||0); }
 function setBC(v){ localStorage.setItem(BC_KEY,v); }
-function getDailyEarned(){ return Number(localStorage.getItem(DAILY_KEY)||0); }
-function setDailyEarned(v){ localStorage.setItem(DAILY_KEY,v); }
+
+
 function isWatched(id){ return localStorage.getItem(WATCHED_PRE+id)==='1'; }
 function setWatched(id){ localStorage.setItem(WATCHED_PRE+id,'1'); }
 
@@ -535,13 +513,6 @@ function renderWorld(world){
       </div>`;
     grid.appendChild(card);
   });
-  updateDailyBar();
-}
-
-function updateDailyBar(){
-  const e=getDailyEarned();
-  document.getElementById('daily-fill').style.width=Math.min(e/200*100,100)+'%';
-  document.getElementById('daily-earned').textContent=e;
 }
 
 function openPlayer(idx){
@@ -578,7 +549,7 @@ function loadVideo(v, watched){
     iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
   }
   if(!watched){
-    const daily=getDailyEarned();
+
     if(daily<200){
       if(playerTimer) clearTimeout(playerTimer);
       playerTimer=setTimeout(()=>awardBC(v),60000);
@@ -591,7 +562,6 @@ function loadVideo(v, watched){
 // startVideo removed — logic now in loadVideo()
 
 function awardBC(v){
-  // EBC rewards from videos disabled — points come from games only
   if(v) setWatched(v.id);
   renderWorld(currentWorld);
 }
@@ -666,7 +636,7 @@ window.addEventListener('message', function(event){
 }, false);
 
 window.addEventListener('load',()=>{
-  document.getElementById('bc-row-val').textContent=getBC().toLocaleString();
+
   renderWorld('ocean');
   setTimeout(()=>speak(WORLDS['ocean'].rita),900);
 });
