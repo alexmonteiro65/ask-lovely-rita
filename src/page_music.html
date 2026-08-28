@@ -26,10 +26,6 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 }
 #jukebox-title{font-size:22px;font-weight:bold;letter-spacing:3px;color:#ff6ef7;text-shadow:0 0 20px #ff6ef7,0 0 40px #a855f7;}
 #jukebox-stars{font-size:10px;color:#ffd700;letter-spacing:4px;margin-top:2px;}
-#bc-header{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:8px;}
-#bc-header img{width:24px;height:24px;object-fit:contain;}
-#bc-header-val{font-size:16px;font-weight:bold;color:#ffd700;}
-#bc-header-label{font-size:16px;font-weight:bold;color:#ffd700;}
 
 /* ── SCROLL ── */
 #music-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 14px;position:relative;z-index:1;}
@@ -172,12 +168,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
       <div id="jukebox-title">THE BEAT JUKEBOX</div>
       <div id="jukebox-stars">★ ★ ★ ★ ★</div>
     </div>
-    <div id="bc-header">
-      <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin.png" alt="BeatCoin">
-      <span id="bc-header-val">0</span>
-      <span id="bc-header-label">BeatCoins</span>
-    </div>
-  </div>
+</div>
 
   <!-- SCROLL -->
   <div id="music-scroll">
@@ -291,7 +282,6 @@ audio.volume = 0.8;
 let currentTrack = -1;
 let isPlaying = false;
 
-function getBC(){ return Number(localStorage.getItem(BC_KEY)||25000); }
 
 function playTrack(idx){
   // Stop current
@@ -510,7 +500,6 @@ function toast(msg){
 }
 
 window.addEventListener('load',()=>{
-  document.getElementById('bc-header-val').textContent = getBC().toLocaleString();
   initDropdowns();
   setTimeout(()=>speak('Welcome to The Beat Jukebox love! Choose a level and pick your song!'),800);
 });
