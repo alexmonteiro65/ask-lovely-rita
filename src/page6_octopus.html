@@ -579,7 +579,7 @@ function loadStorage() {
   try {
     const d = JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');
     if (d.theme && LEVEL_CFG[d.theme]) S.level = d.theme;
-    if (typeof d.beatcoins==='number') S.beatcoins = d.beatcoins;
+    S.beatcoins = Number(localStorage.getItem('askLovelyRitaV4_bc')||0);
   } catch(e) {}
 }
 function saveStorage() {
