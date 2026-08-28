@@ -129,6 +129,18 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
     color:#000; font-size:8px; font-weight:900;
     padding:2px 5px; border-radius:6px; letter-spacing:.5px;
   }
+
+/* ── EBC number font — uniform digits globally ── */
+.ebc-num, #bc-display, #bc-amount, #bc-val, #bank-bc-val, 
+#asset-bc, #asset-session, #asset-coll, #asset-total,
+.lad-stat-bc, .lad-total-val, .bank-card-qty,
+.price-val, #popup-price-val, #bc-row-val,
+[id*="score-"][id*="smart"],[id*="score-"][id*="cute"],
+[id*="score-"][id*="quiet"],[id*="score-"][id*="funny"] {
+  font-family: 'Courier New', Courier, monospace !important;
+  font-variant-numeric: tabular-nums !important;
+  letter-spacing: 0.5px;
+}
 </style>
 </head>
 <body>
@@ -164,7 +176,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
                 <div class="stock-count">Only <span id="stock-rita_p1">6</span> left!</div>
                 <div class="item-footer">
                   <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">500</span></div>
-                  <button class="buy-btn" id="btn-rita_p1" onclick="event.stopPropagation();buyItem('rita_p1')">BUY</button>
+                  <button class="buy-btn" id="btn-rita_p1" onclick=\"event.stopPropagation();openPopup('rita_p1')\">BUY</button>
                 </div>
               </div>
               <div class="item-card" id="card-rita_p2" onclick="openPopup('rita_p2')">
@@ -175,7 +187,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
                 <div class="stock-count">Only <span id="stock-rita_p2">6</span> left!</div>
                 <div class="item-footer">
                   <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">450</span></div>
-                  <button class="buy-btn" id="btn-rita_p2" onclick="event.stopPropagation();buyItem('rita_p2')">BUY</button>
+                  <button class="buy-btn" id="btn-rita_p2" onclick=\"event.stopPropagation();openPopup('rita_p2')\">BUY</button>
                 </div>
               </div>
             </div>
@@ -201,7 +213,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
                 <div class="stock-count">Only <span id="stock-vw_red">5</span> left!</div>
                 <div class="item-footer">
                   <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">800</span></div>
-                  <button class="buy-btn" id="btn-vw_red" onclick="event.stopPropagation();buyItem('vw_red')">BUY</button>
+                  <button class="buy-btn" id="btn-vw_red" onclick=\"event.stopPropagation();openPopup('vw_red')\">BUY</button>
                 </div>
               </div>
               <div class="item-card" id="card-vw_yellow" onclick="openPopup('vw_yellow')">
@@ -212,7 +224,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
                 <div class="stock-count">Only <span id="stock-vw_yellow">5</span> left!</div>
                 <div class="item-footer">
                   <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">750</span></div>
-                  <button class="buy-btn" id="btn-vw_yellow" onclick="event.stopPropagation();buyItem('vw_yellow')">BUY</button>
+                  <button class="buy-btn" id="btn-vw_yellow" onclick=\"event.stopPropagation();openPopup('vw_yellow')\">BUY</button>
                 </div>
               </div>
             </div>
@@ -238,7 +250,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
                 <div class="stock-count"><span id="stock-badge_oct">10</span> available</div>
                 <div class="item-footer">
                   <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">350</span></div>
-                  <button class="buy-btn" id="btn-badge_oct" onclick="event.stopPropagation();buyItem('badge_oct')">BUY</button>
+                  <button class="buy-btn" id="btn-badge_oct" onclick=\"event.stopPropagation();openPopup('badge_oct')\">BUY</button>
                 </div>
               </div>
               <div class="item-card" id="card-badge_spc" onclick="openPopup('badge_spc')">
@@ -249,7 +261,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
                 <div class="stock-count"><span id="stock-badge_spc">10</span> available</div>
                 <div class="item-footer">
                   <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">350</span></div>
-                  <button class="buy-btn" id="btn-badge_spc" onclick="event.stopPropagation();buyItem('badge_spc')">BUY</button>
+                  <button class="buy-btn" id="btn-badge_spc" onclick=\"event.stopPropagation();openPopup('badge_spc')\">BUY</button>
                 </div>
               </div>
             </div>
@@ -275,7 +287,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
                 <div class="stock-count">Only <span id="stock-lad_smart">6</span> left!</div>
                 <div class="item-footer">
                   <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">400</span></div>
-                  <button class="buy-btn" id="btn-lad_smart" onclick="event.stopPropagation();buyItem('lad_smart')">BUY</button>
+                  <button class="buy-btn" id="btn-lad_smart" onclick=\"event.stopPropagation();openPopup('lad_smart')\">BUY</button>
                 </div>
               </div>
               <div class="item-card" id="card-lad_cute" onclick="openPopup('lad_cute')">
@@ -286,7 +298,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
                 <div class="stock-count">Only <span id="stock-lad_cute">6</span> left!</div>
                 <div class="item-footer">
                   <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">400</span></div>
-                  <button class="buy-btn" id="btn-lad_cute" onclick="event.stopPropagation();buyItem('lad_cute')">BUY</button>
+                  <button class="buy-btn" id="btn-lad_cute" onclick=\"event.stopPropagation();openPopup('lad_cute')\">BUY</button>
                 </div>
               </div>
               <div class="item-card" id="card-lad_quiet" onclick="openPopup('lad_quiet')">
@@ -297,7 +309,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
                 <div class="stock-count">Only <span id="stock-lad_quiet">6</span> left!</div>
                 <div class="item-footer">
                   <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">400</span></div>
-                  <button class="buy-btn" id="btn-lad_quiet" onclick="event.stopPropagation();buyItem('lad_quiet')">BUY</button>
+                  <button class="buy-btn" id="btn-lad_quiet" onclick=\"event.stopPropagation();openPopup('lad_quiet')\">BUY</button>
                 </div>
               </div>
               <div class="item-card" id="card-lad_funny" onclick="openPopup('lad_funny')">
@@ -308,7 +320,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
                 <div class="stock-count">Only <span id="stock-lad_funny">6</span> left!</div>
                 <div class="item-footer">
                   <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">400</span></div>
-                  <button class="buy-btn" id="btn-lad_funny" onclick="event.stopPropagation();buyItem('lad_funny')">BUY</button>
+                  <button class="buy-btn" id="btn-lad_funny" onclick=\"event.stopPropagation();openPopup('lad_funny')\">BUY</button>
                 </div>
               </div>
             </div>
@@ -336,7 +348,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
                 <div class="stock-count">Only <span id="stock-stk_lads">99</span> left!</div>
                 <div class="item-footer">
                   <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">800</span></div>
-                  <button class="buy-btn" id="btn-stk_lads" onclick="event.stopPropagation();buyItem('stk_lads')">INVEST</button>
+                  <button class="buy-btn" id="btn-stk_lads" onclick=\"event.stopPropagation();openPopup('stk_lads')\">INVEST</button>
                 </div>
               </div>
 
@@ -348,7 +360,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
                 <div class="stock-count">Only <span id="stock-stk_vw">99</span> left!</div>
                 <div class="item-footer">
                   <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">800</span></div>
-                  <button class="buy-btn" id="btn-stk_vw" onclick="event.stopPropagation();buyItem('stk_vw')">INVEST</button>
+                  <button class="buy-btn" id="btn-stk_vw" onclick=\"event.stopPropagation();openPopup('stk_vw')\">INVEST</button>
                 </div>
               </div>
 
@@ -360,7 +372,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
                 <div class="stock-count">Only <span id="stock-stk_instruments">99</span> left!</div>
                 <div class="item-footer">
                   <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">800</span></div>
-                  <button class="buy-btn" id="btn-stk_instruments" onclick="event.stopPropagation();buyItem('stk_instruments')">INVEST</button>
+                  <button class="buy-btn" id="btn-stk_instruments" onclick=\"event.stopPropagation();openPopup('stk_instruments')\">INVEST</button>
                 </div>
               </div>
 
@@ -372,7 +384,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
                 <div class="stock-count">Only <span id="stock-stk_albums">99</span> left!</div>
                 <div class="item-footer">
                   <div class="item-price"><span class="price-icon">🪙</span><span class="price-val">800</span></div>
-                  <button class="buy-btn" id="btn-stk_albums" onclick="event.stopPropagation();buyItem('stk_albums')">INVEST</button>
+                  <button class="buy-btn" id="btn-stk_albums" onclick=\"event.stopPropagation();openPopup('stk_albums')\">INVEST</button>
                 </div>
               </div>
 
@@ -386,7 +398,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
                 <div class="stock-count">Only <span id="stock-stk_rita">50</span> left!</div>
                 <div class="item-footer">
                   <div class="item-price" style="border-color:rgba(255,215,0,.5);"><span class="price-icon">🪙</span><span class="price-val" style="color:#ffd700;">1,600</span></div>
-                  <button class="buy-btn" id="btn-stk_rita" onclick="event.stopPropagation();buyItem('stk_rita')" style="background:linear-gradient(135deg,#ffd700,#c8a96e);color:#000;">INVEST</button>
+                  <button class="buy-btn" id="btn-stk_rita" onclick=\"event.stopPropagation();openPopup('stk_rita')\" style="background:linear-gradient(135deg,#ffd700,#c8a96e);color:#000;">INVEST</button>
                 </div>
               </div>
 
@@ -470,24 +482,19 @@ function navCarousel(id, dir) {
 
 // BC functions
 const BC_BONUS = 0; // Welcome bonus — protected, cannot be spent in shop
-function getBC(){ return Number(localStorage.getItem(BC_KEY)||BC_BONUS); }
+function getBC(){
+  const ladSum=['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
+  if(ladSum>0){ localStorage.setItem(BC_KEY,ladSum); return ladSum; }
+  return Number(localStorage.getItem(BC_KEY)||0);
+}
 function setBC(v){ localStorage.setItem(BC_KEY,v); }
 
 // Session tracking
 const SESS_KEY = 'lra_session_bc_start';
 function initSession(){
   if(!sessionStorage.getItem(SESS_KEY)){
-    // New session starts — EBCs already safe in BC balance (no action needed)
-    // Show Rita message if they had unspent last session
-    const hadUnspent = localStorage.getItem('lra_had_unspent');
-    if(hadUnspent){
-      localStorage.removeItem('lra_had_unspent');
-      setTimeout(()=>{
-        toast('Your unspent BeatCoins are safe in your account love! Play to unlock your next investing allowance!');
-        speak('Your unspent BeatCoins have been safely returned to your account love! Play more games to unlock your next investing allowance!');
-      }, 1500);
-    }
-    sessionStorage.setItem(SESS_KEY, getBC());
+    const ladTotal=['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
+    sessionStorage.setItem(SESS_KEY, ladTotal);
   }
 }
 function getSessionEarned(){
@@ -660,13 +667,7 @@ function scrollToTop(){
 })();
 
 window.addEventListener('load',()=>{
-  // Migration v5: one-time reset
-  if(!localStorage.getItem('lra_bc_migrated_v5')){
-    localStorage.setItem('lra_bc_migrated_v5','1');
-    localStorage.setItem('askLovelyRitaV4_bc','0');
-  }
   initSession();
-  // Update spendable display after session init
   setTimeout(()=>updateBCDisplay(getBC()), 50);
   updateBCDisplay(getBC());
   Object.keys(ITEMS).forEach(id=>renderItem(id));
