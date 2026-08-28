@@ -176,7 +176,6 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 
     <div id="video-grid"></div>
       <div id="daily-track"><div id="daily-fill" style="width:0%"></div></div>
-      <div id="daily-text"><span id="daily-earned">0</span> / 200 BeatCoins earned today</div>
     </div>
   </div>
 
@@ -236,7 +235,7 @@ const RAW = 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/ma
 const MUSIC = RAW + 'music/';
 const SCENES = RAW + 'videos/scenes/';
 const BC_KEY = 'askLovelyRitaV4_bc';
-const DAILY_KEY = 'lra_vid_daily_' + new Date().toDateString();
+
 const WATCHED_PRE = 'lra_watched_';
 
 /* ── VIDEO DATA ────────────────────────────────────────────────
@@ -532,7 +531,7 @@ function openPlayer(idx){
   // EBC badge disabled
   document.getElementById('player-rita-say').textContent=
     watched?'Great taste love! You already watched this one — wonderful choice!'
-    :'Enjoy the video love! Stay until the end to earn your BeatCoins!';
+    :'Enjoy the video love! Watch until the end!';
   document.getElementById('player-overlay').classList.add('open');
   // Load video immediately — user tap on card IS the required gesture
   loadVideo(v, watched);
