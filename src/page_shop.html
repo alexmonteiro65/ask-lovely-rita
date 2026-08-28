@@ -472,7 +472,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
         <span id="popup-price-val">0</span>
         <span id="popup-price-label">BeatCoins</span>
       </div>
-      <button id="popup-buy-btn" onclick="buyFromPopup()">BUY NOW</button>
+      <button id="popup-buy-btn">BUY NOW</button>
       <div id="popup-msg"></div>
     </div>
   </div>
@@ -702,8 +702,8 @@ function updatePopupState(id) {
 
     stock<=0 ? 'Sold out!' :
     `${stock} remaining`;
-  if(stock<=0){ btn.textContent='SOLD OUT'; btn.disabled=true; msg.textContent=''; }
-  else { btn.textContent='BUY NOW 🛒'; btn.disabled=false; msg.textContent=''; }
+  if(stock<=0){ btn.textContent='SOLD OUT'; btn.disabled=true; btn.onclick=null; msg.textContent=''; }
+  else { btn.textContent='BUY NOW 🛒'; btn.disabled=false; btn.onclick=buyFromPopup; msg.textContent=''; }
 }
 function buyFromPopup() {
   if(currentPopupId) buyItem(currentPopupId);
