@@ -153,7 +153,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
     <div id="bc-box">
       <img id="bc-icon" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin_small.png" alt="EBC" style="width:24px;height:24px;object-fit:contain;" onerror="this.style.display='none'">
       <span id="bc-val">0</span>
-      <span id="bc-sublabel">BeatCoins Available</span>
+      <span id="bc-sublabel">EBCs Available to Invest</span>
     </div>
   </div>
 
@@ -409,6 +409,45 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
       </div>
     </div>
 
+    <!-- SHELF 6: 3D PRINT COLLECTIBLES -->
+    <div class="shelf-section">
+      <div class="shelf-label" style="border-left-color:#ffd700;color:rgba(255,215,0,.8);">📐 3D Print Collectibles — Limited Edition</div>
+      <div class="carousel-wrap" style="border-color:rgba(255,215,0,.3);">
+        <div class="carousel-row">
+          <button class="carousel-arrow" onclick="navCarousel('threed',-1)">◀</button>
+          <div class="carousel-viewport" id="viewport-threed">
+            <div class="carousel-track" id="track-threed">
+              <div class="item-card" style="border-color:rgba(255,215,0,.3);background:rgba(255,215,0,.05);" onclick="open3DPopup('vw_bus_3d')">
+                <div class="item-img-wrap" id="imgwrap-vw_bus_3d">
+                  <span class="premium-badge" style="background:linear-gradient(135deg,#ffd700,#c8a96e);">📐 3D</span>
+                  <img class="item-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/vw_red.png" alt="VW Bus 3D">
+                </div>
+                <div class="item-name" style="color:#ffd700;">VW Bus<br>British Edition 🇬🇧</div>
+                <div class="stock-count">Limited — <span>12</span> codes left!</div>
+                <div class="item-footer">
+                  <div class="item-price" style="border-color:rgba(255,215,0,.5);"><span class="price-icon">🪙</span><span class="price-val" style="color:#ffd700;">1,200</span></div>
+                  <button class="buy-btn" style="background:linear-gradient(135deg,#ffd700,#c8a96e);color:#000;" onclick="event.stopPropagation();open3DPopup('vw_bus_3d')">GET CODE</button>
+                </div>
+              </div>
+              <div class="item-card" style="border-color:rgba(255,215,0,.3);background:rgba(255,215,0,.05);" onclick="open3DPopup('lads_3d')">
+                <div class="item-img-wrap" id="imgwrap-lads_3d">
+                  <span class="premium-badge" style="background:linear-gradient(135deg,#ffd700,#c8a96e);">📐 3D</span>
+                  <img class="item-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-smart-regular.png" alt="Lads 3D">
+                </div>
+                <div class="item-name" style="color:#ffd700;">The Lads<br>3D Figure Set ⭐</div>
+                <div class="stock-count">Limited — <span>8</span> codes left!</div>
+                <div class="item-footer">
+                  <div class="item-price" style="border-color:rgba(255,215,0,.5);"><span class="price-icon">🪙</span><span class="price-val" style="color:#ffd700;">2,000</span></div>
+                  <button class="buy-btn" style="background:linear-gradient(135deg,#ffd700,#c8a96e);color:#000;" onclick="event.stopPropagation();open3DPopup('lads_3d')">GET CODE</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="carousel-arrow" onclick="navCarousel('threed',1)">▶</button>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /shop-scroll -->
 
   <!-- ITEM POPUP -->
@@ -491,11 +530,21 @@ function setBC(v){ localStorage.setItem(BC_KEY,v); }
 
 // Session tracking
 const SESS_KEY = 'lra_session_bc_start';
+const INVEST_KEY = 'lra_ebc_to_invest';
 function initSession(){
   if(!sessionStorage.getItem(SESS_KEY)){
     const ladTotal=['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
     sessionStorage.setItem(SESS_KEY, ladTotal);
   }
+}
+function getSpendableTotal(){
+  // Spendable = 50% of session earned + any unspent from previous sessions
+  const sessEarned = getSessionEarned();
+  const newSpend = Math.floor(sessEarned * 0.5);
+  const stored = Number(localStorage.getItem(INVEST_KEY)||0);
+  const total = Math.max(stored, newSpend);
+  if(newSpend > stored) localStorage.setItem(INVEST_KEY, newSpend);
+  return total;
 }
 function getSessionEarned(){
   const start = Number(sessionStorage.getItem(SESS_KEY)||BC_BONUS);
@@ -503,9 +552,7 @@ function getSessionEarned(){
 }
 
 // Spendable = 50% of EBCs earned this session
-function getSpendable(){
-  return Math.floor(getSessionEarned() * 0.5);
-}
+function getSpendable(){ return getSpendableTotal(); }
 function getStock(id){ if(localStorage.getItem('lra_stock_'+id)===null) localStorage.setItem('lra_stock_'+id,ITEMS[id].stock); return Number(localStorage.getItem('lra_stock_'+id)); }
 function setStock(id,v){ localStorage.setItem('lra_stock_'+id,v); }
 function getQty(id){ return Number(localStorage.getItem('lra_qty_'+id)||0); }
@@ -602,6 +649,10 @@ function buyItem(id) {
   setBC(newBC);
   setStock(id, getStock(id)-1);
   addQty(id);
+  // Deduct from investable amount
+  const currentInvest = Number(localStorage.getItem(INVEST_KEY)||0);
+  const newInvest = Math.max(0, currentInvest - item.price);
+  localStorage.setItem(INVEST_KEY, newInvest);
   updateBCDisplay(newBC, true);
   renderItem(id);
   updatePopupState(id);
@@ -612,6 +663,10 @@ function buyItem(id) {
 // Popup
 let currentPopupId = null;
 function openPopup(id) {
+  // Rita speaks for stickers
+  if(STICKER_IDS_SHOP.includes(id)){
+    setTimeout(()=>speak("These stickers are wonderful love! Print them at home on Avery sticker paper and trade them with your friends at school! What a brilliant way to collect!"), 600);
+  }
   currentPopupId = id;
   const item = ITEMS[id];
   document.getElementById('popup-img').src = item.img;
@@ -640,6 +695,46 @@ function closePopup() {
   document.getElementById('item-popup').classList.remove('open');
   currentPopupId = null;
 }
+
+// 3D items data
+const ITEMS_3D = {
+  'vw_bus_3d': {
+    name: 'VW Bus — British Edition',
+    code: 'LRA-3D-VWBUS-UK-V1',
+    rita: "How exciting love! This is our exclusive VW Bus in British racing colours! Copy this code and open it in any free slicing software like Tinkercad or Ultimaker Cura. Then print your very own VW Bus at home on a three D printer!"
+  },
+  'lads_3d': {
+    name: 'The Lads — 3D Figure Set',
+    code: 'LRA-3D-LADS-SET-V1',
+    rita: "Oh how wonderful love! You are about to print your very own Lads figures! All four of them — Smart, Cute, Quiet and Funny! Copy this code into your three D printing software and bring them to life at home!"
+  }
+};
+
+function open3DPopup(id){
+  const item = ITEMS_3D[id];
+  if(!item) return;
+  document.getElementById('popup-img').src = id === 'vw_bus_3d'
+    ? 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/vw_red.png'
+    : 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-smart-regular.png';
+  document.getElementById('popup-name').textContent = item.name;
+  document.getElementById('popup-stock-line').textContent = 'Limited Edition 3D Print Code';
+  document.getElementById('popup-price-val').textContent = id === 'vw_bus_3d' ? '1,200' : '2,000';
+  const btn = document.getElementById('popup-buy-btn');
+  btn.textContent = '📐 Copy 3D Code';
+  btn.onclick = () => {
+    navigator.clipboard.writeText(item.code).catch(()=>{});
+    toast('📐 Code copied: ' + item.code + ' — Open in your 3D slicer!');
+    speak(item.rita);
+    btn.textContent = '✅ Code Copied!';
+    setTimeout(()=>{ btn.textContent = '📐 Copy 3D Code'; }, 3000);
+  };
+  document.getElementById('item-popup').classList.add('open');
+  setTimeout(()=>speak(item.rita), 400);
+}
+
+// Rita speaks when sticker popup opens
+const STICKER_IDS_SHOP = ['stk_lads','stk_vw','stk_instruments','stk_albums','stk_rita'];
+const _origOpenPopup = typeof openPopup === 'function' ? openPopup : null;
 
 function speak(text){
   if(!window.speechSynthesis)return;
@@ -675,6 +770,7 @@ window.addEventListener('load',()=>{
   initCarousel('posters',2); initCarousel('beetles',2);
   initCarousel('badges',2);  initCarousel('lads',4);
   initCarousel('stickers',5);
+  initCarousel('threed',2);
   speak("Welcome to Beat Shop love! Explore and invest your BeatCoins in exclusive collectibles!");
 });
 </script>
