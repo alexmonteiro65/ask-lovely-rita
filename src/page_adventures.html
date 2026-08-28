@@ -490,60 +490,29 @@ function closeRitaTip(){
 // ── My Assets ─────────────────────────────────────────────────────────────────
 function updateMyAssets(){
   const bc=getBC();
-  const sessionEarned=getSessionEarned();
   const level=localStorage.getItem('askLovelyRitaV4_level')||'youngsters';
+  const shopCredit=Number(localStorage.getItem('lra_ebc_to_invest')||0);
   let collVal=0;
   Object.keys(COLL_ITEMS).forEach(id=>{
     const qty=getQty(id);
     if(qty>0) collVal+=getCurrentValue(id)*qty;
   });
-  // total calculated below after shopCredit is defined
-  document.getElementById('asset-bc').textContent=bc.toLocaleString()+' EBCs';
+  const collTotal=collVal+shopCredit;
+  const totalPortfolio=bc+collVal+shopCredit;
 
-  // Youngsters: simplified — hide session earned and collection value details
-  const earnedRow=document.getElementById('asset-earned-row');
-  const collRow=document.getElementById('asset-coll-row');
-  // Calculate all values
-  const shopCredit = Math.floor(sessionEarned * 0.5);  // 50% of earned = Beat Shop Credit
-  const savedHalf = Math.floor(sessionEarned * 0.5);   // 50% of earned = BeatCoins Earned (saved)
-  const prevBc = bc - sessionEarned;                    // Balance before playing today
-  const collTotal = collVal + shopCredit;               // Collection Value + Beat Shop Credit
-  const totalPortfolio = bc + collVal;                  // Total EBCs Balance + Collection Value
+  // Update display elements safely
+  const set=(id,val)=>{ const el=document.getElementById(id); if(el) el.textContent=val; };
 
-  // Update all elements
-  const prevEl = document.getElementById('asset-prev-bc');
-  const earnedEl = document.getElementById('asset-earned');
-  const investEl = document.getElementById('asset-invest');
-  const collTotalEl = document.getElementById('asset-coll-total');
-
-  if(prevEl) prevEl.textContent = Math.max(0,prevBc).toLocaleString() + ' EBCs';
-  if(earnedEl) earnedEl.textContent = savedHalf.toLocaleString() + ' EBCs';
-  if(investEl) investEl.textContent = shopCredit.toLocaleString() + ' EBCs';
-  if(collTotalEl) collTotalEl.textContent = collTotal.toLocaleString() + ' EBCs';
-
-  document.getElementById('asset-bc').textContent = bc.toLocaleString() + ' EBCs';
-  document.getElementById('asset-coll').textContent = collVal.toLocaleString() + ' EBCs';
-  document.getElementById('asset-total').textContent = totalPortfolio.toLocaleString() + ' EBCs';
-  document.getElementById('asset-total-label').textContent = 'Total Portfolio';
-
-  if(level==='youngsters'){
-    if(earnedRow) earnedRow.style.display='';
-    if(collRow) collRow.style.display='';
-    const sessEl=document.getElementById('asset-session');
-    if(sessionEarned>=0){
-      sessEl.textContent='+'+sessionEarned.toLocaleString()+' EBCs';
-      sessEl.className='asset-val positive';
-    } else {
-      sessEl.textContent=sessionEarned.toLocaleString()+' EBCs';
-      sessEl.className='asset-val negative';
-    }
-    document.getElementById('asset-coll').textContent=collVal.toLocaleString()+' EBCs';
-    document.getElementById('asset-total').textContent=total.toLocaleString()+' EBCs';
-    if(level==='experts'){
-      document.getElementById('asset-total-label').textContent='Total Portfolio';
-    }
-  }
+  set('asset-prev-bc', Math.max(0,bc-shopCredit).toLocaleString()+' EBCs');
+  set('asset-earned', shopCredit.toLocaleString()+' EBCs');
+  set('asset-bc', bc.toLocaleString()+' EBCs');
+  set('asset-invest', shopCredit.toLocaleString()+' EBCs');
+  set('asset-coll', collVal.toLocaleString()+' EBCs');
+  set('asset-coll-total', collTotal.toLocaleString()+' EBCs');
+  set('asset-total', totalPortfolio.toLocaleString()+' EBCs');
+  set('asset-total-label', 'Total Portfolio');
 }
+
 
 // ── Bank carousel — 3 visible, one-by-one, circular ──────────────────────────
 const VISIBLE=3;
