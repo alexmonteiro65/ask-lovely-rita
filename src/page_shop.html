@@ -529,26 +529,26 @@ function getBC(){
 function setBC(v){ localStorage.setItem(BC_KEY,v); }
 
 // Session tracking
-const SESS_KEY = 'lra_session_bc_start';
+const SESS_KEY = 'lra_session_start_bc'; // Unified key — set by page1 on PLAY
 const INVEST_KEY = 'lra_ebc_to_invest';
 function initSession(){
-  if(!sessionStorage.getItem(SESS_KEY)){
-    const ladTotal=['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
-    sessionStorage.setItem(SESS_KEY, ladTotal);
-  }
+  // SESSION_START is set by page1 when player presses PLAY
+  // We only read it here, never overwrite it
+  // If not set (direct access), default to 0
 }
 function getSpendableTotal(){
-  // Spendable = 50% of session earned + any unspent from previous sessions
+  // Spendable = 50% of session earned + any unspent stored
   const sessEarned = getSessionEarned();
   const newSpend = Math.floor(sessEarned * 0.5);
   const stored = Number(localStorage.getItem(INVEST_KEY)||0);
-  const total = Math.max(stored, newSpend);
-  if(newSpend > stored) localStorage.setItem(INVEST_KEY, newSpend);
+  const total = stored + newSpend; // Accumulate, don't replace
+  if(newSpend > 0) localStorage.setItem(INVEST_KEY, total);
   return total;
 }
 function getSessionEarned(){
-  const start = Number(sessionStorage.getItem(SESS_KEY)||BC_BONUS);
-  return Math.max(0, getBC() - start);
+  const start = Number(sessionStorage.getItem(SESS_KEY)||0);
+  const current = getBC();
+  return Math.max(0, current - start);
 }
 
 // Spendable = 50% of EBCs earned this session
