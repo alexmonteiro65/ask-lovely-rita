@@ -993,6 +993,7 @@ function showResult(idx) {
     S.beatcoins        += bonus;
     document.getElementById('bc-amount').textContent = S.beatcoins;
     saveStorage();
+    saveLadBC(bonus);  // Also credit to active Lad score
     S.roundOver = true;
     celebrate();
     toast(`🎉 BONUS! +${bonus} BeatCoins!`);
