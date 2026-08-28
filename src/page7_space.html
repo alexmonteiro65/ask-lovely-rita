@@ -374,8 +374,7 @@ function loadStorage() {
 }
 function saveStorage() {
   try {
-    const d=JSON.parse(localStorage.getItem('askLovelyRitaV4_bc_compat')||'{}');
-    d.beatcoins=S.beatcoins; localStorage.setItem('askLovelyRitaV4_bc_compat',JSON.stringify(d));
+    localStorage.setItem('askLovelyRitaV4_bc', S.beatcoins);
   } catch(e){}
 }
 
