@@ -736,64 +736,75 @@ const ITEMS_3D = {
 function open3DPopup(id){
   const item = ITEMS_3D[id];
   if(!item) return;
-  const alreadyOwned = (parseInt(localStorage.getItem('lra_qty_'+id))||0) > 0;
+
+  // Registar item 3D no ITEMS para buyItem() funcionar
+  ITEMS[id] = { name: item.name, img: item.img, price: item.price };
+  const stockKey = 'lra_stock_'+id;
+  if(localStorage.getItem(stockKey)===null) localStorage.setItem(stockKey, item.stock);
+
+  currentPopupId = id;
   document.getElementById('popup-img').src = item.img;
   document.getElementById('popup-name').textContent = item.name;
-  document.getElementById('popup-stock-line').textContent = 'Limited Edition — ' + item.stock + ' left!';
   document.getElementById('popup-price-val').textContent = item.price.toLocaleString();
+
+  // Limpar botão Copy anterior
+  const oldCopy = document.getElementById('popup-copy-btn');
+  if(oldCopy) oldCopy.remove();
+
+  const alreadyOwned = (parseInt(localStorage.getItem('lra_qty_'+id))||0) > 0;
   const btn = document.getElementById('popup-buy-btn');
   const msg = document.getElementById('popup-msg');
   msg.textContent = '';
+  btn.style.cssText = '';
+  btn.disabled = false;
+
   if(alreadyOwned){
-    btn.textContent = '📐 Copy 3D Print Code';
-    btn.disabled = false;
-    btn.style.background = 'linear-gradient(135deg,#ffd700,#c8a96e)';
-    btn.style.color = '#000';
-    btn.onclick = () => {
-      navigator.clipboard.writeText(item.code).catch(()=>{});
-      msg.textContent = '✅ Code copied! Open in Tinkercad or Ultimaker Cura.';
-      msg.style.color = '#ffd700';
-      btn.textContent = '✅ Copied!';
-      setTimeout(()=>{ btn.textContent = '📐 Copy 3D Print Code'; }, 3000);
-    };
+    btn.style.display = 'none';
+    document.getElementById('popup-stock-line').textContent = '✅ In your collection!';
+    _show3DCopyBtn(id, item, msg);
   } else {
+    btn.style.display = '';
     btn.textContent = '🪙 Invest ' + item.price.toLocaleString() + ' EBCs';
-    btn.disabled = false;
     btn.style.background = 'linear-gradient(135deg,#ffd700,#c8a96e)';
     btn.style.color = '#000';
-    btn.onclick = () => {
-      const bal = getBC();
-      if(bal < item.price){ toast('Not enough EBCs love!'); return; }
-      // Deduzir EBCs do Lad ativo
-      const lad = localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';
-      const key = 'askLovelyRitaV4_bc_'+lad;
-      const cur = parseInt(localStorage.getItem(key)||0);
-      localStorage.setItem(key, Math.max(0, cur - item.price));
-      syncBC();
-      // Registar na coleção
-      localStorage.setItem('lra_qty_'+id, 1);
-      // Decrementar stock visual
-      item.stock = Math.max(0, item.stock - 1);
-      const stockEl = document.getElementById('stock-'+id);
-      if(stockEl) stockEl.textContent = item.stock;
-      // Mostrar código
-      btn.textContent = '📐 Copy 3D Print Code';
-      btn.style.background = 'linear-gradient(135deg,#32c864,#1a8040)';
-      btn.style.color = '#fff';
-      btn.onclick = () => {
-        navigator.clipboard.writeText(item.code).catch(()=>{});
-        msg.textContent = '✅ Code copied! Open in Tinkercad or Ultimaker Cura.';
-        msg.style.color = '#ffd700';
-        btn.textContent = '✅ Copied!';
-        setTimeout(()=>{ btn.textContent = '📐 Copy 3D Print Code'; }, 3000);
-      };
-      msg.innerHTML = '<span style="color:#ffd700;font-size:11px;">🎉 Added to your collection!<br>Code: <b>' + item.code + '</b></span>';
-      speak(item.rita);
-      updateBCDisplay();
+    document.getElementById('popup-stock-line').textContent = 'Limited Edition — ' + getStock(id) + ' left!';
+    btn.onclick = function(){
+      buyItem(id);
+      if((parseInt(localStorage.getItem('lra_qty_'+id))||0) > 0){
+        btn.style.display = 'none';
+        document.getElementById('popup-stock-line').textContent = '✅ In your collection!';
+        msg.innerHTML = '<span style="color:#4ade80;">🎉 Added to your collection love!</span>';
+        _show3DCopyBtn(id, item, msg);
+      }
     };
   }
   document.getElementById('item-popup').classList.add('open');
   setTimeout(()=>speak(item.rita), 400);
+}
+
+function _show3DCopyBtn(id, item, msg){
+  if(document.getElementById('popup-copy-btn')) return;
+  const copyBtn = document.createElement('button');
+  copyBtn.id = 'popup-copy-btn';
+  copyBtn.textContent = '📐 Copy 3D Print Code';
+  copyBtn.style.cssText = 'background:linear-gradient(135deg,#ffd700,#c8a96e);color:#000;border:none;border-radius:20px;padding:12px 32px;font-weight:bold;font-size:14px;cursor:pointer;font-family:Georgia,serif;width:100%;margin-top:8px;display:block;';
+  copyBtn.onclick = function(){
+    const doCopy = () => {
+      copyBtn.textContent = '✅ Copied!';
+      msg.innerHTML = '<span style="color:#ffd700;">Paste into Tinkercad or Ultimaker Cura love!</span>';
+      setTimeout(()=>{ copyBtn.textContent = '📐 Copy 3D Print Code'; }, 3000);
+    };
+    navigator.clipboard.writeText(item.code).then(doCopy).catch(()=>{
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = item.code; ta.style.position='fixed'; ta.style.opacity='0';
+        document.body.appendChild(ta); ta.focus(); ta.select();
+        document.execCommand('copy'); document.body.removeChild(ta);
+        doCopy();
+      } catch(e){ msg.textContent = 'Copy failed — code: ' + item.code; }
+    });
+  };
+  document.getElementById('popup-buy-btn').insertAdjacentElement('afterend', copyBtn);
 }
 
 // Rita speaks when sticker popup opens
