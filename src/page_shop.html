@@ -737,7 +737,7 @@ function open3DPopup(id){
   const item = ITEMS_3D[id];
   if(!item) return;
 
-  // Limpar botão Copy anterior
+  // Limpar botão Copy anterior se existir
   const oldCopy = document.getElementById('popup-copy-btn');
   if(oldCopy) oldCopy.remove();
 
@@ -745,52 +745,57 @@ function open3DPopup(id){
   const btn = document.getElementById('popup-buy-btn');
   const msg = document.getElementById('popup-msg');
 
+  // Preencher popup com dados do item
   document.getElementById('popup-img').src = item.img;
   document.getElementById('popup-name').textContent = item.name;
   document.getElementById('popup-price-val').textContent = item.price.toLocaleString();
   msg.textContent = '';
+
+  // Reset botão
   btn.style.cssText = '';
+  btn.style.background = 'linear-gradient(135deg,#ffd700,#c8a96e)';
+  btn.style.color = '#000';
   btn.disabled = false;
+  btn.style.display = '';
 
   if(alreadyOwned){
-    btn.style.display = 'none';
+    // Já tem na coleção — mostrar Copy direto, botão vira Copy
     document.getElementById('popup-stock-line').textContent = '✅ In your collection!';
-    _show3DCopyBtn(id, item, msg);
+    btn.textContent = '📐 Copy 3D Print Code';
+    btn.onclick = function(){ do3DCopy(item, btn, msg); };
   } else {
-    btn.style.display = '';
+    // Ainda não comprou — mostrar BUY NOW
     const stockStored = Number(localStorage.getItem('lra_stock_'+id));
-    const stockLeft = isNaN(stockStored) || stockStored === 0 ? item.stock : stockStored;
+    const stockLeft = (!stockStored || isNaN(stockStored)) ? item.stock : stockStored;
     document.getElementById('popup-stock-line').textContent = 'Limited Edition — ' + stockLeft + ' left!';
-    btn.textContent = '🪙 Invest ' + item.price.toLocaleString() + ' EBCs';
-    btn.style.background = 'linear-gradient(135deg,#ffd700,#c8a96e)';
-    btn.style.color = '#000';
+    btn.textContent = 'BUY NOW 🛒';
     btn.onclick = function(){ buy3DItem(id, item, btn, msg); };
   }
+
   document.getElementById('item-popup').classList.add('open');
   setTimeout(()=>speak(item.rita), 400);
 }
 
 function buy3DItem(id, item, btn, msg){
-  const bal = getBC();
-  // Hasn't played yet?
+  // Regra 1: jogou pelo menos uma rodada?
   if(getSessionEarned()===0){
     toast('Play a game first love!');
     speak("Oh sorry love! You need to play a game first before you can invest your BeatCoins! Go on and have fun!");
     return;
   }
-  // Not enough EBCs?
+  // Regra 2: tem EBCs suficientes?
+  const bal = getBC();
   if(bal < item.price){
-    toast('Not enough EBCs love! Keep playing!');
+    toast('Not enough EBCs love!');
     speak("Oh sorry love! You don't have enough funds yet! Go and play more games to earn your BeatCoins and come back to invest!");
     return;
   }
-  // Deduzir do Lad ativo
+  // Deduzir do Lad ativo (fonte única de verdade — Lad keys)
   const lad = localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';
   const ladKey = 'askLovelyRitaV4_bc_'+lad;
   const ladBal = Number(localStorage.getItem(ladKey)||0);
   const deduct = Math.min(item.price, ladBal);
   localStorage.setItem(ladKey, ladBal - deduct);
-  // Se faltou saldo no Lad ativo, deduzir do resto
   let remaining = item.price - deduct;
   if(remaining > 0){
     ['smart','cute','quiet','funny'].filter(l=>l!==lad).forEach(l=>{
@@ -803,50 +808,46 @@ function buy3DItem(id, item, btn, msg){
     });
   }
   // Sincronizar cache
-  const newTotal = ['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
+  const newTotal=['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
   localStorage.setItem('askLovelyRitaV4_bc', newTotal);
   // Stock
-  const stockKey = 'lra_stock_'+id;
-  const curStock = Number(localStorage.getItem(stockKey)||item.stock);
-  localStorage.setItem(stockKey, Math.max(0, curStock-1));
-  const stockEl = document.getElementById('stock-'+id);
-  if(stockEl) stockEl.textContent = Math.max(0, curStock-1);
-  // Coleção
+  const stockKey='lra_stock_'+id;
+  const curStock=Number(localStorage.getItem(stockKey)||item.stock);
+  localStorage.setItem(stockKey, Math.max(0,curStock-1));
+  const stockEl=document.getElementById('stock-'+id);
+  if(stockEl) stockEl.textContent=Math.max(0,curStock-1);
+  // Adicionar à coleção
   localStorage.setItem('lra_qty_'+id, 1);
-  // Atualizar display EBCs na loja
+  // Actualizar display de EBCs
   updateBCDisplay(newTotal, true);
-  // UI do popup
-  btn.style.display = 'none';
-  document.getElementById('popup-stock-line').textContent = '✅ In your collection!';
-  msg.innerHTML = '<span style="color:#4ade80;">🎉 Added to your collection love!</span>';
-  _show3DCopyBtn(id, item, msg);
+  // Confirmar na loja
   toast('🎉 ' + item.name + ' is now in your collection love!');
-  speak(item.rita);
+  // Rita explica o código 3D
+  speak("Wonderful choice love! Your item is now in your collection! Now tap Copy Code and paste it into your three D printing software to print your very own model at home!");
+  // Botão vira Copy Code — mesma posição, mesmo botão
+  document.getElementById('popup-stock-line').textContent = '✅ In your collection!';
+  msg.innerHTML = '<span style="color:#4ade80;">🎉 In your collection! Now copy your 3D code below.</span>';
+  btn.textContent = '📐 Copy 3D Print Code';
+  btn.style.background = 'linear-gradient(135deg,#ffd700,#c8a96e)';
+  btn.style.color = '#000';
+  btn.onclick = function(){ do3DCopy(item, btn, msg); };
 }
 
-function _show3DCopyBtn(id, item, msg){
-  if(document.getElementById('popup-copy-btn')) return;
-  const copyBtn = document.createElement('button');
-  copyBtn.id = 'popup-copy-btn';
-  copyBtn.textContent = '📐 Copy 3D Print Code';
-  copyBtn.style.cssText = 'background:linear-gradient(135deg,#ffd700,#c8a96e);color:#000;border:none;border-radius:20px;padding:12px 32px;font-weight:bold;font-size:14px;cursor:pointer;font-family:Georgia,serif;width:100%;margin-top:8px;display:block;';
-  copyBtn.onclick = function(){
-    const doCopy = () => {
-      copyBtn.textContent = '✅ Copied!';
-      msg.innerHTML = '<span style="color:#ffd700;">Paste into Tinkercad or Ultimaker Cura love!</span>';
-      setTimeout(()=>{ copyBtn.textContent = '📐 Copy 3D Print Code'; }, 3000);
-    };
-    navigator.clipboard.writeText(item.code).then(doCopy).catch(()=>{
-      try {
-        const ta = document.createElement('textarea');
-        ta.value = item.code; ta.style.position='fixed'; ta.style.opacity='0';
-        document.body.appendChild(ta); ta.focus(); ta.select();
-        document.execCommand('copy'); document.body.removeChild(ta);
-        doCopy();
-      } catch(e){ msg.textContent = 'Copy failed — please note code manually.'; }
-    });
+function do3DCopy(item, btn, msg){
+  const doCopy = () => {
+    btn.textContent = '✅ Code Copied!';
+    speak("Thank you love! Paste that code into your three D printing software and enjoy your model!");
+    setTimeout(()=>{ closePopup(); }, 2000);
   };
-  document.getElementById('popup-buy-btn').insertAdjacentElement('afterend', copyBtn);
+  navigator.clipboard.writeText(item.code).then(doCopy).catch(()=>{
+    try{
+      const ta=document.createElement('textarea');
+      ta.value=item.code; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta);
+      doCopy();
+    } catch(e){ msg.textContent='Copy failed — please try again.'; }
+  });
 }
 
 
