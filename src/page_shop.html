@@ -412,41 +412,52 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
     <!-- SHELF 6: 3D PRINT COLLECTIBLES -->
     <div class="shelf-section">
       <div class="shelf-label" style="border-left-color:#ffd700;color:rgba(255,215,0,.8);">📐 3D Print Collectibles — Limited Edition</div>
-      <div class="carousel-wrap" style="border-color:rgba(255,215,0,.3);">
-        <div class="carousel-row">
-          <button class="carousel-arrow" onclick="navCarousel('threed',-1)">◀</button>
-          <div class="carousel-viewport" id="viewport-threed">
-            <div class="carousel-track" id="track-threed">
-              <div class="item-card" style="border-color:rgba(255,215,0,.3);background:rgba(255,215,0,.05);text-align:center;" onclick="open3DPopup('vw_bus_3d')">
-                <div class="item-img-wrap" id="imgwrap-vw_bus_3d" style="width:100%;min-height:90px;display:flex;justify-content:center;align-items:center;position:relative;">
-                  <span class="premium-badge" style="background:linear-gradient(135deg,#ffd700,#c8a96e);position:absolute;top:4px;left:4px;z-index:2;">📐 3D</span>
-                  <img class="item-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/vw_red.png" alt="VW Beetle 3D" style="max-width:100%;max-height:88px;object-fit:contain;">
-                </div>
-                <div class="item-name" style="color:#ffd700;">VW Beetle<br>3D Print Edition 🇬🇧</div>
-                <div class="stock-count">Limited — <span>12</span> codes left!</div>
-                <div class="item-footer">
-                  <div class="item-price" style="border-color:rgba(255,215,0,.5);"><span class="price-icon">🪙</span><span class="price-val" style="color:#ffd700;">1,200</span></div>
-                  <button class="buy-btn" style="background:linear-gradient(135deg,#ffd700,#c8a96e);color:#000;" onclick="event.stopPropagation();open3DPopup('vw_bus_3d')">GET CODE</button>
+      <div class="carousel-wrap" style="border-color:rgba(255,215,0,.3);padding:10px 8px;">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <button class="carousel-arrow" onclick="nav3D(-1)">◀</button>
+          <div style="flex:1;overflow:hidden;border-radius:10px;">
+            <div id="track-3d" style="display:flex;transition:transform .35s ease;">
+              <!-- Card 1: VW Kombi -->
+              <div style="flex:0 0 100%;box-sizing:border-box;">
+                <div style="background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.3);border-radius:10px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;text-align:center;" onclick="open3DPopup('vw_bus_3d')">
+                  <div style="position:relative;width:100%;display:flex;justify-content:center;align-items:center;min-height:120px;">
+                    <span class="premium-badge" style="background:linear-gradient(135deg,#ffd700,#c8a96e);position:absolute;top:0;left:0;z-index:2;">📐 3D</span>
+                    <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/vw_kombi_uk.png" alt="VW Kombi UK" style="max-width:100%;max-height:130px;object-fit:contain;">
+                  </div>
+                  <div class="item-name" style="color:#ffd700;">VW Kombi — British Edition 🇬🇧</div>
+                  <div class="stock-count">Limited — <span>12</span> codes left!</div>
+                  <div class="item-footer">
+                    <div class="item-price" style="border-color:rgba(255,215,0,.5);"><span class="price-icon">🪙</span><span class="price-val" style="color:#ffd700;">1,200</span></div>
+                    <button class="buy-btn" style="background:linear-gradient(135deg,#ffd700,#c8a96e);color:#000;" onclick="event.stopPropagation();open3DPopup('vw_bus_3d')">GET CODE</button>
+                  </div>
                 </div>
               </div>
-              <div class="item-card" style="border-color:rgba(255,215,0,.3);background:rgba(255,215,0,.05);text-align:center;" onclick="open3DPopup('lads_3d')">
-                <div class="item-img-wrap" id="imgwrap-lads_3d" style="width:100%;min-height:90px;display:flex;justify-content:center;align-items:center;position:relative;">
-                  <span class="premium-badge" style="background:linear-gradient(135deg,#ffd700,#c8a96e);position:absolute;top:4px;left:4px;z-index:2;">📐 3D</span>
-                  <img class="item-img" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-smart-regular.png" alt="Lads 3D" style="max-width:100%;max-height:88px;object-fit:contain;">
-                </div>
-                <div class="item-name" style="color:#ffd700;">The Lads<br>3D Figure Set ⭐</div>
-                <div class="stock-count">Limited — <span>8</span> codes left!</div>
-                <div class="item-footer">
-                  <div class="item-price" style="border-color:rgba(255,215,0,.5);"><span class="price-icon">🪙</span><span class="price-val" style="color:#ffd700;">2,000</span></div>
-                  <button class="buy-btn" style="background:linear-gradient(135deg,#ffd700,#c8a96e);color:#000;" onclick="event.stopPropagation();open3DPopup('lads_3d')">GET CODE</button>
+              <!-- Card 2: VW Beetle -->
+              <div style="flex:0 0 100%;box-sizing:border-box;">
+                <div style="background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.3);border-radius:10px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;text-align:center;" onclick="open3DPopup('lads_3d')">
+                  <div style="position:relative;width:100%;display:flex;justify-content:center;align-items:center;min-height:120px;">
+                    <span class="premium-badge" style="background:linear-gradient(135deg,#ffd700,#c8a96e);position:absolute;top:0;left:0;z-index:2;">📐 3D</span>
+                    <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/vw_beetle_uk.png" alt="VW Beetle UK" style="max-width:100%;max-height:130px;object-fit:contain;">
+                  </div>
+                  <div class="item-name" style="color:#ffd700;">VW Beetle Convertible — British Edition 🇬🇧</div>
+                  <div class="stock-count">Limited — <span>8</span> codes left!</div>
+                  <div class="item-footer">
+                    <div class="item-price" style="border-color:rgba(255,215,0,.5);"><span class="price-icon">🪙</span><span class="price-val" style="color:#ffd700;">2,000</span></div>
+                    <button class="buy-btn" style="background:linear-gradient(135deg,#ffd700,#c8a96e);color:#000;" onclick="event.stopPropagation();open3DPopup('lads_3d')">GET CODE</button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <button class="carousel-arrow" onclick="navCarousel('threed',1)">▶</button>
+          <button class="carousel-arrow" onclick="nav3D(1)">▶</button>
+        </div>
+        <div style="display:flex;justify-content:center;gap:6px;margin-top:8px;">
+          <div id="dot3d-0" style="width:8px;height:8px;border-radius:50%;background:#ffd700;"></div>
+          <div id="dot3d-1" style="width:8px;height:8px;border-radius:50%;background:#ffd700;opacity:.3;"></div>
         </div>
       </div>
     </div>
+
 
   </div><!-- /shop-scroll -->
 
@@ -505,6 +516,17 @@ const ITEMS = {
 const carousels = {};
 function initCarousel(id, count) {
   carousels[id] = {page:0, total:Math.ceil(count/2)};
+}
+// 3D carrossel — 1 item por vez, largura total
+let cur3D = 0;
+const total3D = 2;
+function nav3D(dir) {
+  cur3D = (cur3D + dir + total3D) % total3D;
+  document.getElementById('track-3d').style.transform = `translateX(-${cur3D * 100}%)`;
+  for(let i=0;i<total3D;i++){
+    const dot = document.getElementById('dot3d-'+i);
+    if(dot) dot.style.opacity = i===cur3D ? '1' : '0.3';
+  }
 }
 function navCarousel(id, dir) {
   const c = carousels[id];
@@ -768,7 +790,7 @@ window.addEventListener('load',()=>{
   initCarousel('posters',2); initCarousel('beetles',2);
   initCarousel('badges',2);  initCarousel('lads',4);
   initCarousel('stickers',5);
-  initCarousel('threed',2);
+
   speak("Welcome to Beat Shop love! Explore and invest your BeatCoins in exclusive collectibles!");
 });
 </script>
