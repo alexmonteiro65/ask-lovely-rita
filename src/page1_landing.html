@@ -710,9 +710,11 @@ function clearRitaDisplay() {
 }
 
 window.addEventListener('load', ()=>{
-  // Migration: clear old welcome bonus (25000 or 10000)
-  const _bc0 = Number(localStorage.getItem('askLovelyRitaV4_bc'));
-  if(_bc0 === 25000 || _bc0 === 10000) localStorage.setItem('askLovelyRitaV4_bc','0');
+  // Migration v5: one-time reset to ensure clean start from 0
+  if(!localStorage.getItem('lra_bc_migrated_v5')){
+    localStorage.setItem('lra_bc_migrated_v5','1');
+    localStorage.setItem('askLovelyRitaV4_bc','0');
+  }
   switchTheme('youngsters', true);
   muteState = localStorage.getItem('askLovelyRitaV4_mute') === '1';
   document.getElementById('sound-icon').textContent = muteState ? '🔇' : '🔊';
