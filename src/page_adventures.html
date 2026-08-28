@@ -306,25 +306,38 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
       <!-- MY ASSETS mini bank statement -->
       <div id="my-assets-box">
         <div id="my-assets-title">My Assets</div>
+        <!-- BLOCK 1: BTC Balance -->
         <div class="asset-row">
-          <span class="asset-label">EBCs Balance</span>
-          <span class="asset-val" id="asset-bc">0</span>
+          <span class="asset-label">Previous EBCs Balance</span>
+          <span class="asset-val" id="asset-prev-bc">0 EBCs</span>
         </div>
-        <div class="asset-row" id="asset-invest-row">
-          <span class="asset-label">EBCs to Invest</span>
-          <span class="asset-val positive" id="asset-invest">0 EBCs</span>
+        <div class="asset-row">
+          <span class="asset-label">BeatCoins Earned</span>
+          <span class="asset-val positive" id="asset-earned">0 EBCs</span>
         </div>
-        <div class="asset-row" id="asset-earned-row">
-          <span class="asset-label">Earned this session</span>
-          <span class="asset-val" id="asset-session">+0</span>
+        <div class="asset-row" style="border-top:1px solid rgba(255,222,89,.15);margin-top:4px;padding-top:6px;">
+          <span class="asset-label" style="font-weight:bold;">Total EBCs Balance</span>
+          <span class="asset-val" style="font-weight:bold;" id="asset-bc">0 EBCs</span>
         </div>
-        <div class="asset-row" id="asset-coll-row">
-          <span class="asset-label">Collection value</span>
+
+        <!-- BLOCK 2: Collection -->
+        <div class="asset-row" style="margin-top:12px;">
+          <span class="asset-label">Collection Value</span>
           <span class="asset-val" id="asset-coll">0 EBCs</span>
         </div>
-        <div class="asset-row" id="asset-total-row">
-          <span class="asset-label" id="asset-total-label">Total Portfolio</span>
-          <span class="asset-val" id="asset-total">0 EBCs</span>
+        <div class="asset-row">
+          <span class="asset-label">Beat Shop Credit</span>
+          <span class="asset-val positive" id="asset-invest">0 EBCs</span>
+        </div>
+        <div class="asset-row" style="border-top:1px solid rgba(255,222,89,.15);margin-top:4px;padding-top:6px;">
+          <span class="asset-label" style="font-weight:bold;">Total Assets</span>
+          <span class="asset-val" style="font-weight:bold;" id="asset-coll-total">0 EBCs</span>
+        </div>
+
+        <!-- BLOCK 3: Portfolio -->
+        <div class="asset-row" id="asset-total-row" style="margin-top:12px;border-top:2px solid rgba(255,222,89,.3);padding-top:8px;">
+          <span class="asset-label" id="asset-total-label" style="font-size:13px;font-weight:bold;color:#ffde59;">Total Portfolio</span>
+          <span class="asset-val" id="asset-total" style="font-size:15px;font-weight:bold;color:#ffde59;">0 EBCs</span>
         </div>
       </div>
 
@@ -486,27 +499,30 @@ function updateMyAssets(){
   // Youngsters: simplified — hide session earned and collection value details
   const earnedRow=document.getElementById('asset-earned-row');
   const collRow=document.getElementById('asset-coll-row');
-  const investEl=document.getElementById('asset-invest');
-  const investRow=document.getElementById('asset-invest-row');
-  // EBCs to Invest = 50% of total earned (persists in localStorage)
-  const INVEST_KEY='lra_ebc_to_invest';
-  const sessionEarned2=getSessionEarned();
-  const newInvest=Math.floor(sessionEarned2*0.5);
-  const storedInvest=Number(localStorage.getItem(INVEST_KEY)||0);
-  const totalInvest=Math.max(storedInvest, newInvest);
-  if(newInvest>storedInvest) localStorage.setItem(INVEST_KEY, newInvest);
-  if(investEl) investEl.textContent=totalInvest.toLocaleString()+' EBCs';
+  // Calculate all values
+  const shopCredit = Math.floor(sessionEarned * 0.5);  // 50% of earned = Beat Shop Credit
+  const savedHalf = Math.floor(sessionEarned * 0.5);   // 50% of earned = BeatCoins Earned (saved)
+  const prevBc = bc - sessionEarned;                    // Balance before playing today
+  const collTotal = collVal + shopCredit;               // Collection Value + Beat Shop Credit
+  const totalPortfolio = bc + collVal;                  // Total EBCs Balance + Collection Value
+
+  // Update all elements
+  const prevEl = document.getElementById('asset-prev-bc');
+  const earnedEl = document.getElementById('asset-earned');
+  const investEl = document.getElementById('asset-invest');
+  const collTotalEl = document.getElementById('asset-coll-total');
+
+  if(prevEl) prevEl.textContent = Math.max(0,prevBc).toLocaleString() + ' EBCs';
+  if(earnedEl) earnedEl.textContent = savedHalf.toLocaleString() + ' EBCs';
+  if(investEl) investEl.textContent = shopCredit.toLocaleString() + ' EBCs';
+  if(collTotalEl) collTotalEl.textContent = collTotal.toLocaleString() + ' EBCs';
+
+  document.getElementById('asset-bc').textContent = bc.toLocaleString() + ' EBCs';
+  document.getElementById('asset-coll').textContent = collVal.toLocaleString() + ' EBCs';
+  document.getElementById('asset-total').textContent = totalPortfolio.toLocaleString() + ' EBCs';
+  document.getElementById('asset-total-label').textContent = 'Total Portfolio';
 
   if(level==='youngsters'){
-    if(earnedRow) earnedRow.style.display='none';
-    // Youngsters: Balance + Collection + Total
-    const youngTotal=bc+collVal;
-    document.getElementById('asset-bc').textContent=bc.toLocaleString()+' EBCs';
-    document.getElementById('asset-coll').textContent=collVal.toLocaleString()+' EBCs';
-    document.getElementById('asset-total').textContent=youngTotal.toLocaleString()+' EBCs'; // Youngsters: no invest line
-    document.getElementById('asset-total-label').textContent='Total Assets';
-    if(investRow) investRow.style.display='none';
-  } else {
     if(earnedRow) earnedRow.style.display='';
     if(collRow) collRow.style.display='';
     const sessEl=document.getElementById('asset-session');
