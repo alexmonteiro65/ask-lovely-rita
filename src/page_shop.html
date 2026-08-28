@@ -649,28 +649,44 @@ function buyItem(id) {
   const bc = getBC();
   const spendable = getSpendable();
   if(getStock(id)<=0){ toast('😢 Sold out! Trade with another player!'); return; }
-  // Check if they have earned enough to spend
   if(getSessionEarned()===0){
     toast('Play first love! Earn BeatCoins then invest!');
     speak("You need to play first love! Earn your Educational BeatCoins and then come invest in the Beat Shop!");
     return;
   }
   if(spendable < item.price){
-    const needed = item.price;
     toast(`Keep playing love! You can spend ${spendable.toLocaleString()} EBCs now.`);
     speak(`Keep playing love! You have earned ${getSessionEarned().toLocaleString()} BeatCoins this session and can invest up to ${spendable.toLocaleString()}. Keep going and earn more!`);
     return;
   }
   if(bc < item.price){ toast(`Not enough EBCs love! You need ${item.price.toLocaleString()}`); return; }
-  const newBC = bc - item.price;
-  setBC(newBC);
+  // Deduzir do Lad ativo — fonte única de verdade
+  const lad = localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';
+  const ladKey = 'askLovelyRitaV4_bc_'+lad;
+  const ladBal = Number(localStorage.getItem(ladKey)||0);
+  const deduct = Math.min(item.price, ladBal);
+  localStorage.setItem(ladKey, ladBal - deduct);
+  let remaining = item.price - deduct;
+  if(remaining > 0){
+    ['smart','cute','quiet','funny'].filter(l=>l!==lad).forEach(l=>{
+      if(remaining<=0) return;
+      const k='askLovelyRitaV4_bc_'+l;
+      const v=Number(localStorage.getItem(k)||0);
+      const d=Math.min(remaining,v);
+      localStorage.setItem(k,v-d);
+      remaining-=d;
+    });
+  }
+  // Sincronizar cache com soma real dos Lads
+  const newTotal=['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
+  localStorage.setItem('askLovelyRitaV4_bc', newTotal);
+  // Stock, coleção, investable
   setStock(id, getStock(id)-1);
   addQty(id);
-  // Deduct from investable amount
   const currentInvest = Number(localStorage.getItem(INVEST_KEY)||0);
-  const newInvest = Math.max(0, currentInvest - item.price);
-  localStorage.setItem(INVEST_KEY, newInvest);
-  updateBCDisplay(newBC, true);
+  localStorage.setItem(INVEST_KEY, Math.max(0, currentInvest - item.price));
+  // Actualizar display
+  updateBCDisplay(newTotal, true);
   renderItem(id);
   updatePopupState(id);
   toast(`🎉 ${item.name} is now in your collection love!`);
