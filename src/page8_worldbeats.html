@@ -603,6 +603,13 @@ function celebrate(){
   setTimeout(()=>layer.innerHTML='',2500);
 }
 
+function saveLadBC(amount){
+  try{
+    const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';
+    const key='askLovelyRitaV4_bc_'+lad;
+    localStorage.setItem(key,Number(localStorage.getItem(key)||0)+amount);
+  }catch(e){}
+}
 function speak(text){
   if(localStorage.getItem('askLovelyRitaV4_mute')==='1') return;
   if(!window.speechSynthesis) return;
