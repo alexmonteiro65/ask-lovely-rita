@@ -263,7 +263,7 @@ function loadStorage(){
     if(lv&&LEVEL_CFG[lv])S.level=lv;
     else{
       const d=JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');
-      if(d.theme&&LEVEL_CFG[d.theme])S.level=d.theme;
+      const lv_=localStorage.getItem('askLovelyRitaV4_level'); if(lv_&&LEVEL_CFG&&LEVEL_CFG[lv_])S.level=lv_; else if(d.theme&&LEVEL_CFG&&LEVEL_CFG[d.theme])S.level=d.theme;
     }
     // EBCs: always use central key
     S.beatcoins=Number(localStorage.getItem('askLovelyRitaV4_bc')||0);
