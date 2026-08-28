@@ -222,7 +222,10 @@ body { background:#3d1a00; display:flex; flex-direction:column; align-items:cent
 
       <!-- Expert: type instrument name -->
       <div id="instrument-name-exp">
-        <input id="instrument-name-input" type="text" placeholder="Type the instrument name..." autocomplete="off">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <input id="instrument-name-input" type="text" placeholder="Type or speak the instrument name..." autocomplete="off" style="flex:1;">
+          <button id="mic-wb-btn" onclick="startWBMic()" style="background:rgba(255,110,247,.2);border:1px solid rgba(255,110,247,.5);border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:18px;color:#ff6ef7;display:flex;align-items:center;justify-content:center;" title="Speak instrument name">🎤</button>
+        </div>
       </div>
 
       <div id="flags-grid"></div>
@@ -609,6 +612,23 @@ function saveLadBC(amount){
     const key='askLovelyRitaV4_bc_'+lad;
     localStorage.setItem(key,Number(localStorage.getItem(key)||0)+amount);
   }catch(e){}
+}
+function startWBMic(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){ speak("Sorry love! Voice input is not available on this device!"); return; }
+  const r=new SR(); r.lang='en-US'; r.interimResults=false; r.maxAlternatives=1;
+  const btn=document.getElementById('mic-wb-btn');
+  if(btn){ btn.textContent='🔴'; btn.style.animation='none'; }
+  r.onresult=(e)=>{
+    const transcript=e.results[0][0].transcript.trim();
+    document.getElementById('instrument-name-input').value=transcript;
+    if(btn){ btn.textContent='🎤'; }
+    speak("Got it love! You said " + transcript + "! Now confirm your answer!");
+  };
+  r.onerror=()=>{ if(btn){ btn.textContent='🎤'; } speak("Could not hear clearly love! Please try again!"); };
+  r.onend=()=>{ if(btn){ btn.textContent='🎤'; } };
+  r.start();
+  speak("Listening love! Say the instrument name now!");
 }
 function speak(text){
   if(localStorage.getItem('askLovelyRitaV4_mute')==='1') return;
