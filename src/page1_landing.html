@@ -392,6 +392,18 @@ body {
 }
 #tap-btn:hover{transform:scale(1.05);}
 #tap-version{font-size:8px;color:rgba(255,255,255,.2);margin-top:20px;letter-spacing:1px;}
+
+/* ── EBC number font — uniform digits globally ── */
+.ebc-num, #bc-display, #bc-amount, #bc-val, #bank-bc-val, 
+#asset-bc, #asset-session, #asset-coll, #asset-total,
+.lad-stat-bc, .lad-total-val, .bank-card-qty,
+.price-val, #popup-price-val, #bc-row-val,
+[id*="score-"][id*="smart"],[id*="score-"][id*="cute"],
+[id*="score-"][id*="quiet"],[id*="score-"][id*="funny"] {
+  font-family: 'Courier New', Courier, monospace !important;
+  font-variant-numeric: tabular-nums !important;
+  letter-spacing: 0.5px;
+}
 </style>
 </head>
 <body>
