@@ -428,18 +428,16 @@ function setQty(id,v){ localStorage.setItem('lra_qty_'+id,v); }
 // Session EBCs tracking
 const SESSION_START_KEY='lra_session_start_bc'; // Unified — set by page1 on PLAY
 function getSessionEarned(){
-  const start=Number(sessionStorage.getItem(SESSION_START_KEY)||0);
-  const current=['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
-  return Math.max(0, current-start);
+  // SESSION_START set by page1 PLAY only. If 0, player hasn't played yet this session.
+  const start = Number(sessionStorage.getItem(SESSION_START_KEY)||0);
+  const current = ['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
+  return Math.max(0, current - start);
 }
 const BC_BONUS=0;
 function initSessionTracking(){
-  // SESSION_START is set by page1 when player presses PLAY
-  // If not set (direct access to profile), default to current balance (earned=0)
-  if(!sessionStorage.getItem(SESSION_START_KEY)){
-    const ladTotal = ['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
-    sessionStorage.setItem(SESSION_START_KEY, ladTotal);
-  }
+  // SESSION_START is set ONLY by page1 PLAY button
+  // Adventures NEVER writes this key — only reads it
+  // If player comes here without going through page1, earned = 0 (correct)
 }
 
 // ── Photo ─────────────────────────────────────────────────────────────────────
