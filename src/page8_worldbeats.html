@@ -423,7 +423,29 @@ function loadQuestion(){
     const btn=document.createElement('button');
     btn.className='flag-btn';
     btn.innerHTML=`<div class="flag-emoji">${opt.flag}</div><div class="flag-label">${opt.label}</div>`;
-    btn.onclick=()=>answer(i,instr);
+    btn.onclick=()=>{
+      // Expert level: validate instrument name first
+      if(S.level==='experts'){
+        const nameInput=document.getElementById('instrument-name-input');
+        const typed=(nameInput?nameInput.value:'').trim().toLowerCase();
+        const correct=instr.name.toLowerCase();
+        if(!typed){
+          speak('Please type or say the instrument name first love! Then choose the country!');
+          if(nameInput) nameInput.style.border='2px solid #f87171';
+          setTimeout(()=>{ if(nameInput) nameInput.style.border=''; },2000);
+          return;
+        }
+        // Check if name is close enough (contains key word or exact match)
+        const nameCorrect = typed===correct || correct.includes(typed) || typed.includes(correct.split(' ')[0].toLowerCase());
+        if(!nameCorrect){
+          speak('That is not quite right love! The instrument is called '+instr.name+'! Try again!');
+          if(nameInput) nameInput.style.border='2px solid #f87171';
+          setTimeout(()=>{ if(nameInput) nameInput.style.border=''; },2000);
+          return;
+        }
+      }
+      answer(i,instr);
+    };
     grid.appendChild(btn);
   });
 
