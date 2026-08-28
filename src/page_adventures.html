@@ -310,6 +310,10 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
           <span class="asset-label">EBCs Balance</span>
           <span class="asset-val" id="asset-bc">0</span>
         </div>
+        <div class="asset-row" id="asset-invest-row">
+          <span class="asset-label">EBCs to Invest</span>
+          <span class="asset-val positive" id="asset-invest">0 EBCs</span>
+        </div>
         <div class="asset-row" id="asset-earned-row">
           <span class="asset-label">Earned this session</span>
           <span class="asset-val" id="asset-session">+0</span>
@@ -484,11 +488,26 @@ function updateMyAssets(){
   // Youngsters: simplified — hide session earned and collection value details
   const earnedRow=document.getElementById('asset-earned-row');
   const collRow=document.getElementById('asset-coll-row');
+  const investEl=document.getElementById('asset-invest');
+  const investRow=document.getElementById('asset-invest-row');
+  // EBCs to Invest = 50% of total earned (persists in localStorage)
+  const INVEST_KEY='lra_ebc_to_invest';
+  const sessionEarned2=getSessionEarned();
+  const newInvest=Math.floor(sessionEarned2*0.5);
+  const storedInvest=Number(localStorage.getItem(INVEST_KEY)||0);
+  const totalInvest=Math.max(storedInvest, newInvest);
+  if(newInvest>storedInvest) localStorage.setItem(INVEST_KEY, newInvest);
+  if(investEl) investEl.textContent=totalInvest.toLocaleString()+' EBCs';
+
   if(level==='youngsters'){
     if(earnedRow) earnedRow.style.display='none';
-    if(collRow) collRow.style.display='none';
-    document.getElementById('asset-total').textContent=total.toLocaleString()+' EBCs';
-    document.getElementById('asset-total-label').textContent='My Total EBCs';
+    // Youngsters: Balance + Collection + Total
+    const youngTotal=bc+collVal;
+    document.getElementById('asset-bc').textContent=bc.toLocaleString()+' EBCs';
+    document.getElementById('asset-coll').textContent=collVal.toLocaleString()+' EBCs';
+    document.getElementById('asset-total').textContent=youngTotal.toLocaleString()+' EBCs';
+    document.getElementById('asset-total-label').textContent='Total Assets';
+    if(investRow) investRow.style.display='none';
   } else {
     if(earnedRow) earnedRow.style.display='';
     if(collRow) collRow.style.display='';
