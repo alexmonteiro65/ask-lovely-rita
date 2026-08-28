@@ -666,6 +666,8 @@ window.addEventListener('load',()=>{
     localStorage.setItem('askLovelyRitaV4_bc','0');
   }
   initSession();
+  // Update spendable display after session init
+  setTimeout(()=>updateBCDisplay(getBC()), 50);
   updateBCDisplay(getBC());
   Object.keys(ITEMS).forEach(id=>renderItem(id));
   // Init carousels
