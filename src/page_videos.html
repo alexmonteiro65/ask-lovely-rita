@@ -181,7 +181,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
         <div class="feat-thumb-overlay"></div>
         <img class="feat-thumb-img" id="feat-thumb-img" src="" alt="">
         <div class="feat-play-btn">▶</div>
-        <div class="feat-bc-badge" id="feat-bc-badge"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin.png" alt=""><span>+50 EBCs</span></div>
+        <div class="feat-bc-badge" id="feat-bc-badge"><img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/beatcoin.png" alt=""><span>✓ Watched</span></div>
         <div class="feat-watched" id="feat-watched">✓ WATCHED</div>
         <div class="feat-source-badge" id="feat-source-badge"></div>
       </div>
@@ -511,7 +511,7 @@ function renderWorld(world){
   document.getElementById('feat-title').textContent=v0.title;
   document.getElementById('feat-sub').textContent=v0.sub;
   document.getElementById('feat-source-badge').textContent=v0.source?'▶ '+v0.source:'';
-  document.getElementById('feat-bc-badge').style.display=watched0?'none':'flex';
+  // EBC badge disabled
   document.getElementById('feat-watched').style.display=watched0?'block':'none';
   // Grid
   const grid=document.getElementById('video-grid'); grid.innerHTML='';
@@ -556,9 +556,9 @@ function openPlayer(idx){
     return;
   }
   const watched=isWatched(v.id);
-  document.getElementById('player-earned').style.display='none';
+  // EBC earned disabled
   document.getElementById('player-title-txt').textContent=v.title;
-  document.getElementById('player-bc-badge').style.display=watched?'none':'flex';
+  // EBC badge disabled
   document.getElementById('player-rita-say').textContent=
     watched?'Great taste love! You already watched this one — wonderful choice!'
     :'Enjoy the video love! Stay until the end to earn your BeatCoins!';
@@ -591,25 +591,8 @@ function loadVideo(v, watched){
 // startVideo removed — logic now in loadVideo()
 
 function awardBC(v){
-  // Reward by level
-  const lvl = localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
-  const rewardMap = {youngsters:25, grownups:50, experts:100};
-  const reward = rewardMap[lvl] || 25;
-  // Only reward once per video per session
-  const sessKey = 'lra_video_rewarded_' + (v ? v.id : 'unknown');
-  if(sessionStorage.getItem(sessKey)) return;
-  sessionStorage.setItem(sessKey, '1');
-  const bc=getBC(); const newBC=bc+reward;
-  const daily=getDailyEarned(); const newDaily=daily+reward;
-  setBC(newBC); setDailyEarned(newDaily); if(v) setWatched(v.id);
-  cashierSound();
-  rollCounter(document.getElementById('bc-row-val'),bc,newBC,800);
-  document.getElementById('player-earned').style.display='block';
-  document.getElementById('player-earned').textContent='+'+reward+' BeatCoins earned! Brilliant love!';
-  document.getElementById('player-bc-badge').style.display='none';
-  document.getElementById('player-rita-say').textContent='Brilliant love! You just earned '+reward+' BeatCoins for watching! You are a true Beat Explorer!';
-  speak('Brilliant love! You just earned '+reward+' BeatCoins for watching! You are a true Beat Explorer!');
-  updateDailyBar();
+  // EBC rewards from videos disabled — points come from games only
+  if(v) setWatched(v.id);
   renderWorld(currentWorld);
 }
 
