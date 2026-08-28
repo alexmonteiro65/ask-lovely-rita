@@ -432,7 +432,12 @@ function isProfitable(id){ return getCurrentValue(id)>COLL_ITEMS[id].price; }
 
 const LAD_IMGS={smart:RAW+'lad-smart-regular.png',cute:RAW+'lad-cute-regular.png',quiet:RAW+'lad-quiet-regular.png',funny:RAW+'lad-funny-regular.png'};
 
-function getBC(){ return Number(localStorage.getItem('askLovelyRitaV4_bc')||0); }
+function getBC(){
+  // Always sum the 4 Lads — single source of truth
+  const ladSum=['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
+  if(ladSum>0) localStorage.setItem('askLovelyRitaV4_bc',ladSum);
+  return ladSum || Number(localStorage.getItem('askLovelyRitaV4_bc')||0);
+}
 function getLadBC(lad){ return Number(localStorage.getItem('askLovelyRitaV4_bc_'+lad)||0); }
 function getNickname(){ return localStorage.getItem('lra_nickname')||'Explorer'; }
 function getQty(id){ return Number(localStorage.getItem('lra_qty_'+id)||0); }
@@ -492,8 +497,7 @@ function updateMyAssets(){
     const qty=getQty(id);
     if(qty>0) collVal+=getCurrentValue(id)*qty;
   });
-  const total=bc+collVal+totalInvest; // Balance + Collection + EBCs to Invest
-
+  // total calculated below after shopCredit is defined
   document.getElementById('asset-bc').textContent=bc.toLocaleString()+' EBCs';
 
   // Youngsters: simplified — hide session earned and collection value details
