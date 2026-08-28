@@ -211,14 +211,14 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 
   <!-- TABS -->
   <div id="tab-bar">
-    <button class="tab-btn active" onclick="switchTab('journey',this)">🗺️ My Journey</button>
-    <button class="tab-btn" onclick="switchTab('bank',this)">🏦 MyBank</button>
+    <button class="tab-btn active" onclick="switchTab('bank',this)">🏦 MyBank</button>
+    <button class="tab-btn" onclick="switchTab('journey',this)">🗺️ My Journey</button>
   </div>
 
   <div id="adv-scroll">
 
     <!-- MY JOURNEY -->
-    <div id="tab-journey" class="adv-section active">
+    <div id="tab-journey" class="adv-section">
 
       <div class="section-card" style="margin-top:4px;">
         <div class="section-title">⭐ My Records</div>
@@ -259,7 +259,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
     </div>
 
     <!-- MYBANK -->
-    <div id="tab-bank" class="adv-section">
+    <div id="tab-bank" class="adv-section active">
 
       <div id="bank-header" style="margin-top:4px;">
         <div id="bank-title">🏦 MyBank</div>
@@ -385,18 +385,23 @@ function setQty(id,v){ localStorage.setItem('lra_qty_'+id,v); }
 // Session EBCs tracking
 const SESSION_START_KEY='lra_session_bc_start';
 function getSessionEarned(){
-  const start=Number(sessionStorage.getItem(SESSION_START_KEY)||getBC());
-  return getBC()-start;
+  const start=Number(sessionStorage.getItem(SESSION_START_KEY)||0);
+  return Math.max(0, getBC()-start);
 }
 const BC_BONUS=0;
 function initSessionTracking(){
-  // Migration: clear old 25000 welcome bonus if still present
-  const currentBC = Number(localStorage.getItem('askLovelyRitaV4_bc'));
-  if(currentBC === 25000 || currentBC === 10000){
-    localStorage.setItem('askLovelyRitaV4_bc', '0');
+  // Migration: detect and clear legacy bonus amounts
+  // Any value that was set as a starting bonus (not earned) should be cleared
+  const legacyKey = 'lra_bc_migrated_v5';
+  if(!localStorage.getItem(legacyKey)){
+    localStorage.setItem(legacyKey,'1');
+    // Clear any pre-existing EBC balance — player starts from 0
+    localStorage.setItem('askLovelyRitaV4_bc','0');
+    // Clear stale session tracking so it recalculates from 0
+    sessionStorage.removeItem(SESSION_START_KEY);
   }
   if(!sessionStorage.getItem(SESSION_START_KEY)){
-    sessionStorage.setItem(SESSION_START_KEY,getBC());
+    sessionStorage.setItem(SESSION_START_KEY, getBC());
   }
 }
 
@@ -500,19 +505,26 @@ function buildBankCarousel(){
     return;
   }
 
-  // Rita tip — 50% chance on profitable, always on loss (different message)
-  const profits=bankItems.filter(([id])=>isProfitable(id));
-  const losses=bankItems.filter(([id])=>!isProfitable(id));
+  // Rita tip — only once per item per session, random selection
+  const RITA_TIP_KEY = 'lra_rita_tip_shown';
+  const alreadyShown = sessionStorage.getItem(RITA_TIP_KEY) || '';
+  const profits=bankItems.filter(([id])=>isProfitable(id) && !alreadyShown.includes(id));
+  const losses=bankItems.filter(([id])=>!isProfitable(id) && !alreadyShown.includes(id));
+  // Pick random profitable item (50% chance)
   if(profits.length>0 && Math.random()<0.50){
-    const [pid,pitem]=profits[0];
+    const randomIdx = Math.floor(Math.random()*profits.length);
+    const [pid,pitem]=profits[randomIdx];
     const val=getCurrentValue(pid);
+    sessionStorage.setItem(RITA_TIP_KEY, alreadyShown+','+pid);
     setTimeout(()=>{
       playProfitSound();
       showRitaTip(`Darling! Your ${pitem.name} has gone up in value! You paid ${pitem.price.toLocaleString()} EBCs and it is now worth ${val.toLocaleString()} EBCs. Shall we sell?`);
     },1500);
-  } else if(losses.length>0 && profits.length===0 && Math.random()<0.40){
-    const [lid,litem]=losses[0];
+  } else if(losses.length>0 && profits.filter(([id])=>!alreadyShown.includes(id)).length===0 && Math.random()<0.35){
+    const randomLossIdx = Math.floor(Math.random()*losses.length);
+    const [lid,litem]=losses[randomLossIdx];
     const val=getCurrentValue(lid);
+    sessionStorage.setItem(RITA_TIP_KEY, alreadyShown+','+lid);
     setTimeout(()=>{
       showRitaTip(`Love, your ${litem.name} has dipped a little. Consider whether to hold on until the market recovers or exchange it now. Sometimes patience is the best investment!`);
     },1500);
