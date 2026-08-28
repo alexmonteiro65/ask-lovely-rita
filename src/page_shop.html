@@ -417,33 +417,31 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
           <button class="carousel-arrow" onclick="nav3D(-1)">◀</button>
           <div style="flex:1;overflow:hidden;border-radius:10px;">
             <div id="track-3d" style="display:flex;transition:transform .35s ease;">
-              <!-- Card 1: VW Kombi -->
+              <!-- Card 1: VW Bus -->
               <div style="flex:0 0 100%;box-sizing:border-box;">
                 <div style="background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.3);border-radius:10px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;text-align:center;" onclick="open3DPopup('vw_bus_3d')">
-                  <div style="position:relative;width:100%;display:flex;justify-content:center;align-items:center;min-height:120px;">
-                    <span class="premium-badge" style="background:linear-gradient(135deg,#ffd700,#c8a96e);position:absolute;top:0;left:0;z-index:2;">📐 3D</span>
-                    <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/vw_kombi_uk.png" alt="VW Kombi UK" style="max-width:100%;max-height:130px;object-fit:contain;">
+                  <div style="width:100%;display:flex;justify-content:center;align-items:center;min-height:120px;">
+                    <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/vw_kombi_uk.png" alt="VW Bus UK" style="max-width:100%;max-height:130px;object-fit:contain;">
                   </div>
-                  <div class="item-name" style="color:#ffd700;">VW Kombi — British Edition 🇬🇧</div>
-                  <div class="stock-count">Limited — <span>12</span> codes left!</div>
+                  <div class="item-name" style="color:#ffd700;">VW Bus — British Edition 🇬🇧</div>
+                  <div class="stock-count">Limited — <span id="stock-vw_bus_3d">12</span> left!</div>
                   <div class="item-footer">
                     <div class="item-price" style="border-color:rgba(255,215,0,.5);"><span class="price-icon">🪙</span><span class="price-val" style="color:#ffd700;">1,200</span></div>
-                    <button class="buy-btn" style="background:linear-gradient(135deg,#ffd700,#c8a96e);color:#000;" onclick="event.stopPropagation();open3DPopup('vw_bus_3d')">GET CODE</button>
+                    <button class="buy-btn" id="btn-vw_bus_3d" style="background:linear-gradient(135deg,#ffd700,#c8a96e);color:#000;" onclick="event.stopPropagation();open3DPopup('vw_bus_3d')">BUY</button>
                   </div>
                 </div>
               </div>
-              <!-- Card 2: VW Beetle -->
+              <!-- Card 2: VW Beetle Convertible -->
               <div style="flex:0 0 100%;box-sizing:border-box;">
-                <div style="background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.3);border-radius:10px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;text-align:center;" onclick="open3DPopup('lads_3d')">
-                  <div style="position:relative;width:100%;display:flex;justify-content:center;align-items:center;min-height:120px;">
-                    <span class="premium-badge" style="background:linear-gradient(135deg,#ffd700,#c8a96e);position:absolute;top:0;left:0;z-index:2;">📐 3D</span>
+                <div style="background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.3);border-radius:10px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;text-align:center;" onclick="open3DPopup('vw_beetle_3d')">
+                  <div style="width:100%;display:flex;justify-content:center;align-items:center;min-height:120px;">
                     <img src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/vw_beetle_uk.png" alt="VW Beetle UK" style="max-width:100%;max-height:130px;object-fit:contain;">
                   </div>
                   <div class="item-name" style="color:#ffd700;">VW Beetle Convertible — British Edition 🇬🇧</div>
-                  <div class="stock-count">Limited — <span>8</span> codes left!</div>
+                  <div class="stock-count">Limited — <span id="stock-vw_beetle_3d">8</span> left!</div>
                   <div class="item-footer">
                     <div class="item-price" style="border-color:rgba(255,215,0,.5);"><span class="price-icon">🪙</span><span class="price-val" style="color:#ffd700;">2,000</span></div>
-                    <button class="buy-btn" style="background:linear-gradient(135deg,#ffd700,#c8a96e);color:#000;" onclick="event.stopPropagation();open3DPopup('lads_3d')">GET CODE</button>
+                    <button class="buy-btn" id="btn-vw_beetle_3d" style="background:linear-gradient(135deg,#ffd700,#c8a96e);color:#000;" onclick="event.stopPropagation();open3DPopup('vw_beetle_3d')">BUY</button>
                   </div>
                 </div>
               </div>
@@ -718,35 +716,82 @@ function closePopup() {
 // 3D items data
 const ITEMS_3D = {
   'vw_bus_3d': {
-    name: 'VW Bus — British Edition',
-    code: 'LRA-3D-VWBUS-UK-V1',
-    rita: "How exciting love! This is our exclusive VW Bus in British racing colours! Copy this code and open it in any free slicing software like Tinkercad or Ultimaker Cura. Then print your very own VW Bus at home on a three D printer!"
+    name: 'VW Bus — British Edition 🇬🇧',
+    img: 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/vw_kombi_uk.png',
+    price: 1200,
+    stock: 12,
+    code: 'LRA-3D-VWBUS-2026-TGV-48X2K',
+    rita: "How exciting love! Your very own VW Bus in British racing colours! Once you invest your BeatCoins tap Copy Code and open it in any free three D printing software like Tinkercad or Ultimaker Cura. Then print your VW Bus at home!"
   },
-  'lads_3d': {
-    name: 'The Lads — 3D Figure Set',
-    code: 'LRA-3D-LADS-SET-V1',
-    rita: "Oh how wonderful love! You are about to print your very own Lads figures! All four of them — Smart, Cute, Quiet and Funny! Copy this code into your three D printing software and bring them to life at home!"
+  'vw_beetle_3d': {
+    name: 'VW Beetle Convertible — British Edition 🇬🇧',
+    img: 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/vw_beetle_uk.png',
+    price: 2000,
+    stock: 8,
+    code: 'LRA-3D-BEETLE-2026-TGV-92Y7M',
+    rita: "Oh how wonderful love! A VW Beetle Convertible with the Union Jack! Once you invest your BeatCoins tap Copy Code and open it in Tinkercad or Ultimaker Cura to print your very own Beetle at home!"
   }
 };
 
 function open3DPopup(id){
   const item = ITEMS_3D[id];
   if(!item) return;
-  document.getElementById('popup-img').src = id === 'vw_bus_3d'
-    ? 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/shop/vw_red.png'
-    : 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-smart-regular.png';
+  const alreadyOwned = (parseInt(localStorage.getItem('lra_qty_'+id))||0) > 0;
+  document.getElementById('popup-img').src = item.img;
   document.getElementById('popup-name').textContent = item.name;
-  document.getElementById('popup-stock-line').textContent = 'Limited Edition 3D Print Code';
-  document.getElementById('popup-price-val').textContent = id === 'vw_bus_3d' ? '1,200' : '2,000';
+  document.getElementById('popup-stock-line').textContent = 'Limited Edition — ' + item.stock + ' left!';
+  document.getElementById('popup-price-val').textContent = item.price.toLocaleString();
   const btn = document.getElementById('popup-buy-btn');
-  btn.textContent = '📐 Copy 3D Code';
-  btn.onclick = () => {
-    navigator.clipboard.writeText(item.code).catch(()=>{});
-    toast('📐 Code copied: ' + item.code + ' — Open in your 3D slicer!');
-    speak(item.rita);
-    btn.textContent = '✅ Code Copied!';
-    setTimeout(()=>{ btn.textContent = '📐 Copy 3D Code'; }, 3000);
-  };
+  const msg = document.getElementById('popup-msg');
+  msg.textContent = '';
+  if(alreadyOwned){
+    btn.textContent = '📐 Copy 3D Print Code';
+    btn.disabled = false;
+    btn.style.background = 'linear-gradient(135deg,#ffd700,#c8a96e)';
+    btn.style.color = '#000';
+    btn.onclick = () => {
+      navigator.clipboard.writeText(item.code).catch(()=>{});
+      msg.textContent = '✅ Code copied! Open in Tinkercad or Ultimaker Cura.';
+      msg.style.color = '#ffd700';
+      btn.textContent = '✅ Copied!';
+      setTimeout(()=>{ btn.textContent = '📐 Copy 3D Print Code'; }, 3000);
+    };
+  } else {
+    btn.textContent = '🪙 Invest ' + item.price.toLocaleString() + ' EBCs';
+    btn.disabled = false;
+    btn.style.background = 'linear-gradient(135deg,#ffd700,#c8a96e)';
+    btn.style.color = '#000';
+    btn.onclick = () => {
+      const bal = getBC();
+      if(bal < item.price){ toast('Not enough EBCs love!'); return; }
+      // Deduzir EBCs do Lad ativo
+      const lad = localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';
+      const key = 'askLovelyRitaV4_bc_'+lad;
+      const cur = parseInt(localStorage.getItem(key)||0);
+      localStorage.setItem(key, Math.max(0, cur - item.price));
+      syncBC();
+      // Registar na coleção
+      localStorage.setItem('lra_qty_'+id, 1);
+      // Decrementar stock visual
+      item.stock = Math.max(0, item.stock - 1);
+      const stockEl = document.getElementById('stock-'+id);
+      if(stockEl) stockEl.textContent = item.stock;
+      // Mostrar código
+      btn.textContent = '📐 Copy 3D Print Code';
+      btn.style.background = 'linear-gradient(135deg,#32c864,#1a8040)';
+      btn.style.color = '#fff';
+      btn.onclick = () => {
+        navigator.clipboard.writeText(item.code).catch(()=>{});
+        msg.textContent = '✅ Code copied! Open in Tinkercad or Ultimaker Cura.';
+        msg.style.color = '#ffd700';
+        btn.textContent = '✅ Copied!';
+        setTimeout(()=>{ btn.textContent = '📐 Copy 3D Print Code'; }, 3000);
+      };
+      msg.innerHTML = '<span style="color:#ffd700;font-size:11px;">🎉 Added to your collection!<br>Code: <b>' + item.code + '</b></span>';
+      speak(item.rita);
+      updateBCDisplay();
+    };
+  }
   document.getElementById('item-popup').classList.add('open');
   setTimeout(()=>speak(item.rita), 400);
 }
