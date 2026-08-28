@@ -688,7 +688,7 @@ function loadStorage() {
     const lv_ = localStorage.getItem('askLovelyRitaV4_level');
     if (lv_ && ['youngsters','grownups','experts'].includes(lv_)) S.level = lv_;
     else if (d.theme && ['youngsters','grownups','experts'].includes(d.theme)) S.level = d.theme;
-    if (typeof d.beatcoins === 'number') S.beatcoins = d.beatcoins;
+    S.beatcoins = Number(localStorage.getItem('askLovelyRitaV4_bc')||0);
   } catch(e) {}
 }
 
