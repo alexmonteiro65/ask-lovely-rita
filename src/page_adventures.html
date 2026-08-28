@@ -739,7 +739,12 @@ window.addEventListener('load',()=>{
   checkSpinUnlock();
   // Apply level theme
   const lvl = localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
-  document.getElementById('phone').className = document.getElementById('phone').className.replace(/theme-\w+/,'') + ' theme-' + lvl;
+  document.getElementById('phone').className = document.getElementById('phone').className.replace(/theme-\w+/g,'') + ' theme-' + lvl;
+  // Build bank carousel after DOM fully ready — delay ensures BC is loaded
+  setTimeout(()=>{
+    buildBankCarousel();
+    updateMyAssets();
+  }, 100);
   speak("Welcome to My Adventures love! This is your personal journey. Explore, collect, and grow your portfolio!");
 });
 window.addEventListener('focus',()=>{
