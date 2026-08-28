@@ -537,13 +537,10 @@ function initSession(){
   // If not set (direct access), default to 0
 }
 function getSpendableTotal(){
-  // Spendable = 50% of session earned + any unspent stored
+  // Spendable = exactly 50% of EBCs earned this session
+  // Simple calculation — never accumulates artificially
   const sessEarned = getSessionEarned();
-  const newSpend = Math.floor(sessEarned * 0.5);
-  const stored = Number(localStorage.getItem(INVEST_KEY)||0);
-  const total = stored + newSpend; // Accumulate, don't replace
-  if(newSpend > 0) localStorage.setItem(INVEST_KEY, total);
-  return total;
+  return Math.floor(sessEarned * 0.5);
 }
 function getSessionEarned(){
   const start = Number(sessionStorage.getItem(SESS_KEY)||0);
@@ -591,7 +588,7 @@ function rollCounter(from, to, duration, el) {
 }
 
 function updateBCDisplay(newVal, animate=false) {
-  const spendable = getSpendable();
+  const spendable = getSpendable(); // Always recalculate fresh
   const el = document.getElementById('bc-val');
   if(animate) {
     const oldVal = Number(el.textContent.replace(/,/g,''));
