@@ -398,13 +398,12 @@ function loadQuestion(){
   document.getElementById('q-val').textContent=`${S.qIndex}/8`;
   document.getElementById('progress-fill').style.width=`${(S.qIndex/8)*100}%`;
 
-  // Show instrument image (always for youngsters, after answer for others)
+  // Show instrument image — always show the correct instrument image
+  // Youngsters: show image + name visible in options
+  // Grown Ups: show image, choose country from options
+  // Experts: show image, type the name + choose country
   const imgEl=document.getElementById('instrument-img');
-  if(lvl==='youngsters'){
-    imgEl.src=instr.img; imgEl.style.opacity='1';
-  } else {
-    imgEl.src='https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/world_beats/wb_taiko.png'; imgEl.style.opacity='0.3';
-  }
+  imgEl.src=instr.img; imgEl.style.opacity='1';
 
   // Sound btn
   document.getElementById('sound-btn-wrap').style.display=lvl==='youngsters'?'none':'flex';
@@ -475,7 +474,7 @@ function answer(chosen,instr){
     document.getElementById('instrument-img').src=instr.img;
     document.getElementById('instrument-img').style.opacity='1';
     setTimeout(()=>{
-      document.getElementById('instrument-img').style.opacity='0.3';
+      document.getElementById('instrument-img').style.opacity='1'; // keep visible
     },3500);
   }
 
@@ -579,8 +578,8 @@ function resetGame(){
   document.getElementById('result-panel').classList.remove('show');
   document.getElementById('bonus-area').style.display='none';
   document.getElementById('result-correct-img').style.display='none';
-  document.getElementById('instrument-img').src='https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/world_beats/wb_taiko.png';
-  document.getElementById('instrument-img').style.opacity='1';
+  document.getElementById('instrument-img').src='https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/peaceful_lad_sitar.png';
+  document.getElementById('instrument-img').style.opacity='0.8';
   document.getElementById('q-counter').textContent='Question 0 of 8';
   document.getElementById('q-val').textContent='0/8';
   document.getElementById('score-val').textContent='0';
