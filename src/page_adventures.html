@@ -426,7 +426,7 @@ function getQty(id){ return Number(localStorage.getItem('lra_qty_'+id)||0); }
 function setQty(id,v){ localStorage.setItem('lra_qty_'+id,v); }
 
 // Session EBCs tracking
-const SESSION_START_KEY='lra_session_bc_start';
+const SESSION_START_KEY='lra_session_start_bc'; // Unified — set by page1 on PLAY
 function getSessionEarned(){
   const start=Number(sessionStorage.getItem(SESSION_START_KEY)||0);
   const current=['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
@@ -434,9 +434,9 @@ function getSessionEarned(){
 }
 const BC_BONUS=0;
 function initSessionTracking(){
-  // Record session start BEFORE any sync — preserves earned EBCs
+  // SESSION_START is set by page1 when player presses PLAY
+  // If not set (direct access to profile), default to current balance (earned=0)
   if(!sessionStorage.getItem(SESSION_START_KEY)){
-    // Use sum of lads as session start point (consistent source of truth)
     const ladTotal = ['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
     sessionStorage.setItem(SESSION_START_KEY, ladTotal);
   }
