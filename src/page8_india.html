@@ -256,8 +256,24 @@ const LEVEL_CFG={
 
 let S={level:'youngsters',beatcoins: 0,score:0,pairs:4,cards:[],flipped:[],matched:[],moves:0,gameActive:false,timerInt:null,timeLeft:0};
 
-function loadStorage(){try{const d=JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');if(d.theme&&LEVEL_CFG[d.theme])S.level=d.theme;if(typeof d.beatcoins==='number')S.beatcoins=d.beatcoins;}catch(e){}}
-function saveStorage(){try{const d=JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');d.beatcoins=S.beatcoins;localStorage.setItem('askLovelyRitaV4',JSON.stringify(d));}catch(e){}}
+function loadStorage(){
+  try{
+    // Level: read from page1 key first
+    const lv=localStorage.getItem('askLovelyRitaV4_level');
+    if(lv&&LEVEL_CFG[lv])S.level=lv;
+    else{
+      const d=JSON.parse(localStorage.getItem('askLovelyRitaV4')||'{}');
+      if(d.theme&&LEVEL_CFG[d.theme])S.level=d.theme;
+    }
+    // EBCs: always use central key
+    S.beatcoins=Number(localStorage.getItem('askLovelyRitaV4_bc')||0);
+  }catch(e){}
+}
+function saveStorage(){
+  try{
+    localStorage.setItem('askLovelyRitaV4_bc', S.beatcoins);
+  }catch(e){}
+}
 
 function init(){
   localStorage.setItem('lra_visited_page8_india.html','1');loadStorage();buildBg();applyLevel(S.level);highlightTab(S.level);setTimeout(()=>speak(RITA_INTRO[S.level]),900);}
