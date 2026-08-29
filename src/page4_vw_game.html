@@ -832,14 +832,15 @@ function finishGame(reason) {
     celebrate();
   } else if (S.correct > 0) {
     earned = S.correct * cfg.perCar;
-    setResult('🚗',`${S.correct} out of 4!`,`${4-S.correct} Beetles didn't make it home.`,`+${earned} BeatCoins`,'#fbbf24');
+    setResult('🚗',`${S.correct} out of 4!`,`${4-S.correct} Beetles didn't make it home.`,`+${earned} EBCs`,'#fbbf24');
     ritaLine = pick(RITA_WIN_PARTIAL);
   } else {
-    setResult('🚧',"Time's Up!",'No Beetles parked — no points lost either!','+0 BeatCoins','rgba(255,255,255,.35)');
+    setResult('🚧',"Time's Up!",'No Beetles parked — no points lost either!','+0 EBCs','rgba(255,255,255,.35)');
     ritaLine = pick(RITA_LOSE);
   }
 
   S.beatcoins += earned;
+  saveEBC(earned);
   const _bcEl = document.getElementById('bc-val'); if(_bcEl) _bcEl.textContent = S.beatcoins;
   saveStorage();
   panel.classList.add('show');
@@ -925,7 +926,7 @@ function saveLadBC(amount) {
     const current = Number(localStorage.getItem(key) || 0);
     localStorage.setItem(key, current + amount);
   }
-function saveEBC(amount){const cur=Number(localStorage.getItem('lra_ebc_balance')||0);localStorage.setItem('lra_ebc_balance',cur+amount);} catch(e) {}
+function saveEBC(amount){try{const cur=Number(localStorage.getItem('lra_ebc_balance')||0);localStorage.setItem('lra_ebc_balance',cur+amount);}catch(e){}}
 }
 
 function goBack() {

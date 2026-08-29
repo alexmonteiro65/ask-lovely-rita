@@ -468,12 +468,9 @@ function postGlobalScore(amount) {
 
 function saveEBC(amount) {
   try {
-    const lad = localStorage.getItem('askLovelyRitaV4_chosen_lad') || 'smart';
-    const key = 'askLovelyRitaV4_bc_' + lad;
-    const current = Number(localStorage.getItem(key) || 0);
-    localStorage.setItem(key, current + amount);
-  }
-function saveEBC(amount){const cur=Number(localStorage.getItem('lra_ebc_balance')||0);localStorage.setItem('lra_ebc_balance',cur+amount);} catch(e) {}
+    const cur = Number(localStorage.getItem('lra_ebc_balance') || 0);
+    localStorage.setItem('lra_ebc_balance', cur + amount);
+  } catch(e) {}
 }
 
 function goBack() {
