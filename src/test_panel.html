@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🛠️ Ask Lovely Rita — Test Panel</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0a0a1a; color: #fff; font-family: Georgia, serif; padding: 20px; }
+  h1 { color: #ff6ef7; font-size: 20px; margin-bottom: 4px; }
+  .subtitle { color: rgba(255,255,255,.4); font-size: 12px; margin-bottom: 24px; }
+  .section { background: rgba(255,255,255,.05); border: 1px solid rgba(255,110,247,.2); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .section h2 { color: #ffde59; font-size: 14px; margin-bottom: 12px; letter-spacing: 1px; }
+  .row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; gap: 10px; }
+  label { font-size: 12px; color: rgba(255,255,255,.7); flex: 1; }
+  input[type=number], input[type=text], select {
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15);
+    border-radius: 6px; padding: 6px 10px; color: #fff; font-size: 13px;
+    width: 130px; font-family: 'Courier New', monospace;
+  }
+  .btn {
+    width: 100%; padding: 12px; border: none; border-radius: 10px;
+    font-size: 14px; font-weight: bold; cursor: pointer; font-family: Georgia, serif;
+    margin-top: 6px; transition: all .2s;
+  }
+  .btn-inject { background: linear-gradient(135deg, #ff6ef7, #a855f7); color: #000; }
+  .btn-inject:hover { box-shadow: 0 0 20px rgba(255,110,247,.5); }
+  .btn-clear { background: rgba(255,80,80,.8); color: #fff; }
+  .btn-nav { background: linear-gradient(135deg, #ffde59, #c8a96e); color: #000; margin-top: 4px; }
+  .btn-nav:hover { box-shadow: 0 0 16px rgba(255,222,89,.4); }
+  .status { background: rgba(0,255,100,.08); border: 1px solid rgba(0,255,100,.2); border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #4ade80; margin-top: 10px; display: none; white-space: pre-line; }
+  .lad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .checkbox-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .checkbox-row input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; }
+  .checkbox-row label { font-size: 11px; cursor: pointer; }
+  .divider { border: none; border-top: 1px solid rgba(255,255,255,.08); margin: 12px 0; }
+  .current { font-size: 11px; color: rgba(255,222,89,.6); margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<h1>🛠️ Ask Lovely Rita — Test Panel</h1>
+<p class="subtitle">Inject test data into localStorage — no playing required</p>
+
+<!-- LEVEL -->
+<div class="section">
+  <h2>🎮 LEVEL & LAD</h2>
+  <div class="row">
+    <label>Level</label>
+    <select id="sel-level">
+      <option value="youngsters">Youngsters</option>
+      <option value="grownups">Grown Ups</option>
+      <option value="experts">Experts</option>
+    </select>
+  </div>
+  <div class="row">
+    <label>Active Lad</label>
+    <select id="sel-lad">
+      <option value="smart">Smart Lad</option>
+      <option value="cute">Cute Lad</option>
+      <option value="quiet">Quiet Lad</option>
+      <option value="funny">Funny Lad</option>
+    </select>
+  </div>
+</div>
+
+<!-- EBCs -->
+<div class="section">
+  <h2>🪙 EBCs PER LAD</h2>
+  <div class="lad-grid">
+    <div>
+      <label>Smart Lad</label>
+      <input type="number" id="bc-smart" value="500" min="0">
+    </div>
+    <div>
+      <label>Cute Lad</label>
+      <input type="number" id="bc-cute" value="300" min="0">
+    </div>
+    <div>
+      <label>Quiet Lad</label>
+      <input type="number" id="bc-quiet" value="0" min="0">
+    </div>
+    <div>
+      <label>Funny Lad</label>
+      <input type="number" id="bc-funny" value="0" min="0">
+    </div>
+  </div>
+  <hr class="divider">
+  <div class="row">
+    <label>Session Start (EBCs before this session)</label>
+    <input type="number" id="sess-start" value="0" min="0">
+  </div>
+  <p class="current" id="total-preview">Total: 800 EBCs | Session Earned: 800 | Shop Credit (50%): 400</p>
+</div>
+
+<!-- COLLECTION -->
+<div class="section">
+  <h2>🎨 COLLECTION ITEMS</h2>
+  <p style="font-size:11px;color:rgba(255,255,255,.4);margin-bottom:10px;">Check items to add to collection at purchase price</p>
+
+  <div class="checkbox-row"><input type="checkbox" id="own-rita_p1"><label for="own-rita_p1">Rita Poster — Presenter (500 EBCs)</label></div>
+  <div class="checkbox-row"><input type="checkbox" id="own-rita_p2"><label for="own-rita_p2">Rita Poster — Traffic Warden (450 EBCs)</label></div>
+  <div class="checkbox-row"><input type="checkbox" id="own-vw_red"><label for="own-vw_red">VW Beetle — Classic Red (800 EBCs)</label></div>
+  <div class="checkbox-row"><input type="checkbox" id="own-vw_yellow"><label for="own-vw_yellow">VW Beetle — Yellow Flowers (750 EBCs)</label></div>
+  <div class="checkbox-row"><input type="checkbox" id="own-badge_oct"><label for="own-badge_oct">Ocean World Badge (350 EBCs)</label></div>
+  <div class="checkbox-row"><input type="checkbox" id="own-badge_spc"><label for="own-badge_spc">Space World Badge (330 EBCs)</label></div>
+  <div class="checkbox-row"><input type="checkbox" id="own-lad_smart"><label for="own-lad_smart">Smart One Poster (400 EBCs)</label></div>
+  <div class="checkbox-row"><input type="checkbox" id="own-lad_cute"><label for="own-lad_cute">Cute One Poster (400 EBCs)</label></div>
+  <div class="checkbox-row"><input type="checkbox" id="own-lad_quiet"><label for="own-lad_quiet">Quiet One Poster (400 EBCs)</label></div>
+  <div class="checkbox-row"><input type="checkbox" id="own-lad_funny"><label for="own-lad_funny">Funny One Poster (400 EBCs)</label></div>
+  <div class="checkbox-row"><input type="checkbox" id="own-stk_lads"><label for="own-stk_lads">Lads Sticker Sheet (800 EBCs)</label></div>
+  <div class="checkbox-row"><input type="checkbox" id="own-stk_vw"><label for="own-stk_vw">VW Sticker Sheet (800 EBCs)</label></div>
+  <div class="checkbox-row"><input type="checkbox" id="own-vw_bus_3d"><label for="own-vw_bus_3d">VW Bus 3D Print (1,200 EBCs)</label></div>
+  <div class="checkbox-row"><input type="checkbox" id="own-vw_beetle_3d"><label for="own-vw_beetle_3d">VW Beetle 3D Print (2,000 EBCs)</label></div>
+</div>
+
+<!-- ACTIONS -->
+<div class="section">
+  <h2>⚡ ACTIONS</h2>
+  <button class="btn btn-inject" onclick="injectData()">💉 INJECT TEST DATA</button>
+  <button class="btn btn-clear" onclick="clearAll()" style="margin-top:8px;">🗑️ CLEAR ALL DATA</button>
+  <div class="status" id="status-box"></div>
+</div>
+
+<!-- NAVIGATION -->
+<div class="section">
+  <h2>🔗 GO TO PAGE</h2>
+  <button class="btn btn-nav" onclick="goTo('page1_landing.html')">🏠 Page 1 — Landing</button>
+  <button class="btn btn-nav" onclick="goTo('page_adventures.html')">👤 MyBank / Profile</button>
+  <button class="btn btn-nav" onclick="goTo('page_shop.html')">🛍️ Beat Shop</button>
+</div>
+
+<script>
+const BASE = 'https://alexmonteiro65.github.io/ask-lovely-rita/src/';
+
+const ITEMS = {
+  rita_p1:500, rita_p2:450, vw_red:800, vw_yellow:750,
+  badge_oct:350, badge_spc:330, lad_smart:400, lad_cute:400,
+  lad_quiet:400, lad_funny:400, stk_lads:800, stk_vw:800,
+  vw_bus_3d:1200, vw_beetle_3d:2000
+};
+
+function updatePreview() {
+  const lads = ['smart','cute','quiet','funny'];
+  const total = lads.reduce((s,l) => s + Number(document.getElementById('bc-'+l).value||0), 0);
+  const sessStart = Number(document.getElementById('sess-start').value||0);
+  const earned = Math.max(0, total - sessStart);
+  const credit = Math.floor(earned * 0.5);
+  document.getElementById('total-preview').textContent =
+    `Total: ${total.toLocaleString()} EBCs | Session Earned: ${earned.toLocaleString()} | Shop Credit (50%): ${credit.toLocaleString()}`;
+}
+
+['smart','cute','quiet','funny'].forEach(l => {
+  document.getElementById('bc-'+l).addEventListener('input', updatePreview);
+});
+document.getElementById('sess-start').addEventListener('input', updatePreview);
+
+function injectData() {
+  const lads = ['smart','cute','quiet','funny'];
+
+  // Level & Lad
+  localStorage.setItem('askLovelyRitaV4_level', document.getElementById('sel-level').value);
+  localStorage.setItem('askLovelyRitaV4_chosen_lad', document.getElementById('sel-lad').value);
+
+  // EBCs per Lad
+  let total = 0;
+  lads.forEach(l => {
+    const v = Number(document.getElementById('bc-'+l).value||0);
+    localStorage.setItem('askLovelyRitaV4_bc_'+l, v);
+    total += v;
+  });
+  localStorage.setItem('askLovelyRitaV4_bc', total);
+
+  // Session start
+  const sessStart = Number(document.getElementById('sess-start').value||0);
+  sessionStorage.setItem('lra_session_start_bc', sessStart);
+
+  // Collection items
+  let collVal = 0;
+  Object.keys(ITEMS).forEach(id => {
+    const owned = document.getElementById('own-'+id)?.checked;
+    if(owned) {
+      localStorage.setItem('lra_qty_'+id, 1);
+      localStorage.setItem('lra_stock_'+id, Math.max(0, (ITEMS[id] === 350 ? 9 : 4)));
+      collVal += ITEMS[id];
+    } else {
+      localStorage.removeItem('lra_qty_'+id);
+    }
+  });
+
+  // Terms accepted so page1 doesn't block
+  localStorage.setItem('lra_terms_accepted', 'true');
+  localStorage.setItem('lra_bc_migrated_v5', 'true');
+
+  const earned = Math.max(0, total - sessStart);
+  const credit = Math.floor(earned * 0.5);
+
+  const box = document.getElementById('status-box');
+  box.style.display = 'block';
+  box.textContent = `✅ Data injected!\n\nEBCs Total: ${total.toLocaleString()}\nSession Start: ${sessStart.toLocaleString()}\nEarned this session: ${earned.toLocaleString()}\nShop Credit (50%): ${credit.toLocaleString()}\nCollection Value: ${collVal.toLocaleString()}\nTotal Educational Portfolio: ${(total + collVal).toLocaleString()}\n\nNow navigate to any page to test!`;
+}
+
+function clearAll() {
+  const keys = Object.keys(localStorage).filter(k =>
+    k.startsWith('askLovelyRita') || k.startsWith('lra_')
+  );
+  keys.forEach(k => localStorage.removeItem(k));
+  sessionStorage.removeItem('lra_session_start_bc');
+  const box = document.getElementById('status-box');
+  box.style.display = 'block';
+  box.style.background = 'rgba(255,80,80,.08)';
+  box.style.borderColor = 'rgba(255,80,80,.2)';
+  box.style.color = '#ff8080';
+  box.textContent = '🗑️ All data cleared. Player is now a fresh new user.';
+}
+
+function goTo(page) {
+  window.open(BASE + page, '_blank');
+}
+
+updatePreview();
+</script>
+</body>
+</html>
