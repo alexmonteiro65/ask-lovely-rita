@@ -557,18 +557,15 @@ function initSession(){
   // If not set (direct access), default to 0
 }
 function getSpendableTotal(){
-  // Spendable = exactly 50% of EBCs earned this session
-  // Simple calculation — never accumulates artificially
-  const sessEarned = getSessionEarned();
-  return Math.floor(sessEarned * 0.5);
+  // EBCs come ONLY from Beat Burst bonus rounds — stored in lra_ebc_balance
+  return Number(localStorage.getItem('lra_ebc_balance')||0);
 }
 function getSessionEarned(){
-  const start = Number(sessionStorage.getItem(SESS_KEY)||0);
-  const current = getBC();
-  return Math.max(0, current - start);
+  // Session earned = EBCs in Beat Burst account
+  return getSpendableTotal();
 }
 
-// Spendable = 50% of EBCs earned this session
+// Spendable = all EBCs earned in Beat Burst rounds
 function getSpendable(){ return getSpendableTotal(); }
 function getStock(id){ if(localStorage.getItem('lra_stock_'+id)===null) localStorage.setItem('lra_stock_'+id,ITEMS[id].stock); return Number(localStorage.getItem('lra_stock_'+id)); }
 function setStock(id,v){ localStorage.setItem('lra_stock_'+id,v); }
@@ -651,12 +648,12 @@ function buyItem(id) {
   if(getStock(id)<=0){ toast('😢 Sold out! Trade with another player!'); return; }
   if(getSessionEarned()===0){
     toast('Play first love! Earn BeatCoins then invest!');
-    speak("You need to play first love! Earn your Educational BeatCoins and then come invest in the Beat Shop!");
+    speak("Oh sorry love! You need to complete a Beat Burst bonus round first to earn your EBCs! Finish a world and play the bonus round!");
     return;
   }
   if(spendable < item.price){
     toast(`Keep playing love! You can spend ${spendable.toLocaleString()} EBCs now.`);
-    speak(`Keep playing love! You have earned ${getSessionEarned().toLocaleString()} BeatCoins this session and can invest up to ${spendable.toLocaleString()}. Keep going and earn more!`);
+    speak(`Oh sorry love! You need more EBCs from the Beat Burst rounds! Complete a world and play the bonus to earn your shop credit!`);
     return;
   }
   if(bc < item.price){ toast(`Not enough EBCs love! You need ${item.price.toLocaleString()}`); return; }
@@ -683,8 +680,9 @@ function buyItem(id) {
   // Stock, coleção, investable
   setStock(id, getStock(id)-1);
   addQty(id);
-  const currentInvest = Number(localStorage.getItem(INVEST_KEY)||0);
-  localStorage.setItem(INVEST_KEY, Math.max(0, currentInvest - item.price));
+  // Deduzir EBCs usados do Beat Burst balance
+  const ebcBal = Number(localStorage.getItem('lra_ebc_balance')||0);
+  localStorage.setItem('lra_ebc_balance', Math.max(0, ebcBal - item.price));
   // Actualizar display
   updateBCDisplay(newTotal, true);
   renderItem(id);
