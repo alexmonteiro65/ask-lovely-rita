@@ -371,8 +371,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
     </div>
   </div>
   <nav id="nav-bar">
-    <button class="nav-btn" onclick="window.location.href='page1_landing.html'"><span class="nav-icon">🏠</span><span>Home</span></button>
-    <button class="nav-btn" onclick="window.location.href='page_shop.html'"><span class="nav-icon">🛍️</span><span>Beat Shop</span></button>
+    <button class="nav-btn" onclick="window.location.href='page1_landing.html'" style="color:#ff6ef7;font-weight:700;"><span class="nav-icon">🏠</span><span>Go Home</span></button>
     <button class="nav-btn active"><span class="nav-icon">👤</span><span>Profile</span></button>
   </nav>
 
@@ -659,7 +658,7 @@ function sellItem(id){
       if(window.speechSynthesis&&window.speechSynthesis.speaking){
         setTimeout(waitAndRedirect,300);
       } else {
-        setTimeout(()=>window.location.href='page_shop.html',600);
+        setTimeout(()=>updateAssets(),600);
       }
     };
     setTimeout(waitAndRedirect,800);
@@ -671,7 +670,7 @@ function sellItem(id){
       if(window.speechSynthesis&&window.speechSynthesis.speaking){
         setTimeout(waitAndRedirect2,300);
       } else {
-        setTimeout(()=>window.location.href='page_shop.html',600);
+        setTimeout(()=>updateAssets(),600);
       }
     };
     setTimeout(waitAndRedirect2,800);
@@ -716,7 +715,7 @@ function goFreeWorlds(){
   localStorage.setItem('lra_worlds_unlocked','1');
   document.getElementById('spin-banner').style.display='none';
   speak("Off to choose your next adventure love!");
-  setTimeout(()=>window.location.href='page5_worlds.html',800);
+  window.location.href='page1_landing.html';
 }
 
 // ── My Records ────────────────────────────────────────────────────────────────
