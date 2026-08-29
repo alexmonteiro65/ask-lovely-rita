@@ -184,7 +184,7 @@ function tapNote(idx){
   if(correct && inZone){
     btn.className='note-btn hit';
     S.hits++; S.earned+=reward;
-    saveLadBC(reward); postGlobalScore(reward);
+    saveEBC(reward); postGlobalScore(reward);
     updateDisplay();
     speak('Brilliant love!');
     toast('✅ Perfect timing! +'+reward+' EBCs!');
@@ -265,6 +265,7 @@ function speak(text){
   if(voice)u.voice=voice;window.speechSynthesis.speak(u);
 }
 function saveLadBC(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';const k='askLovelyRitaV4_bc_'+lad;localStorage.setItem(k,Number(localStorage.getItem(k)||0)+amount);const t=Number(localStorage.getItem('askLovelyRitaV4_bc')||25000);localStorage.setItem('askLovelyRitaV4_bc',t+amount);}
+function saveEBC(amount){const cur=Number(localStorage.getItem('lra_ebc_balance')||0);localStorage.setItem('lra_ebc_balance',cur+amount);}
 function postGlobalScore(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';fetch('https://empty-leaf-6e4b.alexmonteironeto.workers.dev/score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lad,amount})}).catch(()=>{});}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2500);}
 function goBack(){window.location.href='page7_space.html';}
