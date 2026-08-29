@@ -209,10 +209,19 @@ function showResult(){
   document.getElementById('beat-grid').style.pointerEvents='none';
   const r=document.getElementById('result-panel');r.style.display='block';
   document.getElementById('result-score').textContent='+'+S.earned;
-  const msgs={youngsters:"Incredible rhythm love! You are a natural music star!",grownups:"Sensational darling! Rita is so proud of your timing!",experts:"Extraordinary! A true musical genius of the highest order!"};
+  const msgs={youngsters:"Incredible rhythm love! You are a natural music star! Taking you to the Beat Shop in a moment!",grownups:"Sensational darling! Rita is so proud of your timing! Off to the Beat Shop we go!",experts:"Extraordinary! A true musical genius! Heading to the Beat Shop now love!"};
   document.getElementById('result-msg').textContent=msgs[level];
   document.getElementById('result-title').textContent=S.earned>=(reward*2)?'🎵 Music Master!':'🎶 Well Done!';
   speak(msgs[level]);
+  // Auto-advance to Beat Shop after 4 seconds
+  let sec=4;
+  const btn=document.querySelector('#result-panel button');
+  if(btn){btn.textContent='🛍️ Going to Beat Shop in '+sec+'s...';}
+  const iv=setInterval(()=>{
+    sec--;
+    if(btn) btn.textContent=sec>0?'🛍️ Going to Beat Shop in '+sec+'s...':'🛍️ Going now!';
+    if(sec<=0){clearInterval(iv);goChooseWorld();}
+  },1000);
 }
 
 function speak(text){if(localStorage.getItem('askLovelyRitaV4_mute')==='1'||!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.92;u.pitch=1.1;const v=window.speechSynthesis.getVoices();const voice=v.find(x=>x.lang==='en-GB'&&/female|woman/i.test(x.name))||v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));if(voice)u.voice=voice;window.speechSynthesis.speak(u);}
@@ -232,5 +241,10 @@ window.addEventListener('load',()=>{
   else window.speechSynthesis.onvoiceschanged=go;
 });
 </script>
+<!-- ADMIN TEST NAV -->
+<div id="admin-nav" style="position:fixed;top:4px;right:4px;z-index:9999;display:flex;gap:4px;opacity:0.4;">
+  <button onclick="history.back()" style="background:#333;border:none;color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;cursor:pointer;">◀ Back</button>
+  <button onclick="document.getElementById('admin-nav').style.opacity=document.getElementById('admin-nav').style.opacity>'0.5'?'0.15':'1'" style="background:#555;border:none;color:#fff;padding:4px 6px;border-radius:6px;font-size:9px;cursor:pointer;">👁</button>
+</div>
 </body>
 </html>

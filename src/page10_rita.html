@@ -512,7 +512,7 @@ body.theme-experts    { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-grad
       <!-- ACTION BTNS -->
       <div id="action-btns">
         <button class="act-btn" id="start-btn" onclick="startGame()">🎤 Enter Rita's World!</button>
-        <button class="act-btn" id="next-btn" onclick="nextQuestion()">Next ▶</button>
+        <!-- next-btn removed — auto-advance handles this -->
       </div>
 
       <!-- RESULT -->
@@ -1099,7 +1099,7 @@ function checkExpert() {
     speak(msg);
     S.qIndex++;
     document.getElementById('q-val').textContent=`${S.qIndex}/8`;
-    if(S.qIndex<8) document.getElementById('next-btn').style.display='block';
+    if(S.qIndex<8) setTimeout(()=>nextQuestion(), 3000);
     else setTimeout(()=>finishGame(),2000);
     setTimeout(()=>document.getElementById('scroll-area').scrollTo({top:9999,behavior:'smooth'}),300);
   }
@@ -1124,7 +1124,7 @@ function handleCorrect(msg) {
   speak(msg);
   S.qIndex++;
   document.getElementById('q-val').textContent=`${S.qIndex}/8`;
-  if(S.qIndex<8) document.getElementById('next-btn').style.display='block';
+  if(S.qIndex<8) setTimeout(()=>nextQuestion(), 3000);
   else setTimeout(()=>finishGame(),2000);
   setTimeout(()=>document.getElementById('scroll-area').scrollTo({top:9999,behavior:'smooth'}),300);
 }
@@ -1316,5 +1316,10 @@ function setDevice(w,h,name){const p=document.getElementById('phone');p.style.wi
 
 init();
 </script>
+<!-- ADMIN TEST NAV -->
+<div id="admin-nav" style="position:fixed;top:4px;right:4px;z-index:9999;display:flex;gap:4px;opacity:0.4;">
+  <button onclick="history.back()" style="background:#333;border:none;color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;cursor:pointer;">◀ Back</button>
+  <button onclick="document.getElementById('admin-nav').style.opacity=document.getElementById('admin-nav').style.opacity>'0.5'?'0.15':'1'" style="background:#555;border:none;color:#fff;padding:4px 6px;border-radius:6px;font-size:9px;cursor:pointer;">👁</button>
+</div>
 </body>
 </html>

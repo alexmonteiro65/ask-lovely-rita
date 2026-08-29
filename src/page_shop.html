@@ -556,6 +556,28 @@ function setBC(v){ localStorage.setItem(BC_KEY,v); }
 // Session tracking
 const SESS_KEY = 'lra_session_start_bc'; // Unified key — set by page1 on PLAY
 const INVEST_KEY = 'lra_ebc_to_invest';
+function autoRedirectToGame(sec){
+  const visit = localStorage.getItem('lra_shop_visit')||'1';
+  const world = localStorage.getItem('lra_current_world')||'rita';
+  const lv = localStorage.getItem('askLovelyRitaV4_level')||'youngsters';
+  const WORLD_QUIZ2 = {
+    rita:'page_jukebox_time.html', octopus:'page_shape_shifter.html',
+    space:'page_beat_destinations.html', india:'page8_worldbeats.html', city:'page_beat_maths.html'
+  };
+  const dest = visit==='1' ? (WORLD_QUIZ2[world]||'page5_worlds.html') : 'page_adventures.html';
+  const exitBtn = document.getElementById('shop-exit-btn');
+  let s=sec;
+  if(exitBtn){
+    exitBtn.textContent = '▶ Going to game in '+s+'s...';
+    exitBtn.style.background='linear-gradient(135deg,#4ade80,#16a34a)';
+  }
+  const iv=setInterval(()=>{
+    s--;
+    if(exitBtn) exitBtn.textContent=s>0?'▶ Going to game in '+s+'s...':'▶ Going now!';
+    if(s<=0){clearInterval(iv);window.location.href=dest+'?level='+lv+'&from='+world;}
+  },1000);
+}
+
 function initSession(){
   const params = new URLSearchParams(window.location.search);
   const world = params.get('world') || localStorage.getItem('lra_current_world') || '';
@@ -730,8 +752,9 @@ function buyItem(id) {
     return;
   }
   if(ebcBalance === 0){
-    speak('Oh sorry love! You have no EBCs right now. Keep playing to earn more in the Beat Burst rounds and come back!');
-    toast('No EBCs! Keep playing to earn more love!');
+    speak('Oh sorry love! You have no EBCs left. I am taking you back to the game now to earn more!');
+    toast('No EBCs! Going back to the game in 5 seconds...');
+    autoRedirectToGame(5);
     return;
   }
   if(ebcBalance < item.price){
@@ -957,5 +980,10 @@ window.addEventListener('load',()=>{
   // Rita speech handled by initSession based on visit context
 });
 </script>
+<!-- ADMIN TEST NAV -->
+<div id="admin-nav" style="position:fixed;top:4px;right:4px;z-index:9999;display:flex;gap:4px;opacity:0.4;">
+  <button onclick="history.back()" style="background:#333;border:none;color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;cursor:pointer;">◀ Back</button>
+  <button onclick="document.getElementById('admin-nav').style.opacity=document.getElementById('admin-nav').style.opacity>'0.5'?'0.15':'1'" style="background:#555;border:none;color:#fff;padding:4px 6px;border-radius:6px;font-size:9px;cursor:pointer;">👁</button>
+</div>
 </body>
 </html>
