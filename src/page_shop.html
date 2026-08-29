@@ -22,6 +22,9 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
 #bc-icon{font-size:18px;}
 #bc-val{font-size:18px;font-weight:bold;color:#ffd700;min-width:80px;text-align:center;text-shadow:0 0 10px rgba(255,215,0,.8);font-family:'Courier New',Courier,monospace;letter-spacing:0.5px;}
 #bc-sublabel{font-size:11px;font-weight:bold;color:rgba(255,110,247,.8);letter-spacing:1px;}
+#shop-visit-banner{display:none;background:rgba(255,222,89,.08);border:1px solid rgba(255,222,89,.3);border-radius:12px;padding:10px 14px;margin:8px 12px 0;font-size:10px;color:rgba(255,255,255,.8);line-height:1.5;text-align:center;}
+#shop-exit-btn{display:block;width:calc(100% - 24px);margin:10px 12px 0;padding:13px;background:linear-gradient(135deg,#ff6ef7,#a855f7);border:none;border-radius:16px;color:#fff;font-weight:900;font-size:13px;cursor:pointer;font-family:"Segoe UI",system-ui,sans-serif;letter-spacing:.5px;}
+#shop-exit-btn:hover{opacity:.9;}
 
 /* ── SCROLL ── */
 #shop-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:14px 12px 16px;}
@@ -156,6 +159,8 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
       <span id="bc-sublabel">EBCs Available to Invest</span>
     </div>
   </div>
+  <div id="shop-visit-banner"></div>
+  <button id="shop-exit-btn" style="display:none;">Continue My Adventure →</button>
 
   <!-- SCROLL -->
   <div id="shop-scroll">
@@ -552,9 +557,76 @@ function setBC(v){ localStorage.setItem(BC_KEY,v); }
 const SESS_KEY = 'lra_session_start_bc'; // Unified key — set by page1 on PLAY
 const INVEST_KEY = 'lra_ebc_to_invest';
 function initSession(){
-  // SESSION_START is set by page1 when player presses PLAY
-  // We only read it here, never overwrite it
-  // If not set (direct access), default to 0
+  const params = new URLSearchParams(window.location.search);
+  const world = params.get('world') || localStorage.getItem('lra_current_world') || '';
+  const visit = params.get('visit') || localStorage.getItem('lra_shop_visit') || '0';
+  const lv = params.get('level') || localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
+
+  if(world) localStorage.setItem('lra_current_world', world);
+  if(visit) localStorage.setItem('lra_shop_visit', visit);
+  if(lv) localStorage.setItem('askLovelyRitaV4_level', lv);
+
+  const WORLD_QUIZ2 = {
+    rita: 'page_jukebox_time.html',
+    octopus: 'page_shape_shifter.html',
+    space: 'page_beat_destinations.html',
+    india: 'page8_worldbeats.html',
+    city: 'page_beat_maths.html',
+  };
+  const WORLD_NAMES = {
+    rita: "Rita's World", octopus: 'Octopus Garden', space: 'Across the Universe',
+    india: 'The Inner Light', city: 'Penny Lane',
+  };
+
+  const ebc = Number(localStorage.getItem('lra_ebc_balance')||0);
+  const exitBtn = document.getElementById('shop-exit-btn');
+  const shopBanner = document.getElementById('shop-visit-banner');
+
+  if(visit === '1' && world && WORLD_QUIZ2[world]) {
+    // Visit 1 — after Burst1 — continue to Quiz2
+    const quiz2 = WORLD_QUIZ2[world];
+    const worldName = WORLD_NAMES[world] || world;
+    if(exitBtn) {
+      exitBtn.textContent = 'Continue My Adventure →';
+      exitBtn.onclick = function(){
+        window.location.href = quiz2 + '?level=' + lv + '&from=' + world;
+      };
+    }
+    if(shopBanner) {
+      shopBanner.innerHTML = '🎯 <strong>Visit 1 of 2</strong> — ' + worldName + ' | You have <strong>' + ebc + ' EBCs</strong> to invest. Save for visit 2 or buy now!';
+      shopBanner.style.display = 'block';
+    }
+    // Rita speaks
+    setTimeout(()=>{
+      speak('Welcome to Beat Shop love! You have ' + ebc + ' EBCs to invest! You can buy now or save for something bigger next visit. When you are ready tap Continue My Adventure!');
+    }, 800);
+  } else if(visit === '2') {
+    // Visit 2 — after Burst2 — go to Profile
+    const worldName = WORLD_NAMES[world] || world;
+    if(exitBtn) {
+      exitBtn.textContent = 'See My Results →';
+      exitBtn.onclick = function(){
+        window.location.href = 'page_adventures.html';
+      };
+    }
+    if(shopBanner) {
+      shopBanner.innerHTML = '🏆 <strong>Final Visit!</strong> — ' + worldName + ' complete! You have <strong>' + ebc + ' EBCs</strong>. This is your last chance to invest before seeing your results!';
+      shopBanner.style.display = 'block';
+    }
+    setTimeout(()=>{
+      speak('Welcome back love! You completed the world! This is your final chance to invest your EBCs before we see everything you have accomplished. Choose wisely darling!');
+    }, 800);
+  } else {
+    // Direct access (admin/testing)
+    if(exitBtn) {
+      exitBtn.textContent = 'Go Home';
+      exitBtn.onclick = function(){ window.location.href = 'page1_landing.html'; };
+    }
+    if(shopBanner) shopBanner.style.display = 'none';
+    setTimeout(()=>{
+      speak('Welcome to Beat Shop love! Explore and invest your EBCs in exclusive collectibles!');
+    }, 800);
+  }
 }
 function getSpendableTotal(){
   // EBCs come ONLY from Beat Burst bonus rounds — stored in lra_ebc_balance
@@ -657,7 +729,17 @@ function buyItem(id) {
     speak("Oh sorry love! You don't have enough EBCs yet! Complete more Beat Burst rounds to earn your shop credit!");
     return;
   }
-  if(ebcBalance < item.price){ toast(`Not enough EBCs love! You need ${item.price} EBCs`); return; }
+  if(ebcBalance === 0){
+    speak('Oh sorry love! You have no EBCs right now. Keep playing to earn more in the Beat Burst rounds and come back!');
+    toast('No EBCs! Keep playing to earn more love!');
+    return;
+  }
+  if(ebcBalance < item.price){
+    const need = item.price - ebcBalance;
+    speak('Oh sorry love! You need ' + need + ' more EBCs for that one! Keep playing and come back with more!');
+    toast('Need ' + need + ' more EBCs love!');
+    return;
+  }
   // Deduzir APENAS de lra_ebc_balance — nunca toca nos BeatCoins dos Lads
   localStorage.setItem('lra_ebc_balance', ebcBalance - item.price);
   // Stock e coleção
@@ -861,14 +943,18 @@ window.addEventListener('load',()=>{
   // Clear any accumulated invest value — always calculate fresh
   localStorage.removeItem('lra_ebc_to_invest');
   initSession();
-  setTimeout(()=>updateBCDisplay(getBC()), 100);
+  setTimeout(()=>{
+    updateBCDisplay(getBC());
+    const eb = document.getElementById('shop-exit-btn');
+    if(eb) eb.style.display='block';
+  }, 100);
   Object.keys(ITEMS).forEach(id=>renderItem(id));
   // Init carousels
   initCarousel('posters',2); initCarousel('beetles',2);
   initCarousel('badges',2);  initCarousel('lads',4);
   initCarousel('stickers',5);
 
-  speak("Welcome to Beat Shop love! Explore and invest your BeatCoins in exclusive collectibles!");
+  // Rita speech handled by initSession based on visit context
 });
 </script>
 </body>
