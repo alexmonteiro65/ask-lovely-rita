@@ -264,10 +264,24 @@ function endGame(){
   document.getElementById('end-overlay').style.display='flex';
   document.getElementById('end-score').textContent=`Score: ${S.score} barriers cleared`;
   document.getElementById('end-ebc').textContent=`+${S.ebc} EBCs earned!`;
-  const msg=S.score>=10?`Fantastic love! You cleared ${S.score} barriers and earned ${S.ebc} EBCs!`:
-    `Well done love! You cleared ${S.score} barriers and earned ${S.ebc} EBCs! Try again for more!`;
+  const msg=`Fantastic love! You cleared ${S.score} barriers and earned ${S.ebc} EBCs! Taking you to the Beat Shop for your final visit now!`;
   document.getElementById('rita-hud').textContent=msg;
   speak(msg);
+  // Auto-advance to Shop visit=2 after 5s
+  const btn=document.getElementById('end-home');
+  let sec=5;
+  if(btn) btn.textContent='🛍️ Final Beat Shop visit in '+sec+'s...';
+  const iv=setInterval(()=>{
+    sec--;
+    if(btn) btn.textContent=sec>0?'🛍️ Final Beat Shop visit in '+sec+'s...':'🛍️ Going now!';
+    if(sec<=0){
+      clearInterval(iv);
+      const lv=localStorage.getItem('askLovelyRitaV4_level')||'youngsters';
+      localStorage.setItem('lra_current_world','rita');
+      localStorage.setItem('lra_shop_visit','2');
+      window.location.href='page_shop.html?world=rita&visit=2&level='+lv;
+    }
+  },1000);
 }
 
 function resetGame(){
@@ -295,5 +309,10 @@ if(tabMap[lv])document.getElementById(tabMap[lv]).classList.add('active');
 resize();
 speak("Welcome to Rhythm Bounce love! Choose your level and tap the screen to make the ball bounce over the barriers. Each barrier earns you EBCs for the Beat Shop!");
 </script>
+<!-- ADMIN TEST NAV -->
+<div id="admin-nav" style="position:fixed;top:4px;right:4px;z-index:9999;display:flex;gap:4px;opacity:0.4;">
+  <button onclick="history.back()" style="background:#333;border:none;color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;cursor:pointer;">◀ Back</button>
+  <button onclick="document.getElementById('admin-nav').style.opacity=document.getElementById('admin-nav').style.opacity>'0.5'?'0.15':'1'" style="background:#555;border:none;color:#fff;padding:4px 6px;border-radius:6px;font-size:9px;cursor:pointer;">👁</button>
+</div>
 </body>
 </html>
