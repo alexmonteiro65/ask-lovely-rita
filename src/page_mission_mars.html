@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lovely Rita Adventures — Mission to Mars</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0a14;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 16px 40px;}
+#device-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;justify-content:center;}
+#device-bar button{background:#1a1a2e;border:1px solid #333;color:#aaa;padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer;}
+#device-bar button.active{background:#333;color:#fff;border-color:#666;}
+#phone-outer{background:#1c1c1c;border-radius:50px;padding:12px;box-shadow:0 0 0 2px #333,0 20px 60px rgba(0,0,0,.8);}
+#phone{width:369px;height:828px;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;background:#000010;transition:width .3s,height .3s;}
+#notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:30px;background:#1c1c1c;border-radius:0 0 20px 20px;z-index:20;}
+#scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding:36px 12px 8px;scrollbar-width:none;}
+#scroll-area::-webkit-scrollbar{display:none;}
+#bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse at 50% 30%,#0a0030 0%,#000010 60%,#000 100%);border-radius:40px;pointer-events:none;}
+nav#nav-bar{flex-shrink:0;display:flex;align-items:center;justify-content:space-around;padding:8px 20px 12px;border-top:1px solid rgba(255,255,255,.08);background:rgba(0,0,16,.85);backdrop-filter:blur(12px);position:relative;z-index:10;}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;padding:5px 14px;border-radius:12px;font-size:10px;}
+.nav-btn:hover{background:rgba(255,255,255,.08);color:#fff;}
+.nav-btn .nav-icon{font-size:20px;line-height:1;}
+body.theme-youngsters{--accent:#ff6ef7;--btn-grad:linear-gradient(135deg,#ff6ef7,#a855f7);}
+body.theme-grownups{--accent:#ffde59;--btn-grad:linear-gradient(135deg,#ffde59,#c8860a);}
+body.theme-experts{--accent:#c8a96e;--btn-grad:linear-gradient(135deg,#c8a96e,#6677aa);}
+#page-header{text-align:center;margin-bottom:8px;position:relative;z-index:2;}
+#page-header h1{font-size:16px;font-weight:900;letter-spacing:1px;text-transform:uppercase;background:linear-gradient(135deg,#f87171,#fb923c,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+#page-header p{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px;}
+#level-tabs{display:flex;gap:5px;justify-content:center;margin-bottom:8px;position:relative;z-index:2;}
+#level-tabs button{padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);font-size:9px;font-weight:700;cursor:pointer;transition:all .2s;text-transform:uppercase;}
+#level-tabs button.active{background:var(--btn-grad);border-color:transparent;color:#fff;}
+#rita-wrap{background:rgba(255,255,255,.06);border:1px solid rgba(248,113,113,.3);border-radius:14px;padding:8px 26px 8px 10px;position:relative;margin-bottom:8px;z-index:2;}
+#rita-name{font-size:9px;font-weight:700;color:#f87171;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;}
+#rita-text{font-size:10px;color:rgba(255,255,255,.8);line-height:1.5;}
+#rita-speak-btn{position:absolute;top:7px;right:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;color:#fff;}
+#status-bar{display:flex;gap:6px;margin-bottom:8px;position:relative;z-index:2;}
+.stat-card{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:4px 8px;}
+.stat-label{font-size:7px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.5px;}
+.stat-val{font-size:13px;font-weight:900;}
+#bc-val{color:#ffde59;}#score-val{color:#f87171;}#q-val{color:#fbbf24;}
+
+/* SPACE GAME CANVAS */
+#space-wrap{position:relative;z-index:2;margin-bottom:10px;}
+#space-canvas{width:100%;height:220px;display:block;border-radius:16px;background:#000010;border:1px solid rgba(248,113,113,.2);cursor:pointer;}
+#shield-bar{display:flex;gap:4px;justify-content:center;margin-bottom:6px;}
+.shield{font-size:14px;}
+#distance-bar{background:rgba(255,255,255,.05);border-radius:6px;height:6px;overflow:hidden;margin-bottom:4px;}
+#distance-fill{height:100%;background:linear-gradient(90deg,#f87171,#fb923c,#fbbf24);border-radius:6px;width:0%;transition:width .3s;}
+#distance-label{font-size:8px;color:rgba(255,255,255,.4);text-align:center;}
+
+/* QUESTION */
+#question-card{background:rgba(255,255,255,.06);border:1px solid rgba(248,113,113,.3);border-radius:16px;padding:10px 12px;margin-bottom:8px;position:relative;z-index:2;text-align:center;}
+#question-number{font-size:8px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;}
+#question-text{font-size:11px;font-weight:700;color:#fff;line-height:1.5;}
+#answers-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;position:relative;z-index:2;margin-bottom:8px;}
+.ans-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 6px;color:#fff;font-size:10px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center;font-family:'Segoe UI',system-ui,sans-serif;}
+.ans-btn:hover:not(.locked){background:rgba(248,113,113,.2);border-color:rgba(248,113,113,.5);}
+.ans-btn.correct{background:rgba(74,222,128,.2);border-color:#4ade80;color:#4ade80;}
+.ans-btn.wrong{background:rgba(248,113,113,.2);border-color:#f87171;color:#f87171;}
+.ans-btn.locked{cursor:default;opacity:.7;}
+#result-card{background:rgba(255,255,255,.06);border:1px solid rgba(248,113,113,.3);border-radius:16px;padding:14px;text-align:center;display:none;position:relative;z-index:2;margin-bottom:10px;}
+#result-icon{font-size:28px;margin-bottom:6px;}
+#result-title{font-size:13px;font-weight:900;margin-bottom:4px;}
+#result-pts{font-size:15px;font-weight:900;color:#ffde59;margin-bottom:6px;}
+#result-fact{font-size:9px;color:rgba(255,255,255,.65);line-height:1.5;margin-bottom:10px;}
+#next-btn{padding:10px 28px;background:var(--btn-grad);border:none;border-radius:20px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;}
+#congrats-card{display:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,215,0,.4);border-radius:18px;padding:16px;text-align:center;position:relative;z-index:2;margin-bottom:10px;}
+#congrats-title{font-size:16px;font-weight:900;background:linear-gradient(135deg,#f87171,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;}
+#congrats-bc{font-size:13px;font-weight:700;color:#ffde59;margin-bottom:10px;}
+#bonus-btn{padding:12px 24px;background:linear-gradient(135deg,#f87171,#dc2626);border:none;border-radius:20px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;width:100%;margin-bottom:6px;}
+#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:rgba(30,30,50,.95);border:1px solid rgba(248,113,113,.4);border-radius:20px;padding:8px 20px;font-size:12px;color:#fff;pointer-events:none;opacity:0;transition:opacity .3s;z-index:999;}
+</style>
+</head>
+<body class="theme-youngsters">
+<div id="device-bar">
+  <button class="active" onclick="setDevice(369,828,this)">iPhone 14 Pro</button>
+  <button onclick="setDevice(390,844,this)">iPhone 14</button>
+  <button onclick="setDevice(375,812,this)">iPhone 12</button>
+  <button onclick="setDevice(360,800,this)">Android</button>
+</div>
+<div id="phone-outer"><div id="phone">
+  <div id="notch"></div><div id="bg"></div>
+  <div id="scroll-area">
+    <div id="page-header">
+      <h1>🚀 Mission to Mars</h1>
+      <p>Guide the rocket through the cosmos!</p>
+    </div>
+    <div id="level-tabs">
+      <button onclick="setLevel('youngsters')" id="tab-y">🟣 Youngsters</button>
+      <button onclick="setLevel('grownups')" id="tab-g">🟡 Grown Ups</button>
+      <button onclick="setLevel('experts')" id="tab-e">⭐ Experts</button>
+    </div>
+    <div id="rita-wrap">
+      <div id="rita-name">✨ Lovely Rita</div>
+      <div id="rita-text">Blast off love! Tap left or right to dodge the asteroids on the way to Mars!</div>
+      <button id="rita-speak-btn" onclick="speakRita()">🔊</button>
+    </div>
+    <div id="status-bar">
+      <div class="stat-card"><div class="stat-label">BeatCoins</div><div class="stat-val" id="bc-val">0</div></div>
+      <div class="stat-card"><div class="stat-label">Score</div><div class="stat-val" id="score-val">0</div></div>
+      <div class="stat-card"><div class="stat-label">Question</div><div class="stat-val" id="q-val">0/0</div></div>
+    </div>
+
+    <div id="space-wrap">
+      <div id="shield-bar">
+        <span class="shield" id="sh-0">🛡️</span>
+        <span class="shield" id="sh-1">🛡️</span>
+        <span class="shield" id="sh-2">🛡️</span>
+      </div>
+      <canvas id="space-canvas"></canvas>
+      <div id="distance-bar"><div id="distance-fill"></div></div>
+      <div id="distance-label">Distance to Mars: 0%</div>
+    </div>
+
+    <div id="question-card">
+      <div id="question-number">Question 1</div>
+      <div id="question-text">Loading space question...</div>
+    </div>
+    <div id="answers-grid">
+      <button class="ans-btn" id="ans-0" onclick="checkAnswer(0)">A</button>
+      <button class="ans-btn" id="ans-1" onclick="checkAnswer(1)">B</button>
+      <button class="ans-btn" id="ans-2" onclick="checkAnswer(2)">C</button>
+      <button class="ans-btn" id="ans-3" onclick="checkAnswer(3)">D</button>
+    </div>
+    <div id="result-card">
+      <div id="result-icon">🚀</div>
+      <div id="result-title">Brilliant!</div>
+      <div id="result-pts">+40 BeatCoins</div>
+      <div id="result-fact">Space fact here</div>
+      <button id="next-btn" onclick="nextQ()">Next Question →</button>
+    </div>
+    <div id="congrats-card">
+      <div id="congrats-title">🚀 Mars Explorer!</div>
+      <div id="congrats-bc">+160 BeatCoins earned!</div>
+      <button id="bonus-btn" onclick="goBonus()">⚡ Play Cosmic Flash!</button>
+      <button onclick="goWorlds()" style="width:100%;padding:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:20px;color:#fff;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;margin-top:6px;">Choose Another World</button>
+    </div>
+  </div>
+  <nav id="nav-bar">
+    <button class="nav-btn" onclick="window.location.href='page1_landing.html'"><span class="nav-icon">🏠</span><span>Home</span></button>
+    <button class="nav-btn" onclick="goWorlds()"><span class="nav-icon">🌐</span><span>Worlds</span></button>
+    <button class="nav-btn" onclick="goBonus()"><span class="nav-icon">▶️</span><span>Next</span></button>
+  </nav>
+</div></div>
+<div id="toast"></div>
+<script>
+const params=new URLSearchParams(location.search);
+const LEVEL_CFG={youngsters:{bonus:30,bonusAll:120,qCount:6,speed:1.5,asteroidRate:120},grownups:{bonus:40,bonusAll:160,qCount:7,speed:2.5,asteroidRate:80},experts:{bonus:50,bonusAll:200,qCount:8,speed:3.5,asteroidRate:55}};
+
+const ALL_QS=[
+  {q:"How many planets are in our solar system?",answers:['7','8','9','10'],correct:1,levels:['y','g','e'],fact:"8 planets love! Mercury Venus Earth Mars Jupiter Saturn Uranus and Neptune. Poor Pluto was reclassified as a dwarf planet in 2006!"},
+  {q:"What is the name of the red planet the Smart Lad wants to visit?",answers:['Venus','Jupiter','Mars','Saturn'],correct:2,levels:['y','g','e'],fact:"Mars love! It is called the red planet because of iron oxide on its surface. A day on Mars is 24 hours and 37 minutes — almost the same as Earth!"},
+  {q:"How long does it take light from the Sun to reach Earth?",answers:['1 second','8 minutes','1 hour','1 day'],correct:1,levels:['y','g','e'],fact:"8 minutes and 20 seconds love! Light travels at 300000 kilometres per second. Yet it still takes over 8 minutes to reach us from the Sun!"},
+  {q:"What is the largest planet in our solar system?",answers:['Saturn','Neptune','Uranus','Jupiter'],correct:3,levels:['y','g','e'],fact:"Jupiter love! It is so massive that all other planets could fit inside it. Its Great Red Spot is a storm that has been raging for over 400 years!"},
+  {q:"What do we call a rock from space that reaches the Earth's surface?",answers:['Comet','Asteroid','Meteorite','Meteor'],correct:2,levels:['y','g','e'],fact:"A meteorite love! When it is in space it is a meteoroid. When it enters our atmosphere it becomes a meteor or shooting star. Only when it lands is it a meteorite!"},
+  {q:"Which planet has the most beautiful ring system visible from Earth?",answers:['Jupiter','Uranus','Neptune','Saturn'],correct:3,levels:['y','g','e'],fact:"Saturn love! Its rings are made of ice and rock. They are 282000 kilometres wide but only about 1 kilometre thick. Incredible proportions!"},
+  {q:"Approximately how far is Mars from Earth at its closest point?",answers:['55 million km','155 million km','255 million km','355 million km'],correct:0,levels:['g','e'],fact:"About 55 million kilometres love! But Mars and Earth constantly orbit the Sun so the distance changes dramatically. At its furthest Mars is 400 million km away!"},
+  {q:"What is the name of the force that keeps planets in orbit around the Sun?",answers:['Magnetism','Electricity','Gravity','Friction'],correct:2,levels:['g','e'],fact:"Gravity love! Newton discovered it when an apple fell on his head — or so the story goes! Gravity is a fundamental force of the universe that keeps everything in its place."},
+  {q:"How long would a trip to Mars take with current technology?",answers:['3 days','3 weeks','7-9 months','3 years'],correct:2,levels:['g','e'],fact:"7 to 9 months love! SpaceX and NASA are working on faster propulsion. Elon Musk hopes to send humans to Mars by the 2030s!"},
+  {q:"What percentage of our Milky Way galaxy have humans explored directly?",answers:['50%','10%','0.001%','1%'],correct:2,levels:['e'],fact:"Essentially 0 percent love! The Milky Way is 100000 light years across. Our fastest spacecraft would take millions of years to cross it. Space is incomprehensibly vast!"},
+  {q:"What is a light year?",answers:['The age of a star','The distance light travels in one year','The speed of light','The size of a galaxy'],correct:1,levels:['e'],fact:"A light year is about 9.46 trillion kilometres love! The nearest star system Alpha Centauri is 4.37 light years away. Our fastest probe would take 70000 years to reach it!"},
+];
+
+let S={level:'youngsters',score:0,qIndex:0,order:[],answered:false,currentQ:null,shields:3,distance:0};
+let canvas,ctx,W,H,rocket,asteroids,stars,animId,frame;
+
+function init(){
+  const lv=params.get('level')||localStorage.getItem('askLovelyRitaV4_level')||'youngsters';
+  setLevel(lv,true);
+  initCanvas();
+  updateDisplay();
+  speak("Blast off love! I will ask you space questions on our journey to Mars. Answer correctly to keep your shields strong!");
+}
+
+function initCanvas(){
+  canvas=document.getElementById('space-canvas');
+  ctx=canvas.getContext('2d');
+  W=canvas.offsetWidth;H=canvas.offsetHeight;
+  canvas.width=W;canvas.height=H;
+  rocket={x:W/2,y:H*0.7,w:24,h:36,targetX:W/2};
+  asteroids=[];stars=[];frame=0;
+  for(let i=0;i<40;i++)stars.push({x:Math.random()*W,y:Math.random()*H,s:0.5+Math.random()*1.5,speed:0.3+Math.random()*0.7});
+  canvas.addEventListener('click',e=>{
+    const rect=canvas.getBoundingClientRect();
+    const x=e.clientX-rect.left;
+    rocket.targetX=x<W/2?W*0.25:W*0.75;
+  });
+  canvas.addEventListener('touchstart',e=>{
+    e.preventDefault();
+    const rect=canvas.getBoundingClientRect();
+    const x=e.touches[0].clientX-rect.left;
+    rocket.targetX=x<W/2?W*0.25:W*0.75;
+  },{passive:false});
+  startFlight();
+}
+
+function startFlight(){
+  if(animId)cancelAnimationFrame(animId);
+  function loop(){
+    frame++;
+    update();draw();
+    animId=requestAnimationFrame(loop);
+  }
+  loop();
+}
+
+function update(){
+  const cfg=LEVEL_CFG[S.level];
+  // Move rocket
+  rocket.x+=(rocket.targetX-rocket.x)*0.12;
+  // Spawn asteroids
+  if(frame%cfg.asteroidRate===0){
+    asteroids.push({x:Math.random()*W,y:-20,size:20+Math.random()*20,speed:cfg.speed+Math.random()*1.5,angle:Math.random()*Math.PI*2});
+  }
+  // Move asteroids
+  for(let i=asteroids.length-1;i>=0;i--){
+    asteroids[i].y+=asteroids[i].speed;
+    asteroids[i].angle+=0.02;
+    // Hit check
+    const dx=asteroids[i].x-rocket.x;const dy=asteroids[i].y-rocket.y;
+    if(Math.sqrt(dx*dx+dy*dy)<asteroids[i].size*0.6){
+      asteroids.splice(i,1);
+      S.shields--;updateShields();
+      if(S.shields<=0){/* game continues — just no more shields */}
+      continue;
+    }
+    if(asteroids[i].y>H+30)asteroids.splice(i,1);
+  }
+  // Move stars
+  stars.forEach(s=>{s.y+=s.speed;if(s.y>H){s.y=0;s.x=Math.random()*W;}});
+  // Distance
+  if(S.qIndex<S.order.length){
+    S.distance=Math.min(99,(S.qIndex/Math.max(S.order.length,1))*100);
+    document.getElementById('distance-fill').style.width=S.distance+'%';
+    document.getElementById('distance-label').textContent=`Distance to Mars: ${Math.round(S.distance)}%`;
+  }
+}
+
+function draw(){
+  ctx.fillStyle='#000010';ctx.fillRect(0,0,W,H);
+  // Stars
+  stars.forEach(s=>{ctx.fillStyle=`rgba(255,255,255,${0.3+Math.random()*0.4})`;ctx.beginPath();ctx.arc(s.x,s.y,s.s,0,Math.PI*2);ctx.fill();});
+  // Mars (destination)
+  const marsX=W*0.8,marsY=30;
+  const marsGrad=ctx.createRadialGradient(marsX-4,marsY-4,2,marsX,marsY,18);
+  marsGrad.addColorStop(0,'#fb7185');marsGrad.addColorStop(0.5,'#ef4444');marsGrad.addColorStop(1,'#991b1b');
+  ctx.beginPath();ctx.arc(marsX,marsY,18,0,Math.PI*2);ctx.fillStyle=marsGrad;ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,0.12)';ctx.font='7px sans-serif';ctx.textAlign='center';ctx.fillText('MARS',marsX,marsY+30);
+  // Asteroids
+  asteroids.forEach(a=>{
+    ctx.save();ctx.translate(a.x,a.y);ctx.rotate(a.angle);
+    ctx.fillStyle='#78716c';ctx.beginPath();
+    ctx.ellipse(0,0,a.size*0.7,a.size*0.5,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#57534e';ctx.beginPath();ctx.ellipse(a.size*0.2,a.size*0.1,a.size*0.25,a.size*0.2,0.5,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  });
+  // Rocket
+  ctx.save();ctx.translate(rocket.x,rocket.y);
+  // Body
+  ctx.fillStyle='#e2e8f0';ctx.beginPath();ctx.moveTo(0,-18);ctx.lineTo(10,12);ctx.lineTo(-10,12);ctx.closePath();ctx.fill();
+  // Window
+  ctx.fillStyle='#60a5fa';ctx.beginPath();ctx.arc(0,-4,5,0,Math.PI*2);ctx.fill();
+  // Flames
+  ctx.fillStyle='rgba(251,146,60,0.8)';ctx.beginPath();ctx.moveTo(-6,12);ctx.lineTo(0,28+Math.random()*8);ctx.lineTo(6,12);ctx.closePath();ctx.fill();
+  ctx.fillStyle='rgba(253,224,71,0.6)';ctx.beginPath();ctx.moveTo(-3,12);ctx.lineTo(0,22+Math.random()*6);ctx.lineTo(3,12);ctx.closePath();ctx.fill();
+  ctx.restore();
+}
+
+function updateShields(){
+  for(let i=0;i<3;i++){
+    const el=document.getElementById('sh-'+i);
+    if(el)el.textContent=i<S.shields?'🛡️':'💥';
+  }
+}
+
+function setLevel(lv,silent){
+  S.level=lv;localStorage.setItem('askLovelyRitaV4_level',lv);
+  document.body.className='theme-'+lv;
+  ['y','g','e'].forEach(t=>document.getElementById('tab-'+t).classList.remove('active'));
+  document.getElementById('tab-'+lv[0]).classList.add('active');
+  if(!silent)resetGame();
+}
+
+function resetGame(){
+  S.score=0;S.qIndex=0;S.answered=false;S.currentQ=null;S.shields=3;S.distance=0;
+  document.getElementById('result-card').style.display='none';
+  document.getElementById('congrats-card').style.display='none';
+  document.getElementById('question-card').style.display='block';
+  document.getElementById('answers-grid').style.display='grid';
+  updateShields();updateDisplay();startGame();
+}
+
+function startGame(){
+  const cfg=LEVEL_CFG[S.level];
+  const pool=ALL_QS.filter(q=>q.levels.includes(S.level[0]));
+  S.order=shuffle(pool.map((_,i)=>i)).slice(0,Math.min(cfg.qCount,pool.length));
+  S.questionPool=pool;S.qIndex=0;showQ();
+}
+
+function showQ(){
+  if(S.qIndex>=S.order.length){showCongrats();return;}
+  const q=S.questionPool[S.order[S.qIndex]];
+  S.currentQ=q;S.answered=false;
+  document.getElementById('result-card').style.display='none';
+  document.getElementById('question-card').style.display='block';
+  document.getElementById('question-number').textContent=`Question ${S.qIndex+1} of ${S.order.length}`;
+  document.getElementById('question-text').textContent=q.q;
+  document.getElementById('q-val').textContent=`${S.qIndex+1}/${S.order.length}`;
+  q.answers.forEach((a,i)=>{const btn=document.getElementById('ans-'+i);btn.textContent=a;btn.className='ans-btn';});
+  setRita(q.q);speak(q.q);updateDisplay();
+}
+
+function checkAnswer(idx){
+  if(S.answered)return;S.answered=true;
+  const q=S.currentQ;const ok=idx===q.correct;
+  const pts=ok?LEVEL_CFG[S.level].bonus:0;
+  document.querySelectorAll('.ans-btn').forEach((b,i)=>{b.classList.add('locked');if(i===q.correct)b.classList.add('correct');else if(i===idx&&!ok)b.classList.add('wrong');});
+  if(ok){saveLadBC(pts);if(S.shields<3){S.shields++;updateShields();}}
+  else{if(S.level!=='youngsters'&&S.shields>0){S.shields--;updateShields();}}
+  S.score+=pts;updateDisplay();
+  const rc=document.getElementById('result-card');
+  document.getElementById('result-icon').textContent=ok?'🚀':'☄️';
+  document.getElementById('result-title').textContent=ok?'Brilliant love!':'Keep flying love!';
+  document.getElementById('result-pts').textContent=ok?`+${pts} BeatCoins!`:`The answer is: ${q.answers[q.correct]}`;
+  document.getElementById('result-fact').textContent=q.fact;
+  document.getElementById('next-btn').textContent=S.qIndex+1>=S.order.length?'Land on Mars!':'Next Question →';
+  rc.style.display='block';
+  const msg=ok?`Correct love! ${q.fact}`:`Not quite darling! ${q.fact}`;
+  setRita(msg);speak(msg);
+  document.getElementById('scroll-area').scrollTop=9999;
+}
+
+function nextQ(){S.qIndex++;document.getElementById('answers-grid').style.display='grid';showQ();setTimeout(()=>{document.getElementById('scroll-area').scrollTop=0;},100);}
+
+function showCongrats(){
+  const cfg=LEVEL_CFG[S.level];
+  if(animId){cancelAnimationFrame(animId);animId=null;}
+  document.getElementById('question-card').style.display='none';
+  document.getElementById('answers-grid').style.display='none';
+  document.getElementById('result-card').style.display='none';
+  document.getElementById('congrats-card').style.display='block';
+  document.getElementById('congrats-bc').textContent=`+${cfg.bonusAll} BeatCoins earned!`;
+  document.getElementById('distance-fill').style.width='100%';
+  document.getElementById('distance-label').textContent='You reached Mars! 🔴';
+  saveEBC(cfg.bonusAll);
+  const msg=`You reached Mars love! Incredible navigation! You earned ${cfg.bonusAll} BeatCoins on your interplanetary journey!`;
+  setRita(msg);speak(msg);
+  document.getElementById('scroll-area').scrollTop=9999;
+}
+
+function updateDisplay(){
+  const total=['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
+  document.getElementById('bc-val').textContent=total;
+  document.getElementById('score-val').textContent=S.score;
+}
+function setRita(t){document.getElementById('rita-text').textContent=t;}
+function speakRita(){speak(document.getElementById('rita-text').textContent);}
+function speak(text){if(localStorage.getItem('askLovelyRitaV4_mute')==='1'||!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.92;u.pitch=1.1;const v=window.speechSynthesis.getVoices();const voice=v.find(x=>x.lang==='en-GB'&&/female|woman/i.test(x.name))||v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));if(voice)u.voice=voice;window.speechSynthesis.speak(u);}
+function saveLadBC(amount){try{const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';const k='askLovelyRitaV4_bc_'+lad;localStorage.setItem(k,Number(localStorage.getItem(k)||0)+amount);postGlobalScore(amount);}catch(e){}}
+function saveEBC(amount){try{const cur=Number(localStorage.getItem('lra_ebc_balance')||0);localStorage.setItem('lra_ebc_balance',cur+amount);}catch(e){}}
+function postGlobalScore(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';fetch('https://empty-leaf-6e4b.alexmonteironeto.workers.dev/score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lad,amount})}).catch(()=>{});}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function setDevice(w,h,btn){document.querySelectorAll('#device-bar button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const p=document.getElementById('phone');p.style.width=w+'px';p.style.height=h+'px';}
+function goBonus(){const lv=localStorage.getItem('askLovelyRitaV4_level')||'youngsters';window.location.href='page3b_cosmicflash.html?level='+lv+'&from=space';}
+function goWorlds(){window.location.href='page5_worlds.html';}
+init();
+</script>
+</body>
+</html>
