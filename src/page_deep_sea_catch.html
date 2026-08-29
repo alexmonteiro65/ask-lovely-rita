@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lovely Rita Adventures — Deep Sea Catch</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0a14;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 16px 40px;}
+#device-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;justify-content:center;}
+#device-bar button{background:#1a1a2e;border:1px solid #333;color:#aaa;padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer;}
+#device-bar button.active{background:#333;color:#fff;border-color:#666;}
+#phone-outer{background:#1c1c1c;border-radius:50px;padding:12px;box-shadow:0 0 0 2px #333,0 20px 60px rgba(0,0,0,.8);}
+#phone{width:369px;height:828px;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;background:#000814;transition:width .3s,height .3s;}
+#notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:30px;background:#1c1c1c;border-radius:0 0 20px 20px;z-index:20;}
+#scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding:36px 12px 8px;scrollbar-width:none;}
+#scroll-area::-webkit-scrollbar{display:none;}
+#bg{position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,#001830 0%,#002040 40%,#000814 100%);border-radius:40px;pointer-events:none;}
+nav#nav-bar{flex-shrink:0;display:flex;align-items:center;justify-content:space-around;padding:8px 20px 12px;border-top:1px solid rgba(255,255,255,.08);background:rgba(0,8,20,.85);backdrop-filter:blur(12px);position:relative;z-index:10;}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;padding:5px 14px;border-radius:12px;font-size:10px;}
+.nav-btn:hover{background:rgba(255,255,255,.08);color:#fff;}
+.nav-btn .nav-icon{font-size:20px;line-height:1;}
+body.theme-youngsters{--accent:#ff6ef7;--btn-grad:linear-gradient(135deg,#ff6ef7,#a855f7);}
+body.theme-grownups{--accent:#ffde59;--btn-grad:linear-gradient(135deg,#ffde59,#c8860a);}
+body.theme-experts{--accent:#c8a96e;--btn-grad:linear-gradient(135deg,#c8a96e,#6677aa);}
+#page-header{text-align:center;margin-bottom:8px;position:relative;z-index:2;}
+#page-header h1{font-size:16px;font-weight:900;letter-spacing:1px;text-transform:uppercase;background:linear-gradient(135deg,#60a5fa,#34d399,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+#page-header p{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px;}
+#level-tabs{display:flex;gap:5px;justify-content:center;margin-bottom:8px;position:relative;z-index:2;}
+#level-tabs button{padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);font-size:9px;font-weight:700;cursor:pointer;transition:all .2s;text-transform:uppercase;}
+#level-tabs button.active{background:var(--btn-grad);border-color:transparent;color:#fff;}
+#rita-wrap{background:rgba(255,255,255,.06);border:1px solid rgba(96,165,250,.3);border-radius:14px;padding:8px 26px 8px 10px;position:relative;margin-bottom:8px;z-index:2;}
+#rita-name{font-size:9px;font-weight:700;color:#60a5fa;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;}
+#rita-text{font-size:10px;color:rgba(255,255,255,.8);line-height:1.5;}
+#rita-speak-btn{position:absolute;top:7px;right:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;color:#fff;}
+#status-bar{display:flex;gap:6px;margin-bottom:8px;position:relative;z-index:2;}
+.stat-card{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:4px 8px;}
+.stat-label{font-size:7px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.5px;}
+.stat-val{font-size:13px;font-weight:900;}
+#bc-val{color:#ffde59;}#score-val{color:#60a5fa;}#q-val{color:#34d399;}
+
+/* OCEAN SCENE */
+#ocean-scene{position:relative;z-index:2;height:200px;background:linear-gradient(180deg,#001830 0%,#002850 60%,#001020 100%);border-radius:16px;overflow:hidden;margin-bottom:10px;border:1px solid rgba(96,165,250,.2);cursor:pointer;}
+#ocean-surface{position:absolute;top:0;left:0;right:0;height:30px;background:linear-gradient(180deg,rgba(0,40,80,.8),transparent);border-bottom:2px solid rgba(96,165,250,.3);}
+#fishing-line{position:absolute;top:0;left:50%;width:1px;background:rgba(255,255,255,.4);transform-origin:top;}
+#hook{position:absolute;font-size:14px;left:50%;transform:translateX(-50%);}
+#creatures-layer{position:absolute;inset:0;}
+.creature{position:absolute;font-size:32px;cursor:pointer;transition:transform .1s;user-select:none;}
+.creature:hover{transform:scale(1.2);}
+.creature.target{animation:float-target 2s ease-in-out infinite;}
+@keyframes float-target{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+#catch-flash{position:absolute;inset:0;background:rgba(74,222,128,.2);opacity:0;transition:opacity .2s;pointer-events:none;}
+#miss-flash{position:absolute;inset:0;background:rgba(248,113,113,.2);opacity:0;transition:opacity .2s;pointer-events:none;}
+
+/* QUESTION */
+#question-card{background:rgba(255,255,255,.06);border:1px solid rgba(96,165,250,.3);border-radius:16px;padding:10px 12px;margin-bottom:8px;position:relative;z-index:2;text-align:center;}
+#question-number{font-size:8px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;}
+#question-text{font-size:11px;font-weight:700;color:#fff;line-height:1.5;}
+#target-display{font-size:40px;margin:6px 0;}
+#answers-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;position:relative;z-index:2;margin-bottom:8px;}
+.ans-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 6px;color:#fff;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center;font-family:'Segoe UI',system-ui,sans-serif;}
+.ans-btn:hover:not(.locked){background:rgba(96,165,250,.2);border-color:rgba(96,165,250,.5);}
+.ans-btn.correct{background:rgba(74,222,128,.2);border-color:#4ade80;color:#4ade80;}
+.ans-btn.wrong{background:rgba(248,113,113,.2);border-color:#f87171;color:#f87171;}
+.ans-btn.locked{cursor:default;opacity:.7;}
+#open-input-wrap{position:relative;z-index:2;margin-bottom:8px;display:none;}
+#open-input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:10px 12px;color:#fff;font-size:12px;font-family:'Segoe UI',system-ui,sans-serif;outline:none;}
+#open-input:focus{border-color:var(--accent);}
+#submit-btn{width:100%;margin-top:6px;padding:10px;background:var(--btn-grad);border:none;border-radius:12px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;}
+#result-card{background:rgba(255,255,255,.06);border:1px solid rgba(96,165,250,.3);border-radius:16px;padding:14px;text-align:center;display:none;position:relative;z-index:2;margin-bottom:10px;}
+#result-icon{font-size:28px;margin-bottom:6px;}
+#result-title{font-size:13px;font-weight:900;margin-bottom:4px;}
+#result-pts{font-size:15px;font-weight:900;color:#ffde59;margin-bottom:6px;}
+#result-fact{font-size:9px;color:rgba(255,255,255,.65);line-height:1.5;margin-bottom:10px;}
+#next-btn{padding:10px 28px;background:var(--btn-grad);border:none;border-radius:20px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;}
+#congrats-card{display:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,215,0,.4);border-radius:18px;padding:16px;text-align:center;position:relative;z-index:2;margin-bottom:10px;}
+#congrats-title{font-size:16px;font-weight:900;background:linear-gradient(135deg,#60a5fa,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;}
+#congrats-bc{font-size:13px;font-weight:700;color:#ffde59;margin-bottom:10px;}
+#bonus-btn{padding:12px 24px;background:linear-gradient(135deg,#60a5fa,#0284c7);border:none;border-radius:20px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;width:100%;margin-bottom:6px;}
+#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:rgba(30,30,50,.95);border:1px solid rgba(96,165,250,.4);border-radius:20px;padding:8px 20px;font-size:12px;color:#fff;pointer-events:none;opacity:0;transition:opacity .3s;z-index:999;}
+</style>
+</head>
+<body class="theme-youngsters">
+<div id="device-bar">
+  <button class="active" onclick="setDevice(369,828,this)">iPhone 14 Pro</button>
+  <button onclick="setDevice(390,844,this)">iPhone 14</button>
+  <button onclick="setDevice(375,812,this)">iPhone 12</button>
+  <button onclick="setDevice(360,800,this)">Android</button>
+</div>
+<div id="phone-outer"><div id="phone">
+  <div id="notch"></div><div id="bg"></div>
+  <div id="scroll-area">
+    <div id="page-header">
+      <h1>🎣 Deep Sea Catch</h1>
+      <p>Fish the ocean with Rita at Liverpool Pier!</p>
+    </div>
+    <div id="level-tabs">
+      <button onclick="setLevel('youngsters')" id="tab-y">🟣 Youngsters</button>
+      <button onclick="setLevel('grownups')" id="tab-g">🟡 Grown Ups</button>
+      <button onclick="setLevel('experts')" id="tab-e">⭐ Experts</button>
+    </div>
+    <div id="rita-wrap">
+      <div id="rita-name">✨ Lovely Rita</div>
+      <div id="rita-text">Welcome to the deep sea love! Let us fish for knowledge together!</div>
+      <button id="rita-speak-btn" onclick="speakRita()">🔊</button>
+    </div>
+    <div id="status-bar">
+      <div class="stat-card"><div class="stat-label">BeatCoins</div><div class="stat-val" id="bc-val">0</div></div>
+      <div class="stat-card"><div class="stat-label">Score</div><div class="stat-val" id="score-val">0</div></div>
+      <div class="stat-card"><div class="stat-label">Question</div><div class="stat-val" id="q-val">0/0</div></div>
+    </div>
+
+    <div id="ocean-scene">
+      <div id="ocean-surface"></div>
+      <div id="fishing-line" style="height:80px;top:0;"></div>
+      <div id="hook" style="top:75px;">🪝</div>
+      <div id="creatures-layer"></div>
+      <div id="catch-flash"></div>
+      <div id="miss-flash"></div>
+    </div>
+
+    <div id="question-card">
+      <div id="question-number">Question 1</div>
+      <div id="target-display">🐟</div>
+      <div id="question-text">Which creature is this?</div>
+    </div>
+    <div id="answers-grid">
+      <button class="ans-btn" id="ans-0" onclick="checkAnswer(0)">A</button>
+      <button class="ans-btn" id="ans-1" onclick="checkAnswer(1)">B</button>
+      <button class="ans-btn" id="ans-2" onclick="checkAnswer(2)">C</button>
+      <button class="ans-btn" id="ans-3" onclick="checkAnswer(3)">D</button>
+    </div>
+    <div id="open-input-wrap">
+      <input type="text" id="open-input" placeholder="Name this sea creature..." />
+      <button id="submit-btn" onclick="submitOpen()">Catch It!</button>
+    </div>
+    <div id="result-card">
+      <div id="result-icon">🐠</div>
+      <div id="result-title">Great catch!</div>
+      <div id="result-pts">+30 BeatCoins</div>
+      <div id="result-fact">Sea fact here</div>
+      <button id="next-btn" onclick="nextQ()">Next Creature →</button>
+    </div>
+    <div id="congrats-card">
+      <div id="congrats-title">🎣 Master Fisher!</div>
+      <div id="congrats-bc">+120 BeatCoins earned!</div>
+      <button id="bonus-btn" onclick="goBonus()">⚡ Play Tic Tac Toe!</button>
+      <button onclick="goWorlds()" style="width:100%;padding:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:20px;color:#fff;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;margin-top:6px;">Choose Another World</button>
+    </div>
+  </div>
+  <nav id="nav-bar">
+    <button class="nav-btn" onclick="window.location.href='page1_landing.html'"><span class="nav-icon">🏠</span><span>Home</span></button>
+    <button class="nav-btn" onclick="goWorlds()"><span class="nav-icon">🌐</span><span>Worlds</span></button>
+    <button class="nav-btn" onclick="goBonus()"><span class="nav-icon">▶️</span><span>Next</span></button>
+  </nav>
+</div></div>
+<div id="toast"></div>
+<script>
+const params=new URLSearchParams(location.search);
+const LEVEL_CFG={youngsters:{bonus:25,bonusAll:100,qCount:6},grownups:{bonus:35,bonusAll:140,qCount:7},experts:{bonus:50,bonusAll:180,qCount:8}};
+
+const ALL_QS=[
+  // YOUNGSTERS — see the creature, name it
+  {emoji:'🐙',name:'Octopus',q:"Look at this amazing creature love! Can you name it?",answers:['Squid','Octopus','Jellyfish','Crab'],correct:1,levels:['y','g','e'],fact:"An octopus has 8 arms and 3 hearts love! Their blood is blue and they can change colour in milliseconds. Truly extraordinary!"},
+  {emoji:'🦈',name:'Shark',q:"This powerful fish is at the top of the ocean food chain! What is it?",answers:['Dolphin','Whale','Shark','Swordfish'],correct:2,levels:['y','g','e'],fact:"Sharks have been on Earth for over 400 million years love! That is older than trees! They have rows of teeth that regrow throughout their life."},
+  {emoji:'🐠',name:'Clownfish',q:"This colourful little fish lives among sea anemones. What is its name?",answers:['Goldfish','Clownfish','Angelfish','Pufferfish'],correct:1,levels:['y','g','e'],fact:"Clownfish are immune to anemone stings love! They live together in a perfect partnership. All clownfish are born male and can change to female!"},
+  {emoji:'🦑',name:'Squid',q:"This creature has 10 arms and shoots ink when scared. What is it?",answers:['Octopus','Jellyfish','Squid','Eel'],correct:2,levels:['y','g','e'],fact:"Squid can travel at up to 25 mph love! The giant squid can grow up to 14 metres long. They are the largest invertebrates on Earth!"},
+  {emoji:'🐡',name:'Pufferfish',q:"This fish inflates like a balloon when threatened. What is its name?",answers:['Blowfish','Pufferfish','Balloonfish','Globefish'],correct:1,levels:['y','g','e'],fact:"Pufferfish are one of the most poisonous creatures on Earth love! Their toxin is 1200 times more lethal than cyanide. But they are also a delicacy in Japan!"},
+  {emoji:'🦞',name:'Lobster',q:"This red crustacean has large claws and lives on the ocean floor. What is it?",answers:['Crab','Shrimp','Lobster','Crayfish'],correct:2,levels:['y','g','e'],fact:"Lobsters are biologically immortal love! They do not age in the traditional sense. Some live to be over 100 years old!"},
+  // GROWN UPS — description without showing
+  {emoji:'🐬',name:'Dolphin',q:"Rita says: I breathe air through a hole on top of my head. I am highly intelligent and communicate with clicks and whistles. What am I?",answers:['Shark','Whale','Dolphin','Seal'],correct:2,levels:['g','e'],fact:"Dolphins have names for each other love! Each dolphin develops a unique whistle that others use to call them. They are one of the few animals that recognise themselves in mirrors!"},
+  {emoji:'🦀',name:'Crab',q:"Rita says: I walk sideways and have 10 legs. I shed my shell to grow bigger and I pinch when threatened. What am I?",answers:['Lobster','Crab','Scorpion','Shrimp'],correct:1,levels:['g','e'],fact:"Crabs walk sideways because of how their legs are jointed love! They have teeth in their stomachs to grind food. Some crabs can regrow lost claws!"},
+  {emoji:'🪼',name:'Jellyfish',q:"Rita says: I have no brain heart or bones. I am 95 percent water and I sting with my long tentacles. What am I?",answers:['Anemone','Coral','Jellyfish','Sea Urchin'],correct:2,levels:['g','e'],fact:"Some jellyfish are immortal love! The Turritopsis dohrnii can revert back to its juvenile state when stressed. It is theoretically immortal!"},
+  // EXPERTS — facts only
+  {emoji:'🐳',name:'Blue Whale',q:"This creature is the largest animal ever to exist on Earth. Its heart is the size of a small car and its arteries wide enough for a human to crawl through. What is it?",answers:['Sperm Whale','Blue Whale','Megalodon','Fin Whale'],correct:1,levels:['e'],fact:"The blue whale love! It can grow up to 30 metres long and weigh 200 tonnes. Its call at 188 decibels is the loudest sound made by any animal!"},
+  {emoji:'🦑',name:'Giant Squid',q:"This creature has the largest eyes in the animal kingdom — up to 30 centimetres across. It lives in the deep ocean and battles sperm whales. What is it?",answers:['Colossal Squid','Giant Octopus','Giant Squid','Oarfish'],correct:2,levels:['e'],fact:"Giant squids have eyes the size of dinner plates love! This helps them spot bioluminescent light in the deep dark ocean. They can grow up to 13 metres long!"},
+];
+
+let S={level:'youngsters',score:0,qIndex:0,order:[],answered:false,currentQ:null};
+let lineAnim=null;
+
+function init(){
+  const lv=params.get('level')||localStorage.getItem('askLovelyRitaV4_level')||'youngsters';
+  setLevel(lv,true);
+  updateDisplay();
+  animateLine();
+  speak("Welcome to Deep Sea Catch love! Let us fish for amazing ocean creatures and learn about them together!");
+}
+
+function animateLine(){
+  let dir=1,pos=80;
+  lineAnim=setInterval(()=>{
+    pos+=dir*2;if(pos>150||pos<60)dir*=-1;
+    document.getElementById('fishing-line').style.height=pos+'px';
+    document.getElementById('hook').style.top=(pos-5)+'px';
+  },80);
+}
+
+function setLevel(lv,silent){
+  S.level=lv;localStorage.setItem('askLovelyRitaV4_level',lv);
+  document.body.className='theme-'+lv;
+  ['y','g','e'].forEach(t=>document.getElementById('tab-'+t).classList.remove('active'));
+  document.getElementById('tab-'+lv[0]).classList.add('active');
+  if(!silent)resetGame();
+}
+
+function resetGame(){
+  S.score=0;S.qIndex=0;S.answered=false;S.currentQ=null;
+  document.getElementById('result-card').style.display='none';
+  document.getElementById('congrats-card').style.display='none';
+  document.getElementById('question-card').style.display='block';
+  document.getElementById('answers-grid').style.display='grid';
+  document.getElementById('open-input-wrap').style.display='none';
+  updateDisplay();startGame();
+}
+
+function startGame(){
+  const cfg=LEVEL_CFG[S.level];
+  const pool=ALL_QS.filter(q=>q.levels.includes(S.level[0]));
+  S.order=shuffle(pool.map((_,i)=>i)).slice(0,Math.min(cfg.qCount,pool.length));
+  S.qIndex=0;showQ();
+}
+
+function showQ(){
+  const pool=ALL_QS.filter(q=>q.levels.includes(S.level[0]));
+  if(S.qIndex>=S.order.length){showCongrats();return;}
+  const q=pool[S.order[S.qIndex]];
+  S.currentQ=q;S.answered=false;
+  document.getElementById('result-card').style.display='none';
+  document.getElementById('question-card').style.display='block';
+  document.getElementById('question-number').textContent=`Question ${S.qIndex+1} of ${S.order.length}`;
+  document.getElementById('target-display').textContent=q.emoji;
+  document.getElementById('question-text').textContent=q.q;
+  document.getElementById('q-val').textContent=`${S.qIndex+1}/${S.order.length}`;
+  // Populate ocean with creatures
+  populateOcean(q);
+  if(S.level==='experts'){
+    document.getElementById('answers-grid').style.display='grid';
+    document.getElementById('open-input-wrap').style.display='none';
+  } else {
+    document.getElementById('answers-grid').style.display='grid';
+    document.getElementById('open-input-wrap').style.display='none';
+  }
+  q.answers.forEach((a,i)=>{
+    const btn=document.getElementById('ans-'+i);
+    btn.textContent=a;btn.className='ans-btn';
+  });
+  setRita(q.q);speak(q.q);
+  updateDisplay();
+}
+
+function populateOcean(q){
+  const layer=document.getElementById('creatures-layer');
+  layer.innerHTML='';
+  const allEmojis=['🐟','🐠','🐡','🦈','🐙','🦑','🦀','🦞','🐬','🪼','🐳','🦐'];
+  const decoys=allEmojis.filter(e=>e!==q.emoji).slice(0,5);
+  const positions=[[15,40],[65,70],[30,130],[70,120],[45,80]];
+  decoys.forEach((emoji,i)=>{
+    const el=document.createElement('div');
+    el.className='creature';
+    el.textContent=emoji;
+    el.style.left=positions[i][0]+'%';
+    el.style.top=positions[i][1]+'px';
+    el.style.animationDelay=(i*0.4)+'s';
+    layer.appendChild(el);
+  });
+  // Target creature
+  const target=document.createElement('div');
+  target.className='creature target';
+  target.textContent=q.emoji;
+  target.style.left='45%';
+  target.style.top='100px';
+  layer.appendChild(target);
+}
+
+function checkAnswer(idx){
+  if(S.answered)return;S.answered=true;
+  const q=S.currentQ;const ok=idx===q.correct;
+  const pts=ok?LEVEL_CFG[S.level].bonus:0;
+  document.querySelectorAll('.ans-btn').forEach((b,i)=>{
+    b.classList.add('locked');
+    if(i===q.correct)b.classList.add('correct');
+    else if(i===idx&&!ok)b.classList.add('wrong');
+  });
+  if(ok){saveLadBC(pts);flash('catch');}else flash('miss');
+  S.score+=pts;updateDisplay();showResult(ok,pts,q);
+}
+
+function submitOpen(){
+  if(S.answered)return;
+  const val=document.getElementById('open-input').value.trim().toLowerCase();
+  const q=S.currentQ;const correct=q.name.toLowerCase();
+  const ok=val.length>=3&&(correct.includes(val)||val.includes(correct.split(' ')[0]));
+  const pts=ok?LEVEL_CFG[S.level].bonus:0;
+  S.answered=true;if(ok){saveLadBC(pts);flash('catch');}else flash('miss');
+  S.score+=pts;updateDisplay();showResult(ok,pts,q);
+}
+
+function flash(type){
+  const el=document.getElementById(type+'-flash');
+  el.style.opacity='1';setTimeout(()=>el.style.opacity='0',300);
+}
+
+function showResult(ok,pts,q){
+  const rc=document.getElementById('result-card');
+  document.getElementById('result-icon').textContent=ok?'🎣':'🌊';
+  document.getElementById('result-title').textContent=ok?'Great catch love!':'It got away!';
+  document.getElementById('result-pts').textContent=ok?`+${pts} BeatCoins!`:`The answer was ${q.name}`;
+  document.getElementById('result-fact').textContent=q.fact;
+  document.getElementById('next-btn').textContent=S.qIndex+1>=S.order.length?'See Results!':'Next Creature →';
+  rc.style.display='block';
+  const msg=ok?`Wonderful catch love! ${q.fact}`:`Not quite darling! It was the ${q.name}. ${q.fact}`;
+  setRita(msg);speak(msg);
+  document.getElementById('scroll-area').scrollTop=9999;
+}
+
+function nextQ(){S.qIndex++;document.getElementById('answers-grid').style.display='grid';document.getElementById('open-input-wrap').style.display='none';showQ();setTimeout(()=>{document.getElementById('scroll-area').scrollTop=0;},100);}
+
+function showCongrats(){
+  const cfg=LEVEL_CFG[S.level];
+  document.getElementById('question-card').style.display='none';
+  document.getElementById('answers-grid').style.display='none';
+  document.getElementById('result-card').style.display='none';
+  document.getElementById('congrats-card').style.display='block';
+  document.getElementById('congrats-bc').textContent=`+${cfg.bonusAll} BeatCoins earned!`;
+  saveEBC(cfg.bonusAll);
+  const msg=`Outstanding love! You are a true deep sea expert! You earned ${cfg.bonusAll} BeatCoins! The ocean has no secrets from you!`;
+  setRita(msg);speak(msg);
+  document.getElementById('scroll-area').scrollTop=9999;
+}
+
+function updateDisplay(){
+  const total=['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
+  document.getElementById('bc-val').textContent=total;
+  document.getElementById('score-val').textContent=S.score;
+}
+function setRita(t){document.getElementById('rita-text').textContent=t;}
+function speakRita(){speak(document.getElementById('rita-text').textContent);}
+function speak(text){if(localStorage.getItem('askLovelyRitaV4_mute')==='1'||!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.92;u.pitch=1.1;const v=window.speechSynthesis.getVoices();const voice=v.find(x=>x.lang==='en-GB'&&/female|woman/i.test(x.name))||v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));if(voice)u.voice=voice;window.speechSynthesis.speak(u);}
+function saveLadBC(amount){try{const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';const k='askLovelyRitaV4_bc_'+lad;localStorage.setItem(k,Number(localStorage.getItem(k)||0)+amount);postGlobalScore(amount);}catch(e){}}
+function saveEBC(amount){try{const cur=Number(localStorage.getItem('lra_ebc_balance')||0);localStorage.setItem('lra_ebc_balance',cur+amount);}catch(e){}}
+function postGlobalScore(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';fetch('https://empty-leaf-6e4b.alexmonteironeto.workers.dev/score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lad,amount})}).catch(()=>{});}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function setDevice(w,h,btn){document.querySelectorAll('#device-bar button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const p=document.getElementById('phone');p.style.width=w+'px';p.style.height=h+'px';}
+function goBonus(){const lv=localStorage.getItem('askLovelyRitaV4_level')||'youngsters';window.location.href='page2_tictactoe.html?level='+lv+'&from=ocean';}
+function goWorlds(){window.location.href='page5_worlds.html';}
+init();
+</script>
+</body>
+</html>
