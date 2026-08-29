@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lovely Rita Adventures — Beat Patrol</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0a14;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 16px 40px;}
+#device-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;justify-content:center;}
+#device-bar button{background:#1a1a2e;border:1px solid #333;color:#aaa;padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer;transition:all .2s;}
+#device-bar button:hover,#device-bar button.active{background:#333;color:#fff;border-color:#666;}
+#phone-outer{background:#1c1c1c;border-radius:50px;padding:12px;box-shadow:0 0 0 2px #333,0 20px 60px rgba(0,0,0,.8);}
+#phone{width:369px;height:828px;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;background:#0d1a0d;transition:width .3s,height .3s;}
+#notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:30px;background:#1c1c1c;border-radius:0 0 20px 20px;z-index:20;}
+#scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding:36px 12px 8px;scrollbar-width:none;}
+#scroll-area::-webkit-scrollbar{display:none;}
+#bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse at 50% 30%,#0d2a1a 0%,#0a1a08 50%,#050d03 100%);border-radius:40px;pointer-events:none;}
+nav#nav-bar{flex-shrink:0;display:flex;align-items:center;justify-content:space-around;padding:8px 20px 12px;border-top:1px solid rgba(255,255,255,.08);background:rgba(5,13,3,.85);backdrop-filter:blur(12px);position:relative;z-index:10;}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;padding:5px 14px;border-radius:12px;transition:all .2s;font-size:10px;}
+.nav-btn:hover{background:rgba(255,255,255,.08);color:#fff;}
+.nav-btn .nav-icon{font-size:20px;line-height:1;}
+body.theme-youngsters{--accent:#ff6ef7;--btn-grad:linear-gradient(135deg,#ff6ef7,#a855f7);}
+body.theme-grownups{--accent:#ffde59;--btn-grad:linear-gradient(135deg,#ffde59,#c8860a);}
+body.theme-experts{--accent:#c8a96e;--btn-grad:linear-gradient(135deg,#c8a96e,#6677aa);}
+#page-header{text-align:center;margin-bottom:8px;position:relative;z-index:2;}
+#page-header h1{font-size:16px;font-weight:900;letter-spacing:1px;text-transform:uppercase;background:linear-gradient(135deg,#4ade80,#22d3ee,#ff6ef7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+#page-header p{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px;}
+#level-tabs{display:flex;gap:5px;justify-content:center;margin-bottom:8px;position:relative;z-index:2;}
+#level-tabs button{padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);font-size:9px;font-weight:700;cursor:pointer;transition:all .2s;text-transform:uppercase;}
+#level-tabs button.active{background:var(--btn-grad);border-color:transparent;color:#fff;}
+#rita-wrap{background:rgba(255,255,255,.06);border:1px solid rgba(74,222,128,.3);border-radius:14px;padding:8px 26px 8px 10px;position:relative;margin-bottom:8px;z-index:2;}
+#rita-name{font-size:9px;font-weight:700;color:#4ade80;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;}
+#rita-text{font-size:10px;color:rgba(255,255,255,.8);line-height:1.5;}
+#rita-speak-btn{position:absolute;top:7px;right:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;color:#fff;}
+#status-bar{display:flex;gap:6px;margin-bottom:8px;position:relative;z-index:2;}
+.stat-card{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:4px 8px;}
+.stat-label{font-size:7px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.5px;}
+.stat-val{font-size:13px;font-weight:900;}
+#bc-val{color:#ffde59;}#score-val{color:#4ade80;}#q-val{color:#22d3ee;}
+
+/* LITTER PATROL — Youngsters */
+#litter-wrap{position:relative;z-index:2;display:none;}
+#litter-scene{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:12px;margin-bottom:10px;min-height:180px;position:relative;}
+#litter-scene-title{font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-bottom:8px;}
+#litter-items{display:flex;justify-content:space-around;align-items:center;gap:8px;margin-bottom:12px;}
+.litter-item{font-size:36px;cursor:grab;padding:8px;border-radius:12px;border:2px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);transition:all .2s;user-select:none;}
+.litter-item:active{cursor:grabbing;transform:scale(1.1);}
+.litter-item.dragging{opacity:0.5;}
+#bins{display:flex;justify-content:space-around;gap:10px;}
+.bin{flex:1;border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;border:2px dashed rgba(255,255,255,.2);background:rgba(255,255,255,.04);transition:all .2s;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;}
+.bin:hover,.bin.drag-over{border-color:var(--accent);background:rgba(255,255,255,.08);}
+.bin-icon{font-size:28px;}
+.bin-label{font-size:9px;font-weight:700;color:rgba(255,255,255,.6);}
+#trash-bin{border-color:rgba(239,68,68,.3);}
+#recycle-bin{border-color:rgba(34,197,94,.3);}
+
+/* PARKING COURT — Grown Ups */
+#parking-wrap{position:relative;z-index:2;display:none;}
+#scene-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,222,89,.2);border-radius:16px;padding:14px;margin-bottom:10px;}
+#scene-visual{font-size:56px;text-align:center;margin-bottom:8px;}
+#scene-desc{font-size:11px;color:rgba(255,255,255,.8);line-height:1.6;text-align:center;margin-bottom:4px;}
+#scene-detail{font-size:9px;color:rgba(255,255,255,.4);text-align:center;}
+#verdict-btns{display:flex;gap:6px;margin-bottom:8px;}
+.verdict-btn{flex:1;padding:10px 4px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font-size:10px;font-weight:700;cursor:pointer;transition:all .2s;text-align:center;font-family:'Segoe UI',system-ui,sans-serif;}
+.verdict-btn:hover:not(.locked){background:rgba(255,222,89,.15);border-color:rgba(255,222,89,.4);}
+.verdict-btn.correct{background:rgba(74,222,128,.2);border-color:#4ade80;color:#4ade80;}
+.verdict-btn.wrong{background:rgba(248,113,113,.2);border-color:#f87171;color:#f87171;}
+.verdict-btn.locked{cursor:default;opacity:.7;}
+
+/* TRAFFIC COURT — Experts */
+#court-wrap{position:relative;z-index:2;display:none;}
+#law-card{background:rgba(255,255,255,.06);border:1px solid rgba(200,169,110,.3);border-radius:16px;padding:16px;margin-bottom:10px;text-align:center;}
+#law-flag{font-size:32px;margin-bottom:6px;}
+#law-country{font-size:10px;color:rgba(200,169,110,.8);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+#law-text{font-size:12px;font-weight:700;color:#fff;line-height:1.6;margin-bottom:8px;}
+#law-hint{font-size:9px;color:rgba(255,255,255,.35);}
+#court-btns{display:flex;gap:10px;margin-bottom:8px;}
+.court-btn{flex:1;padding:14px;border-radius:14px;border:none;font-size:13px;font-weight:900;cursor:pointer;transition:all .2s;font-family:'Segoe UI',system-ui,sans-serif;}
+#real-btn{background:rgba(74,222,128,.15);border:2px solid rgba(74,222,128,.4);color:#4ade80;}
+#real-btn:hover:not(.locked){background:rgba(74,222,128,.3);}
+#fake-btn{background:rgba(248,113,113,.15);border:2px solid rgba(248,113,113,.4);color:#f87171;}
+#fake-btn:hover:not(.locked){background:rgba(248,113,113,.3);}
+.court-btn.correct{box-shadow:0 0 20px currentColor;}
+.court-btn.wrong{opacity:.5;}
+.court-btn.locked{cursor:default;}
+
+/* SHARED RESULT */
+#result-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:14px;text-align:center;display:none;position:relative;z-index:2;margin-bottom:10px;}
+#result-icon{font-size:28px;margin-bottom:6px;}
+#result-title{font-size:13px;font-weight:900;margin-bottom:4px;}
+#result-pts{font-size:15px;font-weight:900;color:#ffde59;margin-bottom:6px;}
+#result-fact{font-size:9px;color:rgba(255,255,255,.65);line-height:1.5;margin-bottom:10px;}
+#next-btn{padding:10px 28px;background:var(--btn-grad);border:none;border-radius:20px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;}
+#congrats-card{display:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,215,0,.4);border-radius:18px;padding:16px;text-align:center;position:relative;z-index:2;margin-bottom:10px;}
+#congrats-title{font-size:16px;font-weight:900;background:linear-gradient(135deg,#ffde59,#4ade80);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;}
+#congrats-bc{font-size:13px;font-weight:700;color:#ffde59;margin-bottom:10px;}
+#bonus-btn{padding:12px 24px;background:linear-gradient(135deg,#4ade80,#16a34a);border:none;border-radius:20px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;width:100%;margin-bottom:6px;}
+#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:rgba(30,30,50,.95);border:1px solid rgba(74,222,128,.4);border-radius:20px;padding:8px 20px;font-size:12px;color:#fff;pointer-events:none;opacity:0;transition:opacity .3s;z-index:999;white-space:nowrap;}
+</style>
+</head>
+<body class="theme-youngsters">
+<div id="device-bar">
+  <button class="active" onclick="setDevice(369,828,this)">iPhone 14 Pro</button>
+  <button onclick="setDevice(390,844,this)">iPhone 14</button>
+  <button onclick="setDevice(375,812,this)">iPhone 12</button>
+  <button onclick="setDevice(360,800,this)">Android</button>
+</div>
+<div id="phone-outer"><div id="phone">
+  <div id="notch"></div><div id="bg"></div>
+  <div id="scroll-area">
+    <div id="page-header">
+      <h1>🚦 Beat Patrol</h1>
+      <p>Help Rita keep Liverpool tidy and safe!</p>
+    </div>
+    <div id="level-tabs">
+      <button onclick="setLevel('youngsters')" id="tab-y">🟣 Youngsters</button>
+      <button onclick="setLevel('grownups')" id="tab-g">🟡 Grown Ups</button>
+      <button onclick="setLevel('experts')" id="tab-e">⭐ Experts</button>
+    </div>
+    <div id="rita-wrap">
+      <div id="rita-name">✨ Lovely Rita</div>
+      <div id="rita-text">Welcome to Beat Patrol love! Help me keep Liverpool beautiful!</div>
+      <button id="rita-speak-btn" onclick="speakRita()">🔊</button>
+    </div>
+    <div id="status-bar">
+      <div class="stat-card"><div class="stat-label">BeatCoins</div><div class="stat-val" id="bc-val">0</div></div>
+      <div class="stat-card"><div class="stat-label">Score</div><div class="stat-val" id="score-val">0</div></div>
+      <div class="stat-card"><div class="stat-label">Round</div><div class="stat-val" id="q-val">0/0</div></div>
+    </div>
+
+    <!-- YOUNGSTERS: LITTER PATROL -->
+    <div id="litter-wrap">
+      <div id="litter-scene">
+        <div id="litter-scene-title">Drag each item to the correct bin!</div>
+        <div id="litter-items">
+          <div class="litter-item" id="item-0" draggable="true">🍌</div>
+          <div class="litter-item" id="item-1" draggable="true">🥤</div>
+          <div class="litter-item" id="item-2" draggable="true">📰</div>
+        </div>
+        <div id="bins">
+          <div class="bin" id="trash-bin" ondragover="dragOver(event)" ondrop="dropItem(event,'trash')">
+            <div class="bin-icon">🗑️</div>
+            <div class="bin-label">General Waste</div>
+          </div>
+          <div class="bin" id="recycle-bin" ondragover="dragOver(event)" ondrop="dropItem(event,'recycle')">
+            <div class="bin-icon">♻️</div>
+            <div class="bin-label">Recycling</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GROWN UPS: PARKING COURT -->
+    <div id="parking-wrap">
+      <div id="scene-card">
+        <div id="scene-visual">🚗</div>
+        <div id="scene-desc">Loading scene...</div>
+        <div id="scene-detail"></div>
+      </div>
+      <div id="verdict-btns">
+        <button class="verdict-btn" id="vbtn-0" onclick="checkVerdict(0)">🎫 Ticket</button>
+        <button class="verdict-btn" id="vbtn-1" onclick="checkVerdict(1)">⚠️ Warning</button>
+        <button class="verdict-btn" id="vbtn-2" onclick="checkVerdict(2)">✅ Let Go</button>
+      </div>
+    </div>
+
+    <!-- EXPERTS: TRAFFIC COURT -->
+    <div id="court-wrap">
+      <div id="law-card">
+        <div id="law-flag">🇬🇧</div>
+        <div id="law-country">Loading...</div>
+        <div id="law-text">Loading law...</div>
+        <div id="law-hint">Is this a real law or completely made up?</div>
+      </div>
+      <div id="court-btns">
+        <button class="court-btn" id="real-btn" onclick="checkLaw('real')">✅ REAL LAW</button>
+        <button class="court-btn" id="fake-btn" onclick="checkLaw('fake')">❌ FAKE LAW</button>
+      </div>
+    </div>
+
+    <div id="result-card">
+      <div id="result-icon">🚦</div>
+      <div id="result-title">Well done!</div>
+      <div id="result-pts">+30 BeatCoins</div>
+      <div id="result-fact">Fact here</div>
+      <button id="next-btn" onclick="nextQ()">Next →</button>
+    </div>
+    <div id="congrats-card">
+      <div id="congrats-title">🚦 Top Patrol Officer!</div>
+      <div id="congrats-bc">+120 BeatCoins earned!</div>
+      <button id="bonus-btn" onclick="goBonus()">⚡ Play Tap the Beat!</button>
+      <button onclick="goWorlds()" style="width:100%;padding:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:20px;color:#fff;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;margin-top:6px;">Choose Another World</button>
+    </div>
+  </div>
+  <nav id="nav-bar">
+    <button class="nav-btn" onclick="window.location.href='page1_landing.html'"><span class="nav-icon">🏠</span><span>Home</span></button>
+    <button class="nav-btn" onclick="goWorlds()"><span class="nav-icon">🌐</span><span>Worlds</span></button>
+    <button class="nav-btn" onclick="goBonus()"><span class="nav-icon">▶️</span><span>Next</span></button>
+  </nav>
+</div></div>
+<div id="toast"></div>
+<script>
+const params=new URLSearchParams(location.search);
+const LEVEL_CFG={youngsters:{bonus:25,bonusAll:100,qCount:5},grownups:{bonus:35,bonusAll:140,qCount:6},experts:{bonus:50,bonusAll:180,qCount:6}};
+
+// LITTER DATA — Youngsters
+const LITTER_ROUNDS=[
+  {items:['🍌','🥤','📰'],types:['trash','recycle','recycle'],labels:['Banana peel','Plastic cup','Newspaper'],fact:"Plastic and paper can be recycled love! Banana peels are organic waste and go in the general bin.",q:"Help Rita sort these three items found on the Liverpool pier!"},
+  {items:['🍕','🥫','👕'],types:['trash','recycle','trash'],labels:['Pizza box','Tin can','Old t-shirt'],fact:"Tin cans are metal and go in recycling! Pizza boxes are often too greasy to recycle. Clothes can be donated but not recycled here!",q:"Rita found these near the Liver Building. Sort them correctly love!"},
+  {items:['🍾','📦','🍟'],types:['recycle','recycle','trash'],labels:['Glass bottle','Cardboard box','Chips wrapper'],fact:"Glass and cardboard are recyclable! Crisp packets and greasy food wrappers usually cannot be recycled love.",q:"Help Rita clear up after the tourists at the pier!"},
+  {items:['💡','🥛','🎈'],types:['trash','recycle','trash'],labels:['Old bulb','Milk carton','Balloon'],fact:"Milk cartons can be recycled! Old bulbs need special disposal. Balloons are not recyclable and dangerous for wildlife love.",q:"Another batch for Rita to sort on her patrol!"},
+  {items:['📱','🧴','🍎'],types:['trash','recycle','trash'],labels:['Broken phone','Shampoo bottle','Apple core'],fact:"Plastic bottles are recyclable! Old phones need special e-waste recycling. Apple cores are organic waste love.",q:"Final round! Help Rita finish her patrol shift!"},
+];
+
+// PARKING DATA — Grown Ups  
+const PARKING_QS=[
+  {visual:'🚗🟡🟡',desc:"A driver parks on double yellow lines outside a busy Liverpool café. The driver says they will only be 2 minutes.",detail:"Double yellow lines mean NO parking at any time.",options:['Ticket','Warning','Let Go'],correct:0,fact:"Double yellow lines mean no stopping or parking at any time in the UK love! A ticket is the correct response regardless of how long they plan to stay."},
+  {visual:'🚐♿',desc:"A minibus parks in a disabled bay at the Albert Dock. The driver shows a Blue Badge but it has expired by 3 days.",detail:"Blue Badge expired 3 days ago.",options:['Ticket','Warning','Let Go'],correct:1,fact:"An expired Blue Badge is technically invalid love but Rita would give a warning first for a 3-day expiry. A longer expiry would mean a ticket!"},
+  {visual:'🚕⏰',desc:"A taxi stops on a red line to let a passenger out quickly. The passenger has heavy shopping bags. No one is waiting behind.",detail:"Red route — no stopping at any time.",options:['Ticket','Warning','Let Go'],correct:0,fact:"Red routes mean absolutely no stopping love! Not even for a second. The taxi driver should have found a proper drop-off point."},
+  {visual:'🚗🌙',desc:"A car is parked on a single yellow line at 8pm. The sign says restrictions are 8am to 6pm Monday to Saturday.",detail:"Single yellow — restrictions 8am-6pm Mon-Sat.",options:['Ticket','Warning','Let Go'],correct:2,fact:"Single yellow lines only restrict parking during the hours shown on the sign love! At 8pm this car is perfectly legal. Let them go!"},
+  {visual:'🚚📦',desc:"A delivery lorry double parks on a busy street for 10 minutes to unload heavy boxes. Hazard lights are on.",detail:"Double parking with hazard lights during delivery.",options:['Ticket','Warning','Let Go'],correct:1,fact:"Delivery vehicles often get a warning rather than a ticket for brief necessary stops love! But it depends on how long and how much obstruction they cause."},
+  {visual:'🚗🔴',desc:"A car parks perfectly legally but the driver has not paid for the parking meter. The meter shows 30 minutes expired.",detail:"Legal bay but 30 minutes unpaid.",options:['Ticket','Warning','Let Go'],correct:0,fact:"An expired parking meter means an automatic ticket love! There is no warning for meter violations in most UK councils."},
+];
+
+// TRAFFIC COURT DATA — Experts
+const LAWS=[
+  {flag:'🇫🇮',country:'Finland',law:"Traffic fines in Finland are calculated based on the driver's income. A wealthy person can receive a fine of over 100000 euros for speeding.",real:true,fact:"This is absolutely true love! Finland uses a day fine system. Nokia's former CEO once paid 103000 euros for doing 75km/h in a 50 zone!"},
+  {flag:'🇷🇺',country:'Russia',law:"In Moscow it is illegal to drive a dirty car. Police can fine drivers for having an excessively dirty vehicle.",real:true,fact:"Real law love! Moscow has fined drivers for dirty cars since 2006. The fine is about 2000 roubles. Clean cars keep the city looking smart!"},
+  {flag:'🇯🇵',country:'Japan',law:"In Japan it is illegal to splash a pedestrian with water from a puddle while driving. The fine is up to 7000 yen.",real:true,fact:"Absolutely real love! Japan takes pedestrian respect very seriously. Splashing someone is considered a traffic violation under the Road Traffic Law!"},
+  {flag:'🇹🇭',country:'Thailand',law:"In Thailand it is compulsory for all drivers to wear a shirt while driving. Shirtless driving results in an immediate fine.",real:true,fact:"This is a real law in Thailand love! Shirtless driving is considered disrespectful and carries a fine. Always dress properly behind the wheel!"},
+  {flag:'🇬🇧',country:'United Kingdom',law:"In the UK it is illegal to honk your car horn between 11:30pm and 7am in a built-up area.",real:true,fact:"True love! The Highway Code Rule 214 prohibits using your horn in a built-up area between 11:30pm and 7am. Let people sleep!"},
+  {flag:'🇨🇾',country:'Cyprus',law:"In Cyprus it is illegal to eat or drink anything while driving including water. Even at a red light.",real:true,fact:"Real love! Cyprus has some of the strictest distracted driving laws in Europe. No food or drink at all behind the wheel!"},
+  {flag:'🇩🇪',country:'Germany',law:"On the German Autobahn there is no speed limit in some sections. However it is illegal to run out of petrol on the Autobahn.",real:true,fact:"Both parts are true love! No speed limit on unrestricted sections but running out of fuel is illegal because it is considered avoidable negligence!"},
+  {flag:'🌍',country:'Worldwide',law:"In every country in the world it is illegal to drive backwards for more than 100 metres on a public road.",real:false,fact:"Fake love! While reversing dangerously is illegal everywhere the specific 100 metre rule does not exist globally. Laws vary enormously by country!"},
+  {flag:'🇦🇺',country:'Australia',law:"In Queensland Australia it is illegal to own more than 50 kilograms of potatoes without a licence.",real:true,fact:"Shockingly real love! Western Australia had this law for decades to protect local potato farmers. It was only repealed in 2021!"},
+  {flag:'🌍',country:'Worldwide',law:"All countries require drivers to sound their horn when passing another vehicle on a mountain road.",real:false,fact:"Fake love! Some countries recommend it as a safety measure on blind mountain bends but it is not a universal law everywhere!"},
+];
+
+let S={level:'youngsters',score:0,qIndex:0,order:[],answered:false,currentQ:null,litterDone:0,litterCorrect:0};
+let draggedItem=null;
+
+function init(){
+  const lv=params.get('level')||localStorage.getItem('askLovelyRitaV4_level')||'youngsters';
+  setLevel(lv,true);
+  updateDisplay();
+  speak("Welcome to Beat Patrol love! Help me keep Liverpool clean and the streets safe!");
+}
+
+function setLevel(lv,silent){
+  S.level=lv;localStorage.setItem('askLovelyRitaV4_level',lv);
+  document.body.className='theme-'+lv;
+  ['y','g','e'].forEach(t=>document.getElementById('tab-'+t).classList.remove('active'));
+  document.getElementById('tab-'+lv[0]).classList.add('active');
+  document.getElementById('litter-wrap').style.display=lv==='youngsters'?'block':'none';
+  document.getElementById('parking-wrap').style.display=lv==='grownups'?'block':'none';
+  document.getElementById('court-wrap').style.display=lv==='experts'?'block':'none';
+  if(!silent)resetGame();
+}
+
+function resetGame(){
+  S.score=0;S.qIndex=0;S.answered=false;S.currentQ=null;S.litterDone=0;S.litterCorrect=0;
+  document.getElementById('result-card').style.display='none';
+  document.getElementById('congrats-card').style.display='none';
+  updateDisplay();startGame();
+}
+
+function startGame(){
+  const cfg=LEVEL_CFG[S.level];
+  if(S.level==='youngsters'){
+    S.order=shuffle([...Array(LITTER_ROUNDS.length).keys()]).slice(0,cfg.qCount);
+    showLitter();
+  } else if(S.level==='grownups'){
+    S.order=shuffle([...Array(PARKING_QS.length).keys()]).slice(0,cfg.qCount);
+    showParking();
+  } else {
+    S.order=shuffle([...Array(LAWS.length).keys()]).slice(0,cfg.qCount);
+    showLaw();
+  }
+}
+
+// ── YOUNGSTERS: LITTER ────────────────────────────────────────────────────────
+function showLitter(){
+  if(S.qIndex>=S.order.length){showCongrats();return;}
+  const r=LITTER_ROUNDS[S.order[S.qIndex]];
+  S.currentQ=r;S.answered=false;S.litterDone=0;S.litterCorrect=0;
+  document.getElementById('result-card').style.display='none';
+  document.getElementById('q-val').textContent=`${S.qIndex+1}/${S.order.length}`;
+  // Reset items
+  for(let i=0;i<3;i++){
+    const el=document.getElementById('item-'+i);
+    el.textContent=r.items[i];el.style.display='block';el.style.opacity='1';
+    el.ondragstart=e=>{draggedItem={idx:i,type:r.types[i]};el.classList.add('dragging');};
+    el.ondragend=()=>el.classList.remove('dragging');
+    // Touch support
+    el.ontouchstart=e=>{draggedItem={idx:i,type:r.types[i],el};};
+  }
+  // Reset bins
+  ['trash-bin','recycle-bin'].forEach(id=>{document.getElementById(id).classList.remove('drag-over');});
+  setRita(r.q);speak(r.q);
+  updateDisplay();
+}
+
+function dragOver(e){e.preventDefault();e.currentTarget.classList.add('drag-over');}
+
+function dropItem(e,binType){
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if(!draggedItem)return;
+  const idx=draggedItem.idx;
+  const el=document.getElementById('item-'+idx);
+  const correct=draggedItem.type===binType;
+  el.style.opacity='0.3';el.style.cursor='default';
+  el.ondragstart=null;
+  S.litterDone++;
+  if(correct)S.litterCorrect++;
+  draggedItem=null;
+  if(S.litterDone===3){
+    const pts=Math.round(LEVEL_CFG[S.level].bonus*S.litterCorrect/3);
+    if(pts>0)saveLadBC(pts);
+    S.score+=pts;updateDisplay();
+    const r=S.currentQ;
+    showResultCard(S.litterCorrect===3,pts,r.fact,'🌿');
+  }
+}
+
+// Bin click for touch
+document.addEventListener('DOMContentLoaded',()=>{
+  ['trash-bin','recycle-bin'].forEach(id=>{
+    document.getElementById(id).addEventListener('click',function(){
+      if(!draggedItem)return;
+      const binType=id==='trash-bin'?'trash':'recycle';
+      dropItem({preventDefault:()=>{},currentTarget:this},binType);
+    });
+  });
+});
+
+// ── GROWN UPS: PARKING ────────────────────────────────────────────────────────
+function showParking(){
+  if(S.qIndex>=S.order.length){showCongrats();return;}
+  const q=PARKING_QS[S.order[S.qIndex]];
+  S.currentQ=q;S.answered=false;
+  document.getElementById('result-card').style.display='none';
+  document.getElementById('scene-visual').textContent=q.visual;
+  document.getElementById('scene-desc').textContent=q.desc;
+  document.getElementById('scene-detail').textContent=q.detail;
+  document.getElementById('q-val').textContent=`${S.qIndex+1}/${S.order.length}`;
+  ['vbtn-0','vbtn-1','vbtn-2'].forEach((id,i)=>{
+    const btn=document.getElementById(id);
+    btn.textContent=['🎫 Ticket','⚠️ Warning','✅ Let Go'][i];
+    btn.className='verdict-btn';
+  });
+  const msg=`Listen carefully love! ${q.desc} ${q.detail}. What should Rita do?`;
+  setRita(msg);speak(msg);
+  updateDisplay();
+}
+
+function checkVerdict(idx){
+  if(S.answered)return;S.answered=true;
+  const q=S.currentQ;const ok=idx===q.correct;
+  const pts=ok?LEVEL_CFG[S.level].bonus:0;
+  ['vbtn-0','vbtn-1','vbtn-2'].forEach((id,i)=>{
+    const btn=document.getElementById(id);
+    btn.classList.add('locked');
+    if(i===q.correct)btn.classList.add('correct');
+    else if(i===idx&&!ok)btn.classList.add('wrong');
+  });
+  if(ok)saveLadBC(pts);
+  S.score+=pts;updateDisplay();
+  showResultCard(ok,pts,q.fact,'🚗');
+}
+
+// ── EXPERTS: TRAFFIC COURT ────────────────────────────────────────────────────
+function showLaw(){
+  if(S.qIndex>=S.order.length){showCongrats();return;}
+  const law=LAWS[S.order[S.qIndex]];
+  S.currentQ=law;S.answered=false;
+  document.getElementById('result-card').style.display='none';
+  document.getElementById('law-flag').textContent=law.flag;
+  document.getElementById('law-country').textContent=law.country;
+  document.getElementById('law-text').textContent='"'+law.law+'"';
+  document.getElementById('q-val').textContent=`${S.qIndex+1}/${S.order.length}`;
+  ['real-btn','fake-btn'].forEach(id=>{document.getElementById(id).className='court-btn';const el=document.getElementById(id);el.style.cssText='';id==='real-btn'?el.style.cssText='background:rgba(74,222,128,.15);border:2px solid rgba(74,222,128,.4);color:#4ade80;':el.style.cssText='background:rgba(248,113,113,.15);border:2px solid rgba(248,113,113,.4);color:#f87171;';});
+  const msg=`Listen to this law from ${law.country} love! ${law.law} Is this a real law or a fake one?`;
+  setRita(msg);speak(msg);
+  updateDisplay();
+}
+
+function checkLaw(choice){
+  if(S.answered)return;S.answered=true;
+  const law=S.currentQ;const ok=(choice==='real')===law.real;
+  const pts=ok?LEVEL_CFG[S.level].bonus:0;
+  if(ok)saveLadBC(pts);
+  S.score+=pts;updateDisplay();
+  ['real-btn','fake-btn'].forEach(id=>{document.getElementById(id).classList.add('locked');});
+  const correctBtn=law.real?'real-btn':'fake-btn';
+  const wrongBtn=law.real?'fake-btn':'real-btn';
+  document.getElementById(correctBtn).classList.add('correct');
+  if(!ok)document.getElementById(wrongBtn).classList.add('wrong');
+  showResultCard(ok,pts,law.fact,'⚖️');
+}
+
+// ── SHARED ────────────────────────────────────────────────────────────────────
+function showResultCard(ok,pts,fact,icon){
+  const rc=document.getElementById('result-card');
+  document.getElementById('result-icon').textContent=ok?'⭐':icon;
+  document.getElementById('result-title').textContent=ok?'Brilliant love!':'Good try love!';
+  document.getElementById('result-pts').textContent=ok?`+${pts} BeatCoins!`:'No BeatCoins this time!';
+  document.getElementById('result-fact').textContent=fact;
+  const isLast=S.qIndex+1>=S.order.length;
+  document.getElementById('next-btn').textContent=isLast?'See Results!':'Next →';
+  rc.style.display='block';
+  const msg=ok?`Correct love! ${fact}`:`Not quite darling! ${fact}`;
+  setRita(msg);speak(msg);
+  document.getElementById('scroll-area').scrollTop=9999;
+}
+
+function nextQ(){
+  S.qIndex++;
+  document.getElementById('result-card').style.display='none';
+  if(S.level==='youngsters')showLitter();
+  else if(S.level==='grownups')showParking();
+  else showLaw();
+  setTimeout(()=>{document.getElementById('scroll-area').scrollTop=0;},100);
+}
+
+function showCongrats(){
+  const cfg=LEVEL_CFG[S.level];
+  document.getElementById('result-card').style.display='none';
+  document.getElementById('congrats-card').style.display='block';
+  document.getElementById('congrats-bc').textContent=`+${cfg.bonusAll} BeatCoins earned!`;
+  saveEBC(cfg.bonusAll);
+  const msg=`Outstanding patrol work love! Liverpool is proud of you! You earned ${cfg.bonusAll} BeatCoins!`;
+  setRita(msg);speak(msg);
+  document.getElementById('scroll-area').scrollTop=9999;
+}
+
+function updateDisplay(){
+  const total=['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
+  document.getElementById('bc-val').textContent=total;
+  document.getElementById('score-val').textContent=S.score;
+}
+function setRita(t){document.getElementById('rita-text').textContent=t;}
+function speakRita(){speak(document.getElementById('rita-text').textContent);}
+function speak(text){if(localStorage.getItem('askLovelyRitaV4_mute')==='1'||!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.92;u.pitch=1.1;const v=window.speechSynthesis.getVoices();const voice=v.find(x=>x.lang==='en-GB'&&/female|woman/i.test(x.name))||v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));if(voice)u.voice=voice;window.speechSynthesis.speak(u);}
+function saveLadBC(amount){try{const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';const k='askLovelyRitaV4_bc_'+lad;localStorage.setItem(k,Number(localStorage.getItem(k)||0)+amount);postGlobalScore(amount);}catch(e){}}
+function saveEBC(amount){try{const cur=Number(localStorage.getItem('lra_ebc_balance')||0);localStorage.setItem('lra_ebc_balance',cur+amount);}catch(e){}}
+function postGlobalScore(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';fetch('https://empty-leaf-6e4b.alexmonteironeto.workers.dev/score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lad,amount})}).catch(()=>{});}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function setDevice(w,h,btn){document.querySelectorAll('#device-bar button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const p=document.getElementById('phone');p.style.width=w+'px';p.style.height=h+'px';}
+function goBonus(){const lv=localStorage.getItem('askLovelyRitaV4_level')||'youngsters';window.location.href='page3c_tapthebeat.html?level='+lv+'&from=rita';}
+function goWorlds(){window.location.href='page5_worlds.html';}
+init();
+</script>
+</body>
+</html>
