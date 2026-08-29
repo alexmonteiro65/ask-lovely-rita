@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lovely Rita Adventures — Beat Destinations</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0a14;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 16px 40px;}
+#device-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;justify-content:center;}
+#device-bar button{background:#1a1a2e;border:1px solid #333;color:#aaa;padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer;transition:all .2s;}
+#device-bar button:hover,#device-bar button.active{background:#333;color:#fff;border-color:#666;}
+#phone-outer{background:#1c1c1c;border-radius:50px;padding:12px;box-shadow:0 0 0 2px #333,0 20px 60px rgba(0,0,0,.8);}
+#phone{width:369px;height:828px;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;background:#000510;transition:width .3s,height .3s;}
+#notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:30px;background:#1c1c1c;border-radius:0 0 20px 20px;z-index:20;}
+#scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding:36px 12px 8px;scrollbar-width:none;}
+#scroll-area::-webkit-scrollbar{display:none;}
+
+/* BG */
+#globe-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse at 30% 20%,#1a0040 0%,#000510 50%,#000205 100%);border-radius:40px;overflow:hidden;pointer-events:none;}
+.star-dot{position:absolute;background:#fff;border-radius:50%;animation:twinkle var(--td) ease-in-out infinite alternate;}
+@keyframes twinkle{from{opacity:.15;transform:scale(1)}to{opacity:1;transform:scale(1.5)}}
+
+/* NAV */
+nav#nav-bar{flex-shrink:0;display:flex;align-items:center;justify-content:space-around;padding:8px 20px 12px;border-top:1px solid rgba(255,255,255,.08);background:rgba(0,5,16,.7);backdrop-filter:blur(12px);position:relative;z-index:10;}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;padding:5px 14px;border-radius:12px;transition:all .2s;font-size:10px;}
+.nav-btn:hover{background:rgba(255,255,255,.08);color:#fff;}
+.nav-btn .nav-icon{font-size:20px;line-height:1;}
+.nav-btn.nav-home{color:#a855f7;}
+
+/* THEMES */
+body.theme-youngsters{--accent:#ff6ef7;--glow:#ff6ef7;--btn-grad:linear-gradient(135deg,#ff6ef7,#a855f7);}
+body.theme-grownups{--accent:#ffde59;--glow:#ffde59;--btn-grad:linear-gradient(135deg,#ffde59,#c8860a);}
+body.theme-experts{--accent:#c8a96e;--glow:#c8a96e;--btn-grad:linear-gradient(135deg,#c8a96e,#6677aa);}
+
+#page-header{text-align:center;margin-bottom:8px;position:relative;z-index:2;}
+#page-header h1{font-size:16px;font-weight:900;letter-spacing:1px;text-transform:uppercase;background:linear-gradient(135deg,#a855f7,#60a5fa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 14px rgba(168,85,247,.5));}
+#page-header p{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px;}
+
+#level-tabs{display:flex;gap:5px;justify-content:center;margin-bottom:8px;position:relative;z-index:2;}
+#level-tabs button{padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);font-size:9px;font-weight:700;cursor:pointer;transition:all .2s;text-transform:uppercase;}
+#level-tabs button.active{background:var(--btn-grad);border-color:transparent;color:#fff;}
+
+/* RITA BOX */
+#rita-wrap{background:rgba(255,255,255,.06);border:1px solid rgba(168,85,247,.3);border-radius:14px;padding:8px 26px 8px 10px;position:relative;margin-bottom:8px;z-index:2;}
+#rita-name{font-size:9px;font-weight:700;color:#a855f7;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;}
+#rita-text{font-size:10px;color:rgba(255,255,255,.8);line-height:1.5;}
+#rita-speak-btn{position:absolute;top:7px;right:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;color:#fff;}
+
+/* STATUS */
+#status-bar{display:flex;gap:6px;margin-bottom:8px;position:relative;z-index:2;}
+.stat-card{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:4px 8px;}
+.stat-label{font-size:7px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.5px;}
+.stat-val{font-size:13px;font-weight:900;}
+#bc-val{color:#ffde59;}
+#score-val{color:#a855f7;}
+#q-val{color:#60a5fa;}
+
+/* GLOBE */
+#globe-wrap{position:relative;z-index:2;display:flex;justify-content:center;align-items:center;margin-bottom:10px;}
+#globe-canvas{border-radius:50%;cursor:pointer;box-shadow:0 0 40px rgba(100,150,255,.3),0 0 80px rgba(100,150,255,.1);transition:box-shadow .3s;}
+#globe-canvas:hover{box-shadow:0 0 50px rgba(168,85,247,.5),0 0 100px rgba(168,85,247,.2);}
+#globe-hint{text-align:center;font-size:9px;color:rgba(255,255,255,.3);margin-top:4px;}
+
+/* QUESTION */
+#question-card{background:rgba(255,255,255,.06);border:1px solid rgba(168,85,247,.3);border-radius:16px;padding:12px;margin-bottom:10px;position:relative;z-index:2;}
+#question-text{font-size:12px;font-weight:700;color:#fff;text-align:center;line-height:1.5;margin-bottom:10px;}
+#question-number{font-size:8px;color:rgba(255,255,255,.35);text-align:center;margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px;}
+
+/* ANSWER BUTTONS */
+#answers-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;position:relative;z-index:2;margin-bottom:8px;}
+.ans-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:8px 6px;color:#fff;font-size:10px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center;line-height:1.3;font-family:'Segoe UI',system-ui,sans-serif;}
+.ans-btn:hover:not(.locked){background:rgba(168,85,247,.2);border-color:rgba(168,85,247,.5);}
+.ans-btn.correct{background:rgba(74,222,128,.2);border-color:#4ade80;color:#4ade80;}
+.ans-btn.wrong{background:rgba(248,113,113,.2);border-color:#f87171;color:#f87171;}
+.ans-btn.locked{cursor:default;opacity:.7;}
+
+/* OPEN INPUT for Experts */
+#open-input-wrap{position:relative;z-index:2;margin-bottom:8px;display:none;}
+#open-input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:10px 12px;color:#fff;font-size:12px;font-family:'Segoe UI',system-ui,sans-serif;outline:none;}
+#open-input:focus{border-color:var(--accent);}
+#submit-btn{width:100%;margin-top:6px;padding:10px;background:var(--btn-grad);border:none;border-radius:12px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;}
+
+/* RESULT */
+#result-card{background:rgba(255,255,255,.06);border:1px solid rgba(168,85,247,.3);border-radius:16px;padding:14px;text-align:center;display:none;position:relative;z-index:2;margin-bottom:10px;}
+#result-icon{font-size:32px;margin-bottom:6px;}
+#result-title{font-size:14px;font-weight:900;margin-bottom:4px;}
+#result-pts{font-size:18px;font-weight:900;color:#ffde59;margin-bottom:6px;}
+#result-fact{font-size:10px;color:rgba(255,255,255,.6);line-height:1.5;margin-bottom:10px;}
+#next-btn{padding:10px 28px;background:var(--btn-grad);border:none;border-radius:20px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;}
+
+/* CONGRATS */
+#congrats-card{display:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,215,0,.4);border-radius:18px;padding:16px;text-align:center;position:relative;z-index:2;margin-bottom:10px;}
+#congrats-title{font-size:16px;font-weight:900;background:linear-gradient(135deg,#ffde59,#c8a96e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;}
+#congrats-bc{font-size:14px;font-weight:700;color:#ffde59;margin-bottom:10px;}
+#bonus-btn{padding:12px 24px;background:linear-gradient(135deg,#4ade80,#16a34a);border:none;border-radius:20px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;width:100%;margin-bottom:6px;}
+
+/* GLOBE SPINNER */
+#globe-spinner-msg{text-align:center;font-size:11px;color:var(--accent);font-weight:700;margin-bottom:6px;min-height:18px;position:relative;z-index:2;}
+
+/* TOAST */
+#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:rgba(30,30,50,.95);border:1px solid rgba(168,85,247,.4);border-radius:20px;padding:8px 20px;font-size:12px;color:#fff;pointer-events:none;opacity:0;transition:opacity .3s;z-index:999;white-space:nowrap;}
+</style>
+</head>
+<body class="theme-youngsters">
+
+<div id="device-bar">
+  <button class="active" onclick="setDevice(369,828,this)">iPhone 14 Pro</button>
+  <button onclick="setDevice(390,844,this)">iPhone 14</button>
+  <button onclick="setDevice(375,812,this)">iPhone 12</button>
+  <button onclick="setDevice(360,800,this)">Android</button>
+</div>
+
+<div id="phone-outer"><div id="phone">
+  <div id="notch"></div>
+  <div id="globe-bg"></div>
+
+  <div id="scroll-area">
+    <div id="page-header">
+      <h1>🌍 Beat Destinations</h1>
+      <p>Spin the globe — find where the Lads went!</p>
+    </div>
+
+    <div id="level-tabs">
+      <button onclick="setLevel('youngsters')" id="tab-y">🟣 Youngsters</button>
+      <button onclick="setLevel('grownups')" id="tab-g">🟡 Grown Ups</button>
+      <button onclick="setLevel('experts')" id="tab-e">⭐ Experts</button>
+    </div>
+
+    <div id="rita-wrap">
+      <div id="rita-name">✨ Lovely Rita</div>
+      <div id="rita-text">Spin the globe love and find where the Lads went on their incredible journey around the world!</div>
+      <button id="rita-speak-btn" onclick="speakRita()">🔊</button>
+    </div>
+
+    <div id="status-bar">
+      <div class="stat-card"><div class="stat-label">BeatCoins</div><div class="stat-val" id="bc-val">0</div></div>
+      <div class="stat-card"><div class="stat-label">Score</div><div class="stat-val" id="score-val">0</div></div>
+      <div class="stat-card"><div class="stat-label">Question</div><div class="stat-val" id="q-val">0/0</div></div>
+    </div>
+
+    <div id="globe-spinner-msg">Tap the globe to spin!</div>
+
+    <div id="globe-wrap">
+      <canvas id="globe-canvas" width="230" height="230" onclick="spinGlobe()"></canvas>
+      <div id="globe-hint">Tap to spin the globe</div>
+    </div>
+
+    <div id="question-card">
+      <div id="question-number">Question 1 of 8</div>
+      <div id="question-text">Where did it all begin for the Lads?</div>
+    </div>
+
+    <div id="answers-grid">
+      <button class="ans-btn" id="ans-0" onclick="checkAnswer(0)">London</button>
+      <button class="ans-btn" id="ans-1" onclick="checkAnswer(1)">Liverpool</button>
+      <button class="ans-btn" id="ans-2" onclick="checkAnswer(2)">Manchester</button>
+      <button class="ans-btn" id="ans-3" onclick="checkAnswer(3)">Birmingham</button>
+    </div>
+
+    <div id="open-input-wrap">
+      <input type="text" id="open-input" placeholder="Type the city or country..." />
+      <button id="submit-btn" onclick="submitOpenAnswer()">Submit Answer</button>
+    </div>
+
+    <div id="result-card">
+      <div id="result-icon">🌟</div>
+      <div id="result-title">Brilliant!</div>
+      <div id="result-pts">+30 BeatCoins</div>
+      <div id="result-fact">Fun fact here</div>
+      <button id="next-btn" onclick="nextQuestion()">Next Destination →</button>
+    </div>
+
+    <div id="congrats-card">
+      <div id="congrats-title">🌍 World Traveller!</div>
+      <div id="congrats-bc">+120 BeatCoins earned!</div>
+      <button id="bonus-btn" onclick="goToBonusGame()">⚡ Play Cosmic Flash!</button>
+      <button onclick="goChooseWorld()" style="width:100%;padding:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:20px;color:#fff;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;">Choose Another World</button>
+    </div>
+
+  </div><!-- /scroll-area -->
+
+  <nav id="nav-bar">
+    <button class="nav-btn nav-home" onclick="window.location.href='page1_landing.html'"><span class="nav-icon">🏠</span><span>Home</span></button>
+    <button class="nav-btn" onclick="goChooseWorld()"><span class="nav-icon">🌐</span><span>Worlds</span></button>
+    <button class="nav-btn" onclick="goToBonusGame()"><span class="nav-icon">▶️</span><span>Next</span></button>
+  </nav>
+
+</div></div><!-- /phone /phone-outer -->
+
+<div id="toast"></div>
+
+<script>
+// ── CONSTANTS ─────────────────────────────────────────────────────────────────
+const BASE = 'https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/';
+const params = new URLSearchParams(location.search);
+const LEVEL_CFG = {
+  youngsters: { bonus:30, bonusAll:120, qCount:6 },
+  grownups:   { bonus:40, bonusAll:160, qCount:8 },
+  experts:    { bonus:50, bonusAll:200, qCount:8 },
+};
+
+// ── QUESTIONS ─────────────────────────────────────────────────────────────────
+// Each question: { q, answers:[4], correct:index, location:[lat,lon], fact, level:['y','g','e',...] }
+const ALL_QUESTIONS = [
+  // YOUNGSTERS — simple, famous places
+  { q:"Where did the Lads come from?", answers:["London","Liverpool","Manchester","Edinburgh"], correct:1,
+    loc:[53.4,-3.0], fact:"Liverpool is a port city in northwest England. The Lads grew up there and formed their band in the late 1950s.", levels:['y','g','e'] },
+  { q:"Which city in Germany did the Lads travel to become famous musicians?", answers:["Berlin","Munich","Frankfurt","Hamburg"], correct:3,
+    loc:[53.5,10.0], fact:"Hamburg gave the Lads their rock and roll training! They played in clubs there for hours every night before becoming world famous.", levels:['y','g','e'] },
+  { q:"In which country is the famous Abbey Road studio?", answers:["USA","Australia","England","France"], correct:2,
+    loc:[51.5,-0.1], fact:"Abbey Road Studios in London, England is where the Lads recorded most of their music. The zebra crossing outside is world famous!", levels:['y','g','e'] },
+  { q:"Where did the Quiet Lad go to find spiritual wisdom and learn the sitar?", answers:["China","Japan","India","Egypt"], correct:2,
+    loc:[20.5,78.9], fact:"India changed the Quiet Lad's life forever! He studied with a sitar master there and brought Indian music to millions of people.", levels:['y','g','e'] },
+  { q:"Where did the Lads arrive for their first ever USA tour in 1964?", answers:["Los Angeles","Chicago","New York","Boston"], correct:2,
+    loc:[40.7,-74.0], fact:"New York City! Thousands of screaming fans met them at the airport. It was the start of Beatlemania in America!", levels:['y','g','e'] },
+  { q:"In which ocean did the Lads sail on their early tours?", answers:["Pacific","Indian","Atlantic","Arctic"], correct:2,
+    loc:[30.0,-45.0], fact:"The Atlantic Ocean separates England from America. The Lads crossed it on their way to conquer the world!", levels:['y','g','e'] },
+
+  // GROWN UPS — more specific
+  { q:"In which city did the Lads record their last rooftop concert in 1969?", answers:["New York","Liverpool","Paris","London"], correct:3,
+    loc:[51.5,-0.1], fact:"The rooftop of their own Apple Corps building in London's Savile Row! Crowds stopped in the streets below to listen.", levels:['g','e'] },
+  { q:"Where did the Lads attend their famous meditation retreat in 1968?", answers:["Tibet","Nepal","Rishikesh India","Sri Lanka"], correct:2,
+    loc:[30.1,78.3], fact:"Rishikesh in the foothills of the Himalayas! They studied Transcendental Meditation with Maharishi Mahesh Yogi there.", levels:['g','e'] },
+  { q:"In which US city did the Lads play their last ever public concert in 1966?", answers:["New York","San Francisco","Los Angeles","Chicago"], correct:1,
+    loc:[37.7,-122.4], fact:"Candlestick Park in San Francisco! After this concert the Lads never performed live for a paying audience again.", levels:['g','e'] },
+  { q:"Which island did the Lads visit for the filming of a famous musical film in 1965?", answers:["Malta","Tenerife","Bahamas","Sardinia"], correct:2,
+    loc:[25.0,-77.3], fact:"The Bahamas! They filmed part of their second film there. The turquoise water and sunshine made a beautiful backdrop.", levels:['g','e'] },
+
+  // EXPERTS — very specific
+  { q:"In which Indian city did the Quiet Lad study sitar with Ravi Shankar?", answers:["Mumbai","Delhi","Kolkata","Varanasi"], correct:3,
+    loc:[25.3,83.0], fact:"Varanasi, one of the world's oldest cities on the banks of the sacred Ganges river! The Quiet Lad called it a life-changing experience.", levels:['e'] },
+  { q:"In which French city did the Lads first top the charts outside the UK?", answers:["Nice","Marseille","Lyon","Paris"], correct:3,
+    loc:[48.8,2.3], fact:"Paris! Their French fans were incredibly passionate. The Lads performed at the Olympia Theatre there in 1964.", levels:['e'] },
+  { q:"Where was the famous Maharishi's ashram that the Lads visited in 1968?", answers:["Pune","Rishikesh","Mysore","Goa"], correct:1,
+    loc:[30.1,78.3], fact:"Rishikesh on the banks of the Ganges in northern India! The stay inspired a huge amount of new songs.", levels:['e'] },
+  { q:"In which US city did the Lads appear on The Ed Sullivan Show in February 1964?", answers:["Los Angeles","Washington DC","New York","Chicago"], correct:2,
+    loc:[40.7,-74.0], fact:"New York City! 73 million Americans watched on TV — one of the most watched broadcasts in TV history at the time.", levels:['e'] },
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let S = {
+  level: 'youngsters',
+  beatcoins: 0,
+  score: 0,
+  qIndex: 0,
+  order: [],
+  answered: false,
+  spinning: false,
+  spinDeg: 0,
+  currentQ: null,
+};
+
+// ── GLOBE ─────────────────────────────────────────────────────────────────────
+const canvas = document.getElementById('globe-canvas');
+const ctx = canvas.getContext('2d');
+let globeAngle = 0;
+let spinVel = 0;
+let spinAnim = null;
+let targetAngle = 0;
+let onSpinDone = null;
+
+function drawGlobe(angle) {
+  const cx = canvas.width / 2, cy = canvas.height / 2, r = 108;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Ocean base
+  const grad = ctx.createRadialGradient(cx-20, cy-30, 10, cx, cy, r);
+  grad.addColorStop(0, '#1a6fa8');
+  grad.addColorStop(0.5, '#0e4d8a');
+  grad.addColorStop(1, '#06306b');
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2);
+  ctx.fillStyle = grad; ctx.fill();
+
+  // Atmosphere glow
+  const atm = ctx.createRadialGradient(cx, cy, r-10, cx, cy, r+8);
+  atm.addColorStop(0, 'rgba(100,160,255,0)');
+  atm.addColorStop(1, 'rgba(100,160,255,0.25)');
+  ctx.beginPath(); ctx.arc(cx, cy, r+8, 0, Math.PI*2);
+  ctx.fillStyle = atm; ctx.fill();
+
+  // Continents (simplified shapes that scroll with angle)
+  ctx.save();
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.clip();
+  ctx.fillStyle = '#3a8c4e';
+
+  const landMasses = [
+    // [centerLon, centerLat, w, h, label]
+    [-20, 50, 60, 55, 'Europe'],    // Europe
+    [20, 10, 65, 75, 'Africa'],     // Africa
+    [80, 20, 90, 70, 'Asia'],       // Asia
+    [-100, 45, 80, 60, 'N.America'],// North America
+    [-60, -20, 50, 60, 'S.America'],// South America
+    [135, -25, 55, 45, 'Australia'],// Australia
+  ];
+
+  landMasses.forEach(([lon, lat, w, h]) => {
+    const x = cx + ((lon - angle + 540) % 360 - 180) / 180 * r;
+    const y = cy - lat / 90 * r;
+    const scaleX = Math.cos(((lon - angle + 540) % 360 - 180) / 180 * Math.PI);
+    if(scaleX > 0.1) {
+      ctx.beginPath();
+      ctx.ellipse(x, y, w/2 * scaleX, h/2 * 0.9, 0, 0, Math.PI*2);
+      ctx.fill();
+    }
+  });
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 0.5;
+  for(let lon = -180; lon <= 180; lon += 30) {
+    const x = cx + ((lon - angle + 540) % 360 - 180) / 180 * r;
+    const scaleX = Math.cos(((lon - angle + 540) % 360 - 180) / 180 * Math.PI);
+    if(scaleX > 0.05) {
+      ctx.beginPath();
+      ctx.ellipse(x, cy, 8 * scaleX, r, 0, 0, Math.PI*2);
+      ctx.stroke();
+    }
+  }
+  for(let lat = -60; lat <= 60; lat += 30) {
+    const y = cy - lat / 90 * r;
+    const rLat = Math.cos(lat/180*Math.PI) * r;
+    ctx.beginPath();
+    ctx.ellipse(cx, y, rLat, 5, 0, 0, Math.PI*2);
+    ctx.stroke();
+  }
+
+  ctx.restore();
+
+  // Shine overlay
+  const shine = ctx.createRadialGradient(cx-35, cy-40, 0, cx-20, cy-25, r*0.7);
+  shine.addColorStop(0, 'rgba(255,255,255,0.18)');
+  shine.addColorStop(0.5, 'rgba(255,255,255,0.04)');
+  shine.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2);
+  ctx.fillStyle = shine; ctx.fill();
+
+  // Border
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2);
+  ctx.strokeStyle = 'rgba(100,160,255,0.4)'; ctx.lineWidth = 2; ctx.stroke();
+}
+
+function spinGlobe() {
+  if(S.spinning || S.answered) return;
+  if(!S.currentQ) { startGame(); return; }
+  if(S.spinning) return;
+  S.spinning = true;
+  document.getElementById('globe-hint').textContent = 'Spinning...';
+  document.getElementById('globe-spinner-msg').textContent = '🌍 Spinning to destination...';
+
+  const spinAmount = 720 + Math.random() * 360;
+  const duration = 2000;
+  const start = performance.now();
+  const startAngle = globeAngle;
+
+  function animate(now) {
+    const t = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - t, 3);
+    globeAngle = startAngle + spinAmount * ease;
+    drawGlobe(globeAngle);
+    if(t < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      S.spinning = false;
+      document.getElementById('globe-hint').textContent = 'Globe stopped! Now answer...';
+      document.getElementById('globe-spinner-msg').textContent = '📍 Where is it?';
+    }
+  }
+  requestAnimationFrame(animate);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+function init() {
+  const lv = params.get('level') || localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
+  setLevel(lv, true);
+  drawGlobe(0);
+  makeStars();
+  S.beatcoins = ['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
+  updateDisplay();
+  setTimeout(()=>speak("Welcome love! Spin the globe and discover where the Lads went on their incredible journey around the world!"), 600);
+}
+
+function makeStars() {
+  const bg = document.getElementById('globe-bg');
+  for(let i=0;i<50;i++){
+    const d=document.createElement('div');
+    const sz=0.8+Math.random()*2;
+    d.className='star-dot';
+    d.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--td:${1.5+Math.random()*3}s;animation-delay:${Math.random()*3}s;`;
+    bg.appendChild(d);
+  }
+}
+
+function setLevel(lv, silent) {
+  S.level = lv;
+  localStorage.setItem('askLovelyRitaV4_level', lv);
+  document.body.className = 'theme-' + lv;
+  ['y','g','e'].forEach(t=>document.getElementById('tab-'+t).classList.remove('active'));
+  document.getElementById('tab-'+lv[0]).classList.add('active');
+  if(!silent) { resetGame(); }
+}
+
+// ── GAME LOGIC ────────────────────────────────────────────────────────────────
+function startGame() {
+  const cfg = LEVEL_CFG[S.level];
+  const pool = ALL_QUESTIONS.filter(q=>q.levels.includes(S.level[0]));
+  S.order = shuffle(pool.map((_,i)=>i)).slice(0, Math.min(cfg.qCount, pool.length));
+  S.qIndex = 0; S.score = 0; S.answered = false;
+  document.getElementById('congrats-card').style.display = 'none';
+  showQuestion();
+}
+
+function resetGame() {
+  S.qIndex = 0; S.score = 0; S.answered = false; S.currentQ = null;
+  document.getElementById('result-card').style.display = 'none';
+  document.getElementById('congrats-card').style.display = 'none';
+  document.getElementById('question-card').style.display = 'block';
+  document.getElementById('answers-grid').style.display = 'grid';
+  document.getElementById('open-input-wrap').style.display = 'none';
+  document.getElementById('globe-spinner-msg').textContent = 'Tap the globe to spin!';
+  document.getElementById('globe-hint').textContent = 'Tap to spin the globe';
+  updateDisplay();
+  startGame();
+}
+
+function showQuestion() {
+  const pool = ALL_QUESTIONS.filter(q=>q.levels.includes(S.level[0]));
+  if(S.qIndex >= S.order.length) { showCongrats(); return; }
+  const q = pool[S.order[S.qIndex]];
+  S.currentQ = q; S.answered = false;
+
+  document.getElementById('result-card').style.display = 'none';
+  document.getElementById('question-card').style.display = 'block';
+  document.getElementById('question-number').textContent = `Question ${S.qIndex+1} of ${S.order.length}`;
+  document.getElementById('question-text').textContent = q.q;
+  document.getElementById('q-val').textContent = `${S.qIndex+1}/${S.order.length}`;
+
+  if(S.level === 'experts' && q.levels[0] === 'e') {
+    document.getElementById('answers-grid').style.display = 'none';
+    document.getElementById('open-input-wrap').style.display = 'block';
+    document.getElementById('open-input').value = '';
+    document.getElementById('open-input').focus();
+  } else {
+    document.getElementById('answers-grid').style.display = 'grid';
+    document.getElementById('open-input-wrap').style.display = 'none';
+    q.answers.forEach((a,i) => {
+      const btn = document.getElementById('ans-'+i);
+      btn.textContent = a;
+      btn.className = 'ans-btn';
+    });
+  }
+
+  // Spin globe to show destination area
+  spinToLocation(q.loc[1]);
+  updateDisplay();
+
+  const ritatxts = {
+    youngsters: "Look at the globe love! Where do you think this place is?",
+    grownups: "Study the globe carefully darling! Where did the Lads go?",
+    experts: "Think carefully love! This one requires expert knowledge of the Lads' journey!"
+  };
+  setRita(ritatxts[S.level]);
+}
+
+function spinToLocation(targetLon) {
+  const current = globeAngle % 360;
+  const target = ((360 - targetLon) + current + 360) % 360 + current + 360;
+  const duration = 1500;
+  const start = performance.now();
+  const startAngle = globeAngle;
+  S.spinning = true;
+
+  function animate(now) {
+    const t = Math.min((now-start)/duration, 1);
+    const ease = 1 - Math.pow(1-t, 3);
+    globeAngle = startAngle + (target - startAngle) * ease;
+    drawGlobe(globeAngle);
+    if(t < 1) requestAnimationFrame(animate);
+    else { S.spinning = false; }
+  }
+  requestAnimationFrame(animate);
+}
+
+function checkAnswer(idx) {
+  if(S.answered || S.spinning) return;
+  S.answered = true;
+  const q = S.currentQ;
+  const isCorrect = idx === q.correct;
+  const pts = isCorrect ? LEVEL_CFG[S.level].bonus : 0;
+
+  document.querySelectorAll('.ans-btn').forEach((b,i) => {
+    b.classList.add('locked');
+    if(i === q.correct) b.classList.add('correct');
+    else if(i === idx && !isCorrect) b.classList.add('wrong');
+  });
+
+  if(isCorrect) { S.score += pts; saveLadBC(pts); }
+  updateDisplay();
+  showResult(isCorrect, pts, q.fact);
+}
+
+function submitOpenAnswer() {
+  if(S.answered) return;
+  const val = document.getElementById('open-input').value.trim().toLowerCase();
+  const q = S.currentQ;
+  const correct = q.answers[q.correct].toLowerCase();
+  // Accept partial match (at least 3 chars matching)
+  const isCorrect = val.length >= 3 && (correct.includes(val) || val.includes(correct.split(' ')[0]));
+  const pts = isCorrect ? LEVEL_CFG[S.level].bonus : 0;
+  S.answered = true;
+  if(isCorrect) { S.score += pts; saveLadBC(pts); }
+  updateDisplay();
+  showResult(isCorrect, pts, q.fact);
+}
+
+function showResult(correct, pts, fact) {
+  const rc = document.getElementById('result-card');
+  document.getElementById('result-icon').textContent = correct ? '🌟' : '🌍';
+  document.getElementById('result-title').textContent = correct ? 'Brilliant!' : 'Close love!';
+  document.getElementById('result-pts').textContent = correct ? `+${pts} BeatCoins!` : 'No BeatCoins — but now you know!';
+  document.getElementById('result-fact').textContent = S.currentQ.fact;
+  document.getElementById('next-btn').textContent = S.qIndex + 1 >= S.order.length ? 'See Results!' : 'Next Destination →';
+  rc.style.display = 'block';
+
+  const msg = correct
+    ? `Wonderful! You found it! ${S.currentQ.fact.split('!')[0]}!`
+    : `Not quite love! The answer is ${S.currentQ.answers[S.currentQ.correct]}. ${S.currentQ.fact.split('!')[0]}!`;
+  setRita(msg);
+  speak(msg);
+
+  document.getElementById('scroll-area').scrollTop = 9999;
+}
+
+function nextQuestion() {
+  S.qIndex++;
+  document.getElementById('answers-grid').style.display = 'grid';
+  document.getElementById('open-input-wrap').style.display = 'none';
+  showQuestion();
+  setTimeout(()=>{ document.getElementById('scroll-area').scrollTop = 0; }, 100);
+}
+
+function showCongrats() {
+  const cfg = LEVEL_CFG[S.level];
+  document.getElementById('question-card').style.display = 'none';
+  document.getElementById('answers-grid').style.display = 'none';
+  document.getElementById('open-input-wrap').style.display = 'none';
+  document.getElementById('result-card').style.display = 'none';
+  const cc = document.getElementById('congrats-card');
+  cc.style.display = 'block';
+  document.getElementById('congrats-bc').textContent = `+${cfg.bonusAll} BeatCoins earned!`;
+  saveEBC(cfg.bonusAll);
+  const msg = `Amazing work love! You have explored the Lads world destinations and earned ${cfg.bonusAll} BeatCoins! What an incredible journey!`;
+  setRita(msg); speak(msg);
+  document.getElementById('scroll-area').scrollTop = 9999;
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function updateDisplay() {
+  const total = ['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
+  document.getElementById('bc-val').textContent = total;
+  document.getElementById('score-val').textContent = S.score;
+}
+
+function setRita(text) {
+  document.getElementById('rita-text').textContent = text;
+}
+
+function speakRita() {
+  speak(document.getElementById('rita-text').textContent);
+}
+
+function speak(text) {
+  if(localStorage.getItem('askLovelyRitaV4_mute')==='1'||!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang='en-GB'; u.rate=0.92; u.pitch=1.1;
+  const v = window.speechSynthesis.getVoices();
+  const voice = v.find(x=>x.lang==='en-GB'&&/female|woman/i.test(x.name))||v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));
+  if(voice) u.voice=voice;
+  window.speechSynthesis.speak(u);
+}
+
+function saveLadBC(amount) {
+  try {
+    const lad = localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';
+    const k = 'askLovelyRitaV4_bc_'+lad;
+    localStorage.setItem(k, Number(localStorage.getItem(k)||0)+amount);
+    postGlobalScore(amount);
+  } catch(e) {}
+}
+
+function saveEBC(amount) {
+  try {
+    const cur = Number(localStorage.getItem('lra_ebc_balance')||0);
+    localStorage.setItem('lra_ebc_balance', cur+amount);
+  } catch(e) {}
+}
+
+function postGlobalScore(amount) {
+  const lad = localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';
+  fetch('https://empty-leaf-6e4b.alexmonteironeto.workers.dev/score',{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({lad, amount})
+  }).catch(()=>{});
+}
+
+function shuffle(a) {
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+function toast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.style.opacity='1';
+  setTimeout(()=>t.style.opacity='0',2500);
+}
+
+function setDevice(w,h,btn) {
+  document.querySelectorAll('#device-bar button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const p=document.getElementById('phone');
+  p.style.width=w+'px'; p.style.height=h+'px';
+}
+
+function goToBonusGame() {
+  const lv = localStorage.getItem('askLovelyRitaV4_level')||'youngsters';
+  window.location.href = 'page3b_cosmicflash.html?level='+lv+'&from=space';
+}
+
+function goChooseWorld() {
+  window.location.href = 'page5_worlds.html';
+}
+
+init();
+</script>
+</body>
+</html>
