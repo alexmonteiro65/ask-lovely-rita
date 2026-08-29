@@ -508,6 +508,7 @@ function updateMyAssets(){
 
   // Total Educational Portfolio = BeatCoins + Beat Shop Credit + Collection Value
   const totalPortfolio = bc + ebc + collVal;
+  localStorage.setItem('lra_total_portfolio', totalPortfolio); // Mirror to page1
 
   // MyBank — 4 linhas
   set('asset-bc', bc.toLocaleString() + ' EBCs');
