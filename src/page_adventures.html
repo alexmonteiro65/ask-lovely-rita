@@ -490,9 +490,10 @@ function closeRitaTip(){
 // ── My Assets ─────────────────────────────────────────────────────────────────
 function updateMyAssets(){
   const bc = getBC();
+  const ebc = Number(localStorage.getItem('lra_ebc_balance')||0);
   const set = (id,val) => { const el=document.getElementById(id); if(el) el.textContent=val; };
 
-  // Collection Value — ao preço de compra (não multiplicador de mercado)
+  // Collection Value — ao preço de compra
   const PURCHASE_PRICES = {
     rita_p1:500, rita_p2:450, vw_red:800, vw_yellow:750,
     badge_oct:350, badge_spc:330, note_gold:200, note_red:150,
@@ -505,25 +506,25 @@ function updateMyAssets(){
     if(getQty(id) > 0) collVal += price;
   });
 
-  // Total Educational Portfolio = BeatCoins + Collection Value
-  const totalPortfolio = bc + collVal;
+  // Total Educational Portfolio = BeatCoins + Beat Shop Credit + Collection Value
+  const totalPortfolio = bc + ebc + collVal;
 
-  // MyBank — 3 linhas simples
+  // MyBank — 4 linhas
   set('asset-bc', bc.toLocaleString() + ' EBCs');
+  set('asset-invest', ebc.toLocaleString() + ' EBCs');
   set('asset-coll', collVal.toLocaleString() + ' EBCs');
   set('asset-total', totalPortfolio.toLocaleString() + ' EBCs');
   set('asset-total-label', 'Total Educational Portfolio');
 
-  // Esconder linhas que não fazem mais parte do novo modelo
-  ['asset-prev-bc','asset-earned','asset-invest','asset-coll-total'].forEach(id => {
+  // Esconder linhas antigas desnecessárias
+  ['asset-prev-bc','asset-earned','asset-coll-total'].forEach(id => {
     const row = document.getElementById(id);
     if(row) { const p=row.closest('.asset-row'); if(p) p.style.display='none'; }
   });
 
-  // Renomear labels visíveis
-  const bcLabel = document.querySelector('[for="asset-bc"], .asset-label');
-  set('asset-bc-label', 'BeatCoins Balance');
-  set('asset-coll-label', 'Collection Value');
+  // Garantir que a linha Beat Shop Credit aparece
+  const investRow = document.getElementById('asset-invest');
+  if(investRow) { const p=investRow.closest('.asset-row'); if(p) p.style.display=''; }
 }
 
 
