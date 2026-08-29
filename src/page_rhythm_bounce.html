@@ -71,7 +71,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0a14;color:#fff;m
     <div id="end-score">Score: 0</div>
     <div id="end-ebc">+0 EBCs earned!</div>
     <button id="end-btn" onclick="resetGame()">Play Again</button>
-    <button id="end-home" onclick="window.location.href='page5_worlds.html'">Choose World</button>
+    <button id="end-home" onclick="const lv=localStorage.getItem('askLovelyRitaV4_level')||'youngsters';localStorage.setItem('lra_current_world','rita');localStorage.setItem('lra_shop_visit','2');window.location.href='page_shop.html?world=rita&visit=2&level='+lv;">Back to Shop</button>
   </div>
 
 </div></div>
