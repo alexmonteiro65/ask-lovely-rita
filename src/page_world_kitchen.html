@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lovely Rita Adventures — World Kitchen</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0a14;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 16px 40px;}
+#device-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;justify-content:center;}
+#device-bar button{background:#1a1a2e;border:1px solid #333;color:#aaa;padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer;}
+#device-bar button.active{background:#333;color:#fff;border-color:#666;}
+#phone-outer{background:#1c1c1c;border-radius:50px;padding:12px;box-shadow:0 0 0 2px #333,0 20px 60px rgba(0,0,0,.8);}
+#phone{width:369px;height:828px;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;background:#1a0a00;transition:width .3s,height .3s;}
+#notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:30px;background:#1c1c1c;border-radius:0 0 20px 20px;z-index:20;}
+#scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding:36px 12px 8px;scrollbar-width:none;}
+#scroll-area::-webkit-scrollbar{display:none;}
+#bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse at 50% 30%,#2a0e00 0%,#1a0a00 50%,#0a0500 100%);border-radius:40px;pointer-events:none;}
+nav#nav-bar{flex-shrink:0;display:flex;align-items:center;justify-content:space-around;padding:8px 20px 12px;border-top:1px solid rgba(255,255,255,.08);background:rgba(26,10,0,.85);backdrop-filter:blur(12px);position:relative;z-index:10;}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;padding:5px 14px;border-radius:12px;font-size:10px;}
+.nav-btn:hover{background:rgba(255,255,255,.08);color:#fff;}
+.nav-btn .nav-icon{font-size:20px;line-height:1;}
+body.theme-youngsters{--accent:#ff6ef7;--btn-grad:linear-gradient(135deg,#ff6ef7,#a855f7);}
+body.theme-grownups{--accent:#ffde59;--btn-grad:linear-gradient(135deg,#ffde59,#c8860a);}
+body.theme-experts{--accent:#c8a96e;--btn-grad:linear-gradient(135deg,#c8a96e,#6677aa);}
+#page-header{text-align:center;margin-bottom:8px;position:relative;z-index:2;}
+#page-header h1{font-size:16px;font-weight:900;letter-spacing:1px;text-transform:uppercase;background:linear-gradient(135deg,#fb923c,#f59e0b,#ef4444);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+#page-header p{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px;}
+#level-tabs{display:flex;gap:5px;justify-content:center;margin-bottom:8px;position:relative;z-index:2;}
+#level-tabs button{padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);font-size:9px;font-weight:700;cursor:pointer;transition:all .2s;text-transform:uppercase;}
+#level-tabs button.active{background:var(--btn-grad);border-color:transparent;color:#fff;}
+#rita-wrap{background:rgba(255,255,255,.06);border:1px solid rgba(251,146,60,.3);border-radius:14px;padding:8px 26px 8px 10px;position:relative;margin-bottom:8px;z-index:2;}
+#rita-name{font-size:9px;font-weight:700;color:#fb923c;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;}
+#rita-text{font-size:10px;color:rgba(255,255,255,.8);line-height:1.5;}
+#rita-speak-btn{position:absolute;top:7px;right:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;color:#fff;}
+#status-bar{display:flex;gap:6px;margin-bottom:8px;position:relative;z-index:2;}
+.stat-card{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:4px 8px;}
+.stat-label{font-size:7px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.5px;}
+.stat-val{font-size:13px;font-weight:900;}
+#bc-val{color:#ffde59;}#score-val{color:#fb923c;}#q-val{color:#f59e0b;}
+
+/* KITCHEN SCENE */
+#kitchen-scene{position:relative;z-index:2;background:linear-gradient(180deg,rgba(42,14,0,.8),rgba(26,10,0,.4));border:1px solid rgba(251,146,60,.2);border-radius:16px;padding:16px;margin-bottom:10px;text-align:center;}
+#dish-display{font-size:64px;margin-bottom:8px;filter:drop-shadow(0 4px 16px rgba(251,146,60,.3));}
+#dish-name-display{font-size:13px;font-weight:700;color:#fb923c;margin-bottom:4px;min-height:20px;}
+#kitchen-steam{font-size:18px;opacity:.6;animation:steam 2s ease-in-out infinite alternate;letter-spacing:4px;}
+@keyframes steam{from{transform:translateY(0);opacity:.4}to{transform:translateY(-6px);opacity:.9}}
+
+#question-card{background:rgba(255,255,255,.06);border:1px solid rgba(251,146,60,.3);border-radius:16px;padding:10px 12px;margin-bottom:8px;position:relative;z-index:2;text-align:center;}
+#question-number{font-size:8px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;}
+#question-text{font-size:11px;font-weight:700;color:#fff;line-height:1.5;}
+#answers-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;position:relative;z-index:2;margin-bottom:8px;}
+.ans-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 6px;color:#fff;font-size:10px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center;line-height:1.3;font-family:'Segoe UI',system-ui,sans-serif;}
+.ans-btn:hover:not(.locked){background:rgba(251,146,60,.2);border-color:rgba(251,146,60,.5);}
+.ans-btn.correct{background:rgba(74,222,128,.2);border-color:#4ade80;color:#4ade80;}
+.ans-btn.wrong{background:rgba(248,113,113,.2);border-color:#f87171;color:#f87171;}
+.ans-btn.locked{cursor:default;opacity:.7;}
+#open-input-wrap{position:relative;z-index:2;margin-bottom:8px;display:none;}
+#open-input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:10px 12px;color:#fff;font-size:12px;font-family:'Segoe UI',system-ui,sans-serif;outline:none;}
+#open-input:focus{border-color:var(--accent);}
+#submit-btn{width:100%;margin-top:6px;padding:10px;background:var(--btn-grad);border:none;border-radius:12px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;}
+#result-card{background:rgba(255,255,255,.06);border:1px solid rgba(251,146,60,.3);border-radius:16px;padding:14px;text-align:center;display:none;position:relative;z-index:2;margin-bottom:10px;}
+#result-icon{font-size:28px;margin-bottom:6px;}
+#result-title{font-size:13px;font-weight:900;margin-bottom:4px;}
+#result-pts{font-size:15px;font-weight:900;color:#ffde59;margin-bottom:6px;}
+#result-fact{font-size:9px;color:rgba(255,255,255,.65);line-height:1.5;margin-bottom:10px;}
+#next-btn{padding:10px 28px;background:var(--btn-grad);border:none;border-radius:20px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;}
+#congrats-card{display:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,215,0,.4);border-radius:18px;padding:16px;text-align:center;position:relative;z-index:2;margin-bottom:10px;}
+#congrats-title{font-size:16px;font-weight:900;background:linear-gradient(135deg,#fb923c,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;}
+#congrats-bc{font-size:13px;font-weight:700;color:#ffde59;margin-bottom:10px;}
+#bonus-btn{padding:12px 24px;background:linear-gradient(135deg,#fb923c,#ea580c);border:none;border-radius:20px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;width:100%;margin-bottom:6px;}
+#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:rgba(30,30,50,.95);border:1px solid rgba(251,146,60,.4);border-radius:20px;padding:8px 20px;font-size:12px;color:#fff;pointer-events:none;opacity:0;transition:opacity .3s;z-index:999;}
+</style>
+</head>
+<body class="theme-youngsters">
+<div id="device-bar">
+  <button class="active" onclick="setDevice(369,828,this)">iPhone 14 Pro</button>
+  <button onclick="setDevice(390,844,this)">iPhone 14</button>
+  <button onclick="setDevice(375,812,this)">iPhone 12</button>
+  <button onclick="setDevice(360,800,this)">Android</button>
+</div>
+<div id="phone-outer"><div id="phone">
+  <div id="notch"></div><div id="bg"></div>
+  <div id="scroll-area">
+    <div id="page-header">
+      <h1>🍜 World Kitchen</h1>
+      <p>Taste the world with Rita on Penny Lane!</p>
+    </div>
+    <div id="level-tabs">
+      <button onclick="setLevel('youngsters')" id="tab-y">🟣 Youngsters</button>
+      <button onclick="setLevel('grownups')" id="tab-g">🟡 Grown Ups</button>
+      <button onclick="setLevel('experts')" id="tab-e">⭐ Experts</button>
+    </div>
+    <div id="rita-wrap">
+      <div id="rita-name">✨ Lovely Rita</div>
+      <div id="rita-text">Welcome to World Kitchen love! Let us travel the world through food!</div>
+      <button id="rita-speak-btn" onclick="speakRita()">🔊</button>
+    </div>
+    <div id="status-bar">
+      <div class="stat-card"><div class="stat-label">BeatCoins</div><div class="stat-val" id="bc-val">0</div></div>
+      <div class="stat-card"><div class="stat-label">Score</div><div class="stat-val" id="score-val">0</div></div>
+      <div class="stat-card"><div class="stat-label">Question</div><div class="stat-val" id="q-val">0/0</div></div>
+    </div>
+
+    <div id="kitchen-scene">
+      <div id="kitchen-steam">〰️〰️〰️</div>
+      <div id="dish-display">🍕</div>
+      <div id="dish-name-display"></div>
+    </div>
+
+    <div id="question-card">
+      <div id="question-number">Question 1</div>
+      <div id="question-text">Loading...</div>
+    </div>
+    <div id="answers-grid">
+      <button class="ans-btn" id="ans-0" onclick="checkAnswer(0)">A</button>
+      <button class="ans-btn" id="ans-1" onclick="checkAnswer(1)">B</button>
+      <button class="ans-btn" id="ans-2" onclick="checkAnswer(2)">C</button>
+      <button class="ans-btn" id="ans-3" onclick="checkAnswer(3)">D</button>
+    </div>
+    <div id="open-input-wrap">
+      <input type="text" id="open-input" placeholder="Name this dish..." />
+      <button id="submit-btn" onclick="submitOpen()">Serve It!</button>
+    </div>
+    <div id="result-card">
+      <div id="result-icon">🍽️</div>
+      <div id="result-title">Delicious!</div>
+      <div id="result-pts">+30 BeatCoins</div>
+      <div id="result-fact">Food fact here</div>
+      <button id="next-btn" onclick="nextQ()">Next Dish →</button>
+    </div>
+    <div id="congrats-card">
+      <div id="congrats-title">🍽️ World Chef!</div>
+      <div id="congrats-bc">+120 BeatCoins earned!</div>
+      <button id="bonus-btn" onclick="goBonus()">⚡ Play VW Match!</button>
+      <button onclick="goWorlds()" style="width:100%;padding:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:20px;color:#fff;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;margin-top:6px;">Choose Another World</button>
+    </div>
+  </div>
+  <nav id="nav-bar">
+    <button class="nav-btn" onclick="window.location.href='page1_landing.html'"><span class="nav-icon">🏠</span><span>Home</span></button>
+    <button class="nav-btn" onclick="goWorlds()"><span class="nav-icon">🌐</span><span>Worlds</span></button>
+    <button class="nav-btn" onclick="goBonus()"><span class="nav-icon">▶️</span><span>Next</span></button>
+  </nav>
+</div></div>
+<div id="toast"></div>
+<script>
+const params=new URLSearchParams(location.search);
+const LEVEL_CFG={youngsters:{bonus:25,bonusAll:100,qCount:6},grownups:{bonus:35,bonusAll:140,qCount:7},experts:{bonus:50,bonusAll:180,qCount:8}};
+
+const ALL_QS=[
+  // YOUNGSTERS — see emoji, name the country
+  {emoji:'🍕',dish:'Pizza',q:"This round flat dish with tomato and cheese is famous around the world. Which country invented it?",answers:['France','Spain','Italy','Greece'],correct:2,levels:['y','g','e'],fact:"Pizza was invented in Naples Italy love! The classic Margherita was created in 1889 and named after Queen Margherita of Italy. The colours match the Italian flag!"},
+  {emoji:'🍣',dish:'Sushi',q:"This dish uses raw fish on top of vinegared rice. From which country does it originate?",answers:['China','Korea','Thailand','Japan'],correct:3,levels:['y','g','e'],fact:"Sushi is from Japan love! But it was originally preserved fish packed in fermented rice. Modern sushi as we know it was developed in Tokyo in the early 1800s!"},
+  {emoji:'🌮',dish:'Taco',q:"This folded tortilla filled with meat vegetables and sauce is from which country?",answers:['Spain','Brazil','Mexico','Argentina'],correct:2,levels:['y','g','e'],fact:"Tacos are from Mexico love! They have been eaten since the 18th century by silver miners. The word taco means plug or wad in Spanish!"},
+  {emoji:'🥐',dish:'Croissant',q:"This buttery flaky crescent-shaped pastry is the symbol of which country's breakfast?",answers:['Belgium','Austria/France','Switzerland','Netherlands'],correct:1,levels:['y','g','e'],fact:"The croissant was actually invented in Austria love! It was brought to France by Marie Antoinette. The French perfected it and now it is their national pastry!"},
+  {emoji:'🍜',dish:'Pho',q:"This aromatic noodle soup with herbs and thin slices of beef is the national dish of which country?",answers:['Thailand','Cambodia','Vietnam','Indonesia'],correct:2,levels:['y','g','e'],fact:"Pho is from Vietnam love! It became popular in the early 20th century. The broth is simmered for up to 6 hours with spices and bones. Each family has their own secret recipe!"},
+  {emoji:'🥘',dish:'Paella',q:"This saffron-coloured rice dish cooked in a wide flat pan with seafood or meat is from which region?",answers:['Portugal','Italy','Spain','Greece'],correct:2,levels:['y','g','e'],fact:"Paella is from Valencia Spain love! The name comes from the Latin patella meaning pan. Real Valencian paella is made with rabbit and snails not seafood!"},
+  // GROWN UPS — description without showing name
+  {emoji:'🫕',dish:'Tagine',q:"Rita says: I am a slow-cooked North African stew named after the conical clay pot I am cooked in. I contain lamb or chicken with dried fruits and warm spices. Which country made me famous?",answers:['Egypt','Tunisia','Algeria','Morocco'],correct:3,levels:['g','e'],fact:"Tagine is from Morocco love! The conical lid traps steam and returns moisture to the stew. It has been cooked this way for thousands of years in the Maghreb region!"},
+  {emoji:'🍛',dish:'Curry',q:"Rita says: I am a sauce-based dish with spices including turmeric cumin and coriander. I have hundreds of regional varieties and the name comes from the Tamil word kari meaning sauce. Where am I from?",answers:['Thailand','Sri Lanka','India','Malaysia'],correct:2,levels:['g','e'],fact:"Curry originates from India love! But curry is really a British word for a huge variety of South Asian dishes. Chicken tikka masala is now considered Britain's national dish!"},
+  {emoji:'🥟',dish:'Dim Sum',q:"Rita says: I am a collection of small bite-sized portions served in bamboo steamers. People order many varieties and share them at the table in a tradition called yum cha. What country am I from?",answers:['Japan','Vietnam','Korea','China'],correct:3,levels:['g','e'],fact:"Dim Sum is from China love! Specifically from the Cantonese tradition of Hong Kong. Yum cha means drink tea and the tradition started with teahouses along the Silk Road!"},
+  // EXPERTS — clues only, write the answer
+  {emoji:'🫔',dish:'Injera',q:"Rita describes: I am a spongy sourdough flatbread with a slightly sour taste. I serve as both plate and utensil. People tear pieces of me to scoop up stews and salads. I am the staple food of my country where coffee was also invented. What dish am I?",answers:['Lavash','Injera','Naan','Pita'],correct:1,levels:['e'],fact:"Injera is from Ethiopia love! It is made from teff a grain unique to the Ethiopian highlands. Ethiopia is also where coffee was discovered in the 9th century!"},
+  {emoji:'🍲',dish:'Borscht',q:"Rita says: I am a deep ruby-red soup made from beetroot. I am served hot or cold with a dollop of sour cream. I am associated with Eastern Europe especially one country whose food culture centres around me. What am I?",answers:['Goulash','Borscht','Bigos','Czernina'],correct:1,levels:['e'],fact:"Borscht is from Ukraine love! It has been eaten there for over 1000 years. UNESCO added Ukrainian borscht to its list of intangible cultural heritage in 2022 during a difficult time for Ukraine."},
+];
+
+let S={level:'youngsters',score:0,qIndex:0,order:[],answered:false,currentQ:null};
+
+function init(){
+  const lv=params.get('level')||localStorage.getItem('askLovelyRitaV4_level')||'youngsters';
+  setLevel(lv,true);updateDisplay();
+  speak("Welcome to World Kitchen love! I am going to take you on a culinary journey around the world! I will describe each dish and read every question for you. Let us cook up some knowledge!");
+}
+
+function setLevel(lv,silent){
+  S.level=lv;localStorage.setItem('askLovelyRitaV4_level',lv);
+  document.body.className='theme-'+lv;
+  ['y','g','e'].forEach(t=>document.getElementById('tab-'+t).classList.remove('active'));
+  document.getElementById('tab-'+lv[0]).classList.add('active');
+  if(!silent)resetGame();
+}
+
+function resetGame(){
+  S.score=0;S.qIndex=0;S.answered=false;S.currentQ=null;
+  document.getElementById('result-card').style.display='none';
+  document.getElementById('congrats-card').style.display='none';
+  document.getElementById('question-card').style.display='block';
+  document.getElementById('answers-grid').style.display='grid';
+  document.getElementById('open-input-wrap').style.display='none';
+  updateDisplay();startGame();
+}
+
+function startGame(){
+  const cfg=LEVEL_CFG[S.level];
+  const pool=ALL_QS.filter(q=>q.levels.includes(S.level[0]));
+  S.order=shuffle(pool.map((_,i)=>i)).slice(0,Math.min(cfg.qCount,pool.length));
+  S.questionPool=pool;S.qIndex=0;showQ();
+}
+
+function showQ(){
+  if(S.qIndex>=S.order.length){showCongrats();return;}
+  const q=S.questionPool[S.order[S.qIndex]];
+  S.currentQ=q;S.answered=false;
+  document.getElementById('result-card').style.display='none';
+  document.getElementById('question-card').style.display='block';
+  document.getElementById('question-number').textContent=`Question ${S.qIndex+1} of ${S.order.length}`;
+  document.getElementById('question-text').textContent=q.q;
+  document.getElementById('q-val').textContent=`${S.qIndex+1}/${S.order.length}`;
+  document.getElementById('dish-display').textContent=q.emoji;
+  document.getElementById('dish-name-display').textContent=S.level==='youngsters'?q.dish:'?';
+
+  if(S.level==='experts'){
+    document.getElementById('answers-grid').style.display='grid';
+    document.getElementById('open-input-wrap').style.display='none';
+  } else {
+    document.getElementById('answers-grid').style.display='grid';
+    document.getElementById('open-input-wrap').style.display='none';
+  }
+  q.answers.forEach((a,i)=>{const btn=document.getElementById('ans-'+i);btn.textContent=a;btn.className='ans-btn';});
+  setRita(q.q);speak(q.q);updateDisplay();
+}
+
+function checkAnswer(idx){
+  if(S.answered)return;S.answered=true;
+  const q=S.currentQ;const ok=idx===q.correct;
+  const pts=ok?LEVEL_CFG[S.level].bonus:0;
+  document.getElementById('dish-name-display').textContent=q.dish;
+  document.querySelectorAll('.ans-btn').forEach((b,i)=>{b.classList.add('locked');if(i===q.correct)b.classList.add('correct');else if(i===idx&&!ok)b.classList.add('wrong');});
+  if(ok)saveLadBC(pts);
+  S.score+=pts;updateDisplay();showResult(ok,pts,q);
+}
+
+function submitOpen(){
+  if(S.answered)return;
+  const val=document.getElementById('open-input').value.trim().toLowerCase();
+  const q=S.currentQ;const correct=q.dish.toLowerCase();
+  const ok=val.length>=3&&(correct.includes(val)||val.includes(correct.split(' ')[0]));
+  const pts=ok?LEVEL_CFG[S.level].bonus:0;
+  S.answered=true;if(ok)saveLadBC(pts);
+  document.getElementById('dish-name-display').textContent=q.dish;
+  S.score+=pts;updateDisplay();showResult(ok,pts,q);
+}
+
+function showResult(ok,pts,q){
+  const rc=document.getElementById('result-card');
+  document.getElementById('result-icon').textContent=ok?'🍽️':'👨‍🍳';
+  document.getElementById('result-title').textContent=ok?'Delicious love!':'Good try chef!';
+  document.getElementById('result-pts').textContent=ok?`+${pts} BeatCoins!`:`The dish was ${q.dish}`;
+  document.getElementById('result-fact').textContent=q.fact;
+  document.getElementById('next-btn').textContent=S.qIndex+1>=S.order.length?'See Results!':'Next Dish →';
+  rc.style.display='block';
+  const msg=ok?`Wonderful love! ${q.fact}`:`Not quite darling! It was ${q.dish}. ${q.fact}`;
+  setRita(msg);speak(msg);
+  document.getElementById('scroll-area').scrollTop=9999;
+}
+
+function nextQ(){S.qIndex++;document.getElementById('answers-grid').style.display='grid';document.getElementById('open-input-wrap').style.display='none';showQ();setTimeout(()=>{document.getElementById('scroll-area').scrollTop=0;},100);}
+
+function showCongrats(){
+  const cfg=LEVEL_CFG[S.level];
+  document.getElementById('question-card').style.display='none';
+  document.getElementById('answers-grid').style.display='none';
+  document.getElementById('result-card').style.display='none';
+  document.getElementById('congrats-card').style.display='block';
+  document.getElementById('congrats-bc').textContent=`+${cfg.bonusAll} BeatCoins earned!`;
+  saveEBC(cfg.bonusAll);
+  const msg=`Magnifique love! You have tasted the world! You earned ${cfg.bonusAll} BeatCoins! Food truly is the universal language of love!`;
+  setRita(msg);speak(msg);
+  document.getElementById('scroll-area').scrollTop=9999;
+}
+
+function updateDisplay(){
+  const total=['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
+  document.getElementById('bc-val').textContent=total;
+  document.getElementById('score-val').textContent=S.score;
+}
+function setRita(t){document.getElementById('rita-text').textContent=t;}
+function speakRita(){speak(document.getElementById('rita-text').textContent);}
+function speak(text){if(localStorage.getItem('askLovelyRitaV4_mute')==='1'||!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.92;u.pitch=1.1;const v=window.speechSynthesis.getVoices();const voice=v.find(x=>x.lang==='en-GB'&&/female|woman/i.test(x.name))||v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));if(voice)u.voice=voice;window.speechSynthesis.speak(u);}
+function saveLadBC(amount){try{const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';const k='askLovelyRitaV4_bc_'+lad;localStorage.setItem(k,Number(localStorage.getItem(k)||0)+amount);postGlobalScore(amount);}catch(e){}}
+function saveEBC(amount){try{const cur=Number(localStorage.getItem('lra_ebc_balance')||0);localStorage.setItem('lra_ebc_balance',cur+amount);}catch(e){}}
+function postGlobalScore(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';fetch('https://empty-leaf-6e4b.alexmonteironeto.workers.dev/score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lad,amount})}).catch(()=>{});}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function setDevice(w,h,btn){document.querySelectorAll('#device-bar button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const p=document.getElementById('phone');p.style.width=w+'px';p.style.height=h+'px';}
+function goBonus(){const lv=localStorage.getItem('askLovelyRitaV4_level')||'youngsters';window.location.href='page4_vw_game.html?level='+lv+'&from=city';}
+function goWorlds(){window.location.href='page5_worlds.html';}
+init();
+</script>
+</body>
+</html>
