@@ -237,6 +237,8 @@ function selectEra(idx,btn){
   btn.classList.add('active');
   const era=ERAS[idx];
   document.getElementById('jukebox-era-display').textContent=era.icon+' '+era.name;
+  // Restart game with questions weighted toward this era
+  resetGame();
 }
 
 function resetGame(){
@@ -320,14 +322,32 @@ function showResult(ok,pts,q){
   document.getElementById('result-title').textContent=ok?'Brilliant love!':'Good try love!';
   document.getElementById('result-pts').textContent=ok?`+${pts} BeatCoins!`:`The answer is: ${q.answers[q.correct]}`;
   document.getElementById('result-fact').textContent=q.fact;
-  document.getElementById('next-btn').textContent=S.qIndex+1>=S.order.length?'See Results!':'Next Question →';
+  const isLast=S.qIndex+1>=S.order.length;
+  const nb=document.getElementById('next-btn');
+  nb.textContent=isLast?'See Results!':'Next Question →';
   rc.style.display='block';
   const msg=ok?`Correct love! ${q.fact}`:`Not quite darling! ${q.fact}`;
   setRita(msg);speak(msg);
   document.getElementById('scroll-area').scrollTop=9999;
+  // Auto-advance: 4s to next question, 5s if last (to show results)
+  let sec=isLast?5:4;
+  nb.textContent=(isLast?'See Results! ':'Next Question → ')+sec+'s';
+  const iv=setInterval(()=>{
+    sec--;
+    nb.textContent=(isLast?'See Results! ':'Next Question → ')+(sec>0?sec+'s':'...');
+    if(sec<=0){clearInterval(iv);nextQ();}
+  },1000);
 }
 
-function nextQ(){S.qIndex++;document.getElementById('answers-grid').style.display='grid';document.getElementById('open-input-wrap').style.display='none';showQ();setTimeout(()=>{document.getElementById('scroll-area').scrollTop=0;},100);}
+function nextQ(){
+  S.qIndex++;
+  document.getElementById('result-card').style.display='none';
+  document.getElementById('answers-grid').style.display='grid';
+  document.getElementById('open-input-wrap').style.display='none';
+  if(S.qIndex>=S.order.length){showCongrats();return;}
+  showQ();
+  setTimeout(()=>{document.getElementById('scroll-area').scrollTop=0;},100);
+}
 
 function showCongrats(){
   const cfg=LEVEL_CFG[S.level];
@@ -337,9 +357,18 @@ function showCongrats(){
   document.getElementById('congrats-card').style.display='block';
   document.getElementById('congrats-bc').textContent=`+${cfg.bonusAll} BeatCoins earned!`;
   saveEBC(cfg.bonusAll);
-  const msg=`Wonderful love! You are a true music historian! You earned ${cfg.bonusAll} BeatCoins! Music truly is the universal language!`;
+  const msg=`Wonderful love! You are a true music historian! You earned ${cfg.bonusAll} BeatCoins! Get ready for Rhythm Bounce — your next adventure!`;
   setRita(msg);speak(msg);
   document.getElementById('scroll-area').scrollTop=9999;
+  // Auto-advance to Rhythm Bounce after 5s
+  const bb=document.getElementById('bonus-btn');
+  let sec=5;
+  if(bb) bb.textContent='⚡ Rhythm Bounce in '+sec+'s...';
+  const iv=setInterval(()=>{
+    sec--;
+    if(bb) bb.textContent=sec>0?'⚡ Rhythm Bounce in '+sec+'s...':'⚡ Going now!';
+    if(sec<=0){clearInterval(iv);goBonus();}
+  },1000);
 }
 
 function updateDisplay(){
@@ -359,5 +388,10 @@ function goBonus(){const lv=localStorage.getItem('askLovelyRitaV4_level')||'youn
 function goWorlds(){window.location.href='page5_worlds.html';}
 init();
 </script>
+<!-- ADMIN TEST NAV -->
+<div id="admin-nav" style="position:fixed;top:4px;right:4px;z-index:9999;display:flex;gap:4px;opacity:0.4;">
+  <button onclick="history.back()" style="background:#333;border:none;color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;cursor:pointer;">◀ Back</button>
+  <button onclick="document.getElementById('admin-nav').style.opacity=document.getElementById('admin-nav').style.opacity>'0.5'?'0.15':'1'" style="background:#555;border:none;color:#fff;padding:4px 6px;border-radius:6px;font-size:9px;cursor:pointer;">👁</button>
+</div>
 </body>
 </html>
