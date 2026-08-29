@@ -911,7 +911,7 @@ function resetGame() {
   S.order=shuffle([...Array(qArr.length).keys()]);
   document.getElementById('score-val').textContent='0';
   document.getElementById('q-val').textContent='0/8';
-  document.getElementById('q-prompt').textContent='Click below to enter Rita\'s World!';
+  document.getElementById('q-prompt').textContent='';
   document.getElementById('q-category').textContent="♪ Rita's World";
   document.getElementById('album-grid').innerHTML='';
   document.getElementById('album-grid').style.display='none';
@@ -922,7 +922,7 @@ function resetGame() {
   document.getElementById('start-btn').style.display='block';
   document.getElementById('start-btn').textContent='🎤 Enter Rita\'s World!';
   document.getElementById('start-btn').onclick=startGame;
-  document.getElementById('next-btn').style.display='none';
+  const _nb=document.getElementById('next-btn'); if(_nb) _nb.style.display='none';
   // Hide bonus area on reset
   const ba = document.getElementById('bonus-area');
   if (ba) ba.style.display = 'none';
@@ -943,7 +943,7 @@ function loadQuestion() {
 
   document.getElementById('q-val').textContent=`${S.qIndex+1}/8`;
   document.getElementById('result-panel').classList.remove('show');
-  document.getElementById('next-btn').style.display='none';
+  const _nb=document.getElementById('next-btn'); if(_nb) _nb.style.display='none';
   document.getElementById('word-reveal').style.display='none';
   document.getElementById('album-grid').style.display='none';
   document.getElementById('grownup-area').style.display='none';
@@ -1130,7 +1130,7 @@ function handleCorrect(msg) {
 }
 
 function nextQuestion() {
-  document.getElementById('next-btn').style.display='none';
+  const _nb=document.getElementById('next-btn'); if(_nb) _nb.style.display='none';
   document.getElementById('result-panel').classList.remove('show');
   loadQuestion();
 }
@@ -1150,7 +1150,7 @@ function finishGame() {
   document.getElementById('result-pts').textContent=`+${bonus} Bonus BeatCoins!`;
   document.getElementById('result-pts').style.color='#ffde59';
   document.getElementById('result-panel').classList.add('show');
-  document.getElementById('next-btn').style.display='none';
+  const _nb=document.getElementById('next-btn'); if(_nb) _nb.style.display='none';
   document.getElementById('start-btn').textContent='🔄 Play Again!';
   document.getElementById('start-btn').style.display='block';
   document.getElementById('start-btn').onclick=()=>{resetGame();startGame();};
