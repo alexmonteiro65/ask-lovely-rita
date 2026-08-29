@@ -644,47 +644,27 @@ function renderItem(id) {
 function buyItem(id) {
   const item = ITEMS[id];
   const bc = getBC();
-  const spendable = getSpendable();
+  const ebcBalance = Number(localStorage.getItem('lra_ebc_balance')||0);
+  const spendable = ebcBalance; // EBCs from Beat Burst = spendable
   if(getStock(id)<=0){ toast('😢 Sold out! Trade with another player!'); return; }
-  if(getSessionEarned()===0){
-    toast('Play first love! Earn BeatCoins then invest!');
+  if(ebcBalance===0){
+    toast('Complete a Beat Burst round first love!');
     speak("Oh sorry love! You need to complete a Beat Burst bonus round first to earn your EBCs! Finish a world and play the bonus round!");
     return;
   }
-  if(spendable < item.price){
-    toast(`Keep playing love! You can spend ${spendable.toLocaleString()} EBCs now.`);
-    speak(`Oh sorry love! You need more EBCs from the Beat Burst rounds! Complete a world and play the bonus to earn your shop credit!`);
+  if(ebcBalance < item.price){
+    toast(`Not enough EBCs love! You have ${ebcBalance.toLocaleString()} EBCs.`);
+    speak("Oh sorry love! You don't have enough EBCs yet! Complete more Beat Burst rounds to earn your shop credit!");
     return;
   }
-  if(bc < item.price){ toast(`Not enough EBCs love! You need ${item.price.toLocaleString()}`); return; }
-  // Deduzir do Lad ativo — fonte única de verdade
-  const lad = localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';
-  const ladKey = 'askLovelyRitaV4_bc_'+lad;
-  const ladBal = Number(localStorage.getItem(ladKey)||0);
-  const deduct = Math.min(item.price, ladBal);
-  localStorage.setItem(ladKey, ladBal - deduct);
-  let remaining = item.price - deduct;
-  if(remaining > 0){
-    ['smart','cute','quiet','funny'].filter(l=>l!==lad).forEach(l=>{
-      if(remaining<=0) return;
-      const k='askLovelyRitaV4_bc_'+l;
-      const v=Number(localStorage.getItem(k)||0);
-      const d=Math.min(remaining,v);
-      localStorage.setItem(k,v-d);
-      remaining-=d;
-    });
-  }
-  // Sincronizar cache com soma real dos Lads
-  const newTotal=['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
-  localStorage.setItem('askLovelyRitaV4_bc', newTotal);
-  // Stock, coleção, investable
+  if(ebcBalance < item.price){ toast(`Not enough EBCs love! You need ${item.price.toLocaleString()}`); return; }
+  // Deduzir APENAS de lra_ebc_balance — nunca toca nos BeatCoins dos Lads
+  localStorage.setItem('lra_ebc_balance', ebcBalance - item.price);
+  // Stock e coleção
   setStock(id, getStock(id)-1);
   addQty(id);
-  // Deduzir EBCs usados do Beat Burst balance
-  const ebcBal = Number(localStorage.getItem('lra_ebc_balance')||0);
-  localStorage.setItem('lra_ebc_balance', Math.max(0, ebcBal - item.price));
   // Actualizar display
-  updateBCDisplay(newTotal, true);
+  updateBCDisplay(ebcBalance - item.price, true);
   renderItem(id);
   updatePopupState(id);
   toast(`🎉 ${item.name} is now in your collection love!`);
@@ -798,32 +778,14 @@ function buy3DItem(id, item, btn, msg){
     return;
   }
   // Regra 2: tem EBCs suficientes?
-  const bal = getBC();
-  if(bal < item.price){
+  const ebcBal = Number(localStorage.getItem('lra_ebc_balance')||0);
+  if(ebcBal < item.price){
     toast('Not enough EBCs love!');
-    speak("Oh sorry love! You don't have enough funds yet! Go and play more games to earn your BeatCoins and come back to invest!");
+    speak("Oh sorry love! You don't have enough EBCs yet! Complete a Beat Burst bonus round to earn your shop credit!");
     return;
   }
-  // Deduzir do Lad ativo (fonte única de verdade — Lad keys)
-  const lad = localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';
-  const ladKey = 'askLovelyRitaV4_bc_'+lad;
-  const ladBal = Number(localStorage.getItem(ladKey)||0);
-  const deduct = Math.min(item.price, ladBal);
-  localStorage.setItem(ladKey, ladBal - deduct);
-  let remaining = item.price - deduct;
-  if(remaining > 0){
-    ['smart','cute','quiet','funny'].filter(l=>l!==lad).forEach(l=>{
-      if(remaining<=0) return;
-      const k='askLovelyRitaV4_bc_'+l;
-      const v=Number(localStorage.getItem(k)||0);
-      const d=Math.min(remaining,v);
-      localStorage.setItem(k, v-d);
-      remaining-=d;
-    });
-  }
-  // Sincronizar cache
-  const newTotal=['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
-  localStorage.setItem('askLovelyRitaV4_bc', newTotal);
+  // Deduzir APENAS de lra_ebc_balance — nunca toca nos BeatCoins dos Lads
+  localStorage.setItem('lra_ebc_balance', ebcBal - item.price);
   // Stock
   const stockKey='lra_stock_'+id;
   const curStock=Number(localStorage.getItem(stockKey)||item.stock);
