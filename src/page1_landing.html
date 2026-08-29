@@ -728,8 +728,6 @@ window.addEventListener('load', ()=>{
   switchTheme('youngsters', true);
   muteState = localStorage.getItem('askLovelyRitaV4_mute') === '1';
   document.getElementById('sound-icon').textContent = muteState ? '🔇' : '🔊';
-  const bc = Number(localStorage.getItem('askLovelyRitaV4_bc') || 0);
-  document.getElementById('bc-display').textContent = bc.toLocaleString();
   loadLadScores();
   clearRitaDisplay();
   // Rita text box transparent on load
@@ -886,7 +884,7 @@ function loadLadScores() {
   });
   localStorage.setItem('askLovelyRitaV4_bc', total);
   // Total Educational Portfolio = exact mirror of MyBank — single source of truth
-  const portfolio = Number(localStorage.getItem('lra_total_portfolio')||0) || total;
+  const portfolio = Number(localStorage.getItem('lra_total_portfolio')||0);
   document.getElementById('bc-display').textContent = portfolio.toLocaleString();
 }
 
