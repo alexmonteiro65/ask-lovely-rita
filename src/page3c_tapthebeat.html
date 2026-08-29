@@ -221,7 +221,7 @@ function saveEBC(amount){const cur=Number(localStorage.getItem('lra_ebc_balance'
 function postGlobalScore(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';fetch('https://empty-leaf-6e4b.alexmonteironeto.workers.dev/score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lad,amount})}).catch(()=>{});}
 function goBack(){window.location.href='page10_rita.html';}
 function goHome(){window.location.href='page1_landing.html';}
-function goChooseWorld(){window.location.href='page5_worlds.html';}
+function goChooseWorld(){const lv=localStorage.getItem('askLovelyRitaV4_level')||'youngsters';localStorage.setItem('lra_current_world','rita');localStorage.setItem('lra_shop_visit','1');window.location.href='page_shop.html?world=rita&visit=1&level='+lv;}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',3000);}
 
 window.addEventListener('load',()=>{

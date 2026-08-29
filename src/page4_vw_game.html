@@ -934,7 +934,7 @@ function goBack() {
   window.location.href = 'page3_turntable.html';
 }
 function goHome()    { window.location.href = 'page1_landing.html'; }
-function goForward() { window.location.href = 'page5_worlds.html'; }
+function goForward(){const lv=localStorage.getItem('askLovelyRitaV4_level')||'youngsters';localStorage.setItem('lra_current_world','city');localStorage.setItem('lra_shop_visit','1');window.location.href='page_shop.html?world=city&visit=1&level='+lv;}
 
 // ════════════════════════════════
 //  RITA VOICE

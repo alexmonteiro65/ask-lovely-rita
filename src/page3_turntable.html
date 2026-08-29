@@ -1089,9 +1089,24 @@ function goHome() {
 }
 
 function goForward() {
-  // If came from a world bonus, go to next game in that world
-  if (S.fromWorld === 'india') { window.location.href = 'page8_worldbeats.html?level=' + S.level + '&from=turntable'; return; }
-  window.location.href = 'page4_vw_game.html';
+  const lv = S.level || localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
+  const visitContext = localStorage.getItem('lra_shop_visit_pending');
+  // Turntable serves India as BOTH Burst1 (from=india) and Burst2 (from=worldbeats)
+  if (S.fromWorld === 'india') {
+    // Burst1 → Shop visit=1 → Quiz2 (worldbeats)
+    localStorage.setItem('lra_current_world','india');
+    localStorage.setItem('lra_shop_visit','1');
+    window.location.href = 'page_shop.html?world=india&visit=1&level='+lv;
+    return;
+  }
+  if (S.fromWorld === 'worldbeats') {
+    // Burst2 → Shop visit=2 → Profile
+    localStorage.setItem('lra_current_world','india');
+    localStorage.setItem('lra_shop_visit','2');
+    window.location.href = 'page_shop.html?world=india&visit=2&level='+lv;
+    return;
+  }
+  window.location.href = 'page_shop.html?world=india&visit=1&level='+lv;
 }
 
 // ════════════════════════════════

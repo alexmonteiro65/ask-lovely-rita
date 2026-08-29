@@ -282,7 +282,7 @@ function saveEBC(amount){try{const cur=Number(localStorage.getItem('lra_ebc_bala
 function postGlobalScore(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';fetch('https://empty-leaf-6e4b.alexmonteironeto.workers.dev/score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lad,amount})}).catch(()=>{});}
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function setDevice(w,h,btn){document.querySelectorAll('#device-bar button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const p=document.getElementById('phone');p.style.width=w+'px';p.style.height=h+'px';}
-function goBonus(){const lv=localStorage.getItem('askLovelyRitaV4_level')||'youngsters';window.location.href='page4_vw_game.html?level='+lv+'&from=city';}
+function goBonus(){const lv=localStorage.getItem('askLovelyRitaV4_level')||'youngsters';localStorage.setItem('lra_current_world','city');localStorage.setItem('lra_shop_visit','2');window.location.href='page_shop.html?world=city&visit=2&level='+lv;}
 function goWorlds(){window.location.href='page5_worlds.html';}
 init();
 </script>

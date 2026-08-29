@@ -270,7 +270,7 @@ function postGlobalScore(amount){const lad=localStorage.getItem('askLovelyRitaV4
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2500);}
 function goBack(){window.location.href='page7_space.html';}
 function goHome(){window.location.href='page1_landing.html';}
-function goChooseWorld(){window.location.href='page5_worlds.html';}
+function goChooseWorld(){const lv=localStorage.getItem('askLovelyRitaV4_level')||'youngsters';localStorage.setItem('lra_current_world','space');localStorage.setItem('lra_shop_visit','1');window.location.href='page_shop.html?world=space&visit=1&level='+lv;}
 
 window.addEventListener('load',()=>{
   resize();
