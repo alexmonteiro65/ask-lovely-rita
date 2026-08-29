@@ -350,6 +350,7 @@ body.theme-experts    { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-grad
   flex:1; padding:10px; border:none; border-radius:24px;
   font-size:11px; font-weight:800; letter-spacing:.5px; text-transform:uppercase;
   cursor:pointer; transition:transform .15s; position:relative; overflow:hidden;
+  word-break:break-word; overflow-wrap:anywhere; hyphens:auto;
 }
 .act-btn::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(255,255,255,.14),transparent); border-radius:inherit; }
 .act-btn:hover:not(:disabled) { transform:scale(1.03); }
