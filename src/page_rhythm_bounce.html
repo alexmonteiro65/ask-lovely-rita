@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lovely Rita Adventures — Rhythm Bounce</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0a14;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 16px 40px;}
+#device-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;justify-content:center;}
+#device-bar button{background:#1a1a2e;border:1px solid #333;color:#aaa;padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer;transition:all .2s;}
+#device-bar button:hover,#device-bar button.active{background:#333;color:#fff;border-color:#666;}
+#phone-outer{background:#1c1c1c;border-radius:50px;padding:12px;box-shadow:0 0 0 2px #333,0 20px 60px rgba(0,0,0,.8);}
+#phone{width:369px;height:828px;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;transition:width .3s,height .3s;}
+#notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:30px;background:#1c1c1c;border-radius:0 0 20px 20px;z-index:20;}
+#game-canvas{width:100%;height:100%;display:block;position:absolute;inset:0;z-index:1;}
+#hud{position:absolute;top:36px;left:0;right:0;z-index:10;padding:8px 14px;display:flex;justify-content:space-between;align-items:center;}
+#hud-score{font-size:20px;font-weight:900;color:#ffde59;text-shadow:0 0 12px rgba(255,222,89,.5);}
+#hud-lives{font-size:16px;}
+#hud-ebc{font-size:11px;color:#4ade80;font-weight:700;}
+#rita-hud{position:absolute;top:70px;left:10px;right:10px;z-index:10;background:rgba(0,0,0,.6);border:1px solid rgba(168,85,247,.4);border-radius:12px;padding:7px 10px;font-size:10px;color:rgba(255,255,255,.9);line-height:1.4;}
+#start-overlay{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.75);gap:12px;}
+#start-title{font-size:24px;font-weight:900;background:linear-gradient(135deg,#ff6ef7,#a855f7,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center;}
+#start-sub{font-size:11px;color:rgba(255,255,255,.6);text-align:center;max-width:240px;line-height:1.5;}
+#start-btn{padding:14px 36px;background:linear-gradient(135deg,#ff6ef7,#a855f7);border:none;border-radius:24px;color:#fff;font-weight:900;font-size:15px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;box-shadow:0 0 30px rgba(168,85,247,.4);}
+#level-tabs-start{display:flex;gap:8px;}
+#level-tabs-start button{padding:6px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:rgba(255,255,255,.6);font-size:10px;font-weight:700;cursor:pointer;transition:all .2s;}
+#level-tabs-start button.active{background:linear-gradient(135deg,#ff6ef7,#a855f7);border-color:transparent;color:#fff;}
+#end-overlay{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.8);gap:10px;display:none;}
+#end-title{font-size:22px;font-weight:900;color:#ffde59;}
+#end-score{font-size:16px;color:#fff;}
+#end-ebc{font-size:14px;color:#4ade80;font-weight:700;}
+#end-btn{padding:12px 32px;background:linear-gradient(135deg,#ff6ef7,#a855f7);border:none;border-radius:20px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;}
+#end-home{padding:10px 24px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:20px;color:#fff;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;}
+#tap-hint{position:absolute;bottom:100px;left:0;right:0;z-index:10;text-align:center;font-size:13px;font-weight:700;color:rgba(255,255,255,.4);animation:pulse 1s ease-in-out infinite alternate;}
+@keyframes pulse{from{opacity:.3}to{opacity:.9}}
+</style>
+</head>
+<body>
+<div id="device-bar">
+  <button class="active" onclick="setDevice(369,828,this)">iPhone 14 Pro</button>
+  <button onclick="setDevice(390,844,this)">iPhone 14</button>
+  <button onclick="setDevice(375,812,this)">iPhone 12</button>
+  <button onclick="setDevice(360,800,this)">Android</button>
+</div>
+<div id="phone-outer"><div id="phone">
+  <div id="notch"></div>
+  <canvas id="game-canvas"></canvas>
+
+  <div id="hud">
+    <div id="hud-score">0</div>
+    <div id="hud-lives">❤️❤️❤️</div>
+    <div id="hud-ebc">0 EBCs</div>
+  </div>
+  <div id="rita-hud">Tap the screen to make the ball bounce over the barriers love!</div>
+  <div id="tap-hint">TAP TO BOUNCE</div>
+
+  <div id="start-overlay">
+    <div id="start-title">🎵 Rhythm Bounce</div>
+    <div id="start-sub">Tap the screen to bounce the ball over barriers. Each barrier cleared earns EBCs! How far can you go?</div>
+    <div id="level-tabs-start">
+      <button class="active" id="stab-y" onclick="selectLevel('youngsters',this)">🟣 Easy</button>
+      <button id="stab-g" onclick="selectLevel('grownups',this)">🟡 Medium</button>
+      <button id="stab-e" onclick="selectLevel('experts',this)">⭐ Hard</button>
+    </div>
+    <button id="start-btn" onclick="startGame()">▶ PLAY</button>
+  </div>
+
+  <div id="end-overlay" id="end-overlay">
+    <div id="end-title">🎵 Game Over!</div>
+    <div id="end-score">Score: 0</div>
+    <div id="end-ebc">+0 EBCs earned!</div>
+    <button id="end-btn" onclick="resetGame()">Play Again</button>
+    <button id="end-home" onclick="window.location.href='page5_worlds.html'">Choose World</button>
+  </div>
+
+</div></div>
+
+<script>
+const params=new URLSearchParams(location.search);
+const LEVEL_CFG={
+  youngsters:{speed:3,jumpPower:11,gravity:0.45,gapH:140,barrierW:22,ebcPer:10,lives:5,label:'Easy'},
+  grownups:{speed:5,jumpPower:12,gravity:0.55,gapH:120,barrierW:26,ebcPer:15,lives:3,label:'Medium'},
+  experts:{speed:7,jumpPower:13,gravity:0.65,gapH:100,barrierW:30,ebcPer:25,lives:2,label:'Hard'},
+};
+
+const canvas=document.getElementById('game-canvas');
+const ctx=canvas.getContext('2d');
+let W,H,animId;
+let level='youngsters';
+let S={running:false,ball:{x:0,y:0,vy:0,r:16},barriers:[],score:0,ebc:0,lives:3,frameCount:0,nextBarrier:0};
+let particles=[];
+
+function resize(){
+  W=canvas.offsetWidth;H=canvas.offsetHeight;
+  canvas.width=W;canvas.height=H;
+}
+
+function selectLevel(lv,btn){
+  level=lv;
+  document.querySelectorAll('#level-tabs-start button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  localStorage.setItem('askLovelyRitaV4_level',lv);
+}
+
+function startGame(){
+  document.getElementById('start-overlay').style.display='none';
+  document.getElementById('end-overlay').style.display='none';
+  resize();
+  const cfg=LEVEL_CFG[level];
+  S={
+    running:true,
+    ball:{x:W*0.2,y:H*0.5,vy:0,r:16},
+    barriers:[],score:0,ebc:0,
+    lives:cfg.lives,
+    frameCount:0,nextBarrier:80,
+  };
+  particles=[];
+  updateHUD();
+  speak("Here we go love! Tap to bounce over the barriers and earn your EBCs!");
+  loop();
+}
+
+function loop(){
+  if(!S.running)return;
+  update();draw();
+  animId=requestAnimationFrame(loop);
+}
+
+function update(){
+  const cfg=LEVEL_CFG[level];
+  // Ball physics
+  S.ball.vy+=cfg.gravity;
+  S.ball.y+=S.ball.vy;
+  // Floor
+  if(S.ball.y+S.ball.r>H-40){
+    S.ball.y=H-40-S.ball.r;
+    S.ball.vy=0;loseLife();return;
+  }
+  // Ceiling
+  if(S.ball.y-S.ball.r<36){S.ball.y=36+S.ball.r;S.ball.vy=2;}
+
+  // Spawn barriers
+  S.frameCount++;
+  if(S.frameCount>=S.nextBarrier){
+    const gapY=60+Math.random()*(H-cfg.gapH-100);
+    S.barriers.push({x:W+50,gapY,gapH:cfg.gapH,w:cfg.barrierW,passed:false,
+      col:`hsl(${Math.random()*360},80%,60%)`});
+    S.nextBarrier=S.frameCount+Math.floor((80+Math.random()*40)/cfg.speed*3);
+  }
+
+  // Move barriers
+  for(let i=S.barriers.length-1;i>=0;i--){
+    S.barriers[i].x-=cfg.speed;
+    // Pass check
+    if(!S.barriers[i].passed&&S.barriers[i].x+S.barriers[i].w<S.ball.x){
+      S.barriers[i].passed=true;
+      S.score++;S.ebc+=cfg.ebcPer;
+      spawnParticles(S.ball.x,S.ball.y,'#4ade80');
+      updateHUD();
+      if(S.score%5===0) speak(`Amazing love! ${S.score} barriers cleared!`);
+    }
+    // Remove off screen
+    if(S.barriers[i].x+S.barriers[i].w<0){S.barriers.splice(i,1);continue;}
+    // Collision
+    const b=S.barriers[i],ball=S.ball;
+    if(ball.x+ball.r>b.x&&ball.x-ball.r<b.x+b.w){
+      if(ball.y-ball.r<b.gapY||ball.y+ball.r>b.gapY+b.gapH){
+        spawnParticles(ball.x,ball.y,'#f87171');
+        loseLife();return;
+      }
+    }
+  }
+
+  // Particles
+  for(let i=particles.length-1;i>=0;i--){
+    particles[i].life-=1;particles[i].x+=particles[i].vx;particles[i].y+=particles[i].vy;
+    particles[i].vy+=0.2;
+    if(particles[i].life<=0)particles.splice(i,1);
+  }
+}
+
+function spawnParticles(x,y,col){
+  for(let i=0;i<8;i++){
+    const a=Math.random()*Math.PI*2;const spd=2+Math.random()*4;
+    particles.push({x,y,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd-2,life:30,col,r:2+Math.random()*3});
+  }
+}
+
+function loseLife(){
+  S.lives--;updateHUD();
+  if(S.lives<=0){endGame();return;}
+  S.ball.y=H*0.5;S.ball.vy=0;
+  // Remove barriers near ball
+  S.barriers=S.barriers.filter(b=>b.x>S.ball.x+50);
+  speak(S.lives===1?"One life left love! Be careful!":"Keep going love!");
+}
+
+function draw(){
+  // BG
+  const bg=ctx.createLinearGradient(0,0,0,H);
+  bg.addColorStop(0,'#0a001a');bg.addColorStop(1,'#001a0a');
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+
+  // Stars
+  ctx.fillStyle='rgba(255,255,255,0.4)';
+  for(let i=0;i<30;i++){const x=(i*37+S.frameCount*0.3)%W,y=(i*71)%H;ctx.beginPath();ctx.arc(x,y,0.8,0,Math.PI*2);ctx.fill();}
+
+  // Ground
+  ctx.fillStyle='rgba(255,255,255,0.06)';
+  ctx.fillRect(0,H-40,W,40);
+
+  // Barriers
+  S.barriers.forEach(b=>{
+    ctx.fillStyle=b.col;
+    // Top barrier
+    ctx.beginPath();ctx.roundRect(b.x,36,b.w,b.gapY-36,4);ctx.fill();
+    // Bottom barrier
+    ctx.beginPath();ctx.roundRect(b.x,b.gapY+b.gapH,b.w,H-40-b.gapY-b.gapH,4);ctx.fill();
+    // Glow
+    ctx.shadowColor=b.col;ctx.shadowBlur=8;
+    ctx.strokeStyle=b.col;ctx.lineWidth=1;ctx.strokeRect(b.x,36,b.w,b.gapY-36);
+    ctx.strokeRect(b.x,b.gapY+b.gapH,b.w,H-40-b.gapY-b.gapH);
+    ctx.shadowBlur=0;
+  });
+
+  // Ball
+  const ball=S.ball;
+  ctx.shadowColor='#ff6ef7';ctx.shadowBlur=20;
+  const ballGrad=ctx.createRadialGradient(ball.x-4,ball.y-4,2,ball.x,ball.y,ball.r);
+  ballGrad.addColorStop(0,'#fff');ballGrad.addColorStop(0.3,'#ff6ef7');ballGrad.addColorStop(1,'#a855f7');
+  ctx.beginPath();ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);
+  ctx.fillStyle=ballGrad;ctx.fill();ctx.shadowBlur=0;
+  // Music note on ball
+  ctx.fillStyle='#fff';ctx.font=`${ball.r}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('♪',ball.x,ball.y+1);
+
+  // Particles
+  particles.forEach(p=>{
+    ctx.globalAlpha=p.life/30;ctx.fillStyle=p.col;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
+  });
+  ctx.globalAlpha=1;
+}
+
+function tap(){
+  if(!S.running)return;
+  S.ball.vy=-LEVEL_CFG[level].jumpPower;
+}
+
+canvas.addEventListener('click',tap);
+canvas.addEventListener('touchstart',e=>{e.preventDefault();tap();},{passive:false});
+
+function updateHUD(){
+  document.getElementById('hud-score').textContent=S.score;
+  document.getElementById('hud-ebc').textContent=S.ebc+' EBCs';
+  const hearts=['','❤️','❤️❤️','❤️❤️❤️','❤️❤️❤️❤️','❤️❤️❤️❤️❤️'];
+  document.getElementById('hud-lives').textContent=hearts[Math.min(S.lives,5)]||'';
+}
+
+function endGame(){
+  S.running=false;cancelAnimationFrame(animId);
+  saveEBC(S.ebc);
+  document.getElementById('end-overlay').style.display='flex';
+  document.getElementById('end-score').textContent=`Score: ${S.score} barriers cleared`;
+  document.getElementById('end-ebc').textContent=`+${S.ebc} EBCs earned!`;
+  const msg=S.score>=10?`Fantastic love! You cleared ${S.score} barriers and earned ${S.ebc} EBCs!`:
+    `Well done love! You cleared ${S.score} barriers and earned ${S.ebc} EBCs! Try again for more!`;
+  document.getElementById('rita-hud').textContent=msg;
+  speak(msg);
+}
+
+function resetGame(){
+  document.getElementById('end-overlay').style.display='none';
+  document.getElementById('start-overlay').style.display='flex';
+}
+
+function saveEBC(amount){if(amount<=0)return;try{const cur=Number(localStorage.getItem('lra_ebc_balance')||0);localStorage.setItem('lra_ebc_balance',cur+amount);}catch(e){}}
+function speak(text){
+  if(localStorage.getItem('askLovelyRitaV4_mute')==='1'||!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.92;u.pitch=1.1;
+  const v=window.speechSynthesis.getVoices();
+  const voice=v.find(x=>x.lang==='en-GB'&&/female|woman/i.test(x.name))||v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));
+  if(voice)u.voice=voice;window.speechSynthesis.speak(u);
+}
+function setDevice(w,h,btn){document.querySelectorAll('#device-bar button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const p=document.getElementById('phone');p.style.width=w+'px';p.style.height=h+'px';resize();}
+
+// Init level from URL
+const lv=params.get('level')||localStorage.getItem('askLovelyRitaV4_level')||'youngsters';
+level=lv;
+const tabMap={youngsters:'stab-y',grownups:'stab-g',experts:'stab-e'};
+document.querySelectorAll('#level-tabs-start button').forEach(b=>b.classList.remove('active'));
+if(tabMap[lv])document.getElementById(tabMap[lv]).classList.add('active');
+resize();
+speak("Welcome to Rhythm Bounce love! Choose your level and tap the screen to make the ball bounce over the barriers. Each barrier earns you EBCs for the Beat Shop!");
+</script>
+</body>
+</html>
