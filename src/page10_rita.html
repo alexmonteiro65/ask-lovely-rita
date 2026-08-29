@@ -222,6 +222,7 @@ body.theme-experts    { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-grad
 #q-prompt {
   font-size:14px; font-weight:700; color:#fff;
   line-height:1.6; margin-bottom:10px; min-height:44px;
+  display:none;
 }
 /* Blank highlight */
 #q-prompt .blank {
@@ -1099,8 +1100,8 @@ function checkExpert() {
     speak(msg);
     S.qIndex++;
     document.getElementById('q-val').textContent=`${S.qIndex}/8`;
-    if(S.qIndex<8) setTimeout(()=>nextQuestion(), 3000);
-    else setTimeout(()=>finishGame(),2000);
+    if(S.qIndex<8) setTimeout(()=>nextQuestion(), 5000);
+    else setTimeout(()=>finishGame(),7000);
     setTimeout(()=>document.getElementById('scroll-area').scrollTo({top:9999,behavior:'smooth'}),300);
   }
 }
@@ -1124,8 +1125,8 @@ function handleCorrect(msg) {
   speak(msg);
   S.qIndex++;
   document.getElementById('q-val').textContent=`${S.qIndex}/8`;
-  if(S.qIndex<8) setTimeout(()=>nextQuestion(), 3000);
-  else setTimeout(()=>finishGame(),2000);
+  if(S.qIndex<8) setTimeout(()=>nextQuestion(), 5000);
+  else setTimeout(()=>finishGame(),7000);
   setTimeout(()=>document.getElementById('scroll-area').scrollTo({top:9999,behavior:'smooth'}),300);
 }
 
@@ -1151,9 +1152,9 @@ function finishGame() {
   document.getElementById('result-pts').style.color='#ffde59';
   document.getElementById('result-panel').classList.add('show');
   const _nb=document.getElementById('next-btn'); if(_nb) _nb.style.display='none';
-  document.getElementById('start-btn').textContent='🔄 Play Again!';
-  document.getElementById('start-btn').style.display='block';
-  document.getElementById('start-btn').onclick=()=>{resetGame();startGame();};
+  // Play Again button hidden — flow continues automatically via showBonusGame
+  document.getElementById('start-btn').style.display='none';
+  // NOTE: Play Again button exists in HTML — can be re-enabled later if needed
   celebrate();
   setTimeout(()=>speak(pick(RITA_COMPLETE)),500);
   showCongrats(bonus);
@@ -1177,9 +1178,9 @@ function showBonusGame() {
   if (!area) return;
   area.style.display = 'block';
   const msgs = {
-    youngsters: "Magnificent love! You finished Rita's World! Tap the Beat bonus is yours! Going there in 5 seconds!",
-    grownups: "Brilliant darling! Rita is so proud! Tap the Beat awaits you in 5 seconds!",
-    experts: "Outstanding love! A true music expert! Tap the Beat bonus is unlocked! Off we go in 5 seconds!"
+    youngsters: "Magnificent love! You are a Rita's World star! Now we are moving on to the Bonus Round — Tap the Beat! Get ready darling!",
+    grownups: "Brilliant darling! Rita is so proud of you! Next up is your Bonus Round — Tap the Beat! Here we go love!",
+    experts: "Outstanding love! A true music expert! Your Bonus Round awaits — Tap the Beat is next! Moving on now!"
   };
   // Wait for celebrate speech to finish before speaking bonus msg
   setTimeout(()=>speak(msgs[S.level]||msgs.youngsters), 1200);
@@ -1317,9 +1318,10 @@ function setDevice(w,h,name){const p=document.getElementById('phone');p.style.wi
 init();
 </script>
 <!-- ADMIN TEST NAV -->
-<div id="admin-nav" style="position:fixed;top:4px;right:4px;z-index:9999;display:flex;gap:4px;opacity:0.4;">
-  <button onclick="history.back()" style="background:#333;border:none;color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;cursor:pointer;">◀ Back</button>
-  <button onclick="document.getElementById('admin-nav').style.opacity=document.getElementById('admin-nav').style.opacity>'0.5'?'0.15':'1'" style="background:#555;border:none;color:#fff;padding:4px 6px;border-radius:6px;font-size:9px;cursor:pointer;">👁</button>
+<div id="admin-nav" style="position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;gap:6px;background:rgba(0,0,0,.7);padding:5px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.2);">
+  <button onclick="history.back()" style="background:#a855f7;border:none;color:#fff;padding:5px 12px;border-radius:12px;font-size:11px;font-weight:700;cursor:pointer;">◀ PREV</button>
+  <span style="color:rgba(255,255,255,.4);font-size:9px;line-height:30px;">ADMIN</span>
+  <button onclick="window.location.href='page3c_tapthebeat.html?level='+(localStorage.getItem('askLovelyRitaV4_level')||'youngsters')+'&from=rita'" style="background:#4ade80;border:none;color:#000;padding:5px 12px;border-radius:12px;font-size:11px;font-weight:700;cursor:pointer;">NEXT ▶</button>
 </div>
 </body>
 </html>
