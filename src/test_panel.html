@@ -195,6 +195,10 @@ function injectData() {
   const ebcBal = Number(document.getElementById('ebc-balance').value||0);
   localStorage.setItem('lra_ebc_balance', ebcBal);
 
+  // Calcular e gravar Total Educational Portfolio — espelho para página 1
+  const totalPortfolio = total + ebcBal + collVal;
+  localStorage.setItem('lra_total_portfolio', totalPortfolio);
+
   // Terms accepted so page1 doesn't block
   localStorage.setItem('lra_terms_accepted', 'true');
   localStorage.setItem('lra_bc_migrated_v5', 'true');
