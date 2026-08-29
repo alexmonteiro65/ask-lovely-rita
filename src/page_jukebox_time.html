@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lovely Rita Adventures — Jukebox Time</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0a14;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 16px 40px;}
+#device-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;justify-content:center;}
+#device-bar button{background:#1a1a2e;border:1px solid #333;color:#aaa;padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer;transition:all .2s;}
+#device-bar button:hover,#device-bar button.active{background:#333;color:#fff;border-color:#666;}
+#phone-outer{background:#1c1c1c;border-radius:50px;padding:12px;box-shadow:0 0 0 2px #333,0 20px 60px rgba(0,0,0,.8);}
+#phone{width:369px;height:828px;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;background:#0d0005;transition:width .3s,height .3s;}
+#notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:30px;background:#1c1c1c;border-radius:0 0 20px 20px;z-index:20;}
+#scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding:36px 12px 8px;scrollbar-width:none;}
+#scroll-area::-webkit-scrollbar{display:none;}
+#bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse at 50% 20%,#2d0060 0%,#0d0005 60%,#000 100%);border-radius:40px;pointer-events:none;}
+@keyframes jukebox-glow{0%,100%{box-shadow:0 0 20px rgba(255,110,247,.3),0 0 60px rgba(168,85,247,.15)}50%{box-shadow:0 0 40px rgba(255,110,247,.6),0 0 80px rgba(168,85,247,.3)}}
+nav#nav-bar{flex-shrink:0;display:flex;align-items:center;justify-content:space-around;padding:8px 20px 12px;border-top:1px solid rgba(255,255,255,.08);background:rgba(13,0,5,.85);backdrop-filter:blur(12px);position:relative;z-index:10;}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;padding:5px 14px;border-radius:12px;transition:all .2s;font-size:10px;}
+.nav-btn:hover{background:rgba(255,255,255,.08);color:#fff;}
+.nav-btn .nav-icon{font-size:20px;line-height:1;}
+body.theme-youngsters{--accent:#ff6ef7;--btn-grad:linear-gradient(135deg,#ff6ef7,#a855f7);}
+body.theme-grownups{--accent:#ffde59;--btn-grad:linear-gradient(135deg,#ffde59,#c8860a);}
+body.theme-experts{--accent:#c8a96e;--btn-grad:linear-gradient(135deg,#c8a96e,#6677aa);}
+#page-header{text-align:center;margin-bottom:8px;position:relative;z-index:2;}
+#page-header h1{font-size:16px;font-weight:900;letter-spacing:1px;text-transform:uppercase;background:linear-gradient(135deg,#ff6ef7,#ffde59,#c8a96e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+#page-header p{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px;}
+#level-tabs{display:flex;gap:5px;justify-content:center;margin-bottom:8px;position:relative;z-index:2;}
+#level-tabs button{padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);font-size:9px;font-weight:700;cursor:pointer;transition:all .2s;text-transform:uppercase;}
+#level-tabs button.active{background:var(--btn-grad);border-color:transparent;color:#fff;}
+#rita-wrap{background:rgba(255,255,255,.06);border:1px solid rgba(168,85,247,.3);border-radius:14px;padding:8px 26px 8px 10px;position:relative;margin-bottom:8px;z-index:2;}
+#rita-name{font-size:9px;font-weight:700;color:#ff6ef7;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;}
+#rita-text{font-size:10px;color:rgba(255,255,255,.8);line-height:1.5;}
+#rita-speak-btn{position:absolute;top:7px;right:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;color:#fff;}
+#status-bar{display:flex;gap:6px;margin-bottom:8px;position:relative;z-index:2;}
+.stat-card{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:4px 8px;}
+.stat-label{font-size:7px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.5px;}
+.stat-val{font-size:13px;font-weight:900;}
+#bc-val{color:#ffde59;}#score-val{color:#ff6ef7;}#q-val{color:#c8a96e;}
+
+/* JUKEBOX VISUAL */
+#jukebox{position:relative;z-index:2;display:flex;justify-content:center;margin-bottom:10px;}
+#jukebox-body{width:200px;height:160px;background:linear-gradient(180deg,#1a0040 0%,#0d0020 100%);border-radius:20px 20px 10px 10px;border:3px solid rgba(255,110,247,.4);position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;animation:jukebox-glow 2s ease-in-out infinite;overflow:hidden;}
+#jukebox-screen{width:140px;height:80px;background:radial-gradient(ellipse,#1a0040,#000);border-radius:10px;border:2px solid rgba(255,110,247,.6);display:flex;align-items:center;justify-content:center;margin-bottom:8px;position:relative;overflow:hidden;}
+#jukebox-era-display{font-size:9px;font-weight:700;color:#ff6ef7;text-align:center;letter-spacing:.5px;padding:4px;}
+#vinyl{width:50px;height:50px;border-radius:50%;background:conic-gradient(#1a0040,#4a004a,#1a0040,#000,#1a0040);border:2px solid rgba(255,110,247,.3);position:absolute;right:10px;bottom:10px;animation:spin 3s linear infinite;}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+#jukebox-lights{display:flex;gap:6px;position:absolute;top:10px;}
+.jukebox-light{width:8px;height:8px;border-radius:50%;animation:light-blink 1s ease-in-out infinite alternate;}
+.jukebox-light:nth-child(1){background:#ff6ef7;animation-delay:0s;}
+.jukebox-light:nth-child(2){background:#ffde59;animation-delay:.3s;}
+.jukebox-light:nth-child(3){background:#4ade80;animation-delay:.6s;}
+.jukebox-light:nth-child(4){background:#60a5fa;animation-delay:.9s;}
+@keyframes light-blink{from{opacity:.3;transform:scale(0.8)}to{opacity:1;transform:scale(1.2)}}
+
+/* ERA SELECTOR */
+#era-selector{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;position:relative;z-index:2;}
+.era-btn{padding:8px 4px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:rgba(255,255,255,.6);font-size:9px;font-weight:700;cursor:pointer;text-align:center;transition:all .2s;line-height:1.4;}
+.era-btn.active{border-color:rgba(255,110,247,.6);background:rgba(255,110,247,.15);color:#ff6ef7;}
+.era-btn .era-icon{font-size:20px;display:block;margin-bottom:3px;}
+
+#question-card{background:rgba(255,255,255,.06);border:1px solid rgba(168,85,247,.3);border-radius:16px;padding:10px 12px;margin-bottom:8px;position:relative;z-index:2;text-align:center;}
+#question-number{font-size:8px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;}
+#question-era-badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:8px;font-weight:700;margin-bottom:6px;background:rgba(255,110,247,.2);color:#ff6ef7;border:1px solid rgba(255,110,247,.3);}
+#question-text{font-size:11px;font-weight:700;color:#fff;line-height:1.5;}
+#answers-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;position:relative;z-index:2;margin-bottom:8px;}
+.ans-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 6px;color:#fff;font-size:10px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center;line-height:1.3;font-family:'Segoe UI',system-ui,sans-serif;}
+.ans-btn:hover:not(.locked){background:rgba(255,110,247,.2);border-color:rgba(255,110,247,.5);}
+.ans-btn.correct{background:rgba(74,222,128,.2);border-color:#4ade80;color:#4ade80;}
+.ans-btn.wrong{background:rgba(248,113,113,.2);border-color:#f87171;color:#f87171;}
+.ans-btn.locked{cursor:default;opacity:.7;}
+#open-input-wrap{position:relative;z-index:2;margin-bottom:8px;display:none;}
+#open-input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:10px 12px;color:#fff;font-size:12px;font-family:'Segoe UI',system-ui,sans-serif;outline:none;}
+#open-input:focus{border-color:var(--accent);}
+#submit-btn{width:100%;margin-top:6px;padding:10px;background:var(--btn-grad);border:none;border-radius:12px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;}
+#result-card{background:rgba(255,255,255,.06);border:1px solid rgba(168,85,247,.3);border-radius:16px;padding:14px;text-align:center;display:none;position:relative;z-index:2;margin-bottom:10px;}
+#result-icon{font-size:28px;margin-bottom:6px;}
+#result-title{font-size:13px;font-weight:900;margin-bottom:4px;}
+#result-pts{font-size:15px;font-weight:900;color:#ffde59;margin-bottom:6px;}
+#result-fact{font-size:9px;color:rgba(255,255,255,.65);line-height:1.5;margin-bottom:10px;}
+#next-btn{padding:10px 28px;background:var(--btn-grad);border:none;border-radius:20px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;}
+#congrats-card{display:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,215,0,.4);border-radius:18px;padding:16px;text-align:center;position:relative;z-index:2;margin-bottom:10px;}
+#congrats-title{font-size:16px;font-weight:900;background:linear-gradient(135deg,#ff6ef7,#ffde59,#c8a96e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;}
+#congrats-bc{font-size:13px;font-weight:700;color:#ffde59;margin-bottom:10px;}
+#bonus-btn{padding:12px 24px;background:linear-gradient(135deg,#ff6ef7,#a855f7);border:none;border-radius:20px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;width:100%;margin-bottom:6px;}
+#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:rgba(30,30,50,.95);border:1px solid rgba(255,110,247,.4);border-radius:20px;padding:8px 20px;font-size:12px;color:#fff;pointer-events:none;opacity:0;transition:opacity .3s;z-index:999;white-space:nowrap;}
+</style>
+</head>
+<body class="theme-youngsters">
+<div id="device-bar">
+  <button class="active" onclick="setDevice(369,828,this)">iPhone 14 Pro</button>
+  <button onclick="setDevice(390,844,this)">iPhone 14</button>
+  <button onclick="setDevice(375,812,this)">iPhone 12</button>
+  <button onclick="setDevice(360,800,this)">Android</button>
+</div>
+<div id="phone-outer"><div id="phone">
+  <div id="notch"></div><div id="bg"></div>
+  <div id="scroll-area">
+    <div id="page-header">
+      <h1>🎵 Jukebox Time</h1>
+      <p>Travel through music history with Rita!</p>
+    </div>
+    <div id="level-tabs">
+      <button onclick="setLevel('youngsters')" id="tab-y">🟣 Youngsters</button>
+      <button onclick="setLevel('grownups')" id="tab-g">🟡 Grown Ups</button>
+      <button onclick="setLevel('experts')" id="tab-e">⭐ Experts</button>
+    </div>
+    <div id="rita-wrap">
+      <div id="rita-name">✨ Lovely Rita</div>
+      <div id="rita-text">Welcome to Jukebox Time love! Let us travel through music history together!</div>
+      <button id="rita-speak-btn" onclick="speakRita()">🔊</button>
+    </div>
+    <div id="status-bar">
+      <div class="stat-card"><div class="stat-label">BeatCoins</div><div class="stat-val" id="bc-val">0</div></div>
+      <div class="stat-card"><div class="stat-label">Score</div><div class="stat-val" id="score-val">0</div></div>
+      <div class="stat-card"><div class="stat-label">Question</div><div class="stat-val" id="q-val">0/0</div></div>
+    </div>
+
+    <div id="jukebox">
+      <div id="jukebox-body">
+        <div id="jukebox-lights">
+          <div class="jukebox-light"></div><div class="jukebox-light"></div>
+          <div class="jukebox-light"></div><div class="jukebox-light"></div>
+        </div>
+        <div id="jukebox-screen">
+          <div id="jukebox-era-display">INSERT COIN ♪</div>
+        </div>
+        <div id="vinyl"></div>
+      </div>
+    </div>
+
+    <div id="era-selector">
+      <button class="era-btn active" id="era-btn-0" onclick="selectEra(0,this)">
+        <span class="era-icon">🎷</span>Origins<br><small style="font-size:7px;opacity:.6">50s · 60s · 70s</small>
+      </button>
+      <button class="era-btn" id="era-btn-1" onclick="selectEra(1,this)">
+        <span class="era-icon">🎸</span>Classics<br><small style="font-size:7px;opacity:.6">80s · 90s · 2000s</small>
+      </button>
+      <button class="era-btn" id="era-btn-2" onclick="selectEra(2,this)">
+        <span class="era-icon">🎹</span>Evolution<br><small style="font-size:7px;opacity:.6">2010s · 2020s · Future</small>
+      </button>
+    </div>
+
+    <div id="question-card">
+      <div id="question-number">Question 1</div>
+      <div id="question-era-badge">Origins</div>
+      <div id="question-text">Loading...</div>
+    </div>
+    <div id="answers-grid">
+      <button class="ans-btn" id="ans-0" onclick="checkAnswer(0)">A</button>
+      <button class="ans-btn" id="ans-1" onclick="checkAnswer(1)">B</button>
+      <button class="ans-btn" id="ans-2" onclick="checkAnswer(2)">C</button>
+      <button class="ans-btn" id="ans-3" onclick="checkAnswer(3)">D</button>
+    </div>
+    <div id="open-input-wrap">
+      <input type="text" id="open-input" placeholder="Type your answer..." />
+      <button id="submit-btn" onclick="submitOpen()">Submit Answer</button>
+    </div>
+    <div id="result-card">
+      <div id="result-icon">🎵</div>
+      <div id="result-title">Brilliant!</div>
+      <div id="result-pts">+40 BeatCoins</div>
+      <div id="result-fact">Music history fact here</div>
+      <button id="next-btn" onclick="nextQ()">Next Question →</button>
+    </div>
+    <div id="congrats-card">
+      <div id="congrats-title">🎵 Music Historian!</div>
+      <div id="congrats-bc">+160 BeatCoins earned!</div>
+      <button id="bonus-btn" onclick="goBonus()">⚡ Play Rhythm Bounce!</button>
+      <button onclick="goWorlds()" style="width:100%;padding:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:20px;color:#fff;font-size:12px;cursor:pointer;font-family:'Segoe UI',system-ui,sans-serif;margin-top:6px;">Choose Another World</button>
+    </div>
+  </div>
+  <nav id="nav-bar">
+    <button class="nav-btn" onclick="window.location.href='page1_landing.html'"><span class="nav-icon">🏠</span><span>Home</span></button>
+    <button class="nav-btn" onclick="goWorlds()"><span class="nav-icon">🌐</span><span>Worlds</span></button>
+    <button class="nav-btn" onclick="goBonus()"><span class="nav-icon">▶️</span><span>Next</span></button>
+  </nav>
+</div></div>
+<div id="toast"></div>
+<script>
+const params=new URLSearchParams(location.search);
+const LEVEL_CFG={youngsters:{bonus:30,bonusAll:120,qCount:6},grownups:{bonus:40,bonusAll:160,qCount:8},experts:{bonus:50,bonusAll:200,qCount:9}};
+const ERAS=[
+  {name:'Origins',years:'50s · 60s · 70s',icon:'🎷',color:'#ff6ef7'},
+  {name:'Classics',years:'80s · 90s · 2000s',icon:'🎸',color:'#ffde59'},
+  {name:'Evolution',years:'2010s · 2020s · Future',icon:'🎹',color:'#c8a96e'},
+];
+
+const ALL_QS=[
+  // ORIGINS — 50s 60s 70s
+  {era:0,q:"What decade is considered the birthplace of Rock and Roll music?",answers:['1940s','1950s','1960s','1930s'],correct:1,levels:['y','g','e'],fact:"The 1950s gave birth to Rock and Roll love! Artists like Chuck Berry and Little Richard created a sound that would change the world forever!"},
+  {era:0,q:"Which musical instrument became the symbol of Rock and Roll in the 1950s?",answers:['Piano','Saxophone','Electric guitar','Trumpet'],correct:2,levels:['y','g','e'],fact:"The electric guitar became the voice of Rock and Roll love! Artists could now play louder and with more energy than ever before!"},
+  {era:0,q:"In which decade did the Lads rise to global fame and create the British Invasion?",answers:['1950s','1970s','1960s','1980s'],correct:2,levels:['y','g','e'],fact:"The 1960s love! The Lads led the British Invasion of America in 1964 and music was never the same again!"},
+  {era:0,q:"What famous 1969 music festival became a symbol of the hippie movement and peace?",answers:['Glastonbury','Woodstock','Coachella','Reading'],correct:1,levels:['y','g','e'],fact:"Woodstock in New York State attracted 400000 people love! It became the defining moment of the 1960s peace movement!"},
+  {era:0,q:"Which music genre emerged in the 1970s featuring a strong beat and was made for dancing?",answers:['Punk','Disco','Grunge','Metal'],correct:1,levels:['g','e'],fact:"Disco love! Saturday Night Fever and artists like ABBA and Donna Summer made the 1970s dance floors come alive!"},
+  {era:0,q:"What year did the Lads perform their famous rooftop concert in London?",answers:['1967','1968','1969','1970'],correct:2,levels:['g','e'],fact:"January 30 1969 love! The rooftop of their Apple Corps building in Savile Row. It was their last public performance ever!"},
+  {era:0,q:"Which musical movement of the late 1970s rejected the elaborate rock of the era with fast simple raw music?",answers:['Disco','New Wave','Punk rock','Reggae'],correct:2,levels:['e'],fact:"Punk rock love! Bands like The Sex Pistols and The Clash rejected the overproduced music of the 1970s with raw energy and attitude!"},
+
+  // CLASSICS — 80s 90s 2000s
+  {era:1,q:"Which device launched in 1979 changed how people listened to music on the go?",answers:['CD player','Walkman','MP3 player','Radio'],correct:1,levels:['y','g','e'],fact:"The Sony Walkman love! For the first time people could take their music anywhere. It sold 400 million units and changed music forever!"},
+  {era:1,q:"What music video channel launched in 1981 and changed the music industry forever?",answers:['YouTube','Spotify','MTV','BBC Music'],correct:2,levels:['y','g','e'],fact:"MTV love! Music Television launched on August 1 1981 with Video Killed the Radio Star. It made image as important as sound!"},
+  {era:1,q:"Which music format replaced vinyl records and cassettes in the 1980s?",answers:['MP3','Streaming','CD','MiniDisc'],correct:2,levels:['y','g','e'],fact:"The Compact Disc love! CDs were launched in 1982 and by the 1990s they dominated music sales completely!"},
+  {era:1,q:"What genre of music emerged in New York in the 1970s and 80s and combined rhythm and storytelling?",answers:['Grunge','Hip Hop','Techno','Country'],correct:1,levels:['g','e'],fact:"Hip Hop love! Born in the Bronx New York with DJs and MCs. By the 1990s it had become the most popular music genre in the world!"},
+  {era:1,q:"What music streaming service launched in 2008 and changed how people access music?",answers:['Apple Music','YouTube Music','Tidal','Spotify'],correct:3,levels:['g','e'],fact:"Spotify love! Launched in Sweden in 2008 it now has over 600 million users. Physical music sales dropped dramatically because of streaming!"},
+  {era:1,q:"Which 1990s Seattle-based genre combined heavy guitars with emotional introspective lyrics?",answers:['Britpop','Grunge','Nu Metal','Alternative'],correct:1,levels:['e'],fact:"Grunge love! Bands like Nirvana and Pearl Jam created a dark powerful sound that defined a generation in the 1990s!"},
+
+  // EVOLUTION — 2010s 2020s Future
+  {era:2,q:"Which platform launched in 2005 became the biggest place to watch and share music videos?",answers:['TikTok','Instagram','YouTube','Facebook'],correct:2,levels:['y','g','e'],fact:"YouTube love! It completely changed how music videos are shared. A billion people watch YouTube videos every day!"},
+  {era:2,q:"Which social media app that launched around 2018 became famous for launching music careers through short videos?",answers:['Snapchat','Twitter','Instagram','TikTok'],correct:3,levels:['y','g','e'],fact:"TikTok love! Songs go viral overnight on TikTok. Many artists became global stars because their songs were used in millions of videos!"},
+  {era:2,q:"What technology is increasingly being used in the 2020s to create and produce music without human musicians?",answers:['3D printing','Artificial Intelligence','Virtual Reality','Blockchain'],correct:1,levels:['g','e'],fact:"Artificial Intelligence love! AI can now compose music write lyrics and even clone voices. The music industry is debating how to handle this revolution!"},
+  {era:2,q:"Which Asian pop music genre became a global phenomenon in the 2010s and 2020s?",answers:['J-Pop','Mandopop','K-Pop','C-Pop'],correct:2,levels:['g','e'],fact:"K-Pop love! Korean pop music went global with groups like BTS and BLACKPINK. BTS became the first Korean act to top the US charts!"},
+  {era:2,q:"What are NFTs in the context of music and why are some artists using them in the 2020s?",answers:['New Festival Tickets','Non-Fungible Tokens — digital ownership certificates','National Federation of Talent','Network File Transfer'],correct:1,levels:['e'],fact:"Non-Fungible Tokens love! Some musicians sell unique digital items or unreleased music as NFTs giving fans exclusive ownership of digital assets. The future of music ownership is being debated!"},
+];
+
+let S={level:'youngsters',score:0,qIndex:0,order:[],answered:false,currentQ:null,selectedEra:0};
+
+function init(){
+  const lv=params.get('level')||localStorage.getItem('askLovelyRitaV4_level')||'youngsters';
+  setLevel(lv,true);
+  updateDisplay();
+  speak("Welcome to Jukebox Time love! I will take you on a journey through the history of music from the 1950s all the way to the future! Let us begin!");
+}
+
+function setLevel(lv,silent){
+  S.level=lv;localStorage.setItem('askLovelyRitaV4_level',lv);
+  document.body.className='theme-'+lv;
+  ['y','g','e'].forEach(t=>document.getElementById('tab-'+t).classList.remove('active'));
+  document.getElementById('tab-'+lv[0]).classList.add('active');
+  if(!silent)resetGame();
+}
+
+function selectEra(idx,btn){
+  S.selectedEra=idx;
+  document.querySelectorAll('.era-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const era=ERAS[idx];
+  document.getElementById('jukebox-era-display').textContent=era.icon+' '+era.name;
+}
+
+function resetGame(){
+  S.score=0;S.qIndex=0;S.answered=false;S.currentQ=null;
+  document.getElementById('result-card').style.display='none';
+  document.getElementById('congrats-card').style.display='none';
+  document.getElementById('question-card').style.display='block';
+  document.getElementById('answers-grid').style.display='grid';
+  document.getElementById('open-input-wrap').style.display='none';
+  updateDisplay();startGame();
+}
+
+function startGame(){
+  const cfg=LEVEL_CFG[S.level];
+  // Mix from all eras, weighted toward selected era
+  const pool=ALL_QS.filter(q=>q.levels.includes(S.level[0]));
+  const preferred=pool.filter(q=>q.era===S.selectedEra);
+  const others=pool.filter(q=>q.era!==S.selectedEra);
+  const combined=[...shuffle(preferred),...shuffle(others)];
+  S.order=combined.map((_,i)=>i).slice(0,Math.min(cfg.qCount,combined.length));
+  S.questionPool=combined;
+  S.qIndex=0;
+  showQ();
+}
+
+function showQ(){
+  if(S.qIndex>=S.order.length){showCongrats();return;}
+  const q=S.questionPool[S.order[S.qIndex]];
+  S.currentQ=q;S.answered=false;
+  document.getElementById('result-card').style.display='none';
+  document.getElementById('question-card').style.display='block';
+  document.getElementById('question-number').textContent=`Question ${S.qIndex+1} of ${S.order.length}`;
+  const era=ERAS[q.era];
+  document.getElementById('question-era-badge').textContent=era.icon+' '+era.name;
+  document.getElementById('question-era-badge').style.color=era.color;
+  document.getElementById('jukebox-era-display').textContent=era.icon+' '+era.years;
+  document.getElementById('question-text').textContent=q.q;
+  document.getElementById('q-val').textContent=`${S.qIndex+1}/${S.order.length}`;
+
+  if(S.level==='experts'&&q.answers.length===4&&S.qIndex>4){
+    document.getElementById('answers-grid').style.display='grid';
+    document.getElementById('open-input-wrap').style.display='none';
+  } else {
+    document.getElementById('answers-grid').style.display='grid';
+    document.getElementById('open-input-wrap').style.display='none';
+  }
+  q.answers.forEach((a,i)=>{
+    const btn=document.getElementById('ans-'+i);
+    btn.textContent=a;btn.className='ans-btn';
+  });
+  setRita(q.q);speak(q.q);
+  updateDisplay();
+}
+
+function checkAnswer(idx){
+  if(S.answered)return;S.answered=true;
+  const q=S.currentQ;const ok=idx===q.correct;
+  const pts=ok?LEVEL_CFG[S.level].bonus:0;
+  document.querySelectorAll('.ans-btn').forEach((b,i)=>{
+    b.classList.add('locked');
+    if(i===q.correct)b.classList.add('correct');
+    else if(i===idx&&!ok)b.classList.add('wrong');
+  });
+  if(ok)saveLadBC(pts);
+  S.score+=pts;updateDisplay();showResult(ok,pts,q);
+}
+
+function submitOpen(){
+  if(S.answered)return;
+  const val=document.getElementById('open-input').value.trim().toLowerCase();
+  const q=S.currentQ;const correct=q.answers[q.correct].toLowerCase();
+  const ok=val.length>=3&&(correct.includes(val)||val.includes(correct.substring(0,5)));
+  const pts=ok?LEVEL_CFG[S.level].bonus:0;
+  S.answered=true;if(ok)saveLadBC(pts);
+  S.score+=pts;updateDisplay();showResult(ok,pts,q);
+}
+
+function showResult(ok,pts,q){
+  const rc=document.getElementById('result-card');
+  document.getElementById('result-icon').textContent=ok?'🎵':'🎶';
+  document.getElementById('result-title').textContent=ok?'Brilliant love!':'Good try love!';
+  document.getElementById('result-pts').textContent=ok?`+${pts} BeatCoins!`:`The answer is: ${q.answers[q.correct]}`;
+  document.getElementById('result-fact').textContent=q.fact;
+  document.getElementById('next-btn').textContent=S.qIndex+1>=S.order.length?'See Results!':'Next Question →';
+  rc.style.display='block';
+  const msg=ok?`Correct love! ${q.fact}`:`Not quite darling! ${q.fact}`;
+  setRita(msg);speak(msg);
+  document.getElementById('scroll-area').scrollTop=9999;
+}
+
+function nextQ(){S.qIndex++;document.getElementById('answers-grid').style.display='grid';document.getElementById('open-input-wrap').style.display='none';showQ();setTimeout(()=>{document.getElementById('scroll-area').scrollTop=0;},100);}
+
+function showCongrats(){
+  const cfg=LEVEL_CFG[S.level];
+  document.getElementById('question-card').style.display='none';
+  document.getElementById('answers-grid').style.display='none';
+  document.getElementById('result-card').style.display='none';
+  document.getElementById('congrats-card').style.display='block';
+  document.getElementById('congrats-bc').textContent=`+${cfg.bonusAll} BeatCoins earned!`;
+  saveEBC(cfg.bonusAll);
+  const msg=`Wonderful love! You are a true music historian! You earned ${cfg.bonusAll} BeatCoins! Music truly is the universal language!`;
+  setRita(msg);speak(msg);
+  document.getElementById('scroll-area').scrollTop=9999;
+}
+
+function updateDisplay(){
+  const total=['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
+  document.getElementById('bc-val').textContent=total;
+  document.getElementById('score-val').textContent=S.score;
+}
+function setRita(t){document.getElementById('rita-text').textContent=t;}
+function speakRita(){speak(document.getElementById('rita-text').textContent);}
+function speak(text){if(localStorage.getItem('askLovelyRitaV4_mute')==='1'||!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.92;u.pitch=1.1;const v=window.speechSynthesis.getVoices();const voice=v.find(x=>x.lang==='en-GB'&&/female|woman/i.test(x.name))||v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));if(voice)u.voice=voice;window.speechSynthesis.speak(u);}
+function saveLadBC(amount){try{const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';const k='askLovelyRitaV4_bc_'+lad;localStorage.setItem(k,Number(localStorage.getItem(k)||0)+amount);postGlobalScore(amount);}catch(e){}}
+function saveEBC(amount){try{const cur=Number(localStorage.getItem('lra_ebc_balance')||0);localStorage.setItem('lra_ebc_balance',cur+amount);}catch(e){}}
+function postGlobalScore(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';fetch('https://empty-leaf-6e4b.alexmonteironeto.workers.dev/score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lad,amount})}).catch(()=>{});}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function setDevice(w,h,btn){document.querySelectorAll('#device-bar button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const p=document.getElementById('phone');p.style.width=w+'px';p.style.height=h+'px';}
+function goBonus(){const lv=localStorage.getItem('askLovelyRitaV4_level')||'youngsters';window.location.href='page_rhythm_bounce.html?level='+lv+'&from=rita';}
+function goWorlds(){window.location.href='page5_worlds.html';}
+init();
+</script>
+</body>
+</html>
