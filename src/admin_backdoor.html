@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LRA Admin — Alex Only</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0014;color:#fff;min-height:100vh;padding:20px;}
+h1{font-size:18px;font-weight:900;color:#ff6ef7;margin-bottom:4px;}
+.sub{font-size:11px;color:rgba(255,255,255,.4);margin-bottom:20px;}
+.section{margin-bottom:20px;}
+.section-title{font-size:11px;font-weight:700;color:#ffde59;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid rgba(255,222,89,.2);}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;}
+.btn{display:block;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;text-decoration:none;font-size:11px;font-weight:600;transition:all .2s;cursor:pointer;}
+.btn:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);}
+.btn .label{font-size:9px;color:rgba(255,255,255,.4);margin-top:2px;font-weight:400;}
+.btn.quiz{border-left:3px solid #a855f7;}
+.btn.burst{border-left:3px solid #4ade80;}
+.btn.system{border-left:3px solid #60a5fa;}
+.btn.new{border-left:3px solid #fb923c;}
+
+/* INJECT PANEL */
+.inject-panel{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px;margin-bottom:20px;}
+.inject-title{font-size:10px;font-weight:700;color:#4ade80;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;}
+.inject-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap;}
+.inject-row label{font-size:10px;color:rgba(255,255,255,.5);width:140px;flex-shrink:0;}
+.inject-row input,select{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#fff;padding:5px 8px;font-size:11px;font-family:inherit;flex:1;min-width:80px;}
+.inject-btn{padding:8px 16px;border-radius:8px;border:none;font-weight:700;font-size:11px;cursor:pointer;font-family:inherit;}
+.inject-btn.green{background:linear-gradient(135deg,#4ade80,#16a34a);color:#fff;}
+.inject-btn.red{background:linear-gradient(135deg,#f87171,#dc2626);color:#fff;}
+.inject-btn.blue{background:linear-gradient(135deg,#60a5fa,#2563eb);color:#fff;}
+.status{font-size:10px;color:#4ade80;margin-top:8px;min-height:16px;}
+
+/* LEVEL QUICK SET */
+.level-btns{display:flex;gap:6px;margin-bottom:12px;}
+.lvl-btn{padding:6px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:rgba(255,255,255,.6);font-size:10px;font-weight:700;cursor:pointer;}
+.lvl-btn.active{background:linear-gradient(135deg,#ff6ef7,#a855f7);border-color:transparent;color:#fff;}
+
+.legend{display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:9px;color:rgba(255,255,255,.5);}
+.legend-dot{width:10px;height:10px;border-radius:2px;}
+</style>
+</head>
+<body>
+<h1>🔧 Lovely Rita Adventures — Admin Panel</h1>
+<div class="sub">Alex Monteiro — Private Access Only | Do not share this URL</div>
+
+<!-- INJECT DATA -->
+<div class="inject-panel">
+  <div class="inject-title">⚡ Inject Test Data — No Playing Required</div>
+
+  <div class="inject-row">
+    <label>Active Lad</label>
+    <select id="inj-lad">
+      <option value="smart">Smart Lad</option>
+      <option value="cute">Cute Lad</option>
+      <option value="quiet">Quiet Lad</option>
+      <option value="funny">Funny Lad</option>
+    </select>
+  </div>
+  <div class="inject-row">
+    <label>Level</label>
+    <select id="inj-level">
+      <option value="youngsters">Youngsters</option>
+      <option value="grownups">Grown Ups</option>
+      <option value="experts">Experts</option>
+    </select>
+  </div>
+  <div class="inject-row">
+    <label>BeatCoins per Lad</label>
+    <input type="number" id="inj-bc" value="1000" min="0">
+  </div>
+  <div class="inject-row">
+    <label>Beat Burst EBCs</label>
+    <input type="number" id="inj-ebc" value="500" min="0">
+  </div>
+  <div class="inject-row">
+    <label>Shop Visit (1 or 2)</label>
+    <select id="inj-visit">
+      <option value="1">Visit 1 (after Burst 1)</option>
+      <option value="2">Visit 2 (after Burst 2)</option>
+    </select>
+  </div>
+  <div class="inject-row">
+    <label>Current World</label>
+    <select id="inj-world">
+      <option value="rita">Rita's World</option>
+      <option value="octopus">Octopus Garden</option>
+      <option value="space">Across the Universe</option>
+      <option value="india">The Inner Light</option>
+      <option value="city">Penny Lane</option>
+    </select>
+  </div>
+  <div class="inject-row">
+    <label>Collection Items</label>
+    <select id="inj-items" multiple style="height:60px;">
+      <option value="badge_oct">Ocean World Badge (350)</option>
+      <option value="badge_spc">Space World Badge (330)</option>
+      <option value="rita_p2">Rita Poster Traffic Warden (450)</option>
+      <option value="vw_red">VW Beetle Classic Red (800)</option>
+      <option value="lad_smart">Smart One Poster (400)</option>
+    </select>
+  </div>
+  <div class="inject-row">
+    <button class="inject-btn green" onclick="injectData()">🚀 INJECT DATA</button>
+    <button class="inject-btn red" onclick="clearAll()">🗑️ CLEAR ALL</button>
+    <button class="inject-btn blue" onclick="showCurrent()">👁️ SHOW CURRENT</button>
+  </div>
+  <div class="status" id="inject-status"></div>
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#a855f7;"></div> Quiz Game</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#4ade80;"></div> Beat Burst</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#60a5fa;"></div> System Pages</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#fb923c;"></div> New This Session</div>
+</div>
+
+<!-- LEVEL QUICK SET -->
+<div class="section">
+  <div class="section-title">Quick Level Set</div>
+  <div class="level-btns">
+    <button class="lvl-btn" onclick="setLevel('youngsters',this)">🟣 Youngsters</button>
+    <button class="lvl-btn" onclick="setLevel('grownups',this)">🟡 Grown Ups</button>
+    <button class="lvl-btn" onclick="setLevel('experts',this)">⭐ Experts</button>
+  </div>
+</div>
+
+<!-- SYSTEM PAGES -->
+<div class="section">
+  <div class="section-title">System Pages</div>
+  <div class="grid">
+    <a class="btn system" href="page1_landing.html">🏠 Home / Landing<div class="label">Page 1 — Start here</div></a>
+    <a class="btn system" href="page5_worlds.html">🌐 Choose World<div class="label">Page 5 — World selector</div></a>
+    <a class="btn system" href="page_shop.html">🛍️ Beat Shop<div class="label">Full store — direct access</div></a>
+    <a class="btn system" href="page_adventures.html">🏆 Profile / My Adventures<div class="label">MyBank + Collection</div></a>
+    <a class="btn system" href="page_music.html">🎵 Music / Jukebox<div class="label">Audio player</div></a>
+    <a class="btn system" href="page_videos.html">🎬 Videos<div class="label">Vimeo player</div></a>
+    <a class="btn system" href="page_records.html">📊 Records / Leaderboard<div class="label">Global scores</div></a>
+    <a class="btn system" href="page_terms.html">📋 Terms<div class="label">Terms of use</div></a>
+  </div>
+</div>
+
+<!-- RITA'S WORLD -->
+<div class="section">
+  <div class="section-title">Rita's World</div>
+  <div class="grid">
+    <a class="btn quiz new" href="page_beat_patrol.html?level=youngsters&from=rita">🚦 Beat Patrol — Youngsters<div class="label">Litter sorting NEW</div></a>
+    <a class="btn quiz new" href="page_beat_patrol.html?level=grownups&from=rita">🚦 Beat Patrol — Grown Ups<div class="label">Parking court NEW</div></a>
+    <a class="btn quiz new" href="page_beat_patrol.html?level=experts&from=rita">🚦 Beat Patrol — Experts<div class="label">Traffic court NEW</div></a>
+    <a class="btn quiz" href="page10_rita.html?level=youngsters">🎤 Rita's World Quiz — Y<div class="label">Word Quiz — album covers</div></a>
+    <a class="btn quiz" href="page10_rita.html?level=grownups">🎤 Rita's World Quiz — G<div class="label">Fill missing word</div></a>
+    <a class="btn quiz" href="page10_rita.html?level=experts">🎤 Rita's World Quiz — E<div class="label">Complete the lyric</div></a>
+    <a class="btn burst" href="page3c_tapthebeat.html?level=youngsters&from=rita">🥁 Tap the Beat — Y<div class="label">Beat Burst 1</div></a>
+    <a class="btn burst" href="page3c_tapthebeat.html?level=grownups&from=rita">🥁 Tap the Beat — G<div class="label">Beat Burst 1</div></a>
+    <a class="btn burst" href="page3c_tapthebeat.html?level=experts&from=rita">🥁 Tap the Beat — E<div class="label">Beat Burst 1</div></a>
+    <a class="btn quiz new" href="page_jukebox_time.html?level=youngsters&from=rita">🎵 Jukebox Time — Y<div class="label">Music history NEW</div></a>
+    <a class="btn quiz new" href="page_jukebox_time.html?level=grownups&from=rita">🎵 Jukebox Time — G<div class="label">Music history NEW</div></a>
+    <a class="btn quiz new" href="page_jukebox_time.html?level=experts&from=rita">🎵 Jukebox Time — E<div class="label">Music history NEW</div></a>
+    <a class="btn burst new" href="page_rhythm_bounce.html?level=youngsters&from=rita">⚡ Rhythm Bounce — Y<div class="label">Beat Burst 2 NEW</div></a>
+    <a class="btn burst new" href="page_rhythm_bounce.html?level=grownups&from=rita">⚡ Rhythm Bounce — G<div class="label">Beat Burst 2 NEW</div></a>
+    <a class="btn burst new" href="page_rhythm_bounce.html?level=experts&from=rita">⚡ Rhythm Bounce — E<div class="label">Beat Burst 2 NEW</div></a>
+  </div>
+</div>
+
+<!-- OCTOPUS GARDEN -->
+<div class="section">
+  <div class="section-title">Octopus Garden</div>
+  <div class="grid">
+    <a class="btn quiz" href="page6_octopus.html?level=youngsters">🐙 Ocean Spelling — Y<div class="label">Quiz 1 — letter tiles</div></a>
+    <a class="btn quiz" href="page6_octopus.html?level=grownups">🐙 Ocean Spelling — G<div class="label">Quiz 1 — keyboard</div></a>
+    <a class="btn quiz" href="page6_octopus.html?level=experts">🐙 Ocean Spelling — E<div class="label">Quiz 1 — keyboard hard</div></a>
+    <a class="btn burst" href="page2_tictactoe.html?level=youngsters&from=ocean">❌ Tic Tac Toe — Y<div class="label">Beat Burst 1 vs Rita</div></a>
+    <a class="btn burst" href="page2_tictactoe.html?level=grownups&from=ocean">❌ Tic Tac Toe — G<div class="label">Beat Burst 1 vs Rita</div></a>
+    <a class="btn burst" href="page2_tictactoe.html?level=experts&from=ocean">❌ Tic Tac Toe — E<div class="label">Beat Burst 1 vs Rita</div></a>
+    <a class="btn quiz new" href="page_shape_shifter.html?level=youngsters&from=ocean">📐 Shape Shifter — Y<div class="label">Quiz 2 — see shape NEW</div></a>
+    <a class="btn quiz new" href="page_shape_shifter.html?level=grownups&from=ocean">📐 Shape Shifter — G<div class="label">Quiz 2 — describe NEW</div></a>
+    <a class="btn quiz new" href="page_shape_shifter.html?level=experts&from=ocean">📐 Shape Shifter — E<div class="label">Quiz 2 — properties NEW</div></a>
+    <a class="btn burst new" href="page_deep_sea_catch.html?level=youngsters&from=ocean">🎣 Deep Sea Catch — Y<div class="label">Beat Burst 2 NEW</div></a>
+    <a class="btn burst new" href="page_deep_sea_catch.html?level=grownups&from=ocean">🎣 Deep Sea Catch — G<div class="label">Beat Burst 2 NEW</div></a>
+    <a class="btn burst new" href="page_deep_sea_catch.html?level=experts&from=ocean">🎣 Deep Sea Catch — E<div class="label">Beat Burst 2 NEW</div></a>
+  </div>
+</div>
+
+<!-- ACROSS THE UNIVERSE -->
+<div class="section">
+  <div class="section-title">Across the Universe</div>
+  <div class="grid">
+    <a class="btn quiz" href="page7_space.html?level=youngsters">🚀 Space Quiz — Y<div class="label">Quiz 1 — multiple choice</div></a>
+    <a class="btn quiz" href="page7_space.html?level=grownups">🚀 Space Quiz — G<div class="label">Quiz 1 — harder</div></a>
+    <a class="btn quiz" href="page7_space.html?level=experts">🚀 Space Quiz — E<div class="label">Quiz 1 — hardest</div></a>
+    <a class="btn burst" href="page3b_notedrop.html?level=youngsters&from=space">🎵 Note Drop — Y<div class="label">Beat Burst 1 — slow</div></a>
+    <a class="btn burst" href="page3b_notedrop.html?level=grownups&from=space">🎵 Note Drop — G<div class="label">Beat Burst 1 — medium</div></a>
+    <a class="btn burst" href="page3b_notedrop.html?level=experts&from=space">🎵 Note Drop — E<div class="label">Beat Burst 1 — fast</div></a>
+    <a class="btn burst" href="page3b_cosmicflash.html?level=youngsters&from=space">⚡ Cosmic Flash — Y<div class="label">Orphan — decision pending</div></a>
+    <a class="btn burst" href="page3b_cosmicflash.html?level=grownups&from=space">⚡ Cosmic Flash — G<div class="label">Orphan — decision pending</div></a>
+    <a class="btn burst" href="page3b_cosmicflash.html?level=experts&from=space">⚡ Cosmic Flash — E<div class="label">Orphan — decision pending</div></a>
+    <a class="btn quiz new" href="page_beat_destinations.html?level=youngsters&from=space">🌍 Beat Destinations — Y<div class="label">Quiz 2 — globe NEW</div></a>
+    <a class="btn quiz new" href="page_beat_destinations.html?level=grownups&from=space">🌍 Beat Destinations — G<div class="label">Quiz 2 — globe NEW</div></a>
+    <a class="btn quiz new" href="page_beat_destinations.html?level=experts&from=space">🌍 Beat Destinations — E<div class="label">Quiz 2 — open answer NEW</div></a>
+    <a class="btn burst new" href="page_mission_mars.html?level=youngsters&from=space">🚀 Mission to Mars — Y<div class="label">Beat Burst 2 NEW</div></a>
+    <a class="btn burst new" href="page_mission_mars.html?level=grownups&from=space">🚀 Mission to Mars — G<div class="label">Beat Burst 2 NEW</div></a>
+    <a class="btn burst new" href="page_mission_mars.html?level=experts&from=space">🚀 Mission to Mars — E<div class="label">Beat Burst 2 NEW</div></a>
+  </div>
+</div>
+
+<!-- THE INNER LIGHT -->
+<div class="section">
+  <div class="section-title">The Inner Light</div>
+  <div class="grid">
+    <a class="btn quiz" href="page8_india.html?level=youngsters">🪷 Memory Match — Y<div class="label">Quiz 1 — 4 pairs</div></a>
+    <a class="btn quiz" href="page8_india.html?level=grownups">🪷 Memory Match — G<div class="label">Quiz 1 — 6 pairs</div></a>
+    <a class="btn quiz" href="page8_india.html?level=experts">🪷 Memory Match — E<div class="label">Quiz 1 — 8 pairs timed</div></a>
+    <a class="btn burst" href="page3_turntable.html?level=youngsters&from=india">🎸 Turntable — Y<div class="label">Beat Burst 1 — 3 spins</div></a>
+    <a class="btn burst" href="page3_turntable.html?level=grownups&from=india">🎸 Turntable — G<div class="label">Beat Burst 1 — 2 spins</div></a>
+    <a class="btn burst" href="page3_turntable.html?level=experts&from=india">🎸 Turntable — E<div class="label">Beat Burst 1 — 1 spin</div></a>
+    <a class="btn quiz" href="page8_worldbeats.html?level=youngsters">🥁 World Beats — Y<div class="label">Quiz 2 — instruments</div></a>
+    <a class="btn quiz" href="page8_worldbeats.html?level=grownups">🥁 World Beats — G<div class="label">Quiz 2 — instruments</div></a>
+    <a class="btn quiz" href="page8_worldbeats.html?level=experts">🥁 World Beats — E<div class="label">Quiz 2 — instruments hard</div></a>
+    <a class="btn burst" href="page3_turntable.html?level=youngsters&from=worldbeats">🎸 Turntable 2 — Y<div class="label">Beat Burst 2</div></a>
+    <a class="btn burst" href="page3_turntable.html?level=grownups&from=worldbeats">🎸 Turntable 2 — G<div class="label">Beat Burst 2</div></a>
+    <a class="btn burst" href="page3_turntable.html?level=experts&from=worldbeats">🎸 Turntable 2 — E<div class="label">Beat Burst 2</div></a>
+  </div>
+</div>
+
+<!-- PENNY LANE -->
+<div class="section">
+  <div class="section-title">Penny Lane</div>
+  <div class="grid">
+    <a class="btn quiz" href="page9_city.html?level=youngsters">🌆 City Facts — Y<div class="label">Quiz 1 — spot the fake</div></a>
+    <a class="btn quiz" href="page9_city.html?level=grownups">🌆 City Facts — G<div class="label">Quiz 1 — trickier</div></a>
+    <a class="btn quiz" href="page9_city.html?level=experts">🌆 City Facts — E<div class="label">Quiz 1 — hardest</div></a>
+    <a class="btn burst" href="page4_vw_game.html?level=youngsters&from=city">🚗 VW Match — Y<div class="label">Beat Burst 1 — no timer</div></a>
+    <a class="btn burst" href="page4_vw_game.html?level=grownups&from=city">🚗 VW Match — G<div class="label">Beat Burst 1 — 30s</div></a>
+    <a class="btn burst" href="page4_vw_game.html?level=experts&from=city">🚗 VW Match — E<div class="label">Beat Burst 1 — 15s</div></a>
+    <a class="btn quiz new" href="page_beat_maths.html?level=youngsters&from=city">🎵 Beat Maths — Y<div class="label">Quiz 2 — addition NEW</div></a>
+    <a class="btn quiz new" href="page_beat_maths.html?level=grownups&from=city">🎵 Beat Maths — G<div class="label">Quiz 2 — fractions NEW</div></a>
+    <a class="btn quiz new" href="page_beat_maths.html?level=experts&from=city">🎵 Beat Maths — E<div class="label">Quiz 2 — algebra NEW</div></a>
+    <a class="btn burst new" href="page_world_kitchen.html?level=youngsters&from=city">🍜 World Kitchen — Y<div class="label">Beat Burst 2 NEW</div></a>
+    <a class="btn burst new" href="page_world_kitchen.html?level=grownups&from=city">🍜 World Kitchen — G<div class="label">Beat Burst 2 NEW</div></a>
+    <a class="btn burst new" href="page_world_kitchen.html?level=experts&from=city">🍜 World Kitchen — E<div class="label">Beat Burst 2 NEW</div></a>
+  </div>
+</div>
+
+<script>
+const BASE = 'https://alexmonteiro65.github.io/ask-lovely-rita/src/';
+
+// Make all links absolute
+document.querySelectorAll('a.btn').forEach(a => {
+  const href = a.getAttribute('href');
+  if (href && !href.startsWith('http')) {
+    a.href = BASE + href;
+    a.target = '_blank';
+  }
+});
+
+function setLevel(lv, btn) {
+  localStorage.setItem('askLovelyRitaV4_level', lv);
+  document.querySelectorAll('.lvl-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('inject-status').textContent = '✅ Level set to ' + lv;
+  document.getElementById('inj-level').value = lv;
+}
+
+function injectData() {
+  const lad = document.getElementById('inj-lad').value;
+  const level = document.getElementById('inj-level').value;
+  const bc = Number(document.getElementById('inj-bc').value) || 0;
+  const ebc = Number(document.getElementById('inj-ebc').value) || 0;
+  const visit = document.getElementById('inj-visit').value;
+  const world = document.getElementById('inj-world').value;
+  const items = [...document.getElementById('inj-items').selectedOptions].map(o => o.value);
+  const PRICES = {badge_oct:350,badge_spc:330,rita_p2:450,vw_red:800,lad_smart:400};
+
+  // Set level and lad
+  localStorage.setItem('askLovelyRitaV4_level', level);
+  localStorage.setItem('askLovelyRitaV4_chosen_lad', lad);
+
+  // Set BeatCoins for all lads
+  ['smart','cute','quiet','funny'].forEach(l => {
+    localStorage.setItem('askLovelyRitaV4_bc_' + l, l === lad ? bc : Math.floor(bc * 0.3));
+  });
+  const total = ['smart','cute','quiet','funny'].reduce((s,l) =>
+    s + Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0), 0);
+  localStorage.setItem('askLovelyRitaV4_bc', total);
+
+  // Set EBCs
+  localStorage.setItem('lra_ebc_balance', ebc);
+
+  // Set shop visit context
+  localStorage.setItem('lra_shop_visit', visit);
+  localStorage.setItem('lra_current_world', world);
+
+  // Set collection items
+  items.forEach(id => {
+    localStorage.setItem('lra_qty_' + id, 1);
+  });
+
+  // Calculate and set portfolio
+  const collVal = items.reduce((s, id) => s + (PRICES[id] || 0), 0);
+  const portfolio = total + ebc + collVal;
+  localStorage.setItem('lra_total_portfolio', portfolio);
+  localStorage.setItem('lra_session_start_bc', 0);
+
+  document.getElementById('inject-status').textContent =
+    '✅ Injected! Lad: ' + lad + ' | Level: ' + level +
+    ' | BeatCoins: ' + total + ' | EBCs: ' + ebc +
+    ' | Portfolio: ' + portfolio + ' | Items: ' + (items.length || 0);
+}
+
+function clearAll() {
+  const keys = Object.keys(localStorage).filter(k =>
+    k.startsWith('askLovelyRita') || k.startsWith('lra_'));
+  keys.forEach(k => localStorage.removeItem(k));
+  document.getElementById('inject-status').textContent =
+    '🗑️ Cleared ' + keys.length + ' keys from localStorage';
+}
+
+function showCurrent() {
+  const keys = Object.keys(localStorage).filter(k =>
+    k.startsWith('askLovelyRita') || k.startsWith('lra_'));
+  const data = keys.map(k => k + ' = ' + localStorage.getItem(k)).join(' | ');
+  document.getElementById('inject-status').textContent = data || '(empty)';
+}
+
+// Show current level on load
+const curLevel = localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
+document.querySelectorAll('.lvl-btn').forEach(btn => {
+  if (btn.textContent.toLowerCase().includes(curLevel.split('')[0])) {
+    btn.classList.add('active');
+  }
+});
+</script>
+</body>
+</html>
