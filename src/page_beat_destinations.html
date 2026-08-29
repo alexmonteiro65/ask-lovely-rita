@@ -621,8 +621,9 @@ function setDevice(w,h,btn) {
 
 function goToBonusGame() {
   const lv = localStorage.getItem('askLovelyRitaV4_level')||'youngsters';
-  window.location.href = 'page3b_cosmicflash.html?level='+lv+'&from=space';
+  window.location.href = 'page_mission_mars.html?level='+lv+'&from=space';
 }
+function goBonus(){goToBonusGame();}
 
 function goChooseWorld() {
   window.location.href = 'page5_worlds.html';
