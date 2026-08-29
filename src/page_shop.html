@@ -785,7 +785,8 @@ function buy3DItem(id, item, btn, msg){
     return;
   }
   // Deduzir APENAS de lra_ebc_balance — nunca toca nos BeatCoins dos Lads
-  localStorage.setItem('lra_ebc_balance', ebcBal - item.price);
+  const newEBC = ebcBal - item.price;
+  localStorage.setItem('lra_ebc_balance', newEBC);
   // Stock
   const stockKey='lra_stock_'+id;
   const curStock=Number(localStorage.getItem(stockKey)||item.stock);
@@ -795,7 +796,7 @@ function buy3DItem(id, item, btn, msg){
   // Adicionar à coleção
   localStorage.setItem('lra_qty_'+id, 1);
   // Actualizar display de EBCs
-  updateBCDisplay(newTotal, true);
+  updateBCDisplay(newEBC, true);
   // Confirmar na loja
   toast('🎉 ' + item.name + ' is now in your collection love!');
   // Rita explica o código 3D
