@@ -244,13 +244,11 @@ body {
 
 /* Score bar — number only, no BC suffix */
 .lad-score-bar {
-  display:flex; align-items:center; justify-content:center;
-  background:rgba(0,0,0,.38); border:1px solid rgba(255,255,255,.1);
-  border-radius:6px; padding:3px 5px; width:calc(100% - 4px);
+  display:none;
 }
 .lad-score-val { font-size:16px; font-weight:bold; color:var(--accent); letter-spacing:.5px; line-height:1; }
 
-/* "BeatCoins" badge (replaces old "Pick me!") */
+/* "Pick Me" badge */
 .pick-me-bubble {
   font-size:9px; color:#fff !important;
   background:var(--btn-grad); border-radius:6px;
@@ -464,7 +462,7 @@ body {
             <img id="lad-smart" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-smart-regular.png" alt="Smart Lad">
             <div class="lad-card-name">THE SMART ONE</div>
             <div class="lad-score-bar"><span class="lad-score-val" id="score-smart">0</span></div>
-            <div class="pick-me-bubble">BeatCoins</div>
+            <div class="pick-me-bubble">Pick Me</div>
           </div>
 
           <div class="lad-card" id="card-cute" onclick="chooseLad('cute')">
@@ -473,7 +471,7 @@ body {
             <img id="lad-cute" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-cute-regular.png" alt="Cute Lad">
             <div class="lad-card-name">THE CUTE ONE</div>
             <div class="lad-score-bar"><span class="lad-score-val" id="score-cute">0</span></div>
-            <div class="pick-me-bubble">BeatCoins</div>
+            <div class="pick-me-bubble">Pick Me</div>
           </div>
 
           <div id="rita-center">
@@ -490,7 +488,7 @@ body {
             <img id="lad-quiet" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-quiet-regular.png" alt="Quiet Lad">
             <div class="lad-card-name">THE QUIET ONE</div>
             <div class="lad-score-bar"><span class="lad-score-val" id="score-quiet">0</span></div>
-            <div class="pick-me-bubble">BeatCoins</div>
+            <div class="pick-me-bubble">Pick Me</div>
           </div>
 
           <div class="lad-card" id="card-funny" onclick="chooseLad('funny')">
@@ -499,7 +497,7 @@ body {
             <img id="lad-funny" src="https://raw.githubusercontent.com/alexmonteiro65/ask-lovely-rita/main/src/lad-funny-regular.png" alt="Funny Lad">
             <div class="lad-card-name">THE FUNNY ONE</div>
             <div class="lad-score-bar"><span class="lad-score-val" id="score-funny">0</span></div>
-            <div class="pick-me-bubble">BeatCoins</div>
+            <div class="pick-me-bubble">Pick Me</div>
           </div>
 
         </div>
@@ -509,7 +507,7 @@ body {
         </div>
 
         <div id="bc-wrap">
-          <span class="bc-label">Educational BeatCoins Total</span>
+          <span class="bc-label">Total Educational Portfolio</span>
           <span class="bc-count" id="bc-display">0</span>
         </div>
 
@@ -879,17 +877,30 @@ function goHowToPlay() {
 
 function loadLadScores() {
   const lads = ['smart','cute','quiet','funny'];
-  // Total = exact sum of all 4 Lads
+  // Soma dos Lads = EBCs totais
   let total = 0;
   lads.forEach(l => {
     const val = Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0);
     document.getElementById('score-'+l).textContent = val.toLocaleString();
     total += val;
   });
-  // Educational BeatCoins Total = sum of Lads (guaranteed match)
-  document.getElementById('bc-display').textContent = total.toLocaleString();
-  // Also sync the central BC key to match
   localStorage.setItem('askLovelyRitaV4_bc', total);
+  // Total Educational Portfolio = EBCs + Collection Value
+  // Collection value: sum of owned items at purchase price
+  const COLL_PRICES = {
+    rita_p1:500, rita_p2:450, vw_red:800, vw_yellow:750,
+    badge_oct:350, badge_spc:330, note_gold:200, note_red:150,
+    lad_smart:400, lad_cute:400, lad_quiet:400, lad_funny:400,
+    stk_lads:800, stk_vw:800, stk_instruments:800, stk_albums:800, stk_rita:1600,
+    vw_bus_3d:1200, vw_beetle_3d:2000
+  };
+  let collVal = 0;
+  Object.entries(COLL_PRICES).forEach(([id, price]) => {
+    const qty = Number(localStorage.getItem('lra_qty_'+id)||0);
+    if(qty > 0) collVal += price * qty;
+  });
+  const portfolio = total + collVal;
+  document.getElementById('bc-display').textContent = portfolio.toLocaleString();
 }
 
 document.addEventListener('visibilitychange', () => {
