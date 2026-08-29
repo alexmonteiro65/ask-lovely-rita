@@ -876,8 +876,8 @@ function goHowToPlay() {
 }
 
 function loadLadScores() {
+  // Sync Lad scores display
   const lads = ['smart','cute','quiet','funny'];
-  // Soma dos Lads = EBCs totais
   let total = 0;
   lads.forEach(l => {
     const val = Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0);
@@ -885,21 +885,8 @@ function loadLadScores() {
     total += val;
   });
   localStorage.setItem('askLovelyRitaV4_bc', total);
-  // Total Educational Portfolio = EBCs + Collection Value
-  // Collection value: sum of owned items at purchase price
-  const COLL_PRICES = {
-    rita_p1:500, rita_p2:450, vw_red:800, vw_yellow:750,
-    badge_oct:350, badge_spc:330, note_gold:200, note_red:150,
-    lad_smart:400, lad_cute:400, lad_quiet:400, lad_funny:400,
-    stk_lads:800, stk_vw:800, stk_instruments:800, stk_albums:800, stk_rita:1600,
-    vw_bus_3d:1200, vw_beetle_3d:2000
-  };
-  let collVal = 0;
-  Object.entries(COLL_PRICES).forEach(([id, price]) => {
-    const qty = Number(localStorage.getItem('lra_qty_'+id)||0);
-    if(qty > 0) collVal += price * qty;
-  });
-  const portfolio = total + collVal;
+  // Total Educational Portfolio = exact mirror of MyBank — single source of truth
+  const portfolio = Number(localStorage.getItem('lra_total_portfolio')||0) || total;
   document.getElementById('bc-display').textContent = portfolio.toLocaleString();
 }
 
