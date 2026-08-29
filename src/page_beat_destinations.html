@@ -452,14 +452,11 @@ function showQuestion() {
 
   // Spin globe to show destination area
   spinToLocation(q.loc[1]);
+  speak(q.q);
   updateDisplay();
 
-  const ritatxts = {
-    youngsters: "Look at the globe love! Where do you think this place is?",
-    grownups: "Study the globe carefully darling! Where did the Lads go?",
-    experts: "Think carefully love! This one requires expert knowledge of the Lads' journey!"
-  };
-  setRita(ritatxts[S.level]);
+  // Rita reads the actual question
+  setRita(q.q);
 }
 
 function spinToLocation(targetLon) {
