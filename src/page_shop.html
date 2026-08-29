@@ -598,7 +598,7 @@ function rollCounter(from, to, duration, el) {
   function step() {
     const p = Math.min((Date.now()-start)/duration, 1);
     const ease = 1-Math.pow(1-p,3);
-    el.textContent = Math.round(from + (to-from)*ease).toLocaleString();
+    el.textContent = Math.round(from + (to-from)*ease);
     if(p<1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
@@ -612,7 +612,7 @@ function updateBCDisplay(newVal, animate=false) {
     cashierSound();
     rollCounter(oldVal, spendable, 800, el);
   } else {
-    el.textContent = spendable.toLocaleString();
+    el.textContent = spendable;
   }
 }
 
@@ -653,11 +653,11 @@ function buyItem(id) {
     return;
   }
   if(ebcBalance < item.price){
-    toast(`Not enough EBCs love! You have ${ebcBalance.toLocaleString()} EBCs.`);
+    toast(`Not enough EBCs love! You have ${ebcBalance} EBCs.`);
     speak("Oh sorry love! You don't have enough EBCs yet! Complete more Beat Burst rounds to earn your shop credit!");
     return;
   }
-  if(ebcBalance < item.price){ toast(`Not enough EBCs love! You need ${item.price.toLocaleString()}`); return; }
+  if(ebcBalance < item.price){ toast(`Not enough EBCs love! You need ${item.price} EBCs`); return; }
   // Deduzir APENAS de lra_ebc_balance — nunca toca nos BeatCoins dos Lads
   localStorage.setItem('lra_ebc_balance', ebcBalance - item.price);
   // Stock e coleção
@@ -682,7 +682,7 @@ function openPopup(id) {
   const item = ITEMS[id];
   document.getElementById('popup-img').src = item.img;
   document.getElementById('popup-name').textContent = item.name;
-  document.getElementById('popup-price-val').textContent = item.price.toLocaleString();
+  document.getElementById('popup-price-val').textContent = item.price;
   updatePopupState(id);
   document.getElementById('item-popup').classList.add('open');
 }
@@ -742,7 +742,7 @@ function open3DPopup(id){
   // Preencher popup com dados do item
   document.getElementById('popup-img').src = item.img;
   document.getElementById('popup-name').textContent = item.name;
-  document.getElementById('popup-price-val').textContent = item.price.toLocaleString();
+  document.getElementById('popup-price-val').textContent = item.price;
   msg.textContent = '';
 
   // Reset botão
