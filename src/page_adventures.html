@@ -489,32 +489,41 @@ function closeRitaTip(){
 
 // ── My Assets ─────────────────────────────────────────────────────────────────
 function updateMyAssets(){
-  const bc=getBC();
-  const level=localStorage.getItem('askLovelyRitaV4_level')||'youngsters';
-  // BeatCoins Earned = ganho real desta sessão (fonte: SESSION_START gravado pela página 1)
-  const sessEarned = getSessionEarned();
-  // Beat Shop Credit = 50% do ganho desta sessão, calculado fresco — nunca acumula
-  const shopCredit = Math.floor(sessEarned * 0.5);
-  // Collection value
-  let collVal=0;
-  Object.keys(COLL_ITEMS).forEach(id=>{
-    const qty=getQty(id);
-    if(qty>0) collVal+=getCurrentValue(id)*qty;
+  const bc = getBC();
+  const set = (id,val) => { const el=document.getElementById(id); if(el) el.textContent=val; };
+
+  // Collection Value — ao preço de compra (não multiplicador de mercado)
+  const PURCHASE_PRICES = {
+    rita_p1:500, rita_p2:450, vw_red:800, vw_yellow:750,
+    badge_oct:350, badge_spc:330, note_gold:200, note_red:150,
+    lad_smart:400, lad_cute:400, lad_quiet:400, lad_funny:400,
+    stk_lads:800, stk_vw:800, stk_instruments:800, stk_albums:800, stk_rita:1600,
+    vw_bus_3d:1200, vw_beetle_3d:2000
+  };
+  let collVal = 0;
+  Object.entries(PURCHASE_PRICES).forEach(([id, price]) => {
+    if(getQty(id) > 0) collVal += price;
   });
-  const collTotal=collVal+shopCredit;
-  const totalPortfolio=bc+collVal+shopCredit;
 
-  // Update display elements safely
-  const set=(id,val)=>{ const el=document.getElementById(id); if(el) el.textContent=val; };
+  // Total Educational Portfolio = BeatCoins + Collection Value
+  const totalPortfolio = bc + collVal;
 
-  set('asset-prev-bc', Math.max(0, bc - sessEarned).toLocaleString()+' EBCs');
-  set('asset-earned', sessEarned.toLocaleString()+' EBCs');
-  set('asset-bc', bc.toLocaleString()+' EBCs');
-  set('asset-invest', shopCredit.toLocaleString()+' EBCs');
-  set('asset-coll', collVal.toLocaleString()+' EBCs');
-  set('asset-coll-total', collTotal.toLocaleString()+' EBCs');
-  set('asset-total', totalPortfolio.toLocaleString()+' EBCs');
+  // MyBank — 3 linhas simples
+  set('asset-bc', bc.toLocaleString() + ' EBCs');
+  set('asset-coll', collVal.toLocaleString() + ' EBCs');
+  set('asset-total', totalPortfolio.toLocaleString() + ' EBCs');
   set('asset-total-label', 'Total Educational Portfolio');
+
+  // Esconder linhas que não fazem mais parte do novo modelo
+  ['asset-prev-bc','asset-earned','asset-invest','asset-coll-total'].forEach(id => {
+    const row = document.getElementById(id);
+    if(row) { const p=row.closest('.asset-row'); if(p) p.style.display='none'; }
+  });
+
+  // Renomear labels visíveis
+  const bcLabel = document.querySelector('[for="asset-bc"], .asset-label');
+  set('asset-bc-label', 'BeatCoins Balance');
+  set('asset-coll-label', 'Collection Value');
 }
 
 
