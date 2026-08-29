@@ -193,11 +193,11 @@ function playerTap(idx){
   if(S.playerSeq.length===S.sequence.length){
     // Round complete!
     disablePads(true); S.locked=true;
-    S.earned+=reward; saveLadBC(reward); postGlobalScore(reward);
+    S.earned+=reward; saveEBC(reward); postGlobalScore(reward);
     document.getElementById('bc-display').textContent=Number(localStorage.getItem('askLovelyRitaV4_bc')||25000).toLocaleString();
     const msgs=['Brilliant love! Round 1 perfect!','Smashing! Round 2 nailed it!','Outstanding! All 3 rounds complete!'];
     speak(msgs[S.round]);
-    toast('✅ Round '+(S.round+1)+' complete! +'+reward+' BeatCoins!');
+    toast('⚡ Beat Burst! +'+reward+' EBCs for the Beat Shop!');
     document.getElementById('phase-display').textContent='✅ ROUND '+(S.round+1)+' COMPLETE!';
     S.round++;
     setTimeout(startRound,2000);
@@ -217,6 +217,7 @@ function showResult(){
 
 function speak(text){if(localStorage.getItem('askLovelyRitaV4_mute')==='1'||!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.92;u.pitch=1.1;const v=window.speechSynthesis.getVoices();const voice=v.find(x=>x.lang==='en-GB'&&/female|woman/i.test(x.name))||v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));if(voice)u.voice=voice;window.speechSynthesis.speak(u);}
 function saveLadBC(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';const k='askLovelyRitaV4_bc_'+lad;localStorage.setItem(k,Number(localStorage.getItem(k)||0)+amount);const t=Number(localStorage.getItem('askLovelyRitaV4_bc')||25000);localStorage.setItem('askLovelyRitaV4_bc',t+amount);}
+function saveEBC(amount){const cur=Number(localStorage.getItem('lra_ebc_balance')||0);localStorage.setItem('lra_ebc_balance',cur+amount);}
 function postGlobalScore(amount){const lad=localStorage.getItem('askLovelyRitaV4_chosen_lad')||'smart';fetch('https://empty-leaf-6e4b.alexmonteironeto.workers.dev/score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lad,amount})}).catch(()=>{});}
 function goBack(){window.location.href='page10_rita.html';}
 function goHome(){window.location.href='page1_landing.html';}

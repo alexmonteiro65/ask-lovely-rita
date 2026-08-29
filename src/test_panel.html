@@ -90,7 +90,12 @@
     <label>Session Start (EBCs before this session)</label>
     <input type="number" id="sess-start" value="0" min="0">
   </div>
-  <p class="current" id="total-preview">Total: 800 EBCs | Session Earned: 800 | Shop Credit (50%): 400</p>
+  <hr class="divider">
+  <div class="row">
+    <label>⚡ Beat Burst EBCs (Beat Shop Credit)</label>
+    <input type="number" id="ebc-balance" value="500" min="0">
+  </div>
+  <p class="current" id="total-preview">Total: 800 BeatCoins | Beat Shop EBCs: 500</p>
 </div>
 
 <!-- COLLECTION -->
@@ -143,11 +148,9 @@ const ITEMS = {
 function updatePreview() {
   const lads = ['smart','cute','quiet','funny'];
   const total = lads.reduce((s,l) => s + Number(document.getElementById('bc-'+l).value||0), 0);
-  const sessStart = Number(document.getElementById('sess-start').value||0);
-  const earned = Math.max(0, total - sessStart);
-  const credit = Math.floor(earned * 0.5);
+  const ebc = Number(document.getElementById('ebc-balance')?.value||0);
   document.getElementById('total-preview').textContent =
-    `Total: ${total.toLocaleString()} EBCs | Session Earned: ${earned.toLocaleString()} | Shop Credit (50%): ${credit.toLocaleString()}`;
+    `BeatCoins Total: ${total.toLocaleString()} | Beat Shop EBCs: ${ebc.toLocaleString()}`;
 }
 
 ['smart','cute','quiet','funny'].forEach(l => {
@@ -187,6 +190,10 @@ function injectData() {
       localStorage.removeItem('lra_qty_'+id);
     }
   });
+
+  // Beat Burst EBCs — Beat Shop credit
+  const ebcBal = Number(document.getElementById('ebc-balance').value||0);
+  localStorage.setItem('lra_ebc_balance', ebcBal);
 
   // Terms accepted so page1 doesn't block
   localStorage.setItem('lra_terms_accepted', 'true');

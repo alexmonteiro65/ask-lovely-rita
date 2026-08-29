@@ -996,10 +996,10 @@ function showResult(idx) {
     S.beatcoins        += bonus;
     document.getElementById('bc-amount').textContent = S.beatcoins;
     saveStorage();
-    saveLadBC(bonus);  // Also credit to active Lad score
+    saveEBC(bonus);  // EBCs go directly to Beat Shop credit
     S.roundOver = true;
     celebrate();
-    toast(`🎉 BONUS! +${bonus} BeatCoins!`);
+    toast(`⚡ BEAT BURST! +${bonus} EBCs for the Beat Shop!`);
     setTimeout(() => speak(pick(RITA_WIN)), 500);
     showContinue();
 
@@ -1066,6 +1066,14 @@ function saveLadBC(amount) {
     const key = 'askLovelyRitaV4_bc_' + lad;
     const current = Number(localStorage.getItem(key) || 0);
     localStorage.setItem(key, current + amount);
+  } catch(e) {}
+}
+
+// Beat Burst EBCs — go directly to Beat Shop credit, separate from BeatCoins
+function saveEBC(amount) {
+  try {
+    const current = Number(localStorage.getItem('lra_ebc_balance') || 0);
+    localStorage.setItem('lra_ebc_balance', current + amount);
   } catch(e) {}
 }
 
