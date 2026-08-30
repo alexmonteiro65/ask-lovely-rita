@@ -1116,7 +1116,7 @@ function checkExpert() {
     speak(msg);
     S.qIndex++;
     document.getElementById('q-val').textContent=`${S.qIndex}/8`;
-    if(S.qIndex<8) setTimeout(()=>nextQuestion(), 5000);
+    if(S.qIndex<8) setTimeout(()=>nextQuestion(), speechDuration(msg||""));
     else setTimeout(()=>finishGame(),7000);
     setTimeout(()=>document.getElementById('scroll-area').scrollTo({top:9999,behavior:'smooth'}),300);
   }
@@ -1141,9 +1141,15 @@ function handleCorrect(msg) {
   speak(msg);
   S.qIndex++;
   document.getElementById('q-val').textContent=`${S.qIndex}/8`;
-  if(S.qIndex<8) setTimeout(()=>nextQuestion(), 5000);
+  if(S.qIndex<8) setTimeout(()=>nextQuestion(), speechDuration(msg||""));
   else setTimeout(()=>finishGame(),7000);
   setTimeout(()=>document.getElementById('scroll-area').scrollTo({top:9999,behavior:'smooth'}),300);
+}
+
+
+// Calculate speech duration: 75ms per character, min 4000ms, max 12000ms
+function speechDuration(text) {
+  return Math.min(Math.max(text.length * 75, 4000), 12000);
 }
 
 function nextQuestion() {
@@ -1200,7 +1206,7 @@ function showBonusGame() {
   };
   // Wait for celebrate speech to finish before speaking bonus msg
   setTimeout(()=>speak(msgs[S.level]||msgs.youngsters), 1200);
-  let count = 5;
+  let count = 7;
   const cd = document.getElementById('bonus-countdown');
   if (cd) cd.textContent = 'Going there in ' + count + ' seconds...';
   const iv = setInterval(() => {
