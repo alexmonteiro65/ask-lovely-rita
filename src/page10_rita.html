@@ -720,7 +720,19 @@ function init() {
   buildExpertKeyboard();
   applyLevel(S.level);
   highlightTab(S.level);
-  setTimeout(()=>{setPose('present');speak(RITA_INTRO[S.level]);},900);
+  // Only speak intro on manual load — autostart handles its own intro
+  if(!new URLSearchParams(window.location.search).get('autostart')) {
+    setTimeout(()=>{setPose('present');speak(RITA_INTRO[S.level]);},900);
+  } else {
+    // Coming from Choose World — hide start button and auto-begin
+    const _sb = document.getElementById('start-btn');
+    if(_sb) _sb.style.display = 'none';
+    setTimeout(() => {
+      speak(RITA_INTRO[S.level]);
+      const dur = Math.min(Math.max((RITA_INTRO[S.level]||'').length * 75, 5000), 14000);
+      setTimeout(() => startGame(), dur);
+    }, 600);
+  }
 }
 
 function setLevel(lvl) {
