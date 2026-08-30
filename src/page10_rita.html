@@ -724,16 +724,17 @@ function init() {
   if(!new URLSearchParams(window.location.search).get('autostart')) {
     setTimeout(()=>{setPose('present');speak(RITA_INTRO[S.level]);},900);
   } else {
-    // Coming from Choose World — start game directly
+    // Coming from Choose World — speak intro then start game via onend
     const _sb = document.getElementById('start-btn');
     if(_sb) _sb.style.display = 'none';
-    // Force audio unlock then start
     setTimeout(() => {
-      const _unlock = new SpeechSynthesisUtterance('');
-      window.speechSynthesis.speak(_unlock);
-      window.speechSynthesis.cancel();
-      startGame();
-    }, 500);
+      const introMsg = RITA_INTRO[S.level] || RITA_INTRO.youngsters;
+      setRitaSays(introMsg);
+      speak(introMsg, () => {
+        // Intro finished — now start game and read first question
+        startGame();
+      });
+    }, 600);
   }
 }
 
@@ -1112,8 +1113,8 @@ function checkExpert() {
     speak(msg);
     S.qIndex++;
     document.getElementById('q-val').textContent=`${S.qIndex}/8`;
-    if(S.qIndex<8) setTimeout(()=>nextQuestion(), speechDuration(msg||""));
-    else setTimeout(()=>finishGame(),7000);
+    if(S.qIndex<8) speak(msg, ()=>nextQuestion());
+    else speak(msg, ()=>setTimeout(()=>finishGame(),1500));
     setTimeout(()=>document.getElementById('scroll-area').scrollTo({top:9999,behavior:'smooth'}),300);
   }
 }
@@ -1293,19 +1294,26 @@ function playChime() {
 
 function speechDuration(text){return Math.min(Math.max((text||"").length*75,4000),12000);}
 
-function speak(text) {
-  if(localStorage.getItem('askLovelyRitaV4_mute')==='1') return;
-  if(!window.speechSynthesis)return;
+function speak(text, onEndCallback) {
+  if(localStorage.getItem('askLovelyRitaV4_mute')==='1'){if(onEndCallback)onEndCallback();return;}
+  if(!window.speechSynthesis){if(onEndCallback)onEndCallback();return;}
   window.speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang='en-GB';u.rate=0.9;u.pitch=1.1;
+  const doSpeak = () => {
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang='en-GB';u.rate=0.9;u.pitch=1.1;
+    const voices=window.speechSynthesis.getVoices();
+    const brit=voices.find(v=>v.lang==='en-GB'&&/female|woman/i.test(v.name))
+              ||voices.find(v=>v.lang==='en-GB')
+              ||voices.find(v=>v.lang.startsWith('en'));
+    if(brit)u.voice=brit;
+    const rita=document.getElementById('rita-pose');
+    if(rita)rita.classList.add('speaking');
+    u.onend=()=>{if(rita)rita.classList.remove('speaking');if(onEndCallback)onEndCallback();};
+    window.speechSynthesis.speak(u);
+  };
   const voices=window.speechSynthesis.getVoices();
-  const brit=voices.find(v=>v.lang==='en-GB'&&v.name.toLowerCase().includes('female'))||voices.find(v=>v.lang==='en-GB')||voices.find(v=>v.lang.startsWith('en'));
-  if(brit)u.voice=brit;
-  const rita=document.getElementById('rita-pose');
-  rita.classList.add('speaking');
-  u.onend=()=>rita.classList.remove('speaking');
-  window.speechSynthesis.speak(u);
+  if(voices.length>0){doSpeak();}
+  else{window.speechSynthesis.onvoiceschanged=()=>{window.speechSynthesis.onvoiceschanged=null;doSpeak();};}
 }
 function ritaSpeak(){setPose('curious');speak(document.getElementById('rita-says').textContent);}
 if(window.speechSynthesis){window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();}
