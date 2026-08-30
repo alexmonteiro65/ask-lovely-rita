@@ -214,13 +214,18 @@ const ALL_QS=[
   {era:2,q:"What are NFTs in the context of music and why are some artists using them in the 2020s?",answers:['New Festival Tickets','Non-Fungible Tokens — digital ownership certificates','National Federation of Talent','Network File Transfer'],correct:1,levels:['e'],fact:"Non-Fungible Tokens love! Some musicians sell unique digital items or unreleased music as NFTs giving fans exclusive ownership of digital assets. The future of music ownership is being debated!"},
 ];
 
-let S={level:'youngsters',score:0,qIndex:0,order:[],answered:false,currentQ:null,selectedEra:0};
+let S={level:'youngsters',score:0,qIndex:0,order:[],answered:false,currentQ:null,selectedEra:0,currentEra:-1};
 
 function init(){
   const lv=params.get('level')||localStorage.getItem('askLovelyRitaV4_level')||'youngsters';
   setLevel(lv,true);
   updateDisplay();
-  speak("Welcome to Jukebox Time love! I will take you on a journey through the history of music from the 1950s all the way to the future! Let us begin!");
+  // Auto-start — Rita welcomes then game begins automatically
+  const welcomeMsg="Welcome to Jukebox Time love! We are about to travel through music history. Starting with the Origins era — the fifties sixties and seventies!";
+  speak(welcomeMsg);
+  setRita(welcomeMsg);
+  // Start game after welcome speech (estimate 5s for speech)
+  setTimeout(()=>startGame(), 4000);
 }
 
 function setLevel(lv,silent){
@@ -228,6 +233,12 @@ function setLevel(lv,silent){
   document.body.className='theme-'+lv;
   ['y','g','e'].forEach(t=>document.getElementById('tab-'+t).classList.remove('active'));
   document.getElementById('tab-'+lv[0]).classList.add('active');
+  // Lock level tabs for Youngsters
+  if(lv==='youngsters'){
+    document.querySelectorAll('#level-tabs button').forEach(btn=>{
+      if(btn.id!=='tab-y'){btn.style.opacity='0.25';btn.style.pointerEvents='none';}
+    });
+  }
   if(!silent)resetGame();
 }
 
@@ -253,14 +264,18 @@ function resetGame(){
 
 function startGame(){
   const cfg=LEVEL_CFG[S.level];
-  // Mix from all eras, weighted toward selected era
+  // Structure: 2 questions per era in order (Origins → Classics → Evolution)
+  // Each play pulls different questions from each era pool
   const pool=ALL_QS.filter(q=>q.levels.includes(S.level[0]));
-  const preferred=pool.filter(q=>q.era===S.selectedEra);
-  const others=pool.filter(q=>q.era!==S.selectedEra);
-  const combined=[...shuffle(preferred),...shuffle(others)];
-  S.order=combined.map((_,i)=>i).slice(0,Math.min(cfg.qCount,combined.length));
-  S.questionPool=combined;
+  const era0=shuffle(pool.filter(q=>q.era===0));
+  const era1=shuffle(pool.filter(q=>q.era===1));
+  const era2=shuffle(pool.filter(q=>q.era===2));
+  // 2 from each era = 6 questions total
+  const structured=[...era0.slice(0,2),...era1.slice(0,2),...era2.slice(0,2)];
+  S.questionPool=structured;
+  S.order=structured.map((_,i)=>i);
   S.qIndex=0;
+  S.currentEra=-1;
   showQ();
 }
 
@@ -268,6 +283,23 @@ function showQ(){
   if(S.qIndex>=S.order.length){showCongrats();return;}
   const q=S.questionPool[S.order[S.qIndex]];
   S.currentQ=q;S.answered=false;
+  // Announce era change
+  if(q.era!==S.currentEra){
+    S.currentEra=q.era;
+    const era=ERAS[q.era];
+    document.querySelectorAll('.era-btn').forEach((b,i)=>b.classList.toggle('active',i===q.era));
+    document.getElementById('jukebox-era-display').textContent=era.icon+' '+era.name;
+    if(S.qIndex>0){
+      const eraMsg='Moving to '+era.name+' love! '+era.years+'!';
+      setRita(eraMsg);speak(eraMsg);
+      setTimeout(()=>showQContent(q),3000);
+      return;
+    }
+  }
+  showQContent(q);
+}
+
+function showQContent(q){
   document.getElementById('result-card').style.display='none';
   document.getElementById('question-card').style.display='block';
   document.getElementById('question-number').textContent=`Question ${S.qIndex+1} of ${S.order.length}`;
@@ -329,14 +361,9 @@ function showResult(ok,pts,q){
   const msg=ok?`Correct love! ${q.fact}`:`Not quite darling! ${q.fact}`;
   setRita(msg);speak(msg);
   document.getElementById('scroll-area').scrollTop=9999;
-  // Auto-advance: 4s to next question, 5s if last (to show results)
-  let sec=isLast?5:4;
-  nb.textContent=(isLast?'See Results! ':'Next Question → ')+sec+'s';
-  const iv=setInterval(()=>{
-    sec--;
-    nb.textContent=(isLast?'See Results! ':'Next Question → ')+(sec>0?sec+'s':'...');
-    if(sec<=0){clearInterval(iv);nextQ();}
-  },1000);
+  // Estimate speech duration: ~80ms per character, min 4s, max 10s
+  const speechMs = Math.min(Math.max(msg.length * 75, 4000), 10000);
+  setTimeout(()=>nextQ(), speechMs);
 }
 
 function nextQ(){
