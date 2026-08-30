@@ -1104,7 +1104,18 @@ function buildStars() {
 //  OPEN WORLD MODAL
 // ════════════════════════════════
 
+function activateAudio() {
+  try {
+    if(window.speechSynthesis) {
+      const u = new SpeechSynthesisUtterance('');
+      window.speechSynthesis.speak(u);
+      window.speechSynthesis.cancel();
+    }
+  } catch(e) {}
+}
+
 function goDirectToWorld(key) {
+  activateAudio();
   const level = S.level || localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
   const pageMap = {
     ocean: 'page6_octopus.html',
@@ -1113,7 +1124,7 @@ function goDirectToWorld(key) {
     city:  'page9_city.html'
   };
   const dest = pageMap[key];
-  if (dest) window.location.href = dest + '?level=' + level;
+  if (dest) window.location.href = dest + '?level=' + level + '&autostart=1';
 }
 
 function openWorld(key) {
