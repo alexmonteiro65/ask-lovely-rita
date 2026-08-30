@@ -777,8 +777,14 @@ function applyLevel(lvl) {
     // Hide start button — game starts automatically
     const _sb = document.getElementById('start-btn');
     if(_sb) _sb.style.display = 'none';
-    // Brief delay for Rita's welcome speech then start
-    setTimeout(() => startGame(), 1500);
+    // Rita speaks intro first — calculate speech duration then start game
+    setTimeout(() => {
+      const introMsg = RITA_INTRO[S.level] || RITA_INTRO.youngsters;
+      speak(introMsg);
+      // Start game after Rita finishes speaking (75ms per char, min 5s, max 14s)
+      const delay = Math.min(Math.max(introMsg.length * 75, 5000), 14000);
+      setTimeout(() => startGame(), delay);
+    }, 800);
   }
 }
 
