@@ -653,7 +653,7 @@ const Q_EXPERTS = [
 
 // ── RITA SPEECHES
 const RITA_INTRO = {
-  youngsters: "Hello love! Welcome to Rita's World! Here you need to answer me using only words from the Lads' Universe. Click to enter and choose the album that has the right answer darling!",
+  youngsters: "Hello love! Welcome to Rita's World! Here you need to answer me using only words from the Lads' Universe. Click on the album that has the right answer darling!",
   grownups:   "Hello there! Welcome to Rita's World! I will tell you something and you fill in the missing word. Type what the Lads would say love!",
   experts:    "Right then! Expert level love! I will give you a line and you give me the next one. Type it sing it or say it into the mic. Yes you can actually SING it love! Show me what you have got!",
 };
@@ -777,14 +777,14 @@ function applyLevel(lvl) {
     // Hide start button — game starts automatically
     const _sb = document.getElementById('start-btn');
     if(_sb) _sb.style.display = 'none';
-    // Rita speaks intro first — calculate speech duration then start game
+    // Start game immediately so images/content load — Rita speaks welcome in parallel
+    startGame();
+    // Rita speaks intro over the already-loaded first question
     setTimeout(() => {
       const introMsg = RITA_INTRO[S.level] || RITA_INTRO.youngsters;
+      setRitaSays(introMsg);
       speak(introMsg);
-      // Start game after Rita finishes speaking (75ms per char, min 5s, max 14s)
-      const delay = Math.min(Math.max(introMsg.length * 75, 5000), 14000);
-      setTimeout(() => startGame(), delay);
-    }, 800);
+    }, 400);
   }
 }
 
