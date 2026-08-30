@@ -697,7 +697,7 @@ const LEVEL_CFG = {
 };
 
 // ── STATE
-let S = { suppressSpeak: false,
+let S = {
   level:'youngsters', beatcoins: 0, score:0,
   qIndex:0, order:[], gameActive:false, answered:false,
   grownupTries:0, currentQ:null,
@@ -771,37 +771,19 @@ function applyLevel(lvl) {
       }
     });
   }
-  // Auto-start if coming from Choose World (no landing page needed)
+  // Auto-start if coming from Choose World
   const _params = new URLSearchParams(window.location.search);
   if(_params.get('autostart') === '1') {
     const _sb = document.getElementById('start-btn');
     if(_sb) _sb.style.display = 'none';
-    // Suppress question speech BEFORE startGame runs
-    S.suppressSpeak = true;
-    // Load game content (images appear immediately, no speech)
-    startGame();
-    // Rita speaks intro after short delay for voices to load
+    // Rita speaks intro then startGame handles everything normally
     setTimeout(() => {
       const introMsg = RITA_INTRO[S.level] || RITA_INTRO.youngsters;
       setRitaSays(introMsg);
-      const u = new SpeechSynthesisUtterance(introMsg);
-      u.lang = 'en-GB'; u.rate = 0.92; u.pitch = 1.1;
-      const voices = window.speechSynthesis.getVoices();
-      const v = voices.find(x=>x.lang==='en-GB'&&/female|woman/i.test(x.name))
-             || voices.find(x=>x.lang==='en-GB')
-             || voices.find(x=>x.lang.startsWith('en'));
-      if(v) u.voice = v;
-      // When intro finishes, speak the first question
-      u.onend = () => {
-        S.suppressSpeak = false;
-        const qArr = S.level==='youngsters' ? Q_YOUNGSTERS
-                   : S.level==='grownups'   ? Q_GROWNUPS
-                   : Q_EXPERTS;
-        const q = qArr && qArr[S.order && S.order[0]];
-        if(q && q.prompt) speak(q.prompt.replace(/[()]/g,''));
-      };
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(u);
+      speak(introMsg);
+      // Wait for intro to finish, then start game normally
+      const introDuration = Math.min(Math.max(introMsg.length * 75, 5000), 14000);
+      setTimeout(() => startGame(), introDuration);
     }, 700);
   }
 }
@@ -1008,7 +990,7 @@ function loadQuestion() {
     document.getElementById('q-prompt').innerHTML = promptText;
     document.getElementById('q-category').textContent = '♪ Which album has the answer?';
     buildAlbumGrid(q);
-    setTimeout(()=>{ if(!S.suppressSpeak) speak(q.prompt.replace(/[()]/g,'')); },400);
+    setTimeout(()=>{ speak(q.prompt.replace(/[()]/g,'')); },400);
 
   } else if(S.level==='grownups') {
     document.getElementById('q-prompt').textContent="";
