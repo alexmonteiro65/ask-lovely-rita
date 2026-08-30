@@ -740,7 +740,7 @@
 
         <!-- OCTOPUS'S GARDEN -->
         <!-- RITA'S WORLD -->
-        <div class="world-card rita-world" onclick="activateAudio();window.location.href='page10_rita.html?autostart=1'" style="border-color:rgba(255,20,147,.4);">
+        <div class="world-card rita-world" onclick="activateAudio();setTimeout(()=>{window.location.href='page10_rita.html?autostart=1';},100)" style="border-color:rgba(255,20,147,.4);">
           <div class="world-scene scene-rita">
             <div class="music-note" style="left:8%;--nd:2.8s;animation-delay:0s">🎵</div>
             <div class="music-note" style="left:22%;--nd:3.5s;animation-delay:.7s">♪</div>
@@ -1121,7 +1121,7 @@ function goDirectToWorld(key) {
     city:  'page9_city.html'
   };
   const dest = pageMap[key];
-  if (dest) window.location.href = dest + '?level=' + level + '&autostart=1';
+  if (dest) { activateAudio(); setTimeout(()=>{ window.location.href = dest + '?level=' + level + '&autostart=1'; }, 100); }
 }
 
 function openWorld(key) {
