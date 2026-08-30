@@ -511,7 +511,7 @@ body.theme-experts    { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-grad
       <!-- ACTION BTNS -->
       <div id="action-btns">
         <button class="act-btn" id="start-btn" onclick="startGame()">🎤 Enter Rita's World!</button>
-        <button class="act-btn" id="next-btn" onclick="nextQuestion()">Next ▶</button>
+        <!-- next-btn removed — auto-advance via onend -->
       </div>
 
       <!-- RESULT -->
@@ -720,6 +720,7 @@ function init() {
   buildExpertKeyboard();
   applyLevel(S.level);
   highlightTab(S.level);
+  resetGame();
   // Only speak intro on manual load — autostart handles its own intro
   if(!new URLSearchParams(window.location.search).get('autostart')) {
     setTimeout(()=>{setPose('present');speak(RITA_INTRO[S.level]);},900);
@@ -1135,11 +1136,13 @@ function handleCorrect(msg) {
   document.getElementById('result-pts').style.color='#4ade80';
   document.getElementById('result-panel').classList.add('show');
   celebrate();
-  speak(msg);
   S.qIndex++;
   document.getElementById('q-val').textContent=`${S.qIndex}/8`;
-  if(S.qIndex<8) setTimeout(()=>nextQuestion(), speechDuration(msg||""));
-  else setTimeout(()=>finishGame(),7000);
+  if(S.qIndex<8) {
+    speak(msg, ()=>nextQuestion());
+  } else {
+    speak(msg, ()=>setTimeout(()=>finishGame(),1500));
+  }
   setTimeout(()=>document.getElementById('scroll-area').scrollTo({top:9999,behavior:'smooth'}),300);
 }
 
@@ -1165,12 +1168,12 @@ function finishGame() {
   document.getElementById('result-pts').style.color='#ffde59';
   document.getElementById('result-panel').classList.add('show');
   document.getElementById('next-btn').style.display='none';
-  document.getElementById('start-btn').textContent='🔄 Play Again!';
-  document.getElementById('start-btn').style.display='block';
-  document.getElementById('start-btn').onclick=()=>{resetGame();startGame();};
+  // NO Play Again — auto-advance via showCongrats
+  document.getElementById('start-btn').style.display='none';
   celebrate();
-  setTimeout(()=>speak(pick(RITA_COMPLETE)),500);
-  showCongrats(bonus);
+  speak(pick(RITA_COMPLETE), ()=>{
+    setTimeout(()=>showCongrats(bonus), 500);
+  });
 }
 
 
@@ -1183,7 +1186,7 @@ function showCongrats(bonus) {
   document.getElementById('congrats-bc').textContent = '+' + bonus + ' BeatCoins earned!';
   ov.classList.add('show');
   setTimeout(()=>document.getElementById('congrats-bar').style.width='100%', 50);
-  setTimeout(()=>{ ov.classList.remove('show'); showBonusGame(); }, 2600);
+  setTimeout(()=>{ ov.classList.remove('show'); showBonusGame(); }, 4000);
 }
 
 function showBonusGame() {
@@ -1302,9 +1305,13 @@ function speak(text, onEndCallback) {
     const u=new SpeechSynthesisUtterance(text);
     u.lang='en-GB';u.rate=0.9;u.pitch=1.1;
     const voices=window.speechSynthesis.getVoices();
-    const brit=voices.find(v=>v.lang==='en-GB'&&/female|woman/i.test(v.name))
+    const brit=voices.find(v=>v.name==='Google UK English Female')
+              ||voices.find(v=>v.name==='Microsoft Hazel Desktop - English (Great Britain)')
+              ||voices.find(v=>v.name==='Microsoft Susan')
+              ||voices.find(v=>v.lang==='en-GB'&&/female|woman/i.test(v.name))
+              ||voices.find(v=>v.lang==='en-GB'&&!/male/i.test(v.name))
               ||voices.find(v=>v.lang==='en-GB')
-              ||voices.find(v=>v.lang.startsWith('en'));
+              ||voices.find(v=>v.lang.startsWith('en-'));
     if(brit)u.voice=brit;
     const rita=document.getElementById('rita-pose');
     if(rita)rita.classList.add('speaking');
