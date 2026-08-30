@@ -58,11 +58,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0a14;color:#fff;m
   <div id="start-overlay">
     <div id="start-title">🎵 Rhythm Bounce</div>
     <div id="start-sub">Tap the screen to bounce the ball over barriers. Each barrier cleared earns EBCs! How far can you go?</div>
-    <div id="level-tabs-start">
-      <button class="active" id="stab-y" onclick="selectLevel('youngsters',this)">🟣 Easy</button>
-      <button id="stab-g" onclick="selectLevel('grownups',this)">🟡 Medium</button>
-      <button id="stab-e" onclick="selectLevel('experts',this)">⭐ Hard</button>
-    </div>
+<div id="level-display" style="font-size:12px;color:rgba(255,255,255,.5);padding:4px 12px;background:rgba(255,255,255,.06);border-radius:12px;" id="level-display"></div>
     <button id="start-btn" onclick="startGame()">▶ PLAY</button>
   </div>
 
@@ -107,6 +103,10 @@ function startGame(){
   document.getElementById('start-overlay').style.display='none';
   document.getElementById('end-overlay').style.display='none';
   resize();
+// Show current level, don't allow changing
+const _ld = document.getElementById('level-display');
+const _lvMap = {youngsters:'🟣 Easy Mode', grownups:'🟡 Medium Mode', experts:'⭐ Expert Mode'};
+if(_ld) _ld.textContent = _lvMap[level] || '🟣 Easy Mode';
   const cfg=LEVEL_CFG[level];
   S={
     running:true,
@@ -298,7 +298,11 @@ function speak(text){
   const voice=v.find(x=>x.lang==='en-GB'&&/female|woman/i.test(x.name))||v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));
   if(voice)u.voice=voice;window.speechSynthesis.speak(u);
 }
-function setDevice(w,h,btn){document.querySelectorAll('#device-bar button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const p=document.getElementById('phone');p.style.width=w+'px';p.style.height=h+'px';resize();}
+function setDevice(w,h,btn){document.querySelectorAll('#device-bar button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const p=document.getElementById('phone');p.style.width=w+'px';p.style.height=h+'px';resize();
+// Show current level, don't allow changing
+const _ld = document.getElementById('level-display');
+const _lvMap = {youngsters:'🟣 Easy Mode', grownups:'🟡 Medium Mode', experts:'⭐ Expert Mode'};
+if(_ld) _ld.textContent = _lvMap[level] || '🟣 Easy Mode';}
 
 // Init level from URL
 const lv=params.get('level')||localStorage.getItem('askLovelyRitaV4_level')||'youngsters';
@@ -307,6 +311,10 @@ const tabMap={youngsters:'stab-y',grownups:'stab-g',experts:'stab-e'};
 document.querySelectorAll('#level-tabs-start button').forEach(b=>b.classList.remove('active'));
 if(tabMap[lv])document.getElementById(tabMap[lv]).classList.add('active');
 resize();
+// Show current level, don't allow changing
+const _ld = document.getElementById('level-display');
+const _lvMap = {youngsters:'🟣 Easy Mode', grownups:'🟡 Medium Mode', experts:'⭐ Expert Mode'};
+if(_ld) _ld.textContent = _lvMap[level] || '🟣 Easy Mode';
 speak("Welcome to Rhythm Bounce love! Choose your level and tap the screen to make the ball bounce over the barriers. Each barrier earns you EBCs for the Beat Shop!");
 </script>
 <!-- ADMIN TEST NAV -->

@@ -163,7 +163,7 @@ body.theme-experts{--accent:#c8a96e;--btn-grad:linear-gradient(135deg,#c8a96e,#6
       <div id="result-title">Brilliant!</div>
       <div id="result-pts">+40 BeatCoins</div>
       <div id="result-fact">Music history fact here</div>
-      <button id="next-btn" onclick="nextQ()">Next Question →</button>
+      <!-- next-btn removed — auto-advance handles this -->
     </div>
     <div id="congrats-card">
       <div id="congrats-title">🎵 Music Historian!</div>
@@ -225,7 +225,8 @@ function init(){
   speak(welcomeMsg);
   setRita(welcomeMsg);
   // Start game after welcome speech (estimate 5s for speech)
-  setTimeout(()=>startGame(), 4000);
+  const _wMsg="Welcome to Jukebox Time love! We are about to travel through music history. Starting with the Origins era — the fifties sixties and seventies!";
+  setTimeout(()=>startGame(), Math.min(Math.max(_wMsg.length*75,5000),12000));
 }
 
 function setLevel(lv,silent){
@@ -292,7 +293,7 @@ function showQ(){
     if(S.qIndex>0){
       const eraMsg='Moving to '+era.name+' love! '+era.years+'!';
       setRita(eraMsg);speak(eraMsg);
-      setTimeout(()=>showQContent(q),3000);
+      setTimeout(()=>showQContent(q), speechDuration(eraMsg));
       return;
     }
   }
@@ -355,8 +356,8 @@ function showResult(ok,pts,q){
   document.getElementById('result-pts').textContent=ok?`+${pts} BeatCoins!`:`The answer is: ${q.answers[q.correct]}`;
   document.getElementById('result-fact').textContent=q.fact;
   const isLast=S.qIndex+1>=S.order.length;
-  const nb=document.getElementById('next-btn');
-  nb.textContent=isLast?'See Results!':'Next Question →';
+  const nb=document.getElementById('next-btn'); // may be null
+  if(nb) nb.textContent=isLast?'See Results!':'Next Question →';
   rc.style.display='block';
   const msg=ok?`Correct love! ${q.fact}`:`Not quite darling! ${q.fact}`;
   setRita(msg);speak(msg);
@@ -389,7 +390,8 @@ function showCongrats(){
   document.getElementById('scroll-area').scrollTop=9999;
   // Auto-advance to Rhythm Bounce after 5s
   const bb=document.getElementById('bonus-btn');
-  let sec=5;
+  const _congDur=speechDuration(msg);
+  let sec=Math.ceil(_congDur/1000);
   if(bb) bb.textContent='⚡ Rhythm Bounce in '+sec+'s...';
   const iv=setInterval(()=>{
     sec--;
@@ -400,9 +402,15 @@ function showCongrats(){
 
 function updateDisplay(){
   const total=['smart','cute','quiet','funny'].reduce((s,l)=>s+Number(localStorage.getItem('askLovelyRitaV4_bc_'+l)||0),0);
-  document.getElementById('bc-val').textContent=total;
+  const _bcEl=document.getElementById('bc-val'); if(_bcEl) _bcEl.textContent=total;
   document.getElementById('score-val').textContent=S.score;
 }
+
+// Calculate speech duration: 75ms per character, min 4000ms, max 12000ms
+function speechDuration(text) {
+  return Math.min(Math.max(text.length * 75, 4000), 12000);
+}
+
 function setRita(t){document.getElementById('rita-text').textContent=t;}
 function speakRita(){speak(document.getElementById('rita-text').textContent);}
 function speak(text){if(localStorage.getItem('askLovelyRitaV4_mute')==='1'||!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.92;u.pitch=1.1;const v=window.speechSynthesis.getVoices();const voice=v.find(x=>x.lang==='en-GB'&&/female|woman/i.test(x.name))||v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));if(voice)u.voice=voice;window.speechSynthesis.speak(u);}
