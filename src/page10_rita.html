@@ -771,6 +771,15 @@ function applyLevel(lvl) {
       }
     });
   }
+  // Auto-start if coming from Choose World (no landing page needed)
+  const _params = new URLSearchParams(window.location.search);
+  if(_params.get('autostart') === '1') {
+    // Hide start button — game starts automatically
+    const _sb = document.getElementById('start-btn');
+    if(_sb) _sb.style.display = 'none';
+    // Brief delay for Rita's welcome speech then start
+    setTimeout(() => startGame(), 1500);
+  }
 }
 
 // ── STAGE BG
