@@ -218,12 +218,11 @@ body.theme-experts    { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-grad
   background:rgba(0,0,0,.3); border:1px solid rgba(255,215,0,.15);
   border-radius:18px; padding:12px; text-align:center;
 }
-#q-category { font-size:8px; color:#ffd700; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;   display:none;
-}
+#q-category { font-size:8px; color:#ffd700; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
 #q-prompt {
   font-size:14px; font-weight:700; color:#fff;
   line-height:1.6; margin-bottom:10px; min-height:44px;
-  }
+}
 /* Blank highlight */
 #q-prompt .blank {
   color:#ffd700; font-size:16px; letter-spacing:2px;
@@ -351,7 +350,6 @@ body.theme-experts    { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-grad
   flex:1; padding:10px; border:none; border-radius:24px;
   font-size:11px; font-weight:800; letter-spacing:.5px; text-transform:uppercase;
   cursor:pointer; transition:transform .15s; position:relative; overflow:hidden;
-  word-break:break-word; overflow-wrap:anywhere; hyphens:auto;
 }
 .act-btn::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(255,255,255,.14),transparent); border-radius:inherit; }
 .act-btn:hover:not(:disabled) { transform:scale(1.03); }
@@ -434,7 +432,7 @@ body.theme-experts    { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-grad
 
       <div id="page-header">
         <h1>🎤 Rita's World</h1>
-        <p style="margin-top:4px;">&nbsp;</p>
+        <p>Only Lads' language is spoken here!</p>
       </div>
 
       <div id="level-tabs">
@@ -466,7 +464,7 @@ body.theme-experts    { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-grad
 
       <!-- QUESTION -->
       <div id="question-area">
-        <div id="q-category" style="display:none;">♪ Rita's World</div>
+        <div id="q-category">♪ Rita's World</div>
         <div id="q-prompt">Click below to enter Rita's World!</div>
 
         <!-- YOUNGSTERS -->
@@ -513,7 +511,7 @@ body.theme-experts    { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-grad
       <!-- ACTION BTNS -->
       <div id="action-btns">
         <button class="act-btn" id="start-btn" onclick="startGame()">🎤 Enter Rita's World!</button>
-        <!-- next-btn removed — auto-advance handles this -->
+        <button class="act-btn" id="next-btn" onclick="nextQuestion()">Next ▶</button>
       </div>
 
       <!-- RESULT -->
@@ -531,15 +529,7 @@ body.theme-experts    { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-grad
 
     </div>
 
-    <!-- CONGRATS OVERLAY -->
-  <div id="congrats-overlay">
-    <div id="congrats-emoji" style="font-size:56px;margin-bottom:12px;">🎤</div>
-    <div id="congrats-title" style="font-size:22px;font-weight:900;color:#ff6ef7;margin-bottom:6px;">Rita's Star!</div>
-    <div id="congrats-sub" style="font-size:13px;color:rgba(255,255,255,.7);margin-bottom:16px;">You rocked Rita's World love!</div>
-    <div id="congrats-bc" style="font-size:16px;font-weight:700;color:#ffde59;margin-bottom:20px;"></div>
-    <div id="congrats-bar-wrap"><div id="congrats-bar"></div></div>
-  </div>
-  <nav id="nav-bar">
+    <nav id="nav-bar">
       <button class="nav-btn nav-home" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
       <button class="nav-btn" onclick="goChooseWorld()"><span class="nav-icon">🌍</span><span>Choose World</span></button>
       <button class="nav-btn" onclick="goNextPage()"><span class="nav-icon">▶️</span><span>Next Page</span></button>
@@ -653,7 +643,7 @@ const Q_EXPERTS = [
 
 // ── RITA SPEECHES
 const RITA_INTRO = {
-  youngsters: "Hello love! Welcome to Rita's World! Here you need to answer me using only words from the Lads' Universe. Click on the album that has the right answer darling!",
+  youngsters: "Hello love! Welcome to Rita's World! Here you need to answer me using only words from the Lads' Universe. Click to enter and choose the album that has the right answer darling!",
   grownups:   "Hello there! Welcome to Rita's World! I will tell you something and you fill in the missing word. Type what the Lads would say love!",
   experts:    "Right then! Expert level love! I will give you a line and you give me the next one. Type it sing it or say it into the mic. Yes you can actually SING it love! Show me what you have got!",
 };
@@ -762,30 +752,6 @@ function applyLevel(lvl) {
   document.getElementById('rita-says').textContent=RITA_INTRO[lvl];
   document.getElementById('bc-val').textContent=S.beatcoins;
   resetGame();
-  // Lock level tabs for Youngsters
-  const _lv = localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
-  if(_lv === 'youngsters') {
-    document.querySelectorAll('#level-tabs button').forEach(btn => {
-      if(!btn.textContent.toLowerCase().includes('young')) {
-        btn.style.opacity='0.3'; btn.style.pointerEvents='none';
-      }
-    });
-  }
-  // Auto-start if coming from Choose World
-  const _params = new URLSearchParams(window.location.search);
-  if(_params.get('autostart') === '1') {
-    const _sb = document.getElementById('start-btn');
-    if(_sb) _sb.style.display = 'none';
-    // Rita speaks intro then startGame handles everything normally
-    setTimeout(() => {
-      const introMsg = RITA_INTRO[S.level] || RITA_INTRO.youngsters;
-      setRitaSays(introMsg);
-      speak(introMsg);
-      // Wait for intro to finish, then start game normally
-      const introDuration = Math.min(Math.max(introMsg.length * 75, 5000), 14000);
-      setTimeout(() => startGame(), introDuration);
-    }, 700);
-  }
 }
 
 // ── STAGE BG
@@ -944,7 +910,7 @@ function resetGame() {
   S.order=shuffle([...Array(qArr.length).keys()]);
   document.getElementById('score-val').textContent='0';
   document.getElementById('q-val').textContent='0/8';
-  document.getElementById('q-prompt').textContent="";
+  document.getElementById('q-prompt').textContent='Click below to enter Rita\'s World!';
   document.getElementById('q-category').textContent="♪ Rita's World";
   document.getElementById('album-grid').innerHTML='';
   document.getElementById('album-grid').style.display='none';
@@ -955,7 +921,7 @@ function resetGame() {
   document.getElementById('start-btn').style.display='block';
   document.getElementById('start-btn').textContent='🎤 Enter Rita\'s World!';
   document.getElementById('start-btn').onclick=startGame;
-  const _nb=document.getElementById('next-btn'); if(_nb) _nb.style.display='none';
+  document.getElementById('next-btn').style.display='none';
   // Hide bonus area on reset
   const ba = document.getElementById('bonus-area');
   if (ba) ba.style.display = 'none';
@@ -976,7 +942,7 @@ function loadQuestion() {
 
   document.getElementById('q-val').textContent=`${S.qIndex+1}/8`;
   document.getElementById('result-panel').classList.remove('show');
-  const _nb=document.getElementById('next-btn'); if(_nb) _nb.style.display='none';
+  document.getElementById('next-btn').style.display='none';
   document.getElementById('word-reveal').style.display='none';
   document.getElementById('album-grid').style.display='none';
   document.getElementById('grownup-area').style.display='none';
@@ -990,10 +956,10 @@ function loadQuestion() {
     document.getElementById('q-prompt').innerHTML = promptText;
     document.getElementById('q-category').textContent = '♪ Which album has the answer?';
     buildAlbumGrid(q);
-    setTimeout(()=>{ speak(q.prompt.replace(/[()]/g,'')); },400);
+    setTimeout(()=>speak(q.prompt.replace(/[()]/g,'')),400);
 
   } else if(S.level==='grownups') {
-    document.getElementById('q-prompt').textContent="";
+    document.getElementById('q-prompt').textContent='';
     document.getElementById('q-category').textContent='♪ Fill in the blank';
     // Build dashes
     const dashes='('+'-'.repeat(q.dashes)+')';
@@ -1014,7 +980,7 @@ function loadQuestion() {
 
   } else {
     // Experts
-    document.getElementById('q-prompt').textContent="";
+    document.getElementById('q-prompt').textContent='';
     document.getElementById('q-category').textContent='♪ Complete the next line';
     document.getElementById('expert-lyric').textContent=q.lyric;
     document.getElementById('expert-input').value='';
@@ -1132,8 +1098,8 @@ function checkExpert() {
     speak(msg);
     S.qIndex++;
     document.getElementById('q-val').textContent=`${S.qIndex}/8`;
-    if(S.qIndex<8) setTimeout(()=>nextQuestion(), speechDuration(msg||""));
-    else setTimeout(()=>finishGame(),7000);
+    if(S.qIndex<8) document.getElementById('next-btn').style.display='block';
+    else setTimeout(()=>finishGame(),2000);
     setTimeout(()=>document.getElementById('scroll-area').scrollTo({top:9999,behavior:'smooth'}),300);
   }
 }
@@ -1157,19 +1123,13 @@ function handleCorrect(msg) {
   speak(msg);
   S.qIndex++;
   document.getElementById('q-val').textContent=`${S.qIndex}/8`;
-  if(S.qIndex<8) setTimeout(()=>nextQuestion(), speechDuration(msg||""));
-  else setTimeout(()=>finishGame(),7000);
+  if(S.qIndex<8) document.getElementById('next-btn').style.display='block';
+  else setTimeout(()=>finishGame(),2000);
   setTimeout(()=>document.getElementById('scroll-area').scrollTo({top:9999,behavior:'smooth'}),300);
 }
 
-
-// Calculate speech duration: 75ms per character, min 4000ms, max 12000ms
-function speechDuration(text) {
-  return Math.min(Math.max(text.length * 75, 4000), 12000);
-}
-
 function nextQuestion() {
-  const _nb=document.getElementById('next-btn'); if(_nb) _nb.style.display='none';
+  document.getElementById('next-btn').style.display='none';
   document.getElementById('result-panel').classList.remove('show');
   loadQuestion();
 }
@@ -1189,10 +1149,10 @@ function finishGame() {
   document.getElementById('result-pts').textContent=`+${bonus} Bonus BeatCoins!`;
   document.getElementById('result-pts').style.color='#ffde59';
   document.getElementById('result-panel').classList.add('show');
-  const _nb=document.getElementById('next-btn'); if(_nb) _nb.style.display='none';
-  // Play Again button hidden — flow continues automatically via showBonusGame
-  document.getElementById('start-btn').style.display='none';
-  // NOTE: Play Again button exists in HTML — can be re-enabled later if needed
+  document.getElementById('next-btn').style.display='none';
+  document.getElementById('start-btn').textContent='🔄 Play Again!';
+  document.getElementById('start-btn').style.display='block';
+  document.getElementById('start-btn').onclick=()=>{resetGame();startGame();};
   celebrate();
   setTimeout(()=>speak(pick(RITA_COMPLETE)),500);
   showCongrats(bonus);
@@ -1216,13 +1176,13 @@ function showBonusGame() {
   if (!area) return;
   area.style.display = 'block';
   const msgs = {
-    youngsters: "Magnificent love! You are a Rita's World star! Now we are moving on to the Bonus Round — Tap the Beat! Get ready darling!",
-    grownups: "Brilliant darling! Rita is so proud of you! Next up is your Bonus Round — Tap the Beat! Here we go love!",
-    experts: "Outstanding love! A true music expert! Your Bonus Round awaits — Tap the Beat is next! Moving on now!"
+    youngsters: "Magnificent love! You finished Rita's World! Tap the Beat bonus is yours! Going there in 5 seconds!",
+    grownups: "Brilliant darling! Rita is so proud! Tap the Beat awaits you in 5 seconds!",
+    experts: "Outstanding love! A true music expert! Tap the Beat bonus is unlocked! Off we go in 5 seconds!"
   };
   // Wait for celebrate speech to finish before speaking bonus msg
   setTimeout(()=>speak(msgs[S.level]||msgs.youngsters), 1200);
-  let count = 7;
+  let count = 5;
   const cd = document.getElementById('bonus-countdown');
   if (cd) cd.textContent = 'Going there in ' + count + ' seconds...';
   const iv = setInterval(() => {
@@ -1355,11 +1315,5 @@ function setDevice(w,h,name){const p=document.getElementById('phone');p.style.wi
 
 init();
 </script>
-<!-- ADMIN TEST NAV -->
-<div id="admin-nav" style="position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;gap:6px;background:rgba(0,0,0,.7);padding:5px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.2);">
-  <button onclick="history.back()" style="background:#a855f7;border:none;color:#fff;padding:5px 12px;border-radius:12px;font-size:11px;font-weight:700;cursor:pointer;">◀ PREV</button>
-  <span style="color:rgba(255,255,255,.4);font-size:9px;line-height:30px;">ADMIN</span>
-  <button onclick="window.location.href='page3c_tapthebeat.html?level='+(localStorage.getItem('askLovelyRitaV4_level')||'youngsters')+'&from=rita'" style="background:#4ade80;border:none;color:#000;padding:5px 12px;border-radius:12px;font-size:11px;font-weight:700;cursor:pointer;">NEXT ▶</button>
-</div>
 </body>
 </html>
