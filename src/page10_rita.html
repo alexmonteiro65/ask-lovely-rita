@@ -776,24 +776,33 @@ function applyLevel(lvl) {
   if(_params.get('autostart') === '1') {
     const _sb = document.getElementById('start-btn');
     if(_sb) _sb.style.display = 'none';
-    // Step 1: load game content immediately (images appear, no speech yet)
-    startGame();
-    // Step 2: suppress the automatic speak inside loadQuestion on first load
+    // Suppress question speech BEFORE startGame runs
     S.suppressSpeak = true;
-    // Step 3: Rita speaks intro
+    // Load game content (images appear immediately, no speech)
+    startGame();
+    // Rita speaks intro after short delay for voices to load
     setTimeout(() => {
       const introMsg = RITA_INTRO[S.level] || RITA_INTRO.youngsters;
       setRitaSays(introMsg);
-      speak(introMsg);
-      // Step 4: after intro finishes, Rita reads the first question
-      const introDuration = Math.min(Math.max(introMsg.length * 75, 5000), 14000);
-      setTimeout(() => {
+      const u = new SpeechSynthesisUtterance(introMsg);
+      u.lang = 'en-GB'; u.rate = 0.92; u.pitch = 1.1;
+      const voices = window.speechSynthesis.getVoices();
+      const v = voices.find(x=>x.lang==='en-GB'&&/female|woman/i.test(x.name))
+             || voices.find(x=>x.lang==='en-GB')
+             || voices.find(x=>x.lang.startsWith('en'));
+      if(v) u.voice = v;
+      // When intro finishes, speak the first question
+      u.onend = () => {
         S.suppressSpeak = false;
-        // Re-speak the current question
-        const q = S.questions && S.questions[S.qIndex];
+        const qArr = S.level==='youngsters' ? Q_YOUNGSTERS
+                   : S.level==='grownups'   ? Q_GROWNUPS
+                   : Q_EXPERTS;
+        const q = qArr && qArr[S.order && S.order[0]];
         if(q && q.prompt) speak(q.prompt.replace(/[()]/g,''));
-      }, introDuration);
-    }, 600);
+      };
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+    }, 700);
   }
 }
 
