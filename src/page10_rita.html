@@ -724,10 +724,16 @@ function init() {
   if(!new URLSearchParams(window.location.search).get('autostart')) {
     setTimeout(()=>{setPose('present');speak(RITA_INTRO[S.level]);},900);
   } else {
-    // Coming from Choose World — go straight to game, no intro speech
+    // Coming from Choose World — start game directly
     const _sb = document.getElementById('start-btn');
     if(_sb) _sb.style.display = 'none';
-    setTimeout(() => startGame(), 800);
+    // Force audio unlock then start
+    setTimeout(() => {
+      const _unlock = new SpeechSynthesisUtterance('');
+      window.speechSynthesis.speak(_unlock);
+      window.speechSynthesis.cancel();
+      startGame();
+    }, 500);
   }
 }
 
