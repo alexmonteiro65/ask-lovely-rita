@@ -687,7 +687,7 @@ const LEVEL_CFG = {
 };
 
 // ── STATE
-let S = { firstLoad: false,
+let S = {
   level:'youngsters', beatcoins: 0, score:0,
   qIndex:0, order:[], gameActive:false, answered:false,
   grownupTries:0, currentQ:null,
@@ -724,31 +724,17 @@ function init() {
   if(!new URLSearchParams(window.location.search).get('autostart')) {
     setTimeout(()=>{setPose('present');speak(RITA_INTRO[S.level]);},900);
   } else {
-    // Coming from Choose World — hide start button, speak intro, then start game
+    // Coming from Choose World — hide button, speak intro, then startGame normally
     const _sb = document.getElementById('start-btn');
     if(_sb) _sb.style.display = 'none';
+    // Speak intro using the same speak() function that works everywhere
     setTimeout(() => {
       const introMsg = RITA_INTRO[S.level] || RITA_INTRO.youngsters;
-      // Build utterance manually so we can use onend
-      window.speechSynthesis.cancel();
-      const _u = new SpeechSynthesisUtterance(introMsg);
-      _u.lang = 'en-GB'; _u.rate = 0.92; _u.pitch = 1.1;
-      const _vv = window.speechSynthesis.getVoices();
-      const _vf = _vv.find(x=>x.lang==='en-GB'&&/female|woman/i.test(x.name))
-                ||_vv.find(x=>x.lang==='en-GB')
-                ||_vv.find(x=>x.lang.startsWith('en'));
-      if(_vf) _u.voice = _vf;
       setRitaSays(introMsg);
-      // When intro finishes, start game AND speak first question
-      _u.onend = () => {
-        startGame();
-        // Give loadQuestion 200ms to build the DOM, then speak
-        setTimeout(() => {
-          const _q = S.currentQ;
-          if(_q && _q.prompt) speak(_q.prompt.replace(/[()]/g,''));
-        }, 200);
-      };
-      window.speechSynthesis.speak(_u);
+      speak(introMsg);
+      // Wait for intro to finish then startGame — loadQuestion handles the rest
+      const waitMs = Math.min(Math.max(introMsg.length * 75, 5000), 14000);
+      setTimeout(() => startGame(), waitMs);
     }, 600);
   }
 }
@@ -986,8 +972,7 @@ function loadQuestion() {
     document.getElementById('q-prompt').innerHTML = promptText;
     document.getElementById('q-category').textContent = '♪ Which album has the answer?';
     buildAlbumGrid(q);
-    if(!S.firstLoad) setTimeout(()=>speak(q.prompt.replace(/[()]/g,'')),400);
-    S.firstLoad=false;
+    setTimeout(()=>speak(q.prompt.replace(/[()]/g,'')),400);
 
   } else if(S.level==='grownups') {
     document.getElementById('q-prompt').textContent='';
