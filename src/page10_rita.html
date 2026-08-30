@@ -724,18 +724,10 @@ function init() {
   if(!new URLSearchParams(window.location.search).get('autostart')) {
     setTimeout(()=>{setPose('present');speak(RITA_INTRO[S.level]);},900);
   } else {
-    // Coming from Choose World — hide button, speak intro, then startGame normally
+    // Coming from Choose World — go straight to game, no intro speech
     const _sb = document.getElementById('start-btn');
     if(_sb) _sb.style.display = 'none';
-    // Speak intro using the same speak() function that works everywhere
-    setTimeout(() => {
-      const introMsg = RITA_INTRO[S.level] || RITA_INTRO.youngsters;
-      setRitaSays(introMsg);
-      speak(introMsg);
-      // Wait for intro to finish then startGame — loadQuestion handles the rest
-      const waitMs = Math.min(Math.max(introMsg.length * 75, 5000), 14000);
-      setTimeout(() => startGame(), waitMs);
-    }, 600);
+    setTimeout(() => startGame(), 800);
   }
 }
 
