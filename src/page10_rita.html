@@ -1295,7 +1295,11 @@ function playChime() {
   } catch(e) {}
 }
 
-function speechDuration(text){return Math.min(Math.max((text||"").length*75,4000),12000);}
+function speechDuration(text){
+  if(!text) return 4000;
+  const syllables = Math.max(text.replace(/[^aeiouAEIOU]/g,'').length, Math.ceil(text.length/4));
+  return Math.min(Math.max(syllables * 220, 3500), 14000);
+}
 
 function speak(text, onEndCallback) {
   if(localStorage.getItem('askLovelyRitaV4_mute')==='1'){if(onEndCallback)onEndCallback();return;}
