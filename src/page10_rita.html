@@ -218,7 +218,7 @@ body.theme-experts    { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-grad
   background:rgba(0,0,0,.3); border:1px solid rgba(255,215,0,.15);
   border-radius:18px; padding:12px; text-align:center;
 }
-#q-category { font-size:8px; color:#ffd700; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+#q-category { font-size:8px; color:#ffd700; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; display:none; }
 #q-prompt {
   font-size:14px; font-weight:700; color:#fff;
   line-height:1.6; margin-bottom:10px; min-height:44px;
@@ -432,7 +432,7 @@ body.theme-experts    { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-grad
 
       <div id="page-header">
         <h1>🎤 Rita's World</h1>
-        <p>Only Lads' language is spoken here!</p>
+        <p style='margin-top:4px;'>&nbsp;</p>
       </div>
 
       <div id="level-tabs">
@@ -464,8 +464,8 @@ body.theme-experts    { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-grad
 
       <!-- QUESTION -->
       <div id="question-area">
-        <div id="q-category">♪ Rita's World</div>
-        <div id="q-prompt">Click below to enter Rita's World!</div>
+        <div id="q-category" style="display:none;">♪ Rita's World</div>
+        <div id="q-prompt"></div>
 
         <!-- YOUNGSTERS -->
         <div id="album-grid"></div>
@@ -643,7 +643,7 @@ const Q_EXPERTS = [
 
 // ── RITA SPEECHES
 const RITA_INTRO = {
-  youngsters: "Hello love! Welcome to Rita's World! Here you need to answer me using only words from the Lads' Universe. Click to enter and choose the album that has the right answer darling!",
+  youngsters: "Hello love! Welcome to Rita's World! Here you need to answer me using only words from the Lads' Universe. Click on the album that has the right answer darling!",
   grownups:   "Hello there! Welcome to Rita's World! I will tell you something and you fill in the missing word. Type what the Lads would say love!",
   experts:    "Right then! Expert level love! I will give you a line and you give me the next one. Type it sing it or say it into the mic. Yes you can actually SING it love! Show me what you have got!",
 };
@@ -1110,8 +1110,8 @@ function checkExpert() {
     speak(msg);
     S.qIndex++;
     document.getElementById('q-val').textContent=`${S.qIndex}/8`;
-    if(S.qIndex<8) document.getElementById('next-btn').style.display='block';
-    else setTimeout(()=>finishGame(),2000);
+    if(S.qIndex<8) setTimeout(()=>nextQuestion(), speechDuration(msg||""));
+    else setTimeout(()=>finishGame(),7000);
     setTimeout(()=>document.getElementById('scroll-area').scrollTo({top:9999,behavior:'smooth'}),300);
   }
 }
@@ -1135,8 +1135,8 @@ function handleCorrect(msg) {
   speak(msg);
   S.qIndex++;
   document.getElementById('q-val').textContent=`${S.qIndex}/8`;
-  if(S.qIndex<8) document.getElementById('next-btn').style.display='block';
-  else setTimeout(()=>finishGame(),2000);
+  if(S.qIndex<8) setTimeout(()=>nextQuestion(), speechDuration(msg||""));
+  else setTimeout(()=>finishGame(),7000);
   setTimeout(()=>document.getElementById('scroll-area').scrollTo({top:9999,behavior:'smooth'}),300);
 }
 
@@ -1288,6 +1288,8 @@ function playChime() {
     });
   } catch(e) {}
 }
+
+function speechDuration(text){return Math.min(Math.max((text||"").length*75,4000),12000);}
 
 function speak(text) {
   if(localStorage.getItem('askLovelyRitaV4_mute')==='1') return;
