@@ -697,7 +697,7 @@ const LEVEL_CFG = {
 };
 
 // ── STATE
-let S = {
+let S = { suppressSpeak: false,
   level:'youngsters', beatcoins: 0, score:0,
   qIndex:0, order:[], gameActive:false, answered:false,
   grownupTries:0, currentQ:null,
@@ -774,17 +774,26 @@ function applyLevel(lvl) {
   // Auto-start if coming from Choose World (no landing page needed)
   const _params = new URLSearchParams(window.location.search);
   if(_params.get('autostart') === '1') {
-    // Hide start button — game starts automatically
     const _sb = document.getElementById('start-btn');
     if(_sb) _sb.style.display = 'none';
-    // Start game immediately so images/content load — Rita speaks welcome in parallel
+    // Step 1: load game content immediately (images appear, no speech yet)
     startGame();
-    // Rita speaks intro over the already-loaded first question
+    // Step 2: suppress the automatic speak inside loadQuestion on first load
+    S.suppressSpeak = true;
+    // Step 3: Rita speaks intro
     setTimeout(() => {
       const introMsg = RITA_INTRO[S.level] || RITA_INTRO.youngsters;
       setRitaSays(introMsg);
       speak(introMsg);
-    }, 400);
+      // Step 4: after intro finishes, Rita reads the first question
+      const introDuration = Math.min(Math.max(introMsg.length * 75, 5000), 14000);
+      setTimeout(() => {
+        S.suppressSpeak = false;
+        // Re-speak the current question
+        const q = S.questions && S.questions[S.qIndex];
+        if(q && q.prompt) speak(q.prompt.replace(/[()]/g,''));
+      }, introDuration);
+    }, 600);
   }
 }
 
@@ -990,7 +999,7 @@ function loadQuestion() {
     document.getElementById('q-prompt').innerHTML = promptText;
     document.getElementById('q-category').textContent = '♪ Which album has the answer?';
     buildAlbumGrid(q);
-    setTimeout(()=>speak(q.prompt.replace(/[()]/g,'')),400);
+    setTimeout(()=>{ if(!S.suppressSpeak) speak(q.prompt.replace(/[()]/g,'')); },400);
 
   } else if(S.level==='grownups') {
     document.getElementById('q-prompt').textContent="";
