@@ -371,8 +371,7 @@ body{background:#0a0a0a;display:flex;justify-content:center;font-family:Georgia,
     </div>
   </div>
   <nav id="nav-bar">
-    <button class="nav-btn" onclick="window.location.href='page1_landing.html'" style="color:#ff6ef7;font-weight:700;"><span class="nav-icon">🏠</span><span>Go Home</span></button>
-    <button class="nav-btn active"><span class="nav-icon">👤</span><span>Profile</span></button>
+    <button class="nav-btn" onclick="window.location.href='page1_landing.html'" style="color:#ff6ef7;font-weight:900;font-size:11px;"><span class="nav-icon">🏠</span><span>Go Home</span></button>
   </nav>
 
 </div></div>
@@ -571,7 +570,7 @@ function buildBankCarousel(){
     sessionStorage.setItem(RITA_TIP_KEY, alreadyShown+','+pid);
     setTimeout(()=>{
       playProfitSound();
-      showRitaTip(`Darling! Your ${pitem.name} has gone up in value! You paid ${pitem.price.toLocaleString()} EBCs and it is now worth ${val.toLocaleString()} EBCs. Shall we sell?`);
+      showRitaTip(`Darling! Your ${pitem.name} has gone up in value! You paid ${pitem.price} EBCs and it is now worth ${val.toLocaleString()} EBCs. Shall we sell?`);
     },1500);
   } else if(losses.length>0 && profits.filter(([id])=>!alreadyShown.includes(id)).length===0 && Math.random()<0.35){
     const randomLossIdx = Math.floor(Math.random()*losses.length);
@@ -858,6 +857,31 @@ window.addEventListener('load',()=>{
 window.addEventListener('focus',()=>{
   renderLadRecords();
 });
+
+function getFluctuation(id, basePrice) {
+  const key = 'lra_fluct_' + id;
+  let fluct = localStorage.getItem(key);
+  if(!fluct) {
+    // Calculate and save fluctuation for this session
+    const rand = Math.random();
+    let pct;
+    if(rand < 0.05) pct = Math.floor(Math.random()*200+100); // jackpot: +100% to +200%
+    else if(rand < 0.25) pct = Math.floor(Math.random()*40+10); // up: +10% to +50%
+    else if(rand < 0.75) pct = 0; // stable
+    else if(rand < 0.95) pct = -Math.floor(Math.random()*20+10); // down: -10% to -30%
+    else pct = -Math.floor(Math.random()*20+30); // big drop: -30% to -50%
+    localStorage.setItem(key, pct);
+    fluct = pct;
+  }
+  return parseInt(fluct);
+}
+
+function getFluctuationDisplay(pct) {
+  if(pct > 0) return '<span style="color:#4ade80;font-weight:700;">▲ +' + pct + '%</span>';
+  if(pct < 0) return '<span style="color:#f87171;font-weight:700;">▼ ' + pct + '%</span>';
+  return '<span style="color:#9ca3af;">— 0%</span>';
+}
+
 </script>
 </body>
 </html>
