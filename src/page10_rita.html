@@ -218,7 +218,8 @@ body.theme-experts    { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-grad
   background:rgba(0,0,0,.3); border:1px solid rgba(255,215,0,.15);
   border-radius:18px; padding:12px; text-align:center;
 }
-#q-category { font-size:8px; color:#ffd700; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+#q-category { font-size:8px; color:#ffd700; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;   display:none;
+}
 #q-prompt {
   font-size:14px; font-weight:700; color:#fff;
   line-height:1.6; margin-bottom:10px; min-height:44px;
@@ -433,7 +434,7 @@ body.theme-experts    { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-grad
 
       <div id="page-header">
         <h1>🎤 Rita's World</h1>
-        <p>Only Lads' language is spoken here!</p>
+        <p style="margin-top:4px;">&nbsp;</p>
       </div>
 
       <div id="level-tabs">
@@ -465,7 +466,7 @@ body.theme-experts    { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-grad
 
       <!-- QUESTION -->
       <div id="question-area">
-        <div id="q-category">♪ Rita's World</div>
+        <div id="q-category" style="display:none;">♪ Rita's World</div>
         <div id="q-prompt">Click below to enter Rita's World!</div>
 
         <!-- YOUNGSTERS -->
@@ -928,7 +929,7 @@ function resetGame() {
   S.order=shuffle([...Array(qArr.length).keys()]);
   document.getElementById('score-val').textContent='0';
   document.getElementById('q-val').textContent='0/8';
-  document.getElementById('q-prompt').textContent="Only Lads' language is spoken here!";
+  document.getElementById('q-prompt').textContent="";
   document.getElementById('q-category').textContent="♪ Rita's World";
   document.getElementById('album-grid').innerHTML='';
   document.getElementById('album-grid').style.display='none';
@@ -977,7 +978,7 @@ function loadQuestion() {
     setTimeout(()=>speak(q.prompt.replace(/[()]/g,'')),400);
 
   } else if(S.level==='grownups') {
-    document.getElementById('q-prompt').textContent="Only Lads' language is spoken here!";
+    document.getElementById('q-prompt').textContent="";
     document.getElementById('q-category').textContent='♪ Fill in the blank';
     // Build dashes
     const dashes='('+'-'.repeat(q.dashes)+')';
@@ -998,7 +999,7 @@ function loadQuestion() {
 
   } else {
     // Experts
-    document.getElementById('q-prompt').textContent="Only Lads' language is spoken here!";
+    document.getElementById('q-prompt').textContent="";
     document.getElementById('q-category').textContent='♪ Complete the next line';
     document.getElementById('expert-lyric').textContent=q.lyric;
     document.getElementById('expert-input').value='';
