@@ -37,7 +37,7 @@ body{background:#0a0a0a;display:flex;flex-direction:column;align-items:center;mi
 #result-score{font-size:28px;font-weight:bold;color:var(--accent2);margin:10px 0;}
 #result-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:1px;}
 #result-msg{font-size:12px;color:#ddd;font-style:italic;margin-top:8px;line-height:1.5;}
-#bc-display-wrap{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:8px 14px;display:flex;align-items:center;justify-content:space-between;width:100%;}
+#bc-display-hidden-wrap{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:8px 14px;display:flex;align-items:center;justify-content:space-between;width:100%;}
 .bc-label{font-size:10px;color:#fff;}.bc-count{font-size:15px;font-weight:bold;color:var(--accent);}
 #nav-bar{display:flex;justify-content:space-around;align-items:center;padding:10px 0 14px;background:rgba(0,0,0,.4);border-top:1px solid rgba(255,255,255,.06);flex-shrink:0;}
 .nav-btn{background:none;border:none;color:rgba(255,255,255,.4);font-size:9px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 16px;transition:color .2s;font-family:Georgia,serif;}
@@ -214,7 +214,9 @@ function showResult(){
   document.getElementById('result-title').textContent=S.earned>=(reward*2)?'🎵 Music Master!':'🎶 Well Done!';
   speak(msgs[level]);
   // Auto-advance to Beat Shop after 4 seconds
-  let sec=4;
+  const _msg=msgs[level]||msgs.youngsters;
+const _dur=Math.min(Math.max(_msg.length*75,5000),14000);
+  let sec=Math.ceil(_dur/1000);
   const btn=document.querySelector('#result-panel button');
   if(btn){btn.textContent='🛍️ Going to Beat Shop in '+sec+'s...';}
   const iv=setInterval(()=>{
@@ -222,6 +224,12 @@ function showResult(){
     if(btn) btn.textContent=sec>0?'🛍️ Going to Beat Shop in '+sec+'s...':'🛍️ Going now!';
     if(sec<=0){clearInterval(iv);goChooseWorld();}
   },1000);
+}
+
+
+// Calculate speech duration: 75ms per character, min 4000ms, max 12000ms
+function speechDuration(text) {
+  return Math.min(Math.max(text.length * 75, 4000), 12000);
 }
 
 function speak(text){if(localStorage.getItem('askLovelyRitaV4_mute')==='1'||!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.92;u.pitch=1.1;const v=window.speechSynthesis.getVoices();const voice=v.find(x=>x.lang==='en-GB'&&/female|woman/i.test(x.name))||v.find(x=>x.lang==='en-GB')||v.find(x=>x.lang.startsWith('en'));if(voice)u.voice=voice;window.speechSynthesis.speak(u);}
