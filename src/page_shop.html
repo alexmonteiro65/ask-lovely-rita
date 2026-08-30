@@ -615,7 +615,7 @@ function initSession(){
       };
     }
     if(shopBanner) {
-      shopBanner.innerHTML = '🎯 <strong>Visit 1 of 2</strong> — ' + worldName + ' | You have <strong>' + ebc + ' EBCs</strong> to invest. Save for visit 2 or buy now!';
+      shopBanner.innerHTML = '<strong>Visit 1 of 2</strong> — You have <strong>' + ebc + ' EBCs</strong> to invest.<br>Buy now or save your EBCs to buy a more valuable item on Visit 2.';
       shopBanner.style.display = 'block';
     }
     // Rita speaks
@@ -631,8 +631,17 @@ function initSession(){
         window.location.href = 'page_adventures.html';
       };
     }
+    // Also check if player has enough EBCs for anything — if not, auto-redirect
+    setTimeout(()=>{
+      const curEBC = Number(localStorage.getItem('lra_ebc_balance')||0);
+      const minPrice = Math.min(...Object.values(ITEMS).map(i=>i.price));
+      if(curEBC < minPrice && visit==='2'){
+        speak('You have ' + curEBC + ' EBCs love! Not enough to buy anything right now. Taking you to your results!');
+        autoRedirectToGame(5);
+      }
+    }, 3000);
     if(shopBanner) {
-      shopBanner.innerHTML = '🏆 <strong>Final Visit!</strong> — ' + worldName + ' complete! You have <strong>' + ebc + ' EBCs</strong>. This is your last chance to invest before seeing your results!';
+      shopBanner.innerHTML = '<strong>Visit 2 of 2</strong> — You have <strong>' + ebc + ' EBCs</strong> to invest.<br>Buy now or save your EBCs for your next Journey.';
       shopBanner.style.display = 'block';
     }
     setTimeout(()=>{
@@ -752,9 +761,10 @@ function buyItem(id) {
     return;
   }
   if(ebcBalance === 0){
-    speak('Oh sorry love! You have no EBCs left. I am taking you back to the game now to earn more!');
-    toast('No EBCs! Going back to the game in 5 seconds...');
-    autoRedirectToGame(5);
+    const visit = localStorage.getItem('lra_shop_visit')||'1';
+    const dest = visit==='2'?'your results':'the next game';
+    speak('You have used all your EBCs love! Taking you to ' + dest + ' now!');
+    autoRedirectToGame(4);
     return;
   }
   if(ebcBalance < item.price){

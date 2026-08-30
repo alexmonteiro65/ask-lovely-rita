@@ -222,8 +222,7 @@ body.theme-experts    { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-grad
 #q-prompt {
   font-size:14px; font-weight:700; color:#fff;
   line-height:1.6; margin-bottom:10px; min-height:44px;
-  display:none;
-}
+  }
 /* Blank highlight */
 #q-prompt .blank {
   color:#ffd700; font-size:16px; letter-spacing:2px;
@@ -531,7 +530,15 @@ body.theme-experts    { --accent:#c8a96e; --glow:#c8a96e; --btn-grad:linear-grad
 
     </div>
 
-    <nav id="nav-bar">
+    <!-- CONGRATS OVERLAY -->
+  <div id="congrats-overlay">
+    <div id="congrats-emoji" style="font-size:56px;margin-bottom:12px;">🎤</div>
+    <div id="congrats-title" style="font-size:22px;font-weight:900;color:#ff6ef7;margin-bottom:6px;">Rita's Star!</div>
+    <div id="congrats-sub" style="font-size:13px;color:rgba(255,255,255,.7);margin-bottom:16px;">You rocked Rita's World love!</div>
+    <div id="congrats-bc" style="font-size:16px;font-weight:700;color:#ffde59;margin-bottom:20px;"></div>
+    <div id="congrats-bar-wrap"><div id="congrats-bar"></div></div>
+  </div>
+  <nav id="nav-bar">
       <button class="nav-btn nav-home" onclick="goHome()"><span class="nav-icon">🏠</span><span>Home</span></button>
       <button class="nav-btn" onclick="goChooseWorld()"><span class="nav-icon">🌍</span><span>Choose World</span></button>
       <button class="nav-btn" onclick="goNextPage()"><span class="nav-icon">▶️</span><span>Next Page</span></button>
@@ -754,6 +761,15 @@ function applyLevel(lvl) {
   document.getElementById('rita-says').textContent=RITA_INTRO[lvl];
   document.getElementById('bc-val').textContent=S.beatcoins;
   resetGame();
+  // Lock level tabs for Youngsters
+  const _lv = localStorage.getItem('askLovelyRitaV4_level') || 'youngsters';
+  if(_lv === 'youngsters') {
+    document.querySelectorAll('#level-tabs button').forEach(btn => {
+      if(!btn.textContent.toLowerCase().includes('young')) {
+        btn.style.opacity='0.3'; btn.style.pointerEvents='none';
+      }
+    });
+  }
 }
 
 // ── STAGE BG
@@ -912,7 +928,7 @@ function resetGame() {
   S.order=shuffle([...Array(qArr.length).keys()]);
   document.getElementById('score-val').textContent='0';
   document.getElementById('q-val').textContent='0/8';
-  document.getElementById('q-prompt').textContent='';
+  document.getElementById('q-prompt').textContent="Only Lads' language is spoken here!";
   document.getElementById('q-category').textContent="♪ Rita's World";
   document.getElementById('album-grid').innerHTML='';
   document.getElementById('album-grid').style.display='none';
@@ -961,7 +977,7 @@ function loadQuestion() {
     setTimeout(()=>speak(q.prompt.replace(/[()]/g,'')),400);
 
   } else if(S.level==='grownups') {
-    document.getElementById('q-prompt').textContent='';
+    document.getElementById('q-prompt').textContent="Only Lads' language is spoken here!";
     document.getElementById('q-category').textContent='♪ Fill in the blank';
     // Build dashes
     const dashes='('+'-'.repeat(q.dashes)+')';
@@ -982,7 +998,7 @@ function loadQuestion() {
 
   } else {
     // Experts
-    document.getElementById('q-prompt').textContent='';
+    document.getElementById('q-prompt').textContent="Only Lads' language is spoken here!";
     document.getElementById('q-category').textContent='♪ Complete the next line';
     document.getElementById('expert-lyric').textContent=q.lyric;
     document.getElementById('expert-input').value='';
