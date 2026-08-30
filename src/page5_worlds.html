@@ -139,10 +139,7 @@
     border-color: #ffde59 !important;
     transform: scale(1.04);
   }
-  .world-card.spin-locked {
-    opacity: 0.4;
-    pointer-events: none;
-  }
+  .world-card.spin-locked { /* removed — no spin lock */ }
 
   #page-header p {
     font-size: 13px; color: #a0f0ff;
@@ -1213,13 +1210,8 @@ function enterWorld() {
 
 function goBack()    { window.location.href = 'page1_landing.html'; }
 
-// Lock all worlds on load — spin required every visit
-window.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.world-card').forEach(function(card) {
-    card.classList.add('spin-locked');
-    card.classList.remove('spin-chosen');
-  });
-});
+// Spin removed — all worlds always available
+// No locking on load
 function goHome()    { window.location.href = 'page1_landing.html'; }
 function goStore()   { window.location.href='page_shop.html'; }
 function goScore()   { window.location.href='page_adventures.html'; }
