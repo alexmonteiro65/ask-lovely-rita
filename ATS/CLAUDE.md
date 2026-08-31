@@ -115,10 +115,12 @@ ATS/
     ai-universe-script.md        # 2-minute presenter script, EN/PT/ES, scene-by-scene, tied to the diagram
   social/
     logo.svg, profile.png        # @ai.tech.school profile picture (lightning bolt + "ATS", not the site's bracket mark — deliberate, a profile pic at circular-crop size needs different treatment than the inline site logo)
-    post-1-launch.*  … post-5-quote.*   # 5 ready-to-post graphics (SVG source + rendered PNG)
+    post-1-launch.* … post-9-cta.*      # 9 ready-to-post graphics (SVG source + rendered PNG), fill a complete 3×3 grid in order
     captions.md                  # EN/PT/ES captions per post
-    accounts-to-follow.md        # 20 hand-verified real Instagram accounts (two wrong-guess handles caught and logged)
-    content-calendar.md          # 30-day manual posting plan — see note below
+    reels-scripts.md             # 3 Reels scripts (60s each) — scripts only, no video generated
+    profile-setup.md             # bio/link/profile-picture text, ready to paste in manually
+    accounts-to-follow.md        # 20 hand-verified real Instagram accounts (wrong-guess handles caught and logged, not just assumed)
+    content-calendar.md          # 30-day manual posting plan — 9 posts weeks 1–3, 3 Reels week 4
   css/
     style.css                    # global design system + all page styles
   js/
