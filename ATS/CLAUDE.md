@@ -77,6 +77,13 @@ learner pick up where they left off — never to block access.
   are filled into `VIDEO_EMBED_URLS`. Don't revisit calling a generative
   video/image/voice API directly from this codebase without a real
   architecture conversation first.
+- **Same reasoning applies to Buffer, Later, or any social-scheduling
+  API** — requested for @ai.tech.school and declined for identical reasons
+  (billed API + OAuth credentials this assistant won't hold, no backend to
+  run a schedule on). What shipped instead: `social/content-calendar.md`,
+  a real 30-day plan meant to be posted by hand. If real scheduling is ever
+  wanted, that's a backend + credentials decision for a human to make
+  deliberately, not something to wire up incrementally.
 - **Static content, static hosting.** Pages are plain files. Lesson/quiz
   data lives inline in each lesson's own `<script>` block (a small JS
   object passed to the shared quiz engine) — not fetched from a server.
@@ -106,6 +113,12 @@ ATS/
     ai-universe.svg              # source diagram behind the video script (Claude → Prompts/Chat → API → MCP → Connectors → Agents)
   video/
     ai-universe-script.md        # 2-minute presenter script, EN/PT/ES, scene-by-scene, tied to the diagram
+  social/
+    logo.svg, profile.png        # @ai.tech.school profile picture (lightning bolt + "ATS", not the site's bracket mark — deliberate, a profile pic at circular-crop size needs different treatment than the inline site logo)
+    post-1-launch.*  … post-5-quote.*   # 5 ready-to-post graphics (SVG source + rendered PNG)
+    captions.md                  # EN/PT/ES captions per post
+    accounts-to-follow.md        # 20 hand-verified real Instagram accounts (two wrong-guess handles caught and logged)
+    content-calendar.md          # 30-day manual posting plan — see note below
   css/
     style.css                    # global design system + all page styles
   js/
